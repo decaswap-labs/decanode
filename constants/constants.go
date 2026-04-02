@@ -68,7 +68,6 @@ const (
 	CtxMetricLabels   contextKey = "metricLabels"
 	CtxObservedTx     contextKey = "observed-tx"
 	CtxSimulationMode contextKey = "simulation-mode"
-	CtxWASMQuery      contextKey = "wasm-query"
 )
 
 // Permitted characters in Mimirs

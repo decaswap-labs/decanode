@@ -12,8 +12,6 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -66,14 +64,12 @@ func setupBenchmarkManager(b *testing.B) (cosmos.Context, *Mgrs) {
 	keyAcc := cosmos.NewKVStoreKey(authtypes.StoreKey)
 	keyBank := cosmos.NewKVStoreKey(banktypes.StoreKey)
 	keyUpgrade := cosmos.NewKVStoreKey(upgradetypes.StoreKey)
-	keyWasm := cosmos.NewKVStoreKey(wasmtypes.StoreKey)
 
 	db := dbm.NewMemDB()
 	ms := store.NewCommitMultiStore(db, sdklog.NewNopLogger(), storemetrics.NewNoOpMetrics())
 	ms.MountStoreWithDB(keyAcc, cosmos.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyThornodeBench, cosmos.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyBank, cosmos.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyWasm, cosmos.StoreTypeIAVL, db)
 
 	err := ms.LoadLatestVersion()
 	if err != nil {
@@ -118,24 +114,6 @@ func setupBenchmarkManager(b *testing.B) (cosmos.Context, *Mgrs) {
 		authtypes.NewModuleAddress(ModuleName).String(),
 		sdklog.NewNopLogger(),
 	)
-
-	wasmDir := b.TempDir()
-	wk := wasmkeeper.NewKeeper(
-		encodingConfig.Codec,
-		runtime.NewKVStoreService(keyWasm),
-		ak, bk,
-		nil, nil, nil, nil, nil, nil, nil, nil, nil, wasmDir,
-		wasmtypes.DefaultNodeConfig(), wasmtypes.VMConfig{}, wasmkeeper.BuiltInCapabilities(),
-		authtypes.NewModuleAddress(ModuleName).String(),
-	)
-
-	err = wk.SetParams(ctx, wasmtypes.Params{
-		CodeUploadAccess:             wasmtypes.AllowNobody,
-		InstantiateDefaultPermission: wasmtypes.AccessTypeNobody,
-	})
-	if err != nil {
-		b.Fatal(err)
-	}
 
 	err = bk.MintCoins(ctx, ModuleName, cosmos.Coins{
 		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
@@ -183,7 +161,7 @@ func setupBenchmarkManager(b *testing.B) (cosmos.Context, *Mgrs) {
 		b.Fatal(err)
 	}
 
-	mgr := NewManagers(k, encodingConfig.Codec, serviceThornodeBench, bk, ak, uk, wk)
+	mgr := NewManagers(k, encodingConfig.Codec, serviceThornodeBench, bk, ak, uk)
 
 	err = mgr.LoadManagerIfNecessary(ctx)
 	if err != nil {

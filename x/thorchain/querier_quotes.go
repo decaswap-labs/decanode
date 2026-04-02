@@ -496,11 +496,7 @@ func calculateMinSwapAmount(ctx cosmos.Context, mgr *Mgrs, fromAsset, toAsset co
 		minSwapAmount = destInSrcAsset
 	}
 
-	// Bypass non determinism for wasm queries
-	isWasm, _ := ctx.Value(constants.CtxWASMQuery).(bool)
-	if !isWasm {
-		minSwapAmount = minSwapAmount.Mul(cosmos.NewUint(getQuoteRecommendedMinAmountFeeMultiplier()))
-	}
+	minSwapAmount = minSwapAmount.Mul(cosmos.NewUint(getQuoteRecommendedMinAmountFeeMultiplier()))
 
 	// Apply affiliate fee multiplier: multiply by (100% + affiliate_bps)
 	// This accounts for the fact that affiliate fees are taken out before processing
@@ -754,8 +750,7 @@ func (qs queryServer) queryQuoteSwap(ctx cosmos.Context, req *types.QueryQuoteSw
 	}
 
 	// error if older height not explicitly requested and latest block older than max lag
-	isWasm, _ := ctx.Value(constants.CtxWASMQuery).(bool)
-	if !isWasm && req.Height == "" && ctx.BlockTime().Before(time.Now().Add(-config.GetThornode().API.Quote.MaxLag)) {
+	if req.Height == "" && ctx.BlockTime().Before(time.Now().Add(-config.GetThornode().API.Quote.MaxLag)) {
 		return nil, fmt.Errorf("refusing quote on node with stale state")
 	}
 

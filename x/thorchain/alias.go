@@ -212,8 +212,7 @@ var (
 	NewMsgRejectUpgrade            = types.NewMsgRejectUpgrade
 	NewMsgSetIPAddress             = types.NewMsgSetIPAddress
 	NewMsgNetworkFee               = types.NewMsgNetworkFee
-	NewMsgWasmExec                 = types.NewMsgWasmExec
-	NewNetworkFee                  = types.NewNetworkFee
+	NewNetworkFee = types.NewNetworkFee
 	NewTHORName                    = types.NewTHORName
 	NewReferenceMemo               = types.NewReferenceMemo
 	NewStreamingSwap               = types.NewStreamingSwap
@@ -310,8 +309,7 @@ type (
 	MsgSolvency               = types.MsgSolvency
 	MsgRunePoolDeposit        = types.MsgRunePoolDeposit
 	MsgRunePoolWithdraw       = types.MsgRunePoolWithdraw
-	MsgWasmExec               = types.MsgWasmExec
-	MsgSwitch                 = types.MsgSwitch
+	MsgSwitch = types.MsgSwitch
 	MsgTCYClaim               = types.MsgTCYClaim
 	MsgTCYStake               = types.MsgTCYStake
 	MsgTCYUnstake             = types.MsgTCYUnstake

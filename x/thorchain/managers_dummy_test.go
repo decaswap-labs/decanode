@@ -22,7 +22,6 @@ type DummyMgr struct {
 	slasher                   Slasher
 	tradeMgr                  TradeAccountManager
 	securedMgr                SecuredAssetManager
-	wasmMgr                   WasmManager
 	switchMgr                 SwitchManager
 	scheduledMigrationManager ScheduledMigrationManager
 }
@@ -39,9 +38,8 @@ func NewDummyMgrWithKeeper(k keeper.Keeper) *DummyMgr {
 		obMgr:                     NewDummyObserverManager(),
 		poolMgr:                   NewDummyPoolManager(),
 		slasher:                   NewDummySlasher(),
-		tradeMgr:                  NewDummyTradeAccountManager(),
-		wasmMgr:                   NewDummyWasmManager(),
-		switchMgr:                 NewDummySwitchManager(),
+		tradeMgr:  NewDummyTradeAccountManager(),
+		switchMgr: NewDummySwitchManager(),
 		advSwapQueue:              NewDummyAdvSwapQueue(),
 		scheduledMigrationManager: NewDummyScheduledMigrationManager(),
 	}
@@ -59,9 +57,8 @@ func NewDummyMgr() *DummyMgr {
 		obMgr:                     NewDummyObserverManager(),
 		poolMgr:                   NewDummyPoolManager(),
 		slasher:                   NewDummySlasher(),
-		tradeMgr:                  NewDummyTradeAccountManager(),
-		wasmMgr:                   NewDummyWasmManager(),
-		switchMgr:                 NewDummySwitchManager(),
+		tradeMgr:  NewDummyTradeAccountManager(),
+		switchMgr: NewDummySwitchManager(),
 		advSwapQueue:              NewDummyAdvSwapQueue(),
 		scheduledMigrationManager: NewDummyScheduledMigrationManager(),
 	}
@@ -82,7 +79,6 @@ func (m DummyMgr) Slasher() Slasher                         { return m.slasher }
 func (m DummyMgr) AdvSwapQueueMgr() AdvSwapQueue            { return m.advSwapQueue }
 func (m DummyMgr) TradeAccountManager() TradeAccountManager { return m.tradeMgr }
 func (m DummyMgr) SecuredAssetManager() SecuredAssetManager { return m.securedMgr }
-func (m DummyMgr) WasmManager() WasmManager                 { return m.wasmMgr }
 func (m DummyMgr) SwitchManager() SwitchManager             { return m.switchMgr }
 func (m DummyMgr) ScheduledMigrationManager() ScheduledMigrationManager {
 	return m.scheduledMigrationManager
