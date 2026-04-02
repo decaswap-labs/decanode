@@ -1,0 +1,20 @@
+ARG DOCKER_MIRROR=
+FROM ${DOCKER_MIRROR}golang:1.24.6
+
+ENV GOBIN=/go/bin
+ENV GOPATH=/go
+ENV GOOS=linux
+
+RUN mkdir /simtest
+
+WORKDIR /app
+COPY go.mod go.sum ./
+COPY test/simulation/go.mod test/simulation/go.sum ./test/simulation/
+RUN go mod download
+WORKDIR /app/test/simulation
+RUN go mod download
+WORKDIR /app
+
+COPY . .
+
+RUN --mount=type=cache,target=/root/.cache/go-build make _build-test-simulation

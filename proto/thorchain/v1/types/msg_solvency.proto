@@ -1,0 +1,38 @@
+syntax = "proto3";
+package types;
+
+option go_package = "github.com/decaswap-labs/decanode/x/thorchain/types";
+
+import "common/common.proto";
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+
+message MsgSolvency {
+  option (amino.name) = "thorchain/MsgSolvency";
+
+  string id = 1
+      [ (gogoproto.casttype) = "github.com/decaswap-labs/decanode/common.TxID" ];
+  string chain = 2 [ (gogoproto.casttype) =
+                         "github.com/decaswap-labs/decanode/common.Chain" ];
+  string pub_key = 3 [ (gogoproto.casttype) =
+                           "github.com/decaswap-labs/decanode/common.PubKey" ];
+  repeated common.Coin coins = 4 [
+    (gogoproto.castrepeated) = "github.com/decaswap-labs/decanode/common.Coins",
+    (gogoproto.nullable) = false
+  ];
+  int64 height = 5;
+  bytes signer = 6 [
+    (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+    (amino.encoding) = "bech32"
+  ];
+}
+
+message MsgSolvencyQuorum {
+  option (amino.name) = "thorchain/MsgSolvencyQuorum";
+
+  common.QuorumSolvency quoSolvency = 1;
+  bytes signer = 2 [
+    (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+    (amino.encoding) = "bech32"
+  ];
+}

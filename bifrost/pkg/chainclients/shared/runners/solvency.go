@@ -1,0 +1,124 @@
+package runners
+
+import (
+	"fmt"
+	"sync"
+	"time"
+
+	"github.com/rs/zerolog/log"
+
+	"github.com/decaswap-labs/decanode/bifrost/thorclient"
+	"github.com/decaswap-labs/decanode/common"
+	"github.com/decaswap-labs/decanode/common/cosmos"
+	"github.com/decaswap-labs/decanode/constants"
+	"github.com/decaswap-labs/decanode/x/thorchain/types"
+)
+
+// SolvencyCheckProvider methods that a SolvencyChecker implementation should have
+type SolvencyCheckProvider interface {
+	GetHeight() (int64, error)
+	ShouldReportSolvency(height int64) bool
+	ReportSolvency(height int64) error
+}
+
+// SolvencyCheckRunner when a chain get marked as insolvent , and then get halt automatically , the chain client will stop scanning blocks , as a result , solvency checker will
+// not report current solvency status to THORNode anymore, this method is to ensure that the chain client will continue to do solvency check even when the chain has been halted
+func SolvencyCheckRunner(chain common.Chain,
+	provider SolvencyCheckProvider,
+	bridge thorclient.ThorchainBridge,
+	stopper <-chan struct{},
+	wg *sync.WaitGroup,
+	backOffDuration time.Duration,
+) {
+	logger := log.Logger.With().Str("chain", chain.String()).Logger()
+	logger.Info().Msg("start solvency check runner")
+	defer func() {
+		wg.Done()
+		logger.Info().Msg("finish  solvency check runner")
+	}()
+	if provider == nil {
+		logger.Error().Msg("solvency checker provider is nil")
+		return
+	}
+	if backOffDuration == 0 {
+		backOffDuration = constants.ThorchainBlockTime
+	}
+	for {
+		select {
+		case <-stopper:
+			return
+		case <-time.After(backOffDuration):
+			// check whether the chain is halted via mimir or not
+			haltHeight, err := bridge.GetMimir(fmt.Sprintf("Halt%sChain", chain))
+			if err != nil {
+				logger.Err(err).Msg("fail to get chain halt height")
+				continue
+			}
+
+			// check whether the chain is halted via solvency check
+			solvencyHaltHeight, err := bridge.GetMimir(fmt.Sprintf("SolvencyHalt%sChain", chain))
+			if err != nil {
+				logger.Err(err).Msg("fail to get solvency halt height")
+				continue
+			}
+
+			thorHeight, err := bridge.GetBlockHeight()
+			if err != nil {
+				logger.Err(err).Msg("fail to get THORChain block height")
+				continue
+			}
+
+			// Halt<chain>Chain values > 1 are height-based and should not activate until THORChain
+			// reaches that height. A value of 1 is treated as an immediate admin halt and should
+			// not trigger runner-driven solvency checks.
+			chainHalted := haltHeight > 1 && thorHeight >= haltHeight
+			// Solvency halts are also height-based, though in practice they are expected to be set
+			// to the current THORChain height by the solvency handler.
+			solvencyHalted := solvencyHaltHeight > 0 && thorHeight >= solvencyHaltHeight
+			// When the chain is not actively halted, the normal chain client will report solvency
+			// when needed.
+			if !chainHalted && !solvencyHalted {
+				continue
+			}
+
+			currentBlockHeight, err := provider.GetHeight()
+			if err != nil {
+				logger.Err(err).Msg("fail to get current block height")
+				break
+			}
+			if provider.ShouldReportSolvency(currentBlockHeight) {
+				logger.Info().Msgf("current block height: %d, report solvency again", currentBlockHeight)
+				if err = provider.ReportSolvency(currentBlockHeight); err != nil {
+					logger.Err(err).Msg("fail to report solvency")
+				}
+			}
+		}
+	}
+}
+
+// IsVaultSolvent check whether the given vault is solvent or not , if it is not solvent , then it will need to report solvency to thornode
+func IsVaultSolvent(account common.Account, vault types.Vault, currentGasFee cosmos.Uint) bool {
+	logger := log.Logger
+	for _, c := range account.Coins {
+		asgardCoin := vault.GetCoin(c.Asset)
+
+		// when wallet has more coins or equal exactly as asgard , then the vault is solvent
+		if c.Amount.GTE(asgardCoin.Amount) {
+			continue
+		}
+
+		gap := asgardCoin.Amount.Sub(c.Amount)
+		// thornode allow 10x of MaxGas as the gap
+		if c.Asset.IsGasAsset() && gap.LT(currentGasFee.MulUint64(10)) {
+			continue
+		}
+		logger.Info().
+			Str("asset", c.Asset.String()).
+			Str("asgard amount", asgardCoin.Amount.String()).
+			Str("wallet amount", c.Amount.String()).
+			Str("gap", gap.String()).
+			Msg("insolvency detected")
+		return false
+	}
+	return true
+}

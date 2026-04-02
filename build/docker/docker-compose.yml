@@ -1,0 +1,797 @@
+########################################################################################
+# Config
+########################################################################################
+
+# trunk-ignore-all(yamllint/empty-values)
+
+volumes:
+  cli:
+  thornode:
+  thornode-cat:
+  thornode-fox:
+  thornode-pig:
+  bifrost:
+  bifrost-cat:
+  bifrost-fox:
+  bifrost-pig:
+
+########################################################################################
+# Services
+########################################################################################
+
+services:
+  _thorchain: &thorchain-defaults
+    profiles:
+      - _
+    restart: unless-stopped
+    # Use a local tag so that it is never pulled from a remote registry
+    image: thornode:mocknet
+    environment: &thorchain-environment
+      CHAIN_ID: thorchain
+      SIGNER_NAME: thorchain
+      SIGNER_PASSWD: password
+      THORNODE_GRPC_ENABLE: true
+    logging: &logging
+      driver: "json-file"
+      options:
+        max-size: "256m"
+        max-file: "3"
+
+  ######################################################################################
+  # THORChain
+  ######################################################################################
+
+  # ------------------------------ cli ------------------------------
+
+  cli:
+    profiles:
+      - _
+    build:
+      context: ../..
+      dockerfile: ./build/docker/cli/Dockerfile
+      args:
+        DOCKER_MIRROR: ${DOCKER_MIRROR:-}
+    environment:
+      <<: *thorchain-environment
+    entrypoint: /bin/bash
+    command:
+      - --init-file
+      - /cli/bashrc
+    working_dir: /root
+    volumes:
+      - cli:/root
+      - "./cli/:/cli"
+
+  # ------------------------------ events ------------------------------
+
+  events:
+    build:
+      context: ../..
+      dockerfile: ./tools/events/Dockerfile
+      args:
+        TAG: mocknet
+        DOCKER_MIRROR: ${DOCKER_MIRROR:-}
+    environment:
+      CONSOLE: 1
+      ENDPOINTS_THORNODE: http://thornode:1317
+      ENDPOINTS_MIDGARD: http://midgard:8080
+      NETWORK: mocknet
+      SCAN_START: 1
+      SCAN_STOP: -1
+      # output everything
+      THRESHOLDS_USD_VALUE: 0
+      THRESHOLDS_RUNE_VALUE: 0
+      THRESHOLDS_DELTA_USD_VALUE: 0
+      THRESHOLDS_DELTA_PERCENT: 0
+
+  # ------------------------------ thornode ------------------------------
+
+  # Common configuration for thornode, used by single node and cluster nodes
+  _thornode: &thornode
+    <<: *thorchain-defaults
+    hostname: thornode # required for genesis.sh
+    depends_on:
+      - polygon
+      - ethereum
+      - avalanche
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment: &thornode-environment
+      <<: *thorchain-environment
+      SEED: thornode
+      SIGNER_SEED_PHRASE: "dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog fossil"
+      THOR_BLOCK_TIME: ${BLOCK_TIME:-1s}
+      THOR_COSMOS_EBIFROST_ADDRESS: 0.0.0.0:50051
+      HARDFORK_BLOCK_HEIGHT: ${HARDFORK_BLOCK_HEIGHT:-}
+      NEW_GENESIS_TIME: ${NEW_GENESIS_TIME:-}
+      CHURN_MIGRATE_ROUNDS: 2
+      FUND_MIGRATION_INTERVAL: 30
+      SIGNING_TRANSACTION_PERIOD: 30
+      EMISSION_CURVE: 100000
+      AVAX_HOST: ${AVAX_HOST:-http://avalanche:9650/ext/bc/C/rpc}
+      ETH_HOST: ${ETH_HOST:-http://ethereum:8545}
+      BASE_HOST: ${BASE_HOST:-http://base:8545}
+      POL_HOST: ${POL_HOST:-http://polygon:8545}
+      BSC_HOST: ${BSC_HOST:-http://binance-smart:8545}
+      XRP_HOST: ${XRP_HOST:-http://xrp:5005}
+
+      # mimir default overrides
+      HALT_CHURNING: 1
+      EVM_ALLOWANCE_CHECK_AVAX: 1
+      EVM_ALLOWANCE_CHECK_BASE: 1
+      EVM_ALLOWANCE_CHECK_BSC: 1
+      EVM_ALLOWANCE_CHECK_ETH: 1
+      EVM_ALLOWANCE_CHECK_POL: 1
+    ports:
+      - 26657:26657
+      - 26656:26656
+      - 1317:1317
+      - 6060:6060
+      - 50051:50051
+      - 9090:9090
+    volumes:
+      - "../scripts:/docker/scripts"
+      - thornode:/root/.thornode
+    entrypoint: /docker/scripts/genesis.sh
+    command:
+      - thornode
+      - start
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:26657/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+
+  thornode:
+    <<: *thornode
+    # build is only on the main thornode service, not the cluster nodes
+    # this ensures the image is built only once and shared by all (including bifrost)
+    build:
+      context: ../..
+      dockerfile: ./build/docker/Dockerfile
+      args:
+        TAG: mocknet
+        DOCKER_MIRROR: ${DOCKER_MIRROR:-}
+    profiles:
+      - thornode
+      - mocknet
+      - mocknet-cluster
+
+  # ------------------------------ bifrost ------------------------------
+
+  bifrost: &bifrost
+    <<: *thorchain-defaults
+    profiles:
+      - mocknet
+      - mocknet-cluster
+      - bifrost
+      - validator
+    depends_on:
+      - bitcoin
+      - bitcoin-cash
+      - dogecoin
+      - gaia
+      - litecoin
+      - tron-supernode
+      - tron-fullnode
+      - thornode
+      - polygon
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment: &bifrost-environment
+      <<: *thorchain-environment
+      SIGNER_SEED_PHRASE: "dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog fossil"
+      CHAIN_API: thornode:1317
+      CHAIN_RPC: thornode:26657
+      BIFROST_THORCHAIN_CHAIN_EBIFROST: thornode:50051
+      BTC_HOST: ${BTC_HOST:-bitcoin:18443}
+      DOGE_HOST: ${DOGE_HOST:-dogecoin:18332}
+      BCH_HOST: ${BCH_HOST:-bitcoin-cash:28443}
+      LTC_HOST: ${LTC_HOST:-litecoin:38443}
+      ETH_HOST: ${ETH_HOST:-http://ethereum:8545}
+      AVAX_HOST: ${AVAX_HOST:-http://avalanche:9650/ext/bc/C/rpc}
+      GAIA_HOST: ${GAIA_HOST:-http://gaia:26657}
+      GAIA_GRPC_HOST: ${GAIA_GRPC_HOST:-gaia:9090}
+      THOR_BLOCK_TIME: ${BLOCK_TIME:-1s}
+      BLOCK_SCANNER_BACKOFF: ${BLOCK_SCANNER_BACKOFF:-5s}
+      PEER: ${PEER:-}
+      BIFROST_METRICS_PPROF_ENABLED: "true"
+      BIFROST_SIGNER_BACKUP_KEYSHARES: "true"
+      BIFROST_SIGNER_RESCHEDULE_BUFFER_BLOCKS: "5"
+      BIFROST_SIGNER_AUTO_OBSERVE: "false"
+      BIFROST_SIGNER_KEYGEN_TIMEOUT: 6s
+      BIFROST_SIGNER_KEYSIGN_TIMEOUT: 6s
+      BIFROST_CHAINS_AVAX_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_BCH_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_BTC_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_DOGE_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_ETH_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_GAIA_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_LTC_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_BASE_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+      BIFROST_CHAINS_XRP_BLOCK_SCANNER_OBSERVATION_FLEXIBILITY_BLOCKS: "5"
+
+      # maintain historical gas behavior for hard-coded smoke test values
+      BIFROST_CHAINS_ETH_BLOCK_SCANNER_MAX_GAS_LIMIT: 80000
+      BIFROST_CHAINS_AVAX_BLOCK_SCANNER_MAX_GAS_LIMIT: 80000
+      BIFROST_CHAINS_BSC_BLOCK_SCANNER_MAX_GAS_LIMIT: 80000
+      BIFROST_CHAINS_BASE_BLOCK_SCANNER_MAX_GAS_LIMIT: 80000
+
+      # enable btc
+      BIFROST_CHAINS_BTC_DISABLED: "${BIFROST_CHAINS_BTC_DISABLED:-false}"
+
+      # enable bch
+      BIFROST_CHAINS_BCH_DISABLED: "${BIFROST_CHAINS_BCH_DISABLED:-false}"
+
+      # enable ltc
+      BIFROST_CHAINS_LTC_DISABLED: "${BIFROST_CHAINS_LTC_DISABLED:-false}"
+
+      # enable doge
+      BIFROST_CHAINS_DOGE_DISABLED: "${BIFROST_CHAINS_DOGE_DISABLED:-false}"
+
+      # enable eth
+      BIFROST_CHAINS_ETH_DISABLED: "${BIFROST_CHAINS_ETH_DISABLED:-false}"
+
+      # enable avax
+      BIFROST_CHAINS_AVAX_DISABLED: "${BIFROST_CHAINS_AVAX_DISABLED:-false}"
+
+      # enable bsc
+      BIFROST_CHAINS_BSC_DISABLED: "${BIFROST_CHAINS_BSC_DISABLED:-false}"
+      BIFROST_CHAINS_BSC_RPC_HOST: ${BSC_HOST:-http://binance-smart:8545}
+
+      # enable base
+      BIFROST_CHAINS_BASE_DISABLED: "${BIFROST_CHAINS_BASE_DISABLED:-false}"
+      BIFROST_CHAINS_BASE_RPC_HOST: http://base:8545
+
+      # enable xrp
+      BIFROST_CHAINS_XRP_DISABLED: "${BIFROST_CHAINS_XRP_DISABLED:-false}"
+      BIFROST_CHAINS_XRP_RPC_HOST: http://xrp:5005
+      BIFROST_CHAINS_XRP_CHAIN_NETWORK: "1234"
+
+      # enable tron
+      BIFROST_CHAINS_TRON_DISABLED: "${BIFROST_CHAINS_TRON_DISABLED:-false}"
+      BIFROST_CHAINS_TRON_API_HOST: http://tron-fullnode:8090
+      BIFROST_CHAINS_TRON_RPC_HOST: http://tron-fullnode:8091
+
+      # enable gaia
+      BIFROST_CHAINS_GAIA_DISABLED: "${BIFROST_CHAINS_GAIA_DISABLED:-false}"
+      BIFROST_CHAINS_GAIA_RPC_HOST: ${GAIA_HOST:-http://gaia:26657}
+      BIFROST_CHAINS_GAIA_COSMOS_GRPC_HOST: ${GAIA_GRPC_HOST:-gaia:9090}
+      BIFROST_CHAINS_GAIA_COSMOS_CHAIN_ID: "localgaia"
+
+      # enable noble
+      BIFROST_CHAINS_NOBLE_DISABLED: "${BIFROST_CHAINS_NOBLE_DISABLED:-false}"
+      BIFROST_CHAINS_NOBLE_RPC_HOST: http://noble:26657
+      BIFROST_CHAINS_NOBLE_COSMOS_GRPC_HOST: "noble:9090"
+      BIFROST_CHAINS_NOBLE_COSMOS_CHAIN_ID: "localnoble"
+
+      # enable solana
+      BIFROST_CHAINS_SOL_DISABLED: "${BIFROST_CHAINS_SOL_DISABLED:-false}"
+      BIFROST_CHAINS_SOL_RPC_HOST: ${SOL_HOST:-http://solana:8899}
+
+      # enable polygon
+      BIFROST_CHAINS_POL_DISABLED: "${BIFROST_CHAINS_POL_DISABLED:-false}"
+      BIFROST_CHAINS_POL_RPC_HOST: ${BIFROST_CHAINS_POL_RPC_HOST:-http://polygon:8545}
+
+      BIFROST_CHAINS_ZEC_DISABLED: "${BIFROST_CHAINS_ZEC_DISABLED:-false}"
+      BIFROST_CHAINS_ZEC_RPC_HOST: "${BIFROST_CHAINS_ZEC_RPC_HOST:-http://zcash:18232}"
+
+      # disable sui
+      BIFROST_CHAINS_SUI_DISABLED: "true"
+
+      # disable cardano
+      BIFROST_CHAINS_ADA_DISABLED: "true"
+
+      # set fixed gas rate for evm chains
+      BIFROST_CHAINS_ETH_BLOCK_SCANNER_FIXED_GAS_RATE: 20_000_000_000 # 20 gwei
+      BIFROST_CHAINS_AVAX_BLOCK_SCANNER_FIXED_GAS_RATE: 100_000_000_000 # 100 navax
+      BIFROST_CHAINS_BSC_BLOCK_SCANNER_FIXED_GAS_RATE: 50_000_000_000 # 50 gwei
+      BIFROST_CHAINS_BASE_BLOCK_SCANNER_FIXED_GAS_RATE: 20_000_000_000 # 20 gwei
+      BIFROST_CHAINS_POL_BLOCK_SCANNER_FIXED_GAS_RATE: 500_000_000_000 # 500 gwei
+
+      # override bifrost whitelist tokens
+      BIFROST_CHAINS_AVAX_BLOCK_SCANNER_WHITELIST_TOKENS: "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922,0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E,0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+      BIFROST_CHAINS_BSC_BLOCK_SCANNER_WHITELIST_TOKENS: "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922,0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d,0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+      BIFROST_CHAINS_BASE_BLOCK_SCANNER_WHITELIST_TOKENS: "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922,0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913,0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf,0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+      BIFROST_CHAINS_POL_BLOCK_SCANNER_WHITELIST_TOKENS: "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922,0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913,0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf,0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+
+      # attestation timing
+      BIFROST_ATTESTATION_GOSSIP_MIN_TIME_BETWEEN_ATTESTATIONS: 1s
+      BIFROST_ATTESTATION_GOSSIP_OBSERVE_RECONCILE_INTERVAL: 1s
+
+      # shorter solana scan interval
+      BIFROST_CHAINS_SOL_BLOCK_SCANNER_SOLANA_SCAN_INTERVAL: 1s
+
+    ports:
+      - 5040:5040
+      - 6040:6040
+      - 9000:9000
+    entrypoint: /docker/scripts/bifrost.sh
+    volumes:
+      - "../scripts:/docker/scripts"
+      - bifrost:/var/data/bifrost
+      - thornode:/root/.thornode
+    command: ["bifrost", "-p"]
+
+  # ------------------------------ midgard ------------------------------
+
+  midgard:
+    profiles:
+      - midgard
+    depends_on:
+      - midgard-db
+      - thornode
+    image: registry.gitlab.com/thorchain/midgard:develop
+    restart: unless-stopped
+    environment:
+      MIDGARD_THORCHAIN_THOR_NODE_URL: http://thornode:1317/thorchain
+      MIDGARD_THORCHAIN_TENDERMINT_URL: http://thornode:26657/websocket
+      MIDGARD_TIMESCALE_HOST: midgard-db
+      MIDGARD_THORCHAIN_LAST_CHAIN_BACKOFF: ${THOR_BLOCK_TIME:-2s}
+    ports:
+      - 8080:8080
+    logging: *logging
+
+  midgard-db:
+    profiles:
+      - midgard
+    image: ${DOCKER_MIRROR:-}timescale/timescaledb:2.13.0-pg15
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=midgard
+      - POSTGRES_PASSWORD=password
+    command: postgres -c 'max_connections=250'
+    logging: *logging
+
+  ######################################################################################
+  # THORChain Cluster
+  ######################################################################################
+
+  # ------------------------------ thornodes ------------------------------
+
+  thornode-cat:
+    <<: *thornode
+    profiles:
+      - mocknet-cluster
+    depends_on:
+      thornode:
+        condition: service_healthy
+    ports: []
+    hostname: thornode-cat
+    environment:
+      <<: *thornode-environment
+      PEER: thornode
+      SEED: thornode-cat
+      SEEDS: thornode,thornode-fox,thornode-pig
+      SIGNER_SEED_PHRASE: "cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat crawl"
+    volumes:
+      - "../scripts:/docker/scripts"
+      - thornode-cat:/root/.thornode
+    entrypoint: /docker/scripts/validator.sh
+
+  thornode-fox:
+    <<: *thornode
+    profiles:
+      - mocknet-cluster
+    depends_on:
+      thornode:
+        condition: service_healthy
+    ports: []
+    hostname: thornode-fox
+    environment:
+      <<: *thornode-environment
+      PEER: thornode
+      SEED: thornode-fox
+      SEEDS: thornode,thornode-cat,thornode-pig
+      SIGNER_SEED_PHRASE: "fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox filter"
+    volumes:
+      - "../scripts:/docker/scripts"
+      - thornode-fox:/root/.thornode
+    entrypoint: /docker/scripts/validator.sh
+
+  thornode-pig:
+    <<: *thornode
+    profiles:
+      - mocknet-cluster
+    depends_on:
+      thornode:
+        condition: service_healthy
+    ports: []
+    hostname: thornode-pig
+    environment:
+      <<: *thornode-environment
+      PEER: thornode
+      SEED: thornode-pig
+      SEEDS: thornode,thornode-cat,thornode-fox
+      SIGNER_SEED_PHRASE: "pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig quick"
+    volumes:
+      - "../scripts:/docker/scripts"
+      - thornode-pig:/root/.thornode
+    entrypoint: /docker/scripts/validator.sh
+
+  # ------------------------------ bifrosts ------------------------------
+
+  bifrost-cat:
+    <<: *bifrost
+    profiles:
+      - mocknet-cluster
+    depends_on:
+      thornode:
+        condition: service_healthy
+    environment:
+      <<: *bifrost-environment
+      PEER: bifrost
+      CHAIN_API: thornode-cat:1317
+      CHAIN_RPC: thornode-cat:26657
+      BIFROST_THORCHAIN_CHAIN_EBIFROST: thornode-cat:50051
+      SIGNER_SEED_PHRASE: "cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat cat crawl"
+    ports:
+      - 5040
+      - 6040
+    volumes:
+      - "../scripts:/docker/scripts"
+      - bifrost-cat:/var/data/bifrost
+      - thornode-cat:/root/.thornode
+    command: ["bifrost"]
+
+  bifrost-fox:
+    <<: *bifrost
+    profiles:
+      - mocknet-cluster
+    depends_on:
+      thornode:
+        condition: service_healthy
+    environment:
+      <<: *bifrost-environment
+      PEER: bifrost
+      CHAIN_API: thornode-fox:1317
+      CHAIN_RPC: thornode-fox:26657
+      BIFROST_THORCHAIN_CHAIN_EBIFROST: thornode-fox:50051
+      SIGNER_SEED_PHRASE: "fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox fox filter"
+    ports:
+      - 5040
+      - 6040
+    volumes:
+      - "../scripts:/docker/scripts"
+      - bifrost-fox:/var/data/bifrost
+      - thornode-fox:/root/.thornode
+    command: ["bifrost"]
+
+  bifrost-pig:
+    <<: *bifrost
+    profiles:
+      - mocknet-cluster
+    depends_on:
+      thornode:
+        condition: service_healthy
+    environment:
+      <<: *bifrost-environment
+      PEER: bifrost
+      CHAIN_API: thornode-pig:1317
+      CHAIN_RPC: thornode-pig:26657
+      BIFROST_THORCHAIN_CHAIN_EBIFROST: thornode-pig:50051
+      SIGNER_SEED_PHRASE: "pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig pig quick"
+    ports:
+      - 5040
+      - 6040
+    volumes:
+      - "../scripts:/docker/scripts"
+      - bifrost-pig:/var/data/bifrost
+      - thornode-pig:/root/.thornode
+    command: ["bifrost"]
+
+  ######################################################################################
+  # Mock Clients
+  ######################################################################################
+
+  # ------------------------------ gaia ------------------------------
+
+  gaia:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:gaia-daemon-27.1.0
+    volumes:
+      - "./mocknet:/mocknet"
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-1s}
+    ports:
+      - "23357:26657"
+      - "9091:9090"
+      - "21317:1317"
+    command: /mocknet/init-gaia.sh
+
+  # ------------------------------ noble ------------------------------
+
+  noble:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:noble-daemon-9.0.4
+    volumes:
+      - "./mocknet:/mocknet"
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-1s}
+    ports:
+      - "20257:26657"
+      - "9092:9090"
+      - "22317:1317"
+    command: /mocknet/init-noble.sh
+
+  # ------------------------------ bitcoin ------------------------------
+
+  bitcoin:
+    user: root
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:bitcoin-daemon-26.2
+    restart: unless-stopped
+    environment:
+      BTC_MASTER_ADDR: ${BTC_MASTER_ADDR:-bcrt1qf4l5dlqhaujgkxxqmug4stfvmvt58vx2h44c39}
+      BLOCK_TIME: ${BLOCK_TIME:-1}
+    ports:
+      - 18443:18443
+      - 18444:18444
+    entrypoint: "/scripts/entrypoint-mock.sh"
+
+  # ------------------------------ bitcoin cash ------------------------------
+
+  bitcoin-cash:
+    user: root
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:bitcoin-cash-daemon-28.0.1
+    restart: unless-stopped
+    environment:
+      RPC_PORT: "28443"
+      BTC_MASTER_ADDR: ${BCH_MASTER_ADDR:-qpxh73huzlhjfzcccr03zkpd9nd3wsasegmrreet72}
+      BLOCK_TIME: ${BLOCK_TIME:-1}
+    ports:
+      - 28443:28443
+    entrypoint: "/scripts/entrypoint-mock.sh"
+
+  # ------------------------------ dogecoin ------------------------------
+
+  dogecoin:
+    user: root
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:dogecoin-daemon-1.14.9
+    restart: unless-stopped
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-1}
+      DOGE_MASTER_ADDR: ${DOGE_MASTER_ADDR:-mnaioCtEGdw6bd6rWJ13Mbre1kN5rPa2Mo}
+    ports:
+      - 18332:18332
+    entrypoint: "/scripts/entrypoint-mock.sh"
+
+  # ------------------------------ litecoin ------------------------------
+
+  litecoin:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:litecoin-daemon-0.21.4
+    restart: unless-stopped
+    environment:
+      BTC_MASTER_ADDR: ${LTC_MASTER_ADDR:-rltc1qf4l5dlqhaujgkxxqmug4stfvmvt58vx2fc03xm}
+      RPC_PORT: "38443"
+    ports:
+      - 38443:38443
+    volumes:
+      - "./mocknet:/mocknet"
+    entrypoint: "/mocknet/litecoin-entrypoint.sh"
+
+  # ------------------------------ ethereum ------------------------------
+
+  ethereum:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: ${DOCKER_MIRROR:-}ethereum/client-go:v1.17.2
+    restart: unless-stopped
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-5}
+    ports:
+      - 8545:8545
+      - 30301:30301
+      - 30303:30303
+    volumes:
+      - "../scripts:/docker/scripts"
+    entrypoint: /docker/scripts/mock/start-eth.sh
+
+  # ------------------------------ base ------------------------------
+
+  base:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101609.1
+    restart: unless-stopped
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-5}
+      OP_NODE_L1_ETH_RPC: ${ETH_HOST:-http://ethereum:8545}
+    ports:
+      - 8547:8545
+    volumes:
+      - "../scripts:/docker/scripts"
+    entrypoint: /docker/scripts/mock/start-eth.sh
+
+  # ------------------------------ xrp ------------------------------
+
+  xrp:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: ${DOCKER_MIRROR:-}xrpllabsofficial/xrpld:3.1.2
+    restart: unless-stopped
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-5}
+    ports:
+      - 5005:5005
+    volumes:
+      - "../scripts:/docker/scripts"
+    entrypoint: /docker/scripts/xrp/start-xrp.sh
+
+  # ------------------------------ binance-smart ------------------------------
+
+  binance-smart:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:binance-smart-daemon-1.4.18
+    restart: unless-stopped
+    environment:
+      BLOCK_TIME: ${BLOCK_TIME:-5}
+    ports:
+      - 8546:8545
+    volumes:
+      - "../scripts:/docker/scripts"
+    entrypoint: /docker/scripts/mock/start-eth.sh
+
+  # ------------------------------ avalanche ------------------------------
+
+  avalanche:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    restart: unless-stopped
+    image: registry.gitlab.com/thorchain/devops/node-launcher:avalanche-daemon-1.14.1
+    volumes:
+      - "./mocknet/avax:/mocknet"
+    command:
+      - ./avalanchego
+      - --sybil-protection-enabled=false
+      - --network-id=local
+      - --http-host=0.0.0.0
+      - --chain-config-dir=/mocknet/configs
+      - --http-allowed-hosts=*
+    ports:
+      - 9650:9650
+    environment:
+      RPC_PORT: "9650"
+
+  # ------------------------------ tron ------------------------------
+  # The fullnode must wait for the supernode to be healthy before starting.
+  # Without this, both nodes try to connect simultaneously, triggering DUPLICATE_PEER
+  # detection which closes both connections. The fullnode ends up with 0 peers and
+  # fails to sync blocks, causing simulation tests to timeout waiting for tron.
+
+  tron-supernode:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:tron-daemon-4.8.1
+    volumes:
+      - "./mocknet:/mocknet"
+    environment:
+      TRON_NODE_TYPE: mocknet-supernode
+    healthcheck:
+      # Wait for supernode to produce block 1 before fullnode connects
+      test:
+        [
+          "CMD",
+          "curl",
+          "-sf",
+          "-X",
+          "POST",
+          "-H",
+          "Content-Type: application/json",
+          "-d",
+          '{"num":1}',
+          "http://localhost:8090/wallet/getblockbynum",
+        ]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  tron-fullnode:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: registry.gitlab.com/thorchain/devops/node-launcher:tron-daemon-4.8.1
+    depends_on:
+      tron-supernode:
+        condition: service_healthy
+    links:
+      - tron-supernode:supernode
+    volumes:
+      - "./mocknet:/mocknet"
+    ports:
+      - "8090:8090"
+      - "8091:8091"
+    environment:
+      TRON_NODE_TYPE: mocknet-fullnode
+      TRON_SEED_NODE: docker-tron-supernode-1:18888
+
+  # ------------------------------ solana ------------------------------
+
+  solana:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    restart: unless-stopped
+    image: ${DOCKER_MIRROR:-}anzaxyz/agave:v2.3.8
+    volumes:
+      - "./mocknet/solana:/mocknet"
+    entrypoint: /mocknet/entrypoint.sh
+    ports:
+      - 8899:8899
+      - 8900:8900
+      - 10000:10000
+    environment:
+      RPC_PORT: "8899"
+      AIRDROP_ADDRESS: "AAH1XhfycX678et7Pjvwp1DMWnHpSP92wpJwV19MXHtX"
+      AIRDROP_AMOUNT: "10000"
+
+  # -------------------------- polygon ------------------------------
+
+  polygon:
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    restart: unless-stopped
+    image: ${DOCKER_MIRROR:-}0xpolygon/bor:2.5.9
+    ports:
+      - 8548:8545
+    volumes:
+      - ./mocknet/polygon:/mocknet
+    entrypoint: /mocknet/entrypoint.sh
+    command: >
+      server 
+      --allow-insecure-unlock
+      --dev 
+      --dev.period 2
+      --bor.withoutheimdall
+      --http 
+      --http.api=eth,net,web3,txpool,personal 
+      --http.addr=0.0.0.0 
+      --http.corsdomain="*" 
+      --http.vhosts="*"
+      --nodiscover 
+      --miner.etherbase=0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
+
+  # ------------------------------ zcash ------------------------------
+
+  zcash:
+    user: root
+    profiles:
+      - mocknet
+      - mocknet-cluster
+    image: ${DOCKER_MIRROR:-}electriccoinco/zcashd:v6.10.0
+    restart: unless-stopped
+    environment:
+      ZCASH_MASTER_ADDR: ${ZCASH_MASTER_ADDR:-tmGn7qKhnpbnwZPsaPt9XXAQz1Q3HAUCrwh}
+      BLOCK_TIME: ${BLOCK_TIME:-1}
+    volumes:
+      - "./mocknet/zcash/zcash.conf:/srv/zcashd/.zcash/zcash.conf"
+      - "./mocknet/zcash/entrypoint-mock.sh:/usr/local/bin/entrypoint-mock.sh"
+    ports:
+      - 18232:18232
+    entrypoint: entrypoint-mock.sh
+    platform: linux/amd64

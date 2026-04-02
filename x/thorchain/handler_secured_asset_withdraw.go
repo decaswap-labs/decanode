@@ -1,0 +1,82 @@
+package thorchain
+
+import (
+	"fmt"
+
+	"github.com/hashicorp/go-multierror"
+
+	"github.com/decaswap-labs/decanode/common"
+	"github.com/decaswap-labs/decanode/common/cosmos"
+	"github.com/decaswap-labs/decanode/constants"
+)
+
+// SecuredAssetWithdrawHandler is handler to process MsgSecuredAssetWithdraw
+type SecuredAssetWithdrawHandler struct {
+	mgr Manager
+}
+
+// NewSecuredAssetWithdrawHandler create a new instance of SecuredAssetWithdrawHandler
+func NewSecuredAssetWithdrawHandler(mgr Manager) SecuredAssetWithdrawHandler {
+	return SecuredAssetWithdrawHandler{
+		mgr: mgr,
+	}
+}
+
+// Run is the main entry point for SecuredAssetWithdrawHandler
+func (h SecuredAssetWithdrawHandler) Run(ctx cosmos.Context, m cosmos.Msg) (*cosmos.Result, error) {
+	msg, ok := m.(*MsgSecuredAssetWithdraw)
+	if !ok {
+		return nil, errInvalidMessage
+	}
+	if err := h.validate(ctx, *msg); err != nil {
+		ctx.Logger().Error("MsgSecuredAssetWithdraw failed validation", "error", err)
+		return nil, err
+	}
+	err := h.handle(ctx, *msg)
+	if err != nil {
+		ctx.Logger().Error("fail to process MsgSecuredAssetWithdraw", "error", err)
+	}
+	return &cosmos.Result{}, err
+}
+
+func (h SecuredAssetWithdrawHandler) validate(ctx cosmos.Context, msg MsgSecuredAssetWithdraw) error {
+	m, err := h.mgr.Keeper().GetMimirWithRef(ctx, constants.MimirTemplateSecuredAssetHaltWithdraw, msg.Asset.Chain.String())
+	if err != nil {
+		return err
+	}
+	if m > 0 && m <= ctx.BlockHeight() {
+		return fmt.Errorf("%s secured asset withdrawals are disabled", msg.Asset.Chain)
+	}
+
+	// Validate that the address network matches the current chain network
+	if !common.CurrentChainNetwork.SoftEquals(msg.AssetAddress.GetNetwork(msg.AssetAddress.GetChain())) {
+		return fmt.Errorf("address(%s) is not same network", msg.AssetAddress)
+	}
+
+	return msg.ValidateBasic()
+}
+
+// handle process MsgSecuredAssetWithdraw
+func (h SecuredAssetWithdrawHandler) handle(ctx cosmos.Context, msg MsgSecuredAssetWithdraw) error {
+	withdrawAmount, err := h.mgr.SecuredAssetManager().Withdraw(ctx, msg.Asset, msg.Amount, msg.Signer, msg.AssetAddress, msg.Tx.ID)
+	if err != nil {
+		return err
+	}
+
+	toi := TxOutItem{
+		Chain:     withdrawAmount.Asset.GetChain(),
+		InHash:    msg.Tx.ID,
+		ToAddress: msg.AssetAddress,
+		Coin:      withdrawAmount,
+	}
+
+	ok, err := h.mgr.TxOutStore().TryAddTxOutItem(ctx, h.mgr, toi, cosmos.ZeroUint())
+	if err != nil {
+		return multierror.Append(errFailAddOutboundTx, err)
+	}
+	if !ok {
+		return errFailAddOutboundTx
+	}
+
+	return nil
+}
