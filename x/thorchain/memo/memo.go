@@ -333,23 +333,6 @@ func FetchAddress(ctx cosmos.Context, keeper keeper.Keeper, name string, chain c
 		return addr, nil
 	}
 
-	parts := strings.SplitN(name, ".", 2)
-	if len(parts) > 1 {
-		chain, err = common.NewChain(parts[1])
-		if err != nil {
-			return common.NoAddress, err
-		}
-	}
-
-	if keeper.THORNameExists(ctx, parts[0]) {
-		var thorname types.THORName
-		thorname, err = keeper.GetTHORName(ctx, parts[0])
-		if err != nil {
-			return common.NoAddress, err
-		}
-		return thorname.GetAlias(chain), nil
-	}
-
 	return common.NoAddress, fmt.Errorf("%s is not recognizable", name)
 }
 

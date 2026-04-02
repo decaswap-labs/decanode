@@ -694,15 +694,6 @@ func emitEndBlockTelemetry(ctx cosmos.Context, mgr Manager) error {
 		}
 		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "price", "usd"}, price, labels)
 
-		// trade accounts
-		var tu TradeUnit
-		tu, err = mgr.Keeper().GetTradeUnit(ctx, pool.Asset.GetTradeAsset())
-		if err != nil {
-			ctx.Logger().Error("fail to get trade unit", "error", err)
-			continue
-		}
-		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "tradeasset", "units"}, telem(tu.Units), labels)
-		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "tradeasset", "depth"}, telem(tu.Depth), labels)
 	}
 
 	// emit vault metrics
@@ -1361,92 +1352,6 @@ func settleSwapCached(ctx cosmos.Context, mgr Manager, msg MsgSwap, settleReason
 // possible to providers. The amount is limited by the reserve units and pending rune -
 // whichever is less. The ownership units are adjusted and a corresponding amount of
 // rune is transferred from the runepool module to the reserve.
-func reserveExitRUNEPool(ctx cosmos.Context, mgr Manager) error {
-	runePool, err := mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return fmt.Errorf("unable to get runepool: %w", err)
-	}
-
-	pendingRune := mgr.Keeper().GetRuneBalanceOfModule(ctx, RUNEPoolName)
-
-	// if the reserve owns no pol or there are no pending rune, nothing to do
-	if runePool.ReserveUnits.IsZero() || pendingRune.IsZero() {
-		return nil
-	}
-
-	// the reserve will exit as much as possible, limited by reserve share or pending rune
-	reserveExitRune := pendingRune
-	runePoolValue, err := runePoolValue(ctx, mgr)
-	if err != nil {
-		return fmt.Errorf("fail to get pol pool value: %w", err)
-	}
-	reserveRunepoolValue := common.GetSafeShare(runePool.ReserveUnits, runePool.TotalUnits(), runePoolValue)
-	if reserveRunepoolValue.LT(reserveExitRune) {
-		reserveExitRune = reserveRunepoolValue
-	}
-	reserveExitUnits := common.GetSafeShare(reserveExitRune, reserveRunepoolValue, runePool.ReserveUnits)
-
-	// transfer the corresponding rune from runepool module to reserve
-	reserveExitCoins := common.NewCoins(common.NewCoin(common.RuneNative, reserveExitRune))
-	err = mgr.Keeper().SendFromModuleToModule(ctx, RUNEPoolName, ReserveName, reserveExitCoins)
-	if err != nil {
-		return fmt.Errorf("unable to SendFromModuleToModule: %s", err)
-	}
-
-	ctx.Logger().Info("reserve exited runepool", "units", reserveExitUnits, "rune", reserveExitRune)
-
-	// update runepool units
-	runePool.ReserveUnits = common.SafeSub(runePool.ReserveUnits, reserveExitUnits)
-	mgr.Keeper().SetRUNEPool(ctx, runePool)
-
-	return nil
-}
-
-// reserveEnterRUNEPool will acquire the provided rune value of the runepool from the
-// providers to the reserve. The ownership units are adjusted and a corresponding amount
-// of rune is transferred from the reserve to the runepool module. This allows the
-// reserve to reclaim units to allow providers to withdraw.
-func reserveEnterRUNEPool(ctx cosmos.Context, mgr Manager, rune cosmos.Uint) error {
-	runePool, err := mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return fmt.Errorf("fail to get runepool: %w", err)
-	}
-
-	// determine the rune value of the units
-	runePoolValue, err := runePoolValue(ctx, mgr)
-	if err != nil {
-		return fmt.Errorf("fail to get runepool value: %w", err)
-	}
-	units := common.GetSafeShare(rune, runePoolValue, runePool.TotalUnits())
-	coins := common.NewCoins(common.NewCoin(common.RuneNative, rune))
-
-	// transfer the rune from the reserve to the runepool
-	err = mgr.Keeper().SendFromModuleToModule(ctx, ReserveName, RUNEPoolName, coins)
-	if err != nil {
-		return fmt.Errorf("fail to transfer rune from reserve to runepool: %w", err)
-	}
-
-	ctx.Logger().Info("reserve entered runepool", "units", units, "rune", rune)
-
-	// update runepool units
-	runePool.ReserveUnits = runePool.ReserveUnits.Add(units)
-	mgr.Keeper().SetRUNEPool(ctx, runePool)
-
-	return nil
-}
-
-// runePoolValue is the POL value in RUNE plus undeployed RUNE in the runepool module.
-func runePoolValue(ctx cosmos.Context, mgr Manager) (cosmos.Uint, error) {
-	polValue, err := polPoolValue(ctx, mgr)
-	if err != nil {
-		return cosmos.ZeroUint(), err
-	}
-
-	// get the total rune in the runepool module
-	pending := mgr.Keeper().GetRuneBalanceOfModule(ctx, RUNEPoolName)
-
-	return polValue.Add(pending), nil
-}
 
 // polPoolValue - calculates how much the POL is worth in rune
 func polPoolValue(ctx cosmos.Context, mgr Manager) (cosmos.Uint, error) {

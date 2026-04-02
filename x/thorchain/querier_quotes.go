@@ -72,20 +72,7 @@ func quoteParseAddress(ctx cosmos.Context, mgr *Mgrs, addrString string, chain c
 		return addr, nil
 	}
 
-	// attempt to lookup a thorname address
-	name, err := mgr.Keeper().GetTHORName(ctx, addrString)
-	if err != nil {
-		return common.NoAddress, fmt.Errorf("unable to parse address: %w", err)
-	}
-
-	// find the address for the correct chain
-	for _, alias := range name.Aliases {
-		if alias.Chain.Equals(chain) {
-			return alias.Address, nil
-		}
-	}
-
-	return common.NoAddress, fmt.Errorf("no thorname alias for chain %s", chain)
+	return common.NoAddress, fmt.Errorf("unable to parse address: %w", err)
 }
 
 // parseMultipleAffiliateParams - attempts to parse one or more affiliates + affiliate
