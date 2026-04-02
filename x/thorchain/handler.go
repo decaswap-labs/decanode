@@ -67,7 +67,19 @@ func getInternalHandlerMapping(mgr Manager) map[string]MsgHandler {
 	m[sdk.MsgTypeURL(&MsgRagnarok{})] = NewRagnarokHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgNoOp{})] = NewNoOpHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgConsolidate{})] = NewConsolidateHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgManageTHORName{})] = NewManageTHORNameHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgReferenceMemo{})] = NewReferenceMemoHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgTradeAccountDeposit{})] = NewTradeAccountDepositHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgTradeAccountWithdrawal{})] = NewTradeAccountWithdrawalHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgSecuredAssetDeposit{})] = NewSecuredAssetDepositHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgSecuredAssetWithdraw{})] = NewSecuredAssetWithdrawHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgRunePoolDeposit{})] = NewRunePoolDepositHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgRunePoolWithdraw{})] = NewRunePoolWithdrawHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgModifyLimitSwap{})] = NewModifyLimitSwapHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgSwitch{})] = NewSwitchHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgTCYClaim{})] = NewTCYClaimHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgTCYStake{})] = NewTCYStakeHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgTCYUnstake{})] = NewTCYUnstakeHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgOperatorRotate{})] = NewOperatorRotateHandler(mgr)
 	return m
 }
@@ -256,14 +268,6 @@ func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, sig
 		newMsg = NewMsgRunePoolDeposit(signer, tx.Tx)
 	case RunePoolWithdrawMemo:
 		newMsg = NewMsgRunePoolWithdraw(signer, tx.Tx, m.GetBasisPts(), m.GetAffiliateAddress(), m.GetAffiliateBasisPoints())
-	case ExecMemo:
-		coin := tx.Tx.Coins[0]
-		var sender cosmos.AccAddress
-		sender, err = tx.Tx.FromAddress.MappedAccAddress()
-		if err != nil {
-			return nil, err
-		}
-		newMsg = NewMsgWasmExec(coin.Asset, coin.Amount, m.ContractAddress, sender, signer, m.Msg, tx.Tx)
 	case SwitchMemo:
 		coin := tx.Tx.Coins[0]
 		newMsg = NewMsgSwitch(coin.Asset, coin.Amount, m.GetAccAddress(), signer, tx.Tx)

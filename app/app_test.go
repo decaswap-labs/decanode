@@ -10,7 +10,6 @@ import (
 
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	abci "github.com/cometbft/cometbft/abci/types"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -130,7 +129,6 @@ func TestEip712Signing(t *testing.T) {
 		nil,
 		false,
 		simtestutil.EmptyAppOptions{},
-		[]wasmkeeper.Option{},
 	)
 
 	// 1.
@@ -202,7 +200,6 @@ func TestProcessProposal(t *testing.T) {
 		nil,
 		true,
 		appOpts,
-		[]wasmkeeper.Option{},
 	)
 
 	var (

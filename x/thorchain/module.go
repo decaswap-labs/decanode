@@ -33,8 +33,6 @@ import (
 	"github.com/decaswap-labs/decanode/x/thorchain/client/cli"
 	"github.com/decaswap-labs/decanode/x/thorchain/types"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
@@ -157,7 +155,6 @@ func (am AppModule) QuerierRoute() string {
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), am.msgServer)
 	types.RegisterQueryServer(cfg.QueryServer(), am.queryServer)
-	wasmtypes.RegisterQueryServer(cfg.QueryServer(), wasmkeeper.Querier(&am.mgr.wasmKeeper))
 
 	m := NewMigrator(am.mgr)
 	if err := cfg.RegisterMigration(types.ModuleName, 13, m.Migrate13to14); err != nil {

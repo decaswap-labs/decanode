@@ -6,7 +6,6 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	types "github.com/CosmWasm/wasmd/x/wasm/types"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
@@ -167,17 +166,6 @@ type MsgClient interface {
 	ApproveUpgrade(ctx context.Context, in *MsgApproveUpgrade, opts ...grpc.CallOption) (*MsgEmpty, error)
 	RejectUpgrade(ctx context.Context, in *MsgRejectUpgrade, opts ...grpc.CallOption) (*MsgEmpty, error)
 	PriceFeedQuorumBatch(ctx context.Context, in *MsgPriceFeedQuorumBatch, opts ...grpc.CallOption) (*MsgEmpty, error)
-	// CosmWasm interface cloned in order so that we can register the x/thorchain
-	// message server as the server for x/wasm messages, and route through version
-	// control
-	StoreCode(ctx context.Context, in *types.MsgStoreCode, opts ...grpc.CallOption) (*types.MsgStoreCodeResponse, error)
-	InstantiateContract(ctx context.Context, in *types.MsgInstantiateContract, opts ...grpc.CallOption) (*types.MsgInstantiateContractResponse, error)
-	InstantiateContract2(ctx context.Context, in *types.MsgInstantiateContract2, opts ...grpc.CallOption) (*types.MsgInstantiateContract2Response, error)
-	ExecuteContract(ctx context.Context, in *types.MsgExecuteContract, opts ...grpc.CallOption) (*types.MsgExecuteContractResponse, error)
-	MigrateContract(ctx context.Context, in *types.MsgMigrateContract, opts ...grpc.CallOption) (*types.MsgMigrateContractResponse, error)
-	SudoContract(ctx context.Context, in *types.MsgSudoContract, opts ...grpc.CallOption) (*types.MsgSudoContractResponse, error)
-	UpdateAdmin(ctx context.Context, in *types.MsgUpdateAdmin, opts ...grpc.CallOption) (*types.MsgUpdateAdminResponse, error)
-	ClearAdmin(ctx context.Context, in *types.MsgClearAdmin, opts ...grpc.CallOption) (*types.MsgClearAdminResponse, error)
 }
 
 type msgClient struct {
@@ -395,78 +383,6 @@ func (c *msgClient) PriceFeedQuorumBatch(ctx context.Context, in *MsgPriceFeedQu
 	return out, nil
 }
 
-func (c *msgClient) StoreCode(ctx context.Context, in *types.MsgStoreCode, opts ...grpc.CallOption) (*types.MsgStoreCodeResponse, error) {
-	out := new(types.MsgStoreCodeResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/StoreCode", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) InstantiateContract(ctx context.Context, in *types.MsgInstantiateContract, opts ...grpc.CallOption) (*types.MsgInstantiateContractResponse, error) {
-	out := new(types.MsgInstantiateContractResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/InstantiateContract", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) InstantiateContract2(ctx context.Context, in *types.MsgInstantiateContract2, opts ...grpc.CallOption) (*types.MsgInstantiateContract2Response, error) {
-	out := new(types.MsgInstantiateContract2Response)
-	err := c.cc.Invoke(ctx, "/types.Msg/InstantiateContract2", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) ExecuteContract(ctx context.Context, in *types.MsgExecuteContract, opts ...grpc.CallOption) (*types.MsgExecuteContractResponse, error) {
-	out := new(types.MsgExecuteContractResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/ExecuteContract", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) MigrateContract(ctx context.Context, in *types.MsgMigrateContract, opts ...grpc.CallOption) (*types.MsgMigrateContractResponse, error) {
-	out := new(types.MsgMigrateContractResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/MigrateContract", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) SudoContract(ctx context.Context, in *types.MsgSudoContract, opts ...grpc.CallOption) (*types.MsgSudoContractResponse, error) {
-	out := new(types.MsgSudoContractResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/SudoContract", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) UpdateAdmin(ctx context.Context, in *types.MsgUpdateAdmin, opts ...grpc.CallOption) (*types.MsgUpdateAdminResponse, error) {
-	out := new(types.MsgUpdateAdminResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/UpdateAdmin", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) ClearAdmin(ctx context.Context, in *types.MsgClearAdmin, opts ...grpc.CallOption) (*types.MsgClearAdminResponse, error) {
-	out := new(types.MsgClearAdminResponse)
-	err := c.cc.Invoke(ctx, "/types.Msg/ClearAdmin", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	Ban(context.Context, *MsgBan) (*MsgEmpty, error)
@@ -492,17 +408,6 @@ type MsgServer interface {
 	ApproveUpgrade(context.Context, *MsgApproveUpgrade) (*MsgEmpty, error)
 	RejectUpgrade(context.Context, *MsgRejectUpgrade) (*MsgEmpty, error)
 	PriceFeedQuorumBatch(context.Context, *MsgPriceFeedQuorumBatch) (*MsgEmpty, error)
-	// CosmWasm interface cloned in order so that we can register the x/thorchain
-	// message server as the server for x/wasm messages, and route through version
-	// control
-	StoreCode(context.Context, *types.MsgStoreCode) (*types.MsgStoreCodeResponse, error)
-	InstantiateContract(context.Context, *types.MsgInstantiateContract) (*types.MsgInstantiateContractResponse, error)
-	InstantiateContract2(context.Context, *types.MsgInstantiateContract2) (*types.MsgInstantiateContract2Response, error)
-	ExecuteContract(context.Context, *types.MsgExecuteContract) (*types.MsgExecuteContractResponse, error)
-	MigrateContract(context.Context, *types.MsgMigrateContract) (*types.MsgMigrateContractResponse, error)
-	SudoContract(context.Context, *types.MsgSudoContract) (*types.MsgSudoContractResponse, error)
-	UpdateAdmin(context.Context, *types.MsgUpdateAdmin) (*types.MsgUpdateAdminResponse, error)
-	ClearAdmin(context.Context, *types.MsgClearAdmin) (*types.MsgClearAdminResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -578,31 +483,6 @@ func (*UnimplementedMsgServer) RejectUpgrade(ctx context.Context, req *MsgReject
 func (*UnimplementedMsgServer) PriceFeedQuorumBatch(ctx context.Context, req *MsgPriceFeedQuorumBatch) (*MsgEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PriceFeedQuorumBatch not implemented")
 }
-func (*UnimplementedMsgServer) StoreCode(ctx context.Context, req *types.MsgStoreCode) (*types.MsgStoreCodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StoreCode not implemented")
-}
-func (*UnimplementedMsgServer) InstantiateContract(ctx context.Context, req *types.MsgInstantiateContract) (*types.MsgInstantiateContractResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InstantiateContract not implemented")
-}
-func (*UnimplementedMsgServer) InstantiateContract2(ctx context.Context, req *types.MsgInstantiateContract2) (*types.MsgInstantiateContract2Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InstantiateContract2 not implemented")
-}
-func (*UnimplementedMsgServer) ExecuteContract(ctx context.Context, req *types.MsgExecuteContract) (*types.MsgExecuteContractResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExecuteContract not implemented")
-}
-func (*UnimplementedMsgServer) MigrateContract(ctx context.Context, req *types.MsgMigrateContract) (*types.MsgMigrateContractResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MigrateContract not implemented")
-}
-func (*UnimplementedMsgServer) SudoContract(ctx context.Context, req *types.MsgSudoContract) (*types.MsgSudoContractResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SudoContract not implemented")
-}
-func (*UnimplementedMsgServer) UpdateAdmin(ctx context.Context, req *types.MsgUpdateAdmin) (*types.MsgUpdateAdminResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateAdmin not implemented")
-}
-func (*UnimplementedMsgServer) ClearAdmin(ctx context.Context, req *types.MsgClearAdmin) (*types.MsgClearAdminResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClearAdmin not implemented")
-}
-
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
 }
@@ -1021,150 +901,6 @@ func _Msg_PriceFeedQuorumBatch_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_StoreCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgStoreCode)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).StoreCode(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/StoreCode",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).StoreCode(ctx, req.(*types.MsgStoreCode))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_InstantiateContract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgInstantiateContract)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).InstantiateContract(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/InstantiateContract",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).InstantiateContract(ctx, req.(*types.MsgInstantiateContract))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_InstantiateContract2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgInstantiateContract2)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).InstantiateContract2(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/InstantiateContract2",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).InstantiateContract2(ctx, req.(*types.MsgInstantiateContract2))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_ExecuteContract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgExecuteContract)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ExecuteContract(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/ExecuteContract",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ExecuteContract(ctx, req.(*types.MsgExecuteContract))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_MigrateContract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgMigrateContract)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).MigrateContract(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/MigrateContract",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).MigrateContract(ctx, req.(*types.MsgMigrateContract))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_SudoContract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgSudoContract)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SudoContract(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/SudoContract",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SudoContract(ctx, req.(*types.MsgSudoContract))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_UpdateAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgUpdateAdmin)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdateAdmin(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/UpdateAdmin",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdateAdmin(ctx, req.(*types.MsgUpdateAdmin))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_ClearAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(types.MsgClearAdmin)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ClearAdmin(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/types.Msg/ClearAdmin",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ClearAdmin(ctx, req.(*types.MsgClearAdmin))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "types.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -1260,38 +996,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PriceFeedQuorumBatch",
 			Handler:    _Msg_PriceFeedQuorumBatch_Handler,
-		},
-		{
-			MethodName: "StoreCode",
-			Handler:    _Msg_StoreCode_Handler,
-		},
-		{
-			MethodName: "InstantiateContract",
-			Handler:    _Msg_InstantiateContract_Handler,
-		},
-		{
-			MethodName: "InstantiateContract2",
-			Handler:    _Msg_InstantiateContract2_Handler,
-		},
-		{
-			MethodName: "ExecuteContract",
-			Handler:    _Msg_ExecuteContract_Handler,
-		},
-		{
-			MethodName: "MigrateContract",
-			Handler:    _Msg_MigrateContract_Handler,
-		},
-		{
-			MethodName: "SudoContract",
-			Handler:    _Msg_SudoContract_Handler,
-		},
-		{
-			MethodName: "UpdateAdmin",
-			Handler:    _Msg_UpdateAdmin_Handler,
-		},
-		{
-			MethodName: "ClearAdmin",
-			Handler:    _Msg_ClearAdmin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -39,8 +39,6 @@ import (
 	kv1 "github.com/decaswap-labs/decanode/x/thorchain/keeper/v1"
 	"github.com/decaswap-labs/decanode/x/thorchain/types"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 )
 
 var errKaboom = errors.New("kaboom")
@@ -95,14 +93,12 @@ func setupManagerForTest(c *C) (cosmos.Context, *Mgrs) {
 	keyAcc := cosmos.NewKVStoreKey(authtypes.StoreKey)
 	keyBank := cosmos.NewKVStoreKey(banktypes.StoreKey)
 	keyUpgrade := cosmos.NewKVStoreKey(upgradetypes.StoreKey)
-	keyWasm := cosmos.NewKVStoreKey(wasmtypes.StoreKey)
 
 	db := dbm.NewMemDB()
 	ms := store.NewCommitMultiStore(db, sdklog.NewNopLogger(), storemetrics.NewNoOpMetrics())
 	ms.MountStoreWithDB(keyAcc, cosmos.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyThorchain, cosmos.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyBank, cosmos.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(keyWasm, cosmos.StoreTypeIAVL, db)
 
 	err := ms.LoadLatestVersion()
 	c.Assert(err, IsNil)
@@ -144,22 +140,6 @@ func setupManagerForTest(c *C) (cosmos.Context, *Mgrs) {
 		authtypes.NewModuleAddress(ModuleName).String(),
 		sdklog.NewNopLogger(),
 	)
-	wasmDir := c.MkDir()
-	wk := wasmkeeper.NewKeeper(
-		encodingConfig.Codec,
-		runtime.NewKVStoreService(keyWasm),
-		ak, bk,
-		nil, nil, nil, nil, nil, nil, nil, nil, nil, wasmDir,
-		wasmtypes.DefaultNodeConfig(), wasmtypes.VMConfig{}, wasmkeeper.BuiltInCapabilities(),
-		authtypes.NewModuleAddress(ModuleName).String(),
-	)
-
-	err = wk.SetParams(ctx, wasmtypes.Params{
-		CodeUploadAccess:             wasmtypes.AllowNobody,
-		InstantiateDefaultPermission: wasmtypes.AccessTypeNobody,
-	})
-	c.Assert(err, IsNil)
-
 	c.Assert(bk.MintCoins(ctx, ModuleName, cosmos.Coins{
 		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
 	}), IsNil)
@@ -194,7 +174,7 @@ func setupManagerForTest(c *C) (cosmos.Context, *Mgrs) {
 	}), IsNil)
 
 	os.Setenv("NET", "mocknet")
-	mgr := NewManagers(k, encodingConfig.Codec, serviceThorchain, bk, ak, uk, wk)
+	mgr := NewManagers(k, encodingConfig.Codec, serviceThorchain, bk, ak, uk)
 	constants.SWVersion = GetCurrentVersion()
 
 	_, hasVerStored := k.GetVersionWithCtx(ctx)
