@@ -30,6 +30,7 @@ const (
 	XRPChain   = Chain("XRP")
 	SOLChain   = Chain("SOL")
 	ZECChain   = Chain("ZEC")
+	XMRChain   = Chain("XMR")
 	POLChain   = Chain("POL")
 	SUIChain   = Chain("SUI")
 	ADAChain   = Chain("ADA")
@@ -153,7 +154,7 @@ func (c Chain) String() string {
 // GetSigningAlgo get the signing algorithm for the given chain
 func (c Chain) GetSigningAlgo() SigningAlgo {
 	switch c {
-	case SOLChain, SUIChain, ADAChain:
+	case SOLChain, SUIChain, ADAChain, XMRChain:
 		return SigningAlgoEd25519
 	default:
 		return SigningAlgoSecp256k1
@@ -194,6 +195,8 @@ func (c Chain) GetGasAsset() Asset {
 		return SOLAsset
 	case ZECChain:
 		return ZECAsset
+	case XMRChain:
+		return XMRAsset
 	case POLChain:
 		return POLAsset
 	case SUIChain:
@@ -222,6 +225,8 @@ func (c Chain) GetGasUnits() (gasRateUnits string, gasRateUnitsPerOne cosmos.Uin
 		return "sun", cosmos.NewUint(1e6)
 	case BTCChain, BCHChain, LTCChain, DOGEChain, ZECChain:
 		return "satsperbyte", cosmos.NewUint(1e8)
+	case XMRChain:
+		return "piconero", cosmos.NewUint(1e12)
 	case ETHChain, BSCChain, POLChain:
 		return "gwei", cosmos.NewUint(1e9)
 	case AVAXChain:
@@ -258,6 +263,8 @@ func (c Chain) GetGasAssetDecimal() int64 {
 	switch c {
 	case GAIAChain, NOBLEChain, TRONChain, ADAChain:
 		return 6
+	case XMRChain:
+		return 12
 	case XRPChain:
 		return 6
 	case SOLChain, SUIChain:
@@ -463,6 +470,8 @@ func (c Chain) ApproximateBlockMilliseconds() int64 {
 		return 400
 	case ZECChain:
 		return 75_000
+	case XMRChain:
+		return 120_000
 	case POLChain:
 		return 2_000
 	case SUIChain:

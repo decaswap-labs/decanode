@@ -7,6 +7,7 @@ import (
 	"github.com/decaswap-labs/decanode/bifrost/tss/go-tss/tss"
 
 	"github.com/decaswap-labs/decanode/bifrost/metrics"
+	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/monero"
 	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/shared/types"
 	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/utxo"
 	"github.com/decaswap-labs/decanode/bifrost/pubkeymanager"
@@ -35,6 +36,8 @@ func LoadChains(thorKeys *thorclient.Keys,
 		switch chain.ChainID {
 		case common.BTCChain, common.ZECChain:
 			return utxo.NewClient(thorKeys, chain, server, thorchainBridge, m)
+		case common.XMRChain:
+			return monero.NewClient(chain, thorchainBridge)
 		default:
 			log.Fatal().Msgf("chain %s is not supported", chain.ChainID)
 			return nil, nil
