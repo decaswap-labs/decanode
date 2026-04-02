@@ -11,13 +11,12 @@ import (
 
 	math "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/telemetry"
-	"github.com/hashicorp/go-metrics"
 	"github.com/decaswap-labs/decanode/common"
 	"github.com/decaswap-labs/decanode/common/cosmos"
-	"github.com/decaswap-labs/decanode/common/tcysmartcontract"
 	"github.com/decaswap-labs/decanode/constants"
 	"github.com/decaswap-labs/decanode/x/thorchain/keeper"
 	"github.com/decaswap-labs/decanode/x/thorchain/types"
+	"github.com/hashicorp/go-metrics"
 )
 
 // NetworkMgr is going to manage the vaults
@@ -1065,31 +1064,12 @@ func (vm *NetworkMgr) addPOLLiquidity(
 	}
 	coins := common.NewCoins(common.NewCoin(common.RuneAsset(), runeAmt))
 
-	// rune pool tracks the reserve and pooler unit shares of pol
-	runePool, err := mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return fmt.Errorf("fail to get rune pool: %s", err)
-	}
-
-	// if there are no units, this is the initial deposit
-	depositUnits := runeAmt
-
-	// compute the new provider units
-	if !runePool.TotalUnits().IsZero() {
-		var rpValue cosmos.Uint
-		rpValue, err = runePoolValue(ctx, mgr)
-		if err != nil {
-			return fmt.Errorf("fail to get rune pool value: %s", err)
-		}
-		depositUnits = common.GetSafeShare(runeAmt, rpValue, runePool.TotalUnits())
-	}
-
-	// check balance
 	bal := mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
 	if runeAmt.GT(bal) {
 		return nil
 	}
-	if err = mgr.Keeper().SendFromModuleToModule(ctx, ReserveName, AsgardName, coins); err != nil {
+	err := mgr.Keeper().SendFromModuleToModule(ctx, ReserveName, AsgardName, coins)
+	if err != nil {
 		return err
 	}
 
@@ -1105,15 +1085,6 @@ func (vm *NetworkMgr) addPOLLiquidity(
 		return handlerErr
 	}
 
-	// deposit was successful, update the rune pool units accordingly
-	runePool.ReserveUnits = runePool.ReserveUnits.Add(depositUnits)
-	mgr.Keeper().SetRUNEPool(ctx, runePool)
-
-	// rebalance ownership from reserve to poolers if able
-	err = reserveExitRUNEPool(ctx, mgr)
-	if err != nil {
-		return fmt.Errorf("fail to exit runepool: %s", err)
-	}
 	return nil
 }
 
@@ -1158,46 +1129,6 @@ func (vm *NetworkMgr) removePOLLiquidity(
 	// adjust rune amount to reflect basis points of withdraw
 	runeAmt = common.GetSafeShare(basisPts, maxBps, lpRune)
 
-	// rune pool tracks the reserve and pooler unit shares of pol
-	runePool, err := mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return fmt.Errorf("fail to get runepool: %s", err)
-	}
-
-	// reserve acquires corresponding runepool units that will be withdrawn
-	var rpValue cosmos.Uint
-	rpValue, err = runePoolValue(ctx, mgr)
-	if err != nil {
-		return fmt.Errorf("fail to get rune pool value: %s", err)
-	}
-	reserveRunePoolValue := common.GetSafeShare(runePool.ReserveUnits, runePool.TotalUnits(), rpValue)
-
-	// Use CacheContext for atomicity: if rebalance succeeds but handler fails,
-	// all state changes (including rebalance) are automatically rolled back.
-	cacheCtx, commit := ctx.CacheContext()
-
-	if reserveRunePoolValue.LT(runeAmt) {
-		rebalanceRune := common.SafeSub(runeAmt, reserveRunePoolValue)
-		err = reserveEnterRUNEPool(cacheCtx, mgr, rebalanceRune)
-		if err != nil {
-			return fmt.Errorf("fail to enter runepool: %s", err)
-		}
-
-		// fetch updated runepool
-		runePool, err = mgr.Keeper().GetRUNEPool(cacheCtx)
-		if err != nil {
-			return fmt.Errorf("fail to get runepool: %s", err)
-		}
-
-		// re-fetch rpValue after reserveEnterRUNEPool changed the RUNEPool module balance
-		rpValue, err = runePoolValue(cacheCtx, mgr)
-		if err != nil {
-			return fmt.Errorf("fail to get rune pool value: %s", err)
-		}
-	}
-
-	// process the withdraw
-	withdrawUnits := common.GetSafeShare(runeAmt, rpValue, runePool.TotalUnits())
 	coins := common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.ZeroUint()))
 	tx := common.NewTx(common.BlankTxID, polAddress, asgardAddress, coins, nil, "THOR-POL-REMOVE")
 	msg := NewMsgWithdrawLiquidity(
@@ -1209,16 +1140,11 @@ func (vm *NetworkMgr) removePOLLiquidity(
 		signer,
 	)
 
-	_, err = handler(cacheCtx, msg)
+	_, err = handler(ctx, msg)
 	if err != nil {
 		return err
 	}
 
-	// withdraw was successful, update the runepool units accordingly
-	runePool.ReserveUnits = common.SafeSub(runePool.ReserveUnits, withdrawUnits)
-	mgr.Keeper().SetRUNEPool(cacheCtx, runePool)
-
-	commit()
 	return nil
 }
 
@@ -2098,70 +2024,8 @@ func (vm *NetworkMgr) distributeTCYStake(ctx cosmos.Context, mgr Manager) {
 	}
 }
 
-func (vm *NetworkMgr) getTCYDistributions(ctx cosmos.Context, mgr Manager, minTCYMultiple int64, claimAccount cosmos.AccAddress) ([]tcyDistribution, math.Uint) {
-	var (
-		tcyDistributions         []tcyDistribution
-		distributableAmountOfTCY = cosmos.ZeroUint()
-		minTCYMultipleUint       = math.NewUint(uint64(minTCYMultiple))
-
-		appendDistribution = func(tcyDistributions []tcyDistribution, address cosmos.AccAddress, amount math.Uint) []tcyDistribution {
-			return append(tcyDistributions, tcyDistribution{
-				Account:   address,
-				TCYAmount: cosmos.NewUintFromBigInt(amount.BigInt()),
-			})
-		}
-	)
-
-	stakers, err := mgr.Keeper().ListTCYStakers(ctx)
-	if err != nil {
-		ctx.Logger().Error("failed to list tcy stakers", "err", err)
-		return []tcyDistribution{}, math.ZeroUint()
-	}
-
-	for _, staker := range stakers {
-		if staker.Amount.IsZero() && !tcysmartcontract.IsTCYSmartContractAddress(staker.Address) {
-			ctx.Logger().Info("delete tcy staker", staker.Address.String())
-			mgr.Keeper().DeleteTCYStaker(ctx, staker.Address)
-			continue
-		}
-
-		// only consider amount greater or equal to MinTCYForTCYStakeDistribution
-		if staker.Amount.LT(minTCYMultipleUint) {
-			continue
-		}
-
-		acc, err := staker.Address.AccAddress()
-		if err != nil {
-			ctx.Logger().Error("fail to get acc address", err)
-			continue
-		}
-
-		tcyDistributions = appendDistribution(tcyDistributions, acc, staker.Amount)
-		distributableAmountOfTCY = distributableAmountOfTCY.Add(staker.Amount)
-	}
-
-	claimingBalance := mgr.Keeper().GetBalanceOfModule(ctx, TCYClaimingName, common.TCY.Native())
-	if !claimingBalance.IsZero() {
-		tcyDistributions = appendDistribution(tcyDistributions, claimAccount, claimingBalance)
-		distributableAmountOfTCY = distributableAmountOfTCY.Add(claimingBalance)
-	}
-
-	// Send share that corresponds to asgard to claim module instead to swap for tcy
-	asgardBalance := mgr.Keeper().GetBalanceOfModule(ctx, AsgardName, common.TCY.Native())
-	if !asgardBalance.IsZero() {
-		tcyDistributions = appendDistribution(tcyDistributions, claimAccount, asgardBalance)
-		distributableAmountOfTCY = distributableAmountOfTCY.Add(asgardBalance)
-	}
-
-	// Not claimed TCY will go to claiming module
-	tcySupply := mgr.Keeper().GetTotalSupply(ctx, common.TCY)
-	notClaimedTCY := common.SafeSub(tcySupply, distributableAmountOfTCY)
-	if !notClaimedTCY.IsZero() {
-		tcyDistributions = appendDistribution(tcyDistributions, claimAccount, notClaimedTCY)
-		distributableAmountOfTCY = distributableAmountOfTCY.Add(notClaimedTCY)
-	}
-
-	return tcyDistributions, distributableAmountOfTCY
+func (vm *NetworkMgr) getTCYDistributions(_ cosmos.Context, _ Manager, _ int64, _ cosmos.AccAddress) ([]tcyDistribution, math.Uint) {
+	return []tcyDistribution{}, math.ZeroUint()
 }
 
 // Get the amount to distribute based on the min rune multiplier, if we don't have funds or they're less than the multiplier
@@ -2431,26 +2295,6 @@ func (vm *NetworkMgr) calculateNetworkSolvency(ctx cosmos.Context, mgr Manager) 
 	sort.SliceStable(assets, func(i, j int) bool {
 		return assets[i].String() < assets[j].String()
 	})
-
-	for _, asset := range assets {
-		// Check total supply of trade asset (use Depth, not Units, as Depth represents
-		// the actual asset amount owed to trade account holders)
-		tradeAsset := asset.GetTradeAsset()
-		tu, err := mgr.Keeper().GetTradeUnit(ctx, tradeAsset)
-		if err == nil && tu.Depth.GT(math.ZeroUint()) {
-			tradeAmount := math.NewIntFromBigInt(tu.Depth.BigInt())
-			assetAmounts[asset] = assetAmounts[asset].Sub(tradeAmount)
-		}
-
-		// Check depth of secured asset (use Depth, not share supply, as Depth represents
-		// the actual asset amount owed to secured asset holders)
-		securedAsset := asset.GetSecuredAsset()
-		securedPool, err := mgr.Keeper().GetSecuredAsset(ctx, securedAsset)
-		if err == nil && securedPool.Depth.GT(math.ZeroUint()) {
-			securedAmount := math.NewIntFromBigInt(securedPool.Depth.BigInt())
-			assetAmounts[asset] = assetAmounts[asset].Sub(securedAmount)
-		}
-	}
 
 	// Step 6: Subtract pending and scheduled outbounds (skip inactive vaults)
 

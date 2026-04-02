@@ -154,24 +154,7 @@ func unsafeAddRefundOutbound(ctx cosmos.Context, mgr *Mgrs, inHash, destAddr str
 // 	}
 // }
 
-func setTCYClaims(ctx cosmos.Context, mgr *Mgrs) error {
-	claimers, err := getTCYClaimsFromData()
-	if err != nil {
-		return err
-	}
-
-	total := len(claimers)
-	for i, claimer := range claimers {
-		// Log every 100 claims
-		if i%100 == 0 {
-			ctx.Logger().Info("setting tcy claimers", "total", total, "number", i)
-		}
-
-		if err = mgr.Keeper().UpdateTCYClaimer(ctx, claimer.L1Address, claimer.Asset, claimer.Amount); err != nil {
-			ctx.Logger().Error("failed to set tcy claimer", "address", claimer.L1Address.String(), "error", err)
-		}
-	}
-
+func setTCYClaims(_ cosmos.Context, _ *Mgrs) error {
 	return nil
 }
 

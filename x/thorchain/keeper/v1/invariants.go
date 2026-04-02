@@ -13,10 +13,8 @@ func (k KVStore) InvariantRoutes() []common.InvariantRoute {
 		common.NewInvariantRoute("asgard", AsgardInvariant(k)),
 		common.NewInvariantRoute("bond", BondInvariant(k)),
 		common.NewInvariantRoute("thorchain", THORChainInvariant(k)),
-		common.NewInvariantRoute("affiliate_collector", AffilliateCollectorInvariant(k)),
 		common.NewInvariantRoute("pools", PoolsInvariant(k)),
 		common.NewInvariantRoute("streaming_swaps", StreamingSwapsInvariant(k)),
-		common.NewInvariantRoute("runepool", RUNEPoolInvariant(k)),
 	}
 }
 
@@ -214,40 +212,6 @@ func THORChainInvariant(k KVStore) common.Invariant {
 	}
 }
 
-// AffilliateCollectorInvariant the affiliate_collector module backs accrued affiliate
-// rewards
-func AffilliateCollectorInvariant(k KVStore) common.Invariant {
-	return func(ctx cosmos.Context) (msg []string, broken bool) {
-		affColModuleRune := k.GetBalanceOfModule(ctx, AffiliateCollectorName, common.RuneAsset().Native())
-		affCols, err := k.GetAffiliateCollectors(ctx)
-		if err != nil {
-			if affColModuleRune.IsZero() {
-				return nil, false
-			}
-			msg = append(msg, err.Error())
-			return msg, true
-		}
-
-		totalAffRune := cosmos.ZeroUint()
-		for _, ac := range affCols {
-			totalAffRune = totalAffRune.Add(ac.RuneAmount)
-		}
-
-		if totalAffRune.GT(affColModuleRune) {
-			broken = true
-			diff := totalAffRune.Sub(affColModuleRune)
-			coin, _ := common.NewCoin(common.RuneAsset(), diff).Native()
-			msg = append(msg, fmt.Sprintf("insolvent: %s", coin))
-		} else if totalAffRune.LT(affColModuleRune) {
-			broken = true
-			diff := affColModuleRune.Sub(totalAffRune)
-			coin, _ := common.NewCoin(common.RuneAsset(), diff).Native()
-			msg = append(msg, fmt.Sprintf("oversolvent: %s", coin))
-		}
-
-		return msg, broken
-	}
-}
 
 // PoolsInvariant pool units and pending rune/asset should match the sum
 // of units and pending rune/asset for all lps
@@ -444,57 +408,3 @@ func StreamingSwapsInvariant(k KVStore) common.Invariant {
 }
 
 // RUNEPoolInvariant asserts that the RUNEPool units and provider units are consistent.
-func RUNEPoolInvariant(k KVStore) common.Invariant {
-	return func(ctx cosmos.Context) (msg []string, broken bool) {
-		runePool, err := k.GetRUNEPool(ctx)
-		if err != nil {
-			ctx.Logger().Error("error getting rune pool", "error", err)
-			return []string{err.Error()}, true
-		}
-
-		providerUnits := cosmos.ZeroUint()
-		providerDeposited := cosmos.ZeroUint()
-		providerWithdrawn := cosmos.ZeroUint()
-		iterator := k.GetRUNEProviderIterator(ctx)
-		defer iterator.Close()
-		for ; iterator.Valid(); iterator.Next() {
-			var rp RUNEProvider
-			k.Cdc().MustUnmarshal(iterator.Value(), &rp)
-			if rp.RuneAddress.Empty() {
-				continue
-			}
-			providerUnits = providerUnits.Add(rp.Units)
-			providerDeposited = providerDeposited.Add(rp.DepositAmount)
-			providerWithdrawn = providerWithdrawn.Add(rp.WithdrawAmount)
-		}
-
-		if !providerUnits.Equal(runePool.PoolUnits) {
-			m := fmt.Sprintf(
-				"pool units %s != provider units %s",
-				runePool.PoolUnits, providerUnits,
-			)
-			msg = append(msg, m)
-			broken = true
-		}
-
-		if !providerDeposited.Equal(runePool.RuneDeposited) {
-			m := fmt.Sprintf(
-				"rune deposited %s != provider rune deposited %s",
-				runePool.RuneDeposited, providerDeposited,
-			)
-			msg = append(msg, m)
-			broken = true
-		}
-
-		if !providerWithdrawn.Equal(runePool.RuneWithdrawn) {
-			m := fmt.Sprintf(
-				"rune withdrawn %s != provider rune withdrawn %s",
-				runePool.RuneWithdrawn, providerWithdrawn,
-			)
-			msg = append(msg, m)
-			broken = true
-		}
-
-		return msg, broken
-	}
-}

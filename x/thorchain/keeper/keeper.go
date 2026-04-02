@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"cosmossdk.io/math"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	"github.com/blang/semver"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -48,9 +47,6 @@ type Keeper interface {
 	DollarConfigInRune(ctx cosmos.Context, key constants.ConstantName) cosmos.Uint
 
 	GetNativeTxFee(ctx cosmos.Context) cosmos.Uint
-	GetTHORNameRegisterFee(ctx cosmos.Context) cosmos.Uint
-	GetTHORNamePerBlockFee(ctx cosmos.Context) cosmos.Uint
-
 	DeductNativeTxFeeFromAccount(ctx cosmos.Context, acctAddr cosmos.AccAddress) error
 
 	// Keeper Interfaces
@@ -83,17 +79,10 @@ type Keeper interface {
 	KeeperOracle
 	KeeperChainContract
 	KeeperSolvencyVoter
-	KeeperTHORName
-	KeeperReferenceMemo
 	KeeperHalt
 	KeeperAnchors
 	KeeperStreamingSwap
 	KeeperSwapperClout
-	KeeperTradeAccount
-	KeeperSecuredAsset
-	KeeperRUNEPool
-	KeeperTCYClaimer
-	KeeperTCYStaker
 	KeeperVolume
 }
 
@@ -251,32 +240,6 @@ type KeeperSwapSlip interface {
 	GetSwapSlipSnapShot(ctx cosmos.Context, asset common.Asset, height int64) (int64, error)
 	SetSwapSlipSnapShot(ctx cosmos.Context, asset common.Asset, height, currRollup int64)
 	GetSwapSlipSnapShotIterator(ctx cosmos.Context, asset common.Asset) cosmos.Iterator
-}
-
-type KeeperTradeAccount interface {
-	GetTradeAccount(ctx cosmos.Context, addr cosmos.AccAddress, asset common.Asset) (TradeAccount, error)
-	SetTradeAccount(ctx cosmos.Context, record TradeAccount)
-	RemoveTradeAccount(ctx cosmos.Context, record TradeAccount)
-	GetTradeAccountIterator(ctx cosmos.Context) cosmos.Iterator
-	GetTradeAccountIteratorWithAddress(ctx cosmos.Context, addr cosmos.AccAddress) cosmos.Iterator
-	GetTradeUnit(ctx cosmos.Context, asset common.Asset) (TradeUnit, error)
-	SetTradeUnit(ctx cosmos.Context, unit TradeUnit)
-	GetTradeUnitIterator(ctx cosmos.Context) cosmos.Iterator
-}
-
-type KeeperSecuredAsset interface {
-	GetSecuredAsset(ctx cosmos.Context, asset common.Asset) (SecuredAsset, error)
-	SetSecuredAsset(ctx cosmos.Context, unit SecuredAsset)
-	GetSecuredAssetIterator(ctx cosmos.Context) cosmos.Iterator
-}
-
-type KeeperRUNEPool interface {
-	GetRUNEPool(ctx cosmos.Context) (RUNEPool, error)
-	SetRUNEPool(ctx cosmos.Context, pool RUNEPool)
-	GetRUNEProviderIterator(ctx cosmos.Context) cosmos.Iterator
-	GetRUNEProvider(ctx cosmos.Context, addr cosmos.AccAddress) (RUNEProvider, error)
-	SetRUNEProvider(ctx cosmos.Context, rp RUNEProvider)
-	RemoveRUNEProvider(ctx cosmos.Context, rp RUNEProvider)
 }
 
 type KeeperVault interface {
@@ -441,30 +404,6 @@ type KeeperVolume interface {
 	SetVolume(ctx cosmos.Context, volume Volume) error
 }
 
-type KeeperReferenceMemo interface {
-	ReferenceMemoExists(ctx cosmos.Context, _ common.Asset, _ string) bool
-	GetReferenceMemo(ctx cosmos.Context, _ common.Asset, _ string) (ReferenceMemo, error)
-	GetReferenceMemoByTxnHash(ctx cosmos.Context, _ common.TxID) (ReferenceMemo, error)
-	SetReferenceMemo(ctx cosmos.Context, _ ReferenceMemo)
-	GetReferenceMemoIterator(ctx cosmos.Context) cosmos.Iterator
-	DeleteReferenceMemo(ctx cosmos.Context, _ common.Asset, _ string) error
-	GetLastReferenceNumber(ctx cosmos.Context, _ common.Asset) string
-	SetLastReferenceNumber(ctx cosmos.Context, _ common.Asset, _ string)
-}
-
-// NewKeeper creates new instances of the thorchain Keeper
-type KeeperTHORName interface {
-	THORNameExists(ctx cosmos.Context, _ string) bool
-	GetTHORName(ctx cosmos.Context, _ string) (THORName, error)
-	SetTHORName(ctx cosmos.Context, name THORName)
-	GetTHORNameIterator(ctx cosmos.Context) cosmos.Iterator
-	DeleteTHORName(ctx cosmos.Context, _ string) error
-	SetAffiliateCollector(_ cosmos.Context, _ AffiliateFeeCollector)
-	GetAffiliateCollector(_ cosmos.Context, _ cosmos.AccAddress) (AffiliateFeeCollector, error)
-	GetAffiliateCollectorIterator(_ cosmos.Context) cosmos.Iterator
-	GetAffiliateCollectors(_ cosmos.Context) ([]AffiliateFeeCollector, error)
-}
-
 type KeeperHalt interface {
 	IsTradingHalt(ctx cosmos.Context, msg cosmos.Msg) bool
 	IsGlobalTradingHalted(ctx cosmos.Context) bool
@@ -481,22 +420,3 @@ type KeeperAnchors interface {
 	RunePerDollar(ctx cosmos.Context) cosmos.Uint
 }
 
-type KeeperTCYClaimer interface {
-	SetTCYClaimer(ctx cosmos.Context, record TCYClaimer) error
-	GetTCYClaimer(ctx cosmos.Context, l1Address common.Address, asset common.Asset) (TCYClaimer, error)
-	GetTCYClaimerIteratorFromL1Address(ctx cosmos.Context, l1Address common.Address) cosmos.Iterator
-	DeleteTCYClaimer(ctx cosmos.Context, l1Address common.Address, asset common.Asset)
-	ListTCYClaimersFromL1Address(ctx cosmos.Context, l1Address common.Address) ([]TCYClaimer, error)
-	GetTCYClaimerIterator(ctx cosmos.Context) cosmos.Iterator
-	TCYClaimerExists(ctx cosmos.Context, l1Address common.Address, asset common.Asset) bool
-	UpdateTCYClaimer(ctx cosmos.Context, l1Address common.Address, asset common.Asset, amount math.Uint) error
-}
-
-type KeeperTCYStaker interface {
-	SetTCYStaker(ctx cosmos.Context, record TCYStaker) error
-	GetTCYStaker(ctx cosmos.Context, address common.Address) (TCYStaker, error)
-	DeleteTCYStaker(ctx cosmos.Context, address common.Address)
-	ListTCYStakers(ctx cosmos.Context) ([]TCYStaker, error)
-	TCYStakerExists(ctx cosmos.Context, address common.Address) bool
-	UpdateTCYStaker(ctx cosmos.Context, address common.Address, amount math.Uint) error
-}

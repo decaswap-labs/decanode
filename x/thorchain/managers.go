@@ -16,7 +16,6 @@ import (
 
 	"github.com/decaswap-labs/decanode/common"
 	"github.com/decaswap-labs/decanode/common/cosmos"
-	"github.com/decaswap-labs/decanode/common/wasmpermissions"
 	"github.com/decaswap-labs/decanode/constants"
 	"github.com/decaswap-labs/decanode/x/thorchain/keeper"
 	kv1 "github.com/decaswap-labs/decanode/x/thorchain/keeper/v1"
@@ -399,26 +398,6 @@ func (mgr *Mgrs) recreateManagers(ctx cosmos.Context, v semver.Version) error {
 		return fmt.Errorf("fail to create swap queue: %w", err)
 	}
 
-	mgr.tradeManager, err = GetTradeAccountManager(v, mgr.K, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create trade manager: %w", err)
-	}
-
-	mgr.securedManager, err = GetSecuredAssetManager(v, mgr.K, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create secured manager: %w", err)
-	}
-
-	mgr.wasmManager, err = GetWasmManager(ctx, mgr.K, mgr.wasmKeeper, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create wasm manager: %w", err)
-	}
-
-	mgr.switchManager, err = GetSwitchManager(v, mgr.K, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create switch manager: %w", err)
-	}
-
 	mgr.oracleManager, err = GetOracleManager(v, mgr.K, mgr.eventMgr)
 	if err != nil {
 		return fmt.Errorf("fail to create oracle manager: %w", err)
@@ -556,22 +535,6 @@ func GetSlasher(version semver.Version, keeper keeper.Keeper, eventMgr EventMana
 // GetSwapper return an implementation of Swapper
 func GetSwapper(version semver.Version) (Swapper, error) {
 	return newSwapper(), nil
-}
-
-func GetTradeAccountManager(version semver.Version, keeper keeper.Keeper, eventMgr EventManager) (TradeAccountManager, error) {
-	return newTradeMgr(keeper, eventMgr), nil
-}
-
-func GetSecuredAssetManager(version semver.Version, keeper keeper.Keeper, eventMgr EventManager) (SecuredAssetManager, error) {
-	return newSecuredAssetMgr(keeper, eventMgr), nil
-}
-
-func GetWasmManager(ctx cosmos.Context, keeper keeper.Keeper, wasmKeeper wasmkeeper.Keeper, eventMgr EventManager) (WasmManager, error) {
-	return newWasmMgr(keeper, wasmKeeper, wasmpermissions.GetWasmPermissions(), eventMgr)
-}
-
-func GetSwitchManager(version semver.Version, keeper keeper.Keeper, eventMgr EventManager) (SwitchManager, error) {
-	return newSwitchMgr(keeper, eventMgr), nil
 }
 
 func GetScheduledMigrationManager(_ semver.Version, mgr Manager) (ScheduledMigrationManager, error) {

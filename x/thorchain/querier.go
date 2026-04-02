@@ -95,48 +95,8 @@ func (qs queryServer) queryBalanceModule(ctx cosmos.Context, req *types.QueryBal
 	return &balance, nil
 }
 
-func (qs queryServer) queryTHORName(ctx cosmos.Context, req *types.QueryThornameRequest) (*types.QueryThornameResponse, error) {
-	name, err := qs.mgr.Keeper().GetTHORName(ctx, req.Name)
-	if err != nil {
-		return nil, ErrInternal(err, "fail to fetch THORName")
-	}
-
-	affRune := cosmos.ZeroUint()
-	affCol, err := qs.mgr.Keeper().GetAffiliateCollector(ctx, name.Owner)
-	if err == nil {
-		affRune = affCol.RuneAmount
-	}
-
-	// convert to openapi types
-	aliases := []*types.ThornameAlias{}
-	for _, alias := range name.Aliases {
-		aliases = append(aliases, &types.ThornameAlias{
-			Chain:   alias.Chain.String(),
-			Address: alias.Address.String(),
-		})
-	}
-
-	threshold := cosmos.ZeroUint()
-	if !name.PreferredAsset.IsEmpty() {
-		paOf, err := qs.mgr.gasMgr.GetAssetOutboundFee(ctx, name.PreferredAsset, true)
-		if err == nil {
-			multiplier := getEffectiveMultiplier(ctx, qs.mgr, name)
-			threshold = paOf.MulUint64(uint64(multiplier))
-		}
-	}
-
-	resp := types.QueryThornameResponse{
-		Name:                                name.Name,
-		ExpireBlockHeight:                   name.ExpireBlockHeight,
-		Owner:                               name.Owner.String(),
-		PreferredAsset:                      name.PreferredAsset.String(),
-		Aliases:                             aliases,
-		AffiliateCollectorRune:              affRune.String(),
-		PreferredAssetSwapThresholdRune:     threshold.String(),
-		PreferredAssetOutboundFeeMultiplier: name.PreferredAssetOutboundFeeMultiplier,
-	}
-
-	return &resp, nil
+func (qs queryServer) queryTHORName(_ cosmos.Context, _ *types.QueryThornameRequest) (*types.QueryThornameResponse, error) {
+	return nil, errors.New("THORNames are not supported")
 }
 
 func (qs queryServer) queryVault(ctx cosmos.Context, req *types.QueryVaultRequest) (*types.QueryVaultResponse, error) {
@@ -341,147 +301,17 @@ func (qs queryServer) queryVaultSolvency(ctx cosmos.Context, _ *types.QueryVault
 	return resp, nil
 }
 
-func (qs queryServer) queryRUNEPool(ctx cosmos.Context, _ *types.QueryRunePoolRequest) (*types.QueryRunePoolResponse, error) {
-	// gather pol data
-	pol, err := qs.mgr.Keeper().GetPOL(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get POL: %w", err)
-	}
-	polValue, err := polPoolValue(ctx, qs.mgr)
-	if err != nil {
-		return nil, fmt.Errorf("fail to fetch POL value: %w", err)
-	}
-	pnl := pol.PnL(polValue)
-
-	// gather runepool data
-	runePool, err := qs.mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get RUNE pool: %w", err)
-	}
-
-	// calculate pending units
-	runePoolValue, err := runePoolValue(ctx, qs.mgr)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get rune pool value: %w", err)
-	}
-	pendingRune := qs.mgr.Keeper().GetRuneBalanceOfModule(ctx, RUNEPoolName)
-	pendingUnits := common.GetSafeShare(pendingRune, runePoolValue, runePool.TotalUnits())
-
-	// calculate provider shares
-	providerValue := common.GetSafeShare(runePool.PoolUnits, runePool.TotalUnits(), runePoolValue)
-	providerPnl := sdkmath.NewIntFromBigInt(providerValue.BigInt()).Sub(runePool.CurrentDeposit())
-
-	// calculate reserve shares
-	reserveValue := common.GetSafeShare(runePool.ReserveUnits, runePool.TotalUnits(), runePoolValue)
-	reserveCurrentDeposit := pol.CurrentDeposit().
-		Sub(runePool.CurrentDeposit()).
-		Add(cosmos.NewIntFromBigInt(pendingRune.BigInt()))
-	reservePnl := sdkmath.NewIntFromBigInt(reserveValue.BigInt()).Sub(reserveCurrentDeposit)
-
-	result := types.QueryRunePoolResponse{
-		Pol: &types.POL{
-			RuneDeposited:  pol.RuneDeposited.String(),
-			RuneWithdrawn:  pol.RuneWithdrawn.String(),
-			Value:          polValue.String(),
-			Pnl:            pnl.String(),
-			CurrentDeposit: pol.CurrentDeposit().String(),
-		},
-		Providers: &types.RunePoolProviders{
-			Units:          runePool.PoolUnits.String(),
-			PendingUnits:   pendingUnits.String(),
-			PendingRune:    pendingRune.String(),
-			Value:          providerValue.String(),
-			Pnl:            providerPnl.String(),
-			CurrentDeposit: runePool.CurrentDeposit().String(),
-		},
-		Reserve: &types.RunePoolReserve{
-			Units:          runePool.ReserveUnits.String(),
-			Value:          reserveValue.String(),
-			Pnl:            reservePnl.String(),
-			CurrentDeposit: reserveCurrentDeposit.String(),
-		},
-	}
-
-	return &result, nil
+func (qs queryServer) queryRUNEPool(_ cosmos.Context, _ *types.QueryRunePoolRequest) (*types.QueryRunePoolResponse, error) {
+	return nil, errors.New("RUNEPool is not supported")
 }
 
 // queryRUNEProvider
-func (qs queryServer) queryRUNEProvider(ctx cosmos.Context, req *types.QueryRuneProviderRequest) (*types.QueryRuneProviderResponse, error) {
-	if len(req.Address) == 0 {
-		return nil, errors.New("address not provided")
-	}
-	addr, err := cosmos.AccAddressFromBech32(req.Address)
-	if err != nil {
-		return nil, errors.New("unable to decode address")
-	}
-	rp, err := qs.mgr.Keeper().GetRUNEProvider(ctx, addr)
-	if err != nil {
-		return nil, fmt.Errorf("unable to GetRUNEProvider: %s", err)
-	}
-
-	// get runepool value to determine current value and pnl
-	runePool, err := qs.mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get RUNE pool: %w", err)
-	}
-	runePoolValue, err := runePoolValue(ctx, qs.mgr)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get rune pool value: %w", err)
-	}
-	providerValue := common.GetSafeShare(rp.Units, runePool.TotalUnits(), runePoolValue)
-	providerPnl := providerValue.BigInt()
-	providerPnl.Sub(providerPnl, rp.DepositAmount.BigInt())
-	providerPnl.Add(providerPnl, rp.WithdrawAmount.BigInt())
-
-	result := types.QueryRuneProviderResponse{
-		RuneAddress:        rp.RuneAddress.String(),
-		Units:              rp.Units.String(),
-		Value:              providerValue.String(),
-		Pnl:                providerPnl.String(),
-		DepositAmount:      rp.DepositAmount.String(),
-		WithdrawAmount:     rp.WithdrawAmount.String(),
-		LastDepositHeight:  rp.LastDepositHeight,
-		LastWithdrawHeight: rp.LastWithdrawHeight,
-	}
-	return &result, nil
+func (qs queryServer) queryRUNEProvider(_ cosmos.Context, _ *types.QueryRuneProviderRequest) (*types.QueryRuneProviderResponse, error) {
+	return nil, errors.New("RUNEPool is not supported")
 }
 
-// queryRUNEProviders
-func (qs queryServer) queryRUNEProviders(ctx cosmos.Context, _ *types.QueryRuneProvidersRequest) (*types.QueryRuneProvidersResponse, error) {
-	// get runepool value to determine current value and pnl
-	runePool, err := qs.mgr.Keeper().GetRUNEPool(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get RUNE pool: %w", err)
-	}
-	runePoolValue, err := runePoolValue(ctx, qs.mgr)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get rune pool value: %w", err)
-	}
-
-	var runeProviders []*types.QueryRuneProviderResponse
-	iterator := qs.mgr.Keeper().GetRUNEProviderIterator(ctx)
-	defer iterator.Close()
-	for ; iterator.Valid(); iterator.Next() {
-		var rp types.RUNEProvider
-		qs.mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &rp)
-
-		providerValue := common.GetSafeShare(rp.Units, runePool.TotalUnits(), runePoolValue)
-		providerPnl := providerValue.BigInt()
-		providerPnl.Sub(providerPnl, rp.DepositAmount.BigInt())
-		providerPnl.Add(providerPnl, rp.WithdrawAmount.BigInt())
-
-		runeProviders = append(runeProviders, &types.QueryRuneProviderResponse{
-			RuneAddress:        rp.RuneAddress.String(),
-			Units:              rp.Units.String(),
-			Value:              providerValue.String(),
-			Pnl:                providerPnl.String(),
-			DepositAmount:      rp.DepositAmount.String(),
-			WithdrawAmount:     rp.WithdrawAmount.String(),
-			LastDepositHeight:  rp.LastDepositHeight,
-			LastWithdrawHeight: rp.LastWithdrawHeight,
-		})
-	}
-	return &types.QueryRuneProvidersResponse{Providers: runeProviders}, nil
+func (qs queryServer) queryRUNEProviders(_ cosmos.Context, _ *types.QueryRuneProvidersRequest) (*types.QueryRuneProvidersResponse, error) {
+	return nil, errors.New("RUNEPool is not supported")
 }
 
 func (qs queryServer) queryNetwork(ctx cosmos.Context, _ *types.QueryNetworkRequest) (*types.QueryNetworkResponse, error) {
@@ -535,8 +365,8 @@ func (qs queryServer) queryNetwork(ctx cosmos.Context, _ *types.QueryNetworkRequ
 		OutboundFeeMultiplier: outboundFeeMultiplier.String(),
 		NativeTxFeeRune:       qs.mgr.Keeper().GetNativeTxFee(ctx).String(),
 		NativeOutboundFeeRune: qs.mgr.Keeper().GetOutboundTxFee(ctx).String(),
-		TnsRegisterFeeRune:    qs.mgr.Keeper().GetTHORNameRegisterFee(ctx).String(),
-		TnsFeePerBlockRune:    qs.mgr.Keeper().GetTHORNamePerBlockFee(ctx).String(),
+		TnsRegisterFeeRune:    "0",
+		TnsFeePerBlockRune:    "0",
 		RunePriceInTor:        dollarsPerRuneIgnoreHalt(ctx, qs.mgr.Keeper()).String(),
 		TorPriceInRune:        runePerDollarIgnoreHalt(ctx, qs.mgr.Keeper()).String(),
 		TorPriceHalted:        median.IsZero(),
@@ -1784,178 +1614,28 @@ func (qs queryServer) queryDerivedPools(ctx cosmos.Context, _ *types.QueryDerive
 	return &types.QueryDerivedPoolsResponse{Pools: pools}, nil
 }
 
-func (qs queryServer) queryTradeUnit(ctx cosmos.Context, req *types.QueryTradeUnitRequest) (*types.QueryTradeUnitResponse, error) {
-	if len(req.Asset) == 0 {
-		return nil, errors.New("asset not provided")
-	}
-	asset, err := common.NewAsset(req.Asset)
-	if err != nil {
-		ctx.Logger().Error("fail to parse asset", "error", err)
-		return nil, fmt.Errorf("could not parse asset: %w", err)
-	}
-
-	tu, err := qs.mgr.Keeper().GetTradeUnit(ctx, asset)
-	if err != nil {
-		ctx.Logger().Error("fail to get trade unit", "error", err)
-		return nil, fmt.Errorf("could not get trade unit: %w", err)
-	}
-	tuResp := types.QueryTradeUnitResponse{
-		Asset: tu.Asset.String(),
-		Units: tu.Units.String(),
-		Depth: tu.Depth.String(),
-	}
-	return &tuResp, nil
+func (qs queryServer) queryTradeUnit(_ cosmos.Context, _ *types.QueryTradeUnitRequest) (*types.QueryTradeUnitResponse, error) {
+	return nil, errors.New("trade accounts are not supported")
 }
 
-func (qs queryServer) queryTradeUnits(ctx cosmos.Context, _ *types.QueryTradeUnitsRequest) (*types.QueryTradeUnitsResponse, error) {
-	pools, err := qs.mgr.Keeper().GetPools(ctx)
-	if err != nil {
-		return nil, errors.New("failed to get pools")
-	}
-	units := make([]*types.QueryTradeUnitResponse, 0)
-	for _, pool := range pools {
-		// skip non-layer1 pools
-		if pool.Asset.GetChain().IsTHORChain() {
-			continue
-		}
-		asset := pool.Asset.GetTradeAsset()
-		tu, err := qs.mgr.Keeper().GetTradeUnit(ctx, asset)
-		if err != nil {
-			ctx.Logger().Error("fail to get trade unit", "error", err)
-			return nil, fmt.Errorf("could not get trade unit: %w", err)
-		}
-		tuResp := types.QueryTradeUnitResponse{
-			Asset: tu.Asset.String(),
-			Units: tu.Units.String(),
-			Depth: tu.Depth.String(),
-		}
-		units = append(units, &tuResp)
-	}
-
-	return &types.QueryTradeUnitsResponse{TradeUnits: units}, nil
+func (qs queryServer) queryTradeUnits(_ cosmos.Context, _ *types.QueryTradeUnitsRequest) (*types.QueryTradeUnitsResponse, error) {
+	return nil, errors.New("trade accounts are not supported")
 }
 
-func (qs queryServer) queryTradeAccounts(ctx cosmos.Context, req *types.QueryTradeAccountsRequest) (*types.QueryTradeAccountsResponse, error) {
-	if len(req.Asset) == 0 {
-		return nil, errors.New("asset not provided")
-	}
-	asset, err := common.NewAsset(req.Asset)
-	if err != nil {
-		ctx.Logger().Error("fail to parse address", "error", err)
-		return nil, fmt.Errorf("could not parse address: %w", err)
-	}
-
-	accounts := make([]*types.QueryTradeAccountResponse, 0)
-	iter := qs.mgr.Keeper().GetTradeAccountIterator(ctx)
-	defer iter.Close()
-	for ; iter.Valid(); iter.Next() {
-		var ta TradeAccount
-		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &ta); err != nil {
-			continue
-		}
-		if !ta.Asset.Equals(asset) {
-			continue
-		}
-		if ta.Units.IsZero() {
-			continue
-		}
-		taResp := types.QueryTradeAccountResponse{
-			Asset:              ta.Asset.String(),
-			Units:              ta.Units.String(),
-			Owner:              ta.Owner.String(),
-			LastAddHeight:      ta.LastAddHeight,
-			LastWithdrawHeight: ta.LastWithdrawHeight,
-		}
-		accounts = append(accounts, &taResp)
-	}
-
-	return &types.QueryTradeAccountsResponse{TradeAccounts: accounts}, nil
+func (qs queryServer) queryTradeAccounts(_ cosmos.Context, _ *types.QueryTradeAccountsRequest) (*types.QueryTradeAccountsResponse, error) {
+	return nil, errors.New("trade accounts are not supported")
 }
 
-func (qs queryServer) queryTradeAccount(ctx cosmos.Context, req *types.QueryTradeAccountRequest) (*types.QueryTradeAccountsResponse, error) {
-	if len(req.Address) == 0 {
-		return nil, errors.New("address not provided")
-	}
-	addr, err := cosmos.AccAddressFromBech32(req.Address)
-	if err != nil {
-		ctx.Logger().Error("fail to parse address", "error", err)
-		return nil, fmt.Errorf("could not parse address: %w", err)
-	}
-
-	accounts := make([]*types.QueryTradeAccountResponse, 0)
-	iter := qs.mgr.Keeper().GetTradeAccountIteratorWithAddress(ctx, addr)
-	defer iter.Close()
-	for ; iter.Valid(); iter.Next() {
-		var ta TradeAccount
-		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &ta); err != nil {
-			continue
-		}
-		if ta.Units.IsZero() {
-			continue
-		}
-
-		taResp := types.QueryTradeAccountResponse{
-			Asset:              ta.Asset.String(),
-			Units:              ta.Units.String(),
-			Owner:              ta.Owner.String(),
-			LastAddHeight:      ta.LastAddHeight,
-			LastWithdrawHeight: ta.LastWithdrawHeight,
-		}
-		accounts = append(accounts, &taResp)
-	}
-
-	return &types.QueryTradeAccountsResponse{TradeAccounts: accounts}, nil
+func (qs queryServer) queryTradeAccount(_ cosmos.Context, _ *types.QueryTradeAccountRequest) (*types.QueryTradeAccountsResponse, error) {
+	return nil, errors.New("trade accounts are not supported")
 }
 
-func (qs queryServer) querySecuredAssets(ctx cosmos.Context, req *types.QuerySecuredAssetsRequest) (*types.QuerySecuredAssetsResponse, error) {
-	iter := qs.mgr.Keeper().GetSecuredAssetIterator(ctx)
-	res := make([]*types.QuerySecuredAssetResponse, 0)
-	defer iter.Close()
-	for ; iter.Valid(); iter.Next() {
-		var p keeper.SecuredAsset
-		if err := qs.mgr.Keeper().Cdc().Unmarshal(iter.Value(), &p); err != nil {
-			continue
-		}
-		if p.Depth.IsZero() {
-			continue
-		}
-
-		shareSupply := qs.mgr.SecuredAssetManager().GetShareSupply(ctx, p.Asset)
-
-		pResp := types.QuerySecuredAssetResponse{
-			Asset:  p.Asset.String(),
-			Supply: shareSupply.String(),
-			Depth:  p.Depth.String(),
-		}
-		res = append(res, &pResp)
-	}
-
-	return &types.QuerySecuredAssetsResponse{
-		Assets: res,
-	}, nil
+func (qs queryServer) querySecuredAssets(_ cosmos.Context, _ *types.QuerySecuredAssetsRequest) (*types.QuerySecuredAssetsResponse, error) {
+	return nil, errors.New("secured assets are not supported")
 }
 
-func (qs queryServer) querySecuredAsset(ctx cosmos.Context, req *types.QuerySecuredAssetRequest) (*types.QuerySecuredAssetResponse, error) {
-	if len(req.Asset) == 0 {
-		return nil, errors.New("asset not provided")
-	}
-	asset, err := common.NewAsset(req.Asset)
-	if err != nil {
-		ctx.Logger().Error("fail to parse asset", "error", err)
-		return nil, fmt.Errorf("could not parse asset: %w", err)
-	}
-
-	a, shareSupply, err := qs.mgr.SecuredAssetManager().GetSecuredAssetStatus(ctx, asset)
-	if err != nil {
-		ctx.Logger().Error("fail to get asset status", "error", err)
-		return nil, fmt.Errorf("could not get asset status: %w", err)
-	}
-
-	return &types.QuerySecuredAssetResponse{
-		Asset:  a.Asset.String(),
-		Supply: shareSupply.String(),
-		Depth:  a.Depth.String(),
-	}, nil
+func (qs queryServer) querySecuredAsset(_ cosmos.Context, _ *types.QuerySecuredAssetRequest) (*types.QuerySecuredAssetResponse, error) {
+	return nil, errors.New("secured assets are not supported")
 }
 
 func extractVoter(ctx cosmos.Context, tx_id string, mgr *Mgrs) (common.TxID, ObservedTxVoter, error) {
@@ -3603,83 +3283,20 @@ func dollarsPerRuneIgnoreHalt(ctx cosmos.Context, k keeper.Keeper) cosmos.Uint {
 }
 
 // queryTCYStakers
-func (qs queryServer) queryTCYStakers(ctx cosmos.Context, req *types.QueryTCYStakersRequest) (*types.QueryTCYStakersResponse, error) {
-	var stakers []*types.QueryTCYStakerResponse
-	tcyStakers, err := qs.mgr.Keeper().ListTCYStakers(ctx)
-	if err != nil {
-		return &types.QueryTCYStakersResponse{}, err
-	}
-	for _, staker := range tcyStakers {
-		stakers = append(stakers, &types.QueryTCYStakerResponse{
-			Address: staker.Address.String(),
-			Amount:  staker.Amount.String(),
-		})
-	}
-	return &types.QueryTCYStakersResponse{TcyStakers: stakers}, nil
+func (qs queryServer) queryTCYStakers(_ cosmos.Context, _ *types.QueryTCYStakersRequest) (*types.QueryTCYStakersResponse, error) {
+	return nil, errors.New("TCY is not supported")
 }
 
-// queryTCYStaker
-func (qs queryServer) queryTCYStaker(ctx cosmos.Context, req *types.QueryTCYStakerRequest) (*types.QueryTCYStakerResponse, error) {
-	addr, err := common.NewAddress(req.Address)
-	if err != nil {
-		ctx.Logger().Error("fail to get parse address", "error", err)
-		return nil, fmt.Errorf("fail to parse address: %w", err)
-	}
-	staker, err := qs.mgr.Keeper().GetTCYStaker(ctx, addr)
-	if err != nil {
-		ctx.Logger().Error("fail to get tcy staker", "error", err)
-		return nil, fmt.Errorf("fail to tcy staker: %w", err)
-	}
-
-	stakerRes := types.QueryTCYStakerResponse{
-		Address: staker.Address.String(),
-		Amount:  staker.Amount.String(),
-	}
-
-	return &stakerRes, nil
+func (qs queryServer) queryTCYStaker(_ cosmos.Context, _ *types.QueryTCYStakerRequest) (*types.QueryTCYStakerResponse, error) {
+	return nil, errors.New("TCY is not supported")
 }
 
-// queryTCYClaimers
-func (qs queryServer) queryTCYClaimers(ctx cosmos.Context, req *types.QueryTCYClaimersRequest) (*types.QueryTCYClaimersResponse, error) {
-	var claimers []*types.QueryTCYClaimer
-	iterator := qs.mgr.Keeper().GetTCYClaimerIterator(ctx)
-	defer iterator.Close()
-	for ; iterator.Valid(); iterator.Next() {
-		var claimer TCYClaimer
-		qs.mgr.Keeper().Cdc().MustUnmarshal(iterator.Value(), &claimer)
-
-		claimers = append(claimers, &types.QueryTCYClaimer{
-			Asset:     claimer.Asset.String(),
-			L1Address: claimer.L1Address.String(),
-			Amount:    claimer.Amount.String(),
-		})
-	}
-	return &types.QueryTCYClaimersResponse{TcyClaimers: claimers}, nil
+func (qs queryServer) queryTCYClaimers(_ cosmos.Context, _ *types.QueryTCYClaimersRequest) (*types.QueryTCYClaimersResponse, error) {
+	return nil, errors.New("TCY is not supported")
 }
 
-// queryTCYClaimer
-func (qs queryServer) queryTCYClaimer(ctx cosmos.Context, req *types.QueryTCYClaimerRequest) (*types.QueryTCYClaimerResponse, error) {
-	addr, err := common.NewAddress(req.Address)
-	if err != nil {
-		ctx.Logger().Error("fail to get parse address", "error", err)
-		return nil, fmt.Errorf("fail to parse address: %w", err)
-	}
-	addressClaims, err := qs.mgr.Keeper().ListTCYClaimersFromL1Address(ctx, addr)
-	if err != nil {
-		ctx.Logger().Error("fail to get tcy claimer", "error", err)
-		return nil, fmt.Errorf("fail to tcy claimer: %w", err)
-	}
-
-	var claimsRes []*types.QueryTCYClaimer
-	for _, claim := range addressClaims {
-		claimsRes = append(claimsRes, &types.QueryTCYClaimer{
-			Asset:     claim.Asset.String(),
-			L1Address: claim.L1Address.String(),
-			Amount:    claim.Amount.String(),
-		})
-	}
-
-	return &types.QueryTCYClaimerResponse{TcyClaimer: claimsRes}, nil
+func (qs queryServer) queryTCYClaimer(_ cosmos.Context, _ *types.QueryTCYClaimerRequest) (*types.QueryTCYClaimerResponse, error) {
+	return nil, errors.New("TCY is not supported")
 }
 
 // queryOraclePrices

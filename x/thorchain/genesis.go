@@ -97,15 +97,6 @@ func ValidateGenesis(data GenesisState) error {
 		}
 	}
 
-	for _, n := range data.THORNames {
-		if len(n.Name) > 30 {
-			return errors.New("THORName cannot exceed 30 characters")
-		}
-		if !IsValidTHORName(n.Name) {
-			return errors.New("invalid THORName")
-		}
-	}
-
 	return nil
 }
 
@@ -133,14 +124,7 @@ func DefaultGenesisState() GenesisState {
 		StreamingSwaps:          make([]StreamingSwap, 0),
 		NetworkFees:             make([]NetworkFee, 0),
 		ChainContracts:          make([]ChainContract, 0),
-		THORNames:               make([]THORName, 0),
 		SwapperClout:            make([]SwapperClout, 0),
-		TradeAccounts:           make([]TradeAccount, 0),
-		TradeUnits:              make([]TradeUnit, 0),
-		SecuredAssets:           make([]SecuredAsset, 0),
-		RuneProviders:           make([]RUNEProvider, 0),
-		RunePool:                NewRUNEPool(),
-		AffiliateCollectors:     []AffiliateFeeCollector{},
 	}
 }
 
@@ -155,11 +139,6 @@ func initGenesis(ctx cosmos.Context, keeper keeper.Keeper, data GenesisState) []
 	for _, lp := range data.LiquidityProviders {
 		keeper.SetLiquidityProvider(ctx, lp)
 	}
-
-	for _, rp := range data.RuneProviders {
-		keeper.SetRUNEProvider(ctx, rp)
-	}
-	keeper.SetRUNEPool(ctx, data.RunePool)
 
 	validators := make([]abci.ValidatorUpdate, 0, len(data.NodeAccounts))
 	for _, nodeAccount := range data.NodeAccounts {
@@ -266,30 +245,9 @@ func initGenesis(ctx cosmos.Context, keeper keeper.Keeper, data GenesisState) []
 		keeper.SetChainContract(ctx, cc)
 	}
 
-	for _, n := range data.THORNames {
-		keeper.SetTHORName(ctx, n)
-	}
-
 	for _, clout := range data.SwapperClout {
 		if err := keeper.SetSwapperClout(ctx, clout); err != nil {
 			panic(err)
-		}
-	}
-
-	for _, acct := range data.TradeAccounts {
-		keeper.SetTradeAccount(ctx, acct)
-	}
-	for _, unit := range data.TradeUnits {
-		keeper.SetTradeUnit(ctx, unit)
-	}
-	for _, a := range data.SecuredAssets {
-		keeper.SetSecuredAsset(ctx, a)
-	}
-
-	ttl := keeper.GetConfigInt64(ctx, constants.MemolessTxnTTL)
-	for _, ref := range data.ReferenceMemos {
-		if !ref.IsExpired(ctx.BlockHeight(), ttl) {
-			keeper.SetReferenceMemo(ctx, ref)
 		}
 	}
 
@@ -320,22 +278,6 @@ func initGenesis(ctx cosmos.Context, keeper keeper.Keeper, data GenesisState) []
 		}
 	}
 
-	for _, item := range data.AffiliateCollectors {
-		keeper.SetAffiliateCollector(ctx, item)
-	}
-
-	for _, item := range data.TcyClaimers {
-		if err := keeper.SetTCYClaimer(ctx, item); err != nil {
-			panic(err)
-		}
-	}
-
-	for _, item := range data.TcyStakers {
-		if err := keeper.SetTCYStaker(ctx, item); err != nil {
-			panic(err)
-		}
-	}
-
 	reserveAddr, _ := keeper.GetModuleAddress(ReserveName)
 	ctx.Logger().Info("Reserve Module", "address", reserveAddr.String())
 	bondAddr, _ := keeper.GetModuleAddress(BondName)
@@ -344,13 +286,6 @@ func initGenesis(ctx cosmos.Context, keeper keeper.Keeper, data GenesisState) []
 	ctx.Logger().Info("Asgard Module", "address", asgardAddr.String())
 	treasuryAddr, _ := keeper.GetModuleAddress(TreasuryName)
 	ctx.Logger().Info("Treasury Module", "address", treasuryAddr.String())
-	runePoolAddr, _ := keeper.GetModuleAddress(RUNEPoolName)
-	ctx.Logger().Info("RUNEPool Module", "address", runePoolAddr.String())
-	ClaimingAddr, _ := keeper.GetModuleAddress(TCYClaimingName)
-	ctx.Logger().Info("Claiming Module", "address", ClaimingAddr.String())
-	tcyStakeAddr, _ := keeper.GetModuleAddress(TCYStakeName)
-	ctx.Logger().Info("TCYStake Module", "address", tcyStakeAddr.String())
-
 	return validators
 }
 
@@ -441,38 +376,7 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		bps = append(bps, bp)
 	}
 
-	tcyClaimers := make([]TCYClaimer, 0)
-	iterator = k.GetTCYClaimerIterator(ctx)
-	defer iterator.Close()
-	for ; iterator.Valid(); iterator.Next() {
-		var claimer TCYClaimer
-		k.Cdc().MustUnmarshal(iterator.Value(), &claimer)
-		if claimer.IsEmpty() {
-			continue
-		}
-		if claimer.Amount.IsZero() {
-			continue
-		}
-
-		tcyClaimers = append(tcyClaimers, claimer)
-	}
-
-	tcyStakers := make([]TCYStaker, 0)
-	stakers, err := k.ListTCYStakers(ctx)
-	if err != nil {
-		panic(err)
-	}
-	for _, staker := range stakers {
-		if staker.IsEmpty() {
-			continue
-		}
-		if staker.Amount.IsZero() {
-			continue
-		}
-
-		tcyStakers = append(tcyStakers, staker)
-	}
-
+	var err error
 	var observedTxInVoters ObservedTxVoters
 	var outs []TxOut
 	startBlockHeight := ctx.BlockHeight() - k.GetConstants().GetInt64Value(constants.SigningTransactionPeriod)
@@ -575,19 +479,6 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		vaults = append(vaults, vault)
 	}
 
-	ttl := k.GetConfigInt64(ctx, constants.MemolessTxnTTL)
-	memos := make([]ReferenceMemo, 0)
-	refIter := k.GetReferenceMemoIterator(ctx)
-	defer refIter.Close()
-	for ; refIter.Valid(); refIter.Next() {
-		var mem ReferenceMemo
-		k.Cdc().MustUnmarshal(refIter.Value(), &mem)
-		if mem.IsExpired(ctx.BlockHeight(), ttl) {
-			continue
-		}
-		memos = append(memos, mem)
-	}
-
 	swapMsgs := make([]MsgSwap, 0)
 	iterMsgSwap := k.GetAdvSwapQueueItemIterator(ctx)
 	defer iterMsgSwap.Close()
@@ -633,15 +524,6 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		chainContracts = append(chainContracts, cc)
 	}
 
-	names := make([]THORName, 0)
-	iterNames := k.GetTHORNameIterator(ctx)
-	defer iterNames.Close()
-	for ; iterNames.Valid(); iterNames.Next() {
-		var n THORName
-		k.Cdc().MustUnmarshal(iterNames.Value(), &n)
-		names = append(names, n)
-	}
-
 	mimirs := make([]Mimir, 0)
 	mimirIter := k.GetMimirIterator(ctx)
 	defer mimirIter.Close()
@@ -681,46 +563,6 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		clouts = append(clouts, clout)
 	}
 
-	runeProviders := make([]RUNEProvider, 0)
-	iterRUNEProviders := k.GetRUNEProviderIterator(ctx)
-	defer iterRUNEProviders.Close()
-	for ; iterRUNEProviders.Valid(); iterRUNEProviders.Next() {
-		var rp RUNEProvider
-		k.Cdc().MustUnmarshal(iterRUNEProviders.Value(), &rp)
-		runeProviders = append(runeProviders, rp)
-	}
-
-	runePool, err := k.GetRUNEPool(ctx)
-	if err != nil {
-		ctx.Logger().Error("fail to get rune pool", "error", err)
-	}
-
-	tradeAccts := make([]TradeAccount, 0)
-	iterTradeAccts := k.GetTradeAccountIterator(ctx)
-	defer iterTradeAccts.Close()
-	for ; iterTradeAccts.Valid(); iterTradeAccts.Next() {
-		var acct TradeAccount
-		k.Cdc().MustUnmarshal(iterTradeAccts.Value(), &acct)
-		tradeAccts = append(tradeAccts, acct)
-	}
-	tradeUnits := make([]TradeUnit, 0)
-	iterTradeUnits := k.GetTradeUnitIterator(ctx)
-	defer iterTradeUnits.Close()
-	for ; iterTradeUnits.Valid(); iterTradeUnits.Next() {
-		var unit TradeUnit
-		k.Cdc().MustUnmarshal(iterTradeUnits.Value(), &unit)
-		tradeUnits = append(tradeUnits, unit)
-	}
-
-	securedAssets := make([]SecuredAsset, 0)
-	iterSecuredAssets := k.GetSecuredAssetIterator(ctx)
-	defer iterSecuredAssets.Close()
-	for ; iterSecuredAssets.Valid(); iterSecuredAssets.Next() {
-		var a SecuredAsset
-		k.Cdc().MustUnmarshal(iterSecuredAssets.Value(), &a)
-		securedAssets = append(securedAssets, a)
-	}
-
 	// Use Coin struct to represent these Asset-Amount pairs.
 	outboundFeeWithheldRune := common.Coins{}
 	outboundFeeSpentRune := common.Coins{}
@@ -757,11 +599,6 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		outboundFeeSpentRune = append(outboundFeeSpentRune, common.NewCoin(asset, amount))
 	}
 
-	affiliateCollectors, err := k.GetAffiliateCollectors(ctx)
-	if err != nil {
-		panic(err)
-	}
-
 	return GenesisState{
 		Pools:                   pools,
 		LiquidityProviders:      liquidityProviders,
@@ -770,7 +607,6 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		NodeAccounts:            nodeAccounts,
 		BondProviders:           bps,
 		Vaults:                  vaults,
-		ReferenceMemos:          memos,
 		LastSignedHeight:        lastSignedHeight,
 		LastChainHeights:        lastChainHeights,
 		Network:                 network,
@@ -782,17 +618,8 @@ func ExportGenesis(ctx cosmos.Context, k keeper.Keeper) GenesisState {
 		StreamingSwaps:          streamSwaps,
 		NetworkFees:             networkFees,
 		ChainContracts:          chainContracts,
-		THORNames:               names,
 		Mimirs:                  mimirs,
 		NodeMimirs:              nodeMimirs,
 		SwapperClout:            clouts,
-		TradeAccounts:           tradeAccts,
-		TradeUnits:              tradeUnits,
-		SecuredAssets:           securedAssets,
-		RuneProviders:           runeProviders,
-		RunePool:                runePool,
-		AffiliateCollectors:     affiliateCollectors,
-		TcyClaimers:             tcyClaimers,
-		TcyStakers:              tcyStakers,
 	}
 }

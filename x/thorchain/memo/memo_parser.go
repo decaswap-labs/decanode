@@ -550,22 +550,6 @@ func (p *parser) getTxID(idx int, required bool, def common.TxID) common.TxID {
 
 func (p *parser) getTHORName(idx int, required bool, def types.THORName, subIndex int) types.THORName {
 	p.incRequired(required)
-	name := p.get(idx)
-	if subIndex >= 0 {
-		name = p.getSubIndex(idx, subIndex)
-	}
-	if p.keeper == nil {
-		return def
-	}
-	if p.keeper.THORNameExists(p.ctx, name) {
-		tn, err := p.keeper.GetTHORName(p.ctx, name)
-		if err != nil {
-			if required || p.get(idx) != "" {
-				p.addErr(fmt.Errorf("cannot parse '%s' as a THORName: %w", p.get(idx), err))
-			}
-		}
-		return tn
-	}
 	return def
 }
 
