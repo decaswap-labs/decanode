@@ -60,10 +60,6 @@ func init() {
 		DECAPoolDepositMaturityBlocks:       0,
 		DECAPoolMaxReserveBackstop:          0,
 		SaversEjectInterval:                 60,
-		SystemIncomeBurnRateBps:             0,
-		DevFundSystemIncomeBps:              0,
-		MarketingFundSystemIncomeBps:        0,
-		TCYStakeSystemIncomeBps:             0,
 		MultipleAffiliatesMaxCount:          5,
 		BankSendEnabled:                     1,
 	}
@@ -72,9 +68,8 @@ func init() {
 	}
 	stringOverrides = map[ConstantName]string{
 		DefaultPoolStatus:    "Available",
-		DevFundAddress:       "tthor1qk8c8sfrmfm0tkncs0zxeutc8v5mx3pjj07k4u", // addr_thor_pig in regtest
-		MarketingFundAddress: "tthor1qk8c8sfrmfm0tkncs0zxeutc8v5mx3pjj07k4u", // same as dev fund in regtest
-		OverSolvencyAddress:  "tthor1qk8c8sfrmfm0tkncs0zxeutc8v5mx3pjj07k4u", // same as dev fund in regtest
+		DevFundAddress:      "tthor1qk8c8sfrmfm0tkncs0zxeutc8v5mx3pjj07k4u",
+		OverSolvencyAddress: "tthor1qk8c8sfrmfm0tkncs0zxeutc8v5mx3pjj07k4u",
 	}
 
 	v1Values := NewConstantValue()

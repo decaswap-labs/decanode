@@ -12,7 +12,8 @@ import (
 type ConstantName int
 
 const (
-	EmissionCurve ConstantName = iota
+	ValidatorFeeShareBps ConstantName = iota
+	DevFundFeeShareBps
 	MaxDecaSupply
 	BlocksPerYear
 	OutboundTransactionFee
@@ -134,13 +135,7 @@ const (
 	DECAPoolDepositMaturityBlocks
 	DECAPoolMaxReserveBackstop
 	SaversEjectInterval
-	SystemIncomeBurnRateBps
-	DevFundSystemIncomeBps
 	DevFundAddress
-	PendulumAssetsBasisPoints
-	PendulumUseEffectiveSecurity
-	PendulumUseVaultAssets
-	TVLCapBasisPoints
 	MultipleAffiliatesMaxCount
 	BondSlashBan
 	BankSendEnabled
@@ -148,7 +143,6 @@ const (
 	DECAPoolHaltWithdraw
 	MinDecaForTCYStakeDistribution
 	MinTCYForTCYStakeDistribution
-	TCYStakeSystemIncomeBps
 	TCYClaimingSwapHalt
 	TCYStakeDistributionHalt
 	TCYStakingHalt
@@ -161,8 +155,6 @@ const (
 	HaltOracle
 	OracleUpdateInterval
 	ReserveMaxCap
-	MarketingFundSystemIncomeBps
-	MarketingFundAddress
 	OverSolvencyToTreasuryBps
 	OverSolvencyCheckInterval
 	OverSolvencyAddress

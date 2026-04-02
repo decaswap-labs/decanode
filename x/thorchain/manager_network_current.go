@@ -1506,68 +1506,33 @@ func (vm *NetworkMgr) UpdateNetwork(ctx cosmos.Context, constAccessor constants.
 	}
 
 	totalReserve := vm.k.GetDecaBalanceOfModule(ctx, ReserveName)
-
-	// when total reserve is zero , can't pay reward
 	if totalReserve.IsZero() {
 		return nil
 	}
-	availablePools, availablePoolsRune, err := getAvailablePoolsRune(ctx, vm.k)
-	if err != nil {
-		return fmt.Errorf("fail to get available pools and their rune: %w", err)
-	}
-	vaultsLiquidityRune, err := getVaultsLiquidityRune(ctx, vm.k)
-	if err != nil {
-		return fmt.Errorf("fail to get vaults liquidity rune: %w", err)
-	}
 
-	// If no Rune is in Available pools, then don't give out block rewards.
-	if availablePoolsRune.IsZero() {
-		return nil // If no Rune is in available pools, then don't give out block rewards.
-	}
-
-	// get total liquidity fees
 	currentHeight := uint64(ctx.BlockHeight())
 	totalLiquidityFees, err := vm.k.GetTotalLiquidityFees(ctx, currentHeight)
 	if err != nil {
 		return fmt.Errorf("fail to get total liquidity fee: %w", err)
 	}
 
-	// NOTE: if we continue to have remaining gas to pay off (which is
-	// extremely unlikely), ignore it for now (attempt to recover in the next
-	// block). This should be OK as the asset amount in the pool has already
-	// been deducted so the balances are correct. Just operating at a deficit.
-	active, err := vm.k.ListActiveValidators(ctx)
-	if err != nil {
-		return fmt.Errorf("fail to get all active accounts: %w", err)
-	}
-	effectiveSecurityBond := getEffectiveSecurityBond(active)
-	totalEffectiveBond, _ := getTotalEffectiveBond(active)
-
-	emissionCurve := vm.k.GetConfigInt64(ctx, constants.EmissionCurve)
-
-	// Override EmissionCurve to default (6) if reserve balance exceeds ReserveMaxCap
-	reserveMaxCap := vm.k.GetConfigInt64(ctx, constants.ReserveMaxCap)
-	if reserveMaxCap > 0 && totalReserve.GT(cosmos.NewUint(uint64(reserveMaxCap))) {
-		emissionCurve = 6 // Default EmissionCurve value
+	if totalLiquidityFees.IsZero() {
+		return nil
 	}
 
-	devFundSystemIncomeBps := vm.k.GetConfigInt64(ctx, constants.DevFundSystemIncomeBps)
-	systemIncomeBurnRateBps := vm.k.GetConfigInt64(ctx, constants.SystemIncomeBurnRateBps)
-	tcyStakeSystemIncomeBps := vm.k.GetConfigInt64(ctx, constants.TCYStakeSystemIncomeBps)
-	marketingFundSystemIncomeBps := vm.k.GetConfigInt64(ctx, constants.MarketingFundSystemIncomeBps)
-	blocksPerYear := constAccessor.GetInt64Value(constants.BlocksPerYear)
-	bondReward, totalPoolRewards, lpShare, devFundDeduct, systemIncomeBurnDeduct, tcyStakeDeduct, marketingFundDeduct := vm.calcBlockRewards(ctx,
-		availablePoolsRune, vaultsLiquidityRune, effectiveSecurityBond,
-		totalEffectiveBond, totalReserve, totalLiquidityFees, emissionCurve,
-		blocksPerYear, devFundSystemIncomeBps, systemIncomeBurnRateBps, tcyStakeSystemIncomeBps, marketingFundSystemIncomeBps)
+	validatorShareBps := cosmos.SafeUintFromInt64(vm.k.GetConfigInt64(ctx, constants.ValidatorFeeShareBps))
+	devFundShareBps := cosmos.SafeUintFromInt64(vm.k.GetConfigInt64(ctx, constants.DevFundFeeShareBps))
+	bpsDenom := cosmos.NewUint(10_000)
+
+	validatorReward := common.GetSafeShare(validatorShareBps, bpsDenom, totalLiquidityFees)
+	devFundDeduct := common.GetSafeShare(devFundShareBps, bpsDenom, totalLiquidityFees)
 
 	if !devFundDeduct.IsZero() {
-		// Send to dev fund address
 		devFundAddressConst := vm.k.GetConstants().GetStringValue(constants.DevFundAddress)
 		var devFundAddress cosmos.AccAddress
 		devFundAddress, err = cosmos.AccAddressFromBech32(devFundAddressConst)
 		if err != nil {
-			return fmt.Errorf("fail to AccAddressFromBech32(devFundAddressConst)")
+			return fmt.Errorf("fail to parse dev fund address: %w", err)
 		}
 		coin := common.NewCoin(common.DecaNative, devFundDeduct)
 		if err = vm.k.SendFromModuleToAccount(ctx, ReserveName, devFundAddress, common.NewCoins(coin)); err != nil {
@@ -1575,111 +1540,36 @@ func (vm *NetworkMgr) UpdateNetwork(ctx cosmos.Context, constAccessor constants.
 		}
 	}
 
-	if !marketingFundDeduct.IsZero() {
-		// Send to marketing fund address
-		marketingFundAddressConst := vm.k.GetConstants().GetStringValue(constants.MarketingFundAddress)
-		var marketingFundAddress cosmos.AccAddress
-		marketingFundAddress, err = cosmos.AccAddressFromBech32(marketingFundAddressConst)
-		if err != nil {
-			return fmt.Errorf("fail to AccAddressFromBech32(marketingFundAddressConst)")
-		}
-		coin := common.NewCoin(common.DecaNative, marketingFundDeduct)
-		if err = vm.k.SendFromModuleToAccount(ctx, ReserveName, marketingFundAddress, common.NewCoins(coin)); err != nil {
-			return fmt.Errorf("fail to transfer funds from reserve to marketingFundAddress: %w", err)
-		}
-	}
-
-	if !systemIncomeBurnDeduct.IsZero() {
-		coin := common.NewCoin(common.DecaNative, systemIncomeBurnDeduct)
-		// Burn system income
-		// Send to THORCHain module first, then burn
-		if err = vm.k.SendFromModuleToModule(ctx, ReserveName, ModuleName, common.NewCoins(coin)); err != nil {
-			return fmt.Errorf("fail to transfer funds from reserve to devFundAddress: %w", err)
-		}
-		if err = vm.k.BurnFromModule(ctx, ModuleName, coin); err != nil {
-			return fmt.Errorf("fail to burn system income from reserve: %w", err)
-		}
-		burnEvt := NewEventMintBurn(BurnSupplyType, coin.Asset.Native(), coin.Amount, "burn_system_income")
-		if err = vm.eventMgr.EmitEvent(ctx, burnEvt); err != nil {
-			ctx.Logger().Error("fail to emit burn event", "error", err)
-		}
-		// Decrement the MaxDecaSupply mimir by the amount of RUNE burnt
-		currentMaxDecaSupply := cosmos.SafeUintFromInt64(vm.k.GetConfigInt64(ctx, constants.MaxDecaSupply))
-		currentMaxDecaSupply = currentMaxDecaSupply.Sub(systemIncomeBurnDeduct)
-		vm.k.SetMimir(ctx, constants.MaxDecaSupply.String(), int64(currentMaxDecaSupply.Uint64()))
-	}
-
-	if !tcyStakeDeduct.IsZero() {
-		coin := common.NewCoin(common.DecaNative, tcyStakeDeduct)
-		if err = vm.k.SendFromModuleToModule(ctx, ReserveName, TCYStakeName, common.NewCoins(coin)); err != nil {
-			return fmt.Errorf("fail to transfer funds from reserve to tcy fund: %w", err)
-		}
-	}
-
-	// Pay out LP/node split from remaining totalPoolRewards
-	network.LPIncomeSplit = int64(lpShare.Uint64())
-	network.NodeIncomeSplit = int64(10_000) - network.LPIncomeSplit
-
-	// Reserve-emitted block rewards (not liquidity fees) are based on totalReserve, thus the Reserve should always have enough for them.
-	// The same does not go for liquidity fees; liquidity fees sent from pools to the Reserve (negative pool rewards)
-	// are to be passed on as bond rewards, so pool reward transfers should be processed before the bond reward transfer.
-
-	var evtPools []PoolAmt
-
-	if !totalPoolRewards.IsZero() { // If Pool Rewards to hand out
-		var rewardAmts []cosmos.Uint
-		var rewardPools []Pool
-		// Pool Rewards are based on Fee Share
-		for _, pool := range availablePools {
-			var amt, fees cosmos.Uint
-			if totalLiquidityFees.IsZero() {
-				amt = common.GetSafeShare(pool.BalanceDeca, availablePoolsRune, totalPoolRewards)
-				fees = cosmos.ZeroUint()
-			} else {
-				fees, err = vm.k.GetPoolLiquidityFees(ctx, currentHeight, pool.Asset)
-				if err != nil {
-					ctx.Logger().Error("fail to get fees", "error", err)
-					continue
-				}
-				amt = common.GetSafeShare(fees, totalLiquidityFees, totalPoolRewards)
-			}
-			if err = vm.paySaverYield(ctx, pool.Asset, amt.Add(fees)); err != nil {
-				return fmt.Errorf("fail to pay saver yield: %w", err)
-			}
-			// when pool reward is zero, don't emit it
-			if amt.IsZero() {
-				continue
-			}
-			rewardAmts = append(rewardAmts, amt)
-			evtPools = append(evtPools, PoolAmt{Asset: pool.Asset, Amount: int64(amt.Uint64())})
-			rewardPools = append(rewardPools, pool)
-
-		}
-		// Pay out
-		if err = vm.payPoolRewards(ctx, rewardAmts, rewardPools); err != nil {
-			return err
-		}
-
-	}
-
-	if !bondReward.IsZero() {
-		coin := common.NewCoin(common.DecaNative, bondReward)
+	if !validatorReward.IsZero() {
+		coin := common.NewCoin(common.DecaNative, validatorReward)
 		if err = vm.k.SendFromModuleToModule(ctx, ReserveName, BondName, common.NewCoins(coin)); err != nil {
 			ctx.Logger().Error("fail to transfer funds from reserve to bond", "error", err)
 			return fmt.Errorf("fail to transfer funds from reserve to bond: %w", err)
 		}
 	}
-	network.BondRewardRune = network.BondRewardRune.Add(bondReward) // Add here for individual Node collection later
+	network.BondRewardRune = network.BondRewardRune.Add(validatorReward)
 
-	rewardEvt := NewEventRewards(bondReward, evtPools, devFundDeduct, systemIncomeBurnDeduct, tcyStakeDeduct, marketingFundDeduct)
+	network.LPIncomeSplit = 0
+	network.NodeIncomeSplit = 9000
+
+	ctx.Logger().Info(
+		"fee distribution",
+		"total_liquidity_fees", totalLiquidityFees,
+		"validator_reward", validatorReward,
+		"dev_fund_reward", devFundDeduct,
+	)
+
+	var evtPools []PoolAmt
+	rewardEvt := NewEventRewards(validatorReward, evtPools, devFundDeduct, cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint())
 	if err = eventMgr.EmitEvent(ctx, rewardEvt); err != nil {
 		return fmt.Errorf("fail to emit reward event: %w", err)
 	}
+
 	i, err := getTotalActiveNodeWithBond(ctx, vm.k)
 	if err != nil {
 		return fmt.Errorf("fail to get total active node account: %w", err)
 	}
-	network.TotalBondUnits = network.TotalBondUnits.Add(cosmos.NewUint(uint64(i))) // Add 1 unit for each active Node
+	network.TotalBondUnits = network.TotalBondUnits.Add(cosmos.NewUint(uint64(i)))
 
 	return vm.k.SetNetwork(ctx, network)
 }
@@ -1702,169 +1592,6 @@ func (vm *NetworkMgr) payPoolRewards(ctx cosmos.Context, poolRewards []cosmos.Ui
 	return nil
 }
 
-// Calculate pool deficit based on the pool's accrued fees compared with total fees.
-func (vm *NetworkMgr) calcPoolDeficit(lpDeficit, totalFees, poolFees cosmos.Uint) cosmos.Uint {
-	return common.GetSafeShare(poolFees, totalFees, lpDeficit)
-}
-
-// Calculate the block rewards that bonders and liquidity providers should receive
-func (vm *NetworkMgr) calcBlockRewards(
-	ctx cosmos.Context,
-	availablePoolsRune,
-	vaultsLiquidityRune,
-	effectiveSecurityBond,
-	totalEffectiveBond,
-	totalReserve,
-	totalLiquidityFees cosmos.Uint,
-	emissionCurve int64,
-	blocksPerYear int64,
-	devFundSystemIncomeBps int64,
-	systemIncomeBurnRateBps int64,
-	tcyStakeSystemIncomeBps int64,
-	marketingFundSystemIncomeBps int64) (
-	bondReward cosmos.Uint,
-	totalPoolRewards cosmos.Uint,
-	lpShare cosmos.Uint,
-	devFundDeduct cosmos.Uint,
-	systemIncomeBurnDeduct cosmos.Uint,
-	tcyStakeDeduct cosmos.Uint,
-	marketingFundDeduct cosmos.Uint,
-) {
-	// Block Rewards will take the latest reserve, divide it by the emission
-	// curve factor, then divide by blocks per year
-	trD := cosmos.NewDec(int64(totalReserve.Uint64()))
-	ecD := cosmos.NewDec(emissionCurve)
-	bpyD := cosmos.NewDec(blocksPerYear)
-	// Defensive check: ensure emission curve and blocks per year are positive
-	if emissionCurve <= 0 || blocksPerYear <= 0 {
-		ctx.Logger().Error("invalid emission curve or blocks per year", "emissionCurve", emissionCurve, "blocksPerYear", blocksPerYear)
-		// Return zero rewards if config is invalid
-		return cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint()
-	}
-	blockRewardD := trD.Quo(ecD).Quo(bpyD)
-	blockReward := cosmos.NewUint(uint64((blockRewardD).RoundInt64()))
-
-	systemIncome := blockReward.Add(totalLiquidityFees) // Get total system income for block
-	devFundSystemIncomeBpsUint := cosmos.SafeUintFromInt64(devFundSystemIncomeBps)
-	systemIncomeBurnRateBpsUint := cosmos.SafeUintFromInt64(systemIncomeBurnRateBps)
-	tcyStakeSystemIncomeBpsUint := cosmos.SafeUintFromInt64(tcyStakeSystemIncomeBps)
-	marketingFundSystemIncomeBpsUint := cosmos.SafeUintFromInt64(marketingFundSystemIncomeBps)
-	devFundDeduct = common.GetSafeShare(devFundSystemIncomeBpsUint, cosmos.NewUint(10_000), systemIncome)
-	systemIncomeBurnDeduct = common.GetSafeShare(systemIncomeBurnRateBpsUint, cosmos.NewUint(10_000), systemIncome)
-	tcyStakeDeduct = common.GetSafeShare(tcyStakeSystemIncomeBpsUint, cosmos.NewUint(10_000), systemIncome)
-	marketingFundDeduct = common.GetSafeShare(marketingFundSystemIncomeBpsUint, cosmos.NewUint(10_000), systemIncome)
-	assetsBps := cosmos.NewUint(uint64(vm.k.GetConfigInt64(ctx, constants.PendulumAssetsBasisPoints)))
-	useEffectiveSecurity := (vm.k.GetConfigInt64(ctx, constants.PendulumUseEffectiveSecurity) > 0)
-	useVaultAssets := (vm.k.GetConfigInt64(ctx, constants.PendulumUseVaultAssets) > 0)
-
-	if !tcyStakeDeduct.IsZero() {
-		systemIncome = common.SafeSub(systemIncome, tcyStakeDeduct)
-	}
-
-	if devFundDeduct.GT(systemIncome) {
-		devFundDeduct = systemIncome
-	}
-
-	if !devFundDeduct.IsZero() {
-		systemIncome = common.SafeSub(systemIncome, devFundDeduct)
-	}
-
-	if systemIncomeBurnDeduct.GT(systemIncome) {
-		systemIncomeBurnDeduct = systemIncome
-	}
-	if !systemIncomeBurnDeduct.IsZero() {
-		systemIncome = common.SafeSub(systemIncome, systemIncomeBurnDeduct)
-	}
-
-	if marketingFundDeduct.GT(systemIncome) {
-		marketingFundDeduct = systemIncome
-	}
-	if !marketingFundDeduct.IsZero() {
-		systemIncome = common.SafeSub(systemIncome, marketingFundDeduct)
-	}
-
-	lpSplit := vm.getPoolShare(availablePoolsRune, vaultsLiquidityRune, effectiveSecurityBond, totalEffectiveBond, systemIncome, assetsBps, useEffectiveSecurity, useVaultAssets) // Get liquidity provider share
-	bonderSplit := common.SafeSub(systemIncome, lpSplit)                                                                                                                          // Remainder to Bonders
-
-	ctx.Logger().Info(
-		"incentive pendulum",
-		"total_effective_bond", totalEffectiveBond,
-		"effective_security_bond", effectiveSecurityBond,
-		"vaults_liquidity_rune", vaultsLiquidityRune,
-		"available_pools_rune", availablePoolsRune,
-		"block_reward", blockReward,
-		"total_liquidity_fees", totalLiquidityFees,
-		"dev_fund_reward", devFundDeduct,
-		"income_burn", systemIncomeBurnDeduct,
-		"marketing_fund_reward", marketingFundDeduct,
-		"total_pendulum_rewards", systemIncome,
-		"pendulum_assets_basis_points", assetsBps,
-		"use_vault_assets", useVaultAssets,
-		"use_effective_security", useEffectiveSecurity,
-		"bond_rewards", bonderSplit,
-		"pool_rewards", lpSplit,
-		"tcy_stake_reward", tcyStakeDeduct,
-		"system_income", systemIncome,
-	)
-
-	lpShare = common.GetSafeShare(lpSplit, systemIncome, cosmos.NewUint(10_000))
-
-	return bonderSplit, lpSplit, lpShare, devFundDeduct, systemIncomeBurnDeduct, tcyStakeDeduct, marketingFundDeduct
-}
-
-// getPoolShare calculates the pool share of the total rewards. The distribution is
-// calculated such that the amount distributed to pools should equal the amount
-// distributed to the security bond when security bond is 2x the value in pools.
-//
-// totalLiquidty: RUNE value in pools
-// securityBond: RUNE value bonded by smallest 66% of nodes
-// effectiveBond: total RUNE value bonded, with max per-node at 66th percentile
-// totalRewards: total RUNE rewards to be distributed
-func (vm *NetworkMgr) getPoolShare(
-	pooledRune, vaultLiquidity, effectiveSecurityBond, totalEffectiveBond, totalRewards, assetsBps cosmos.Uint, useEffectiveSecurity, useVaultAssets bool,
-) cosmos.Uint {
-	securing := effectiveSecurityBond
-	secured := vaultLiquidity
-
-	if !useEffectiveSecurity {
-		securing = totalEffectiveBond
-	}
-	if !useVaultAssets {
-		secured = pooledRune
-	}
-
-	// Proportionally underestimate or overestimate the Assets (in terms of RUNE value) needing to be secured.
-	secured = common.GetUncappedShare(assetsBps, cosmos.NewUint(constants.MaxBasisPts), secured)
-
-	// no payments to liquidity providers when more liquidity than security
-	if securing.LTE(secured) {
-		return cosmos.ZeroUint()
-	}
-
-	// calculate the base node share rewards
-	baseNodeShare := common.GetSafeShare(secured, securing, totalRewards)
-
-	// base pool share is the remaining
-	basePoolShare := common.SafeSub(totalRewards, baseNodeShare)
-
-	// correct for share of node rewards not received by the security bond
-	// and for that pools shouldn't receive rewards for vault liquidity not in pools
-	adjustmentNodeShare := common.GetUncappedShare(totalEffectiveBond, effectiveSecurityBond, baseNodeShare)
-	adjustmentPoolShare := common.GetSafeShare(pooledRune, vaultLiquidity, basePoolShare)
-
-	if !useEffectiveSecurity {
-		adjustmentNodeShare = baseNodeShare
-	}
-	if !useVaultAssets {
-		adjustmentPoolShare = basePoolShare
-	}
-
-	adjustmentRewards := adjustmentPoolShare.Add(adjustmentNodeShare)
-
-	// Derive the pool share according to the adjustment rewards,
-	// totalRewards being the allocation to never be exceeded.
-	return common.GetSafeShare(adjustmentPoolShare, adjustmentRewards, totalRewards)
-}
 
 // checkPoolRagnarok iterate through all the pools to see whether there are pools need to be ragnarok
 // this function will only run in an interval , defined by constants.FundMigrationInterval

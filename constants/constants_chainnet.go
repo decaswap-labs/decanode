@@ -5,12 +5,11 @@ package constants
 
 func init() {
 	int64Overrides = map[ConstantName]int64{
-		ChurnInterval:              432000,
+		ChurnInterval:              50400,
 		OperationalVotesMin:        1,
 		MinDecaPoolDepth:           1_00000000,
 		MinimumBondInDeca:          200_000_00000000,
 		PoolCycle:                  720,
-		EmissionCurve:              8,
 		NumberOfNewNodesPerChurn:   4,
 		MintSynths:                 1,
 		BurnSynths:                 1,
@@ -18,8 +17,7 @@ func init() {
 		MultipleAffiliatesMaxCount: 5,
 	}
 	stringOverrides = map[ConstantName]string{
-		DevFundAddress:       "cthor1jydyvc8wt84jcdl6qex0ps9czfmcaqurljevkt",
-		MarketingFundAddress: "cthor15wayjcl0ecdnqzjx9a3f9zll6pzvphl6we8k6j",
-		OverSolvencyAddress:  "cthor1jydyvc8wt84jcdl6qex0ps9czfmcaqurljevkt",
+		DevFundAddress:      "cthor1jydyvc8wt84jcdl6qex0ps9czfmcaqurljevkt",
+		OverSolvencyAddress: "cthor1jydyvc8wt84jcdl6qex0ps9czfmcaqurljevkt",
 	}
 }

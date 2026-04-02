@@ -4,7 +4,8 @@ package constants
 func NewConstantValue() *ConstantVals {
 	return &ConstantVals{
 		int64values: map[ConstantName]int64{
-			EmissionCurve:                       6,
+			ValidatorFeeShareBps:                9000,
+			DevFundFeeShareBps:                  1000,
 			BlocksPerYear:                       5256000,
 			MaxDecaSupply:                       -1, // max supply of rune. Default set to -1 to avoid consensus failure
 			OutboundTransactionFee:              2_000000,
@@ -16,9 +17,9 @@ func NewConstantValue() *ConstantVals {
 			PendingLiquidityAgeLimit:            100800,             // age pending liquidity can be pending before its auto committed to the pool
 			MinDecaPoolDepth:                    10000_00000000,     // minimum rune pool depth to be an available pool
 			MaxAvailablePools:                   100,                // maximum number of available pools
-			MinimumNodesForBFT:                  4,                  // Minimum node count to keep network running. Below this, Ragnarök is performed.
-			DesiredValidatorSet:                 100,                // desire validator set
-			AsgardSize:                          40,                 // desired node operators in an asgard vault
+			MinimumNodesForBFT:                  4,
+			DesiredValidatorSet:                 30,
+			AsgardSize:                          30,
 			DerivedDepthBasisPts:                0,                  // Basis points to increase/decrease derived pool depth (10k == 1x)
 			DerivedMinDepth:                     100,                // in basis points, min derived pool depth
 			MaxAnchorSlip:                       1500,               // basis points of rune depth to trigger pausing a derived virtual pool
@@ -27,7 +28,7 @@ func NewConstantValue() *ConstantVals {
 			DynamicMaxAnchorTarget:              0,                  // target depth of derived virtual pool (in basis points)
 			DynamicMaxAnchorCalcInterval:        14400,              // number of blocks to recalculate the dynamic max anchor
 			FundMigrationInterval:               360,                // number of blocks THORNode will attempt to move funds from a retiring vault to an active one
-			ChurnInterval:                       43200,              // How many blocks THORNode try to rotate validators
+			ChurnInterval:                       50400,              // Weekly keygen cycle (7*24*60*60/12 = 50400 blocks at 12s)
 			ChurnRetryInterval:                  720,                // How many blocks until we retry a churn (only if we haven't had a successful churn in ChurnInterval blocks
 			MissingBlockChurnOut:                0,                  // num of blocks a validator needs to NOT sign between churns
 			MaxMissingBlockChurnOut:             0,                  // max number of nodes to be churned out due to not signing blocks
@@ -130,13 +131,6 @@ func NewConstantValue() *ConstantVals {
 			DECAPoolDepositMaturityBlocks:       14400 * 90,         // blocks from last deposit to allow withdraw
 			DECAPoolMaxReserveBackstop:          5_000_000_00000000, // 5 million RUNE
 			SaversEjectInterval:                 0,                  // number of blocks for savers check, disabled if zero
-			SystemIncomeBurnRateBps:             1,                  // burn 1bps (0.01%) RUNE of all system income per ADR 17
-			DevFundSystemIncomeBps:              500,                // allocate 500bps (5%) RUNE of all system income to dev fund per ADR 18
-			MarketingFundSystemIncomeBps:        500,                // allocate 500bps (5%) RUNE of all system income to marketing fund per ADR 21
-			PendulumAssetsBasisPoints:           10_000,             // Incentive curve adjustment lever to proportionally underestimate or overestimate Assets needing to be secured.
-			PendulumUseEffectiveSecurity:        0,                  // If 1, use the effective security bond (the bond sacrificable to seize L1 Assets) as the securing bond for which to target double the value of the secured Assets. If 0, instead use the whole (rewards-receiving) total effective bond.
-			PendulumUseVaultAssets:              0,                  // If 1. use the L1 Assets in the vaults (the Assets seizable by the lower-bond 2/3rds of nodes in each vault) as the Assets to be secured.  If 0, instead use only the L1 Assets in pools, ignoring the L1 Assets in for instance streaming swaps, oversolvencies, and Trade/Bridge Assets.
-			TVLCapBasisPoints:                   0,                  // If 0, TVL Cap is set to the effective active bond. If non-zero, the value is interrupted as basis points relative to total active bond
 			MultipleAffiliatesMaxCount:          5,                  // maximum number of nested affiliates
 			BondSlashBan:                        5_000_00000000,     // 5000 RUNE - amount to slash bond of banned nodes
 			BankSendEnabled:                     0,                  // enable/disable cosmos bank send messages
@@ -144,13 +138,12 @@ func NewConstantValue() *ConstantVals {
 			DECAPoolHaltWithdraw:                0,                  // enable/disable DECAPool withdraw (block height)
 			MinDecaForTCYStakeDistribution:      2_100_00000000,     // Set what is the minimum amount of rune need it on TCY fund in order to be distributed
 			MinTCYForTCYStakeDistribution:       100000,             // Set what is the minimum amount of TCY need it on TCY fund in order to be distributed
-			TCYStakeSystemIncomeBps:             1000,               // allocate 1000bps (10%) RUNE of all system income to TCY Fund
 			TCYClaimingSwapHalt:                 1,                  // enable/disable claiming module rune to tcy swap
 			TCYStakeDistributionHalt:            1,                  // enable/disable tcy stake distribution
 			TCYStakingHalt:                      1,                  // enable/disable tcy staking
 			TCYUnstakingHalt:                    1,                  // enable/disable tcy unstaking
 			TCYClaimingHalt:                     1,                  // enable/disable tcy claiming
-			ReserveMaxCap:                       0,                  // maximum reserve balance before EmissionCurve is overridden, 0 = disabled
+			ReserveMaxCap:                       0,
 			MaxDepositTxIDRetries:               100,                // maximum retries for deposit txid auto-increment to avoid collisions
 			OverSolvencyToTreasuryBps:           0,                  // basis points (0-10000) of over-solvent liquidity to swap to RUNE and transfer to over-solvency sweep destination address
 			OverSolvencyCheckInterval:           600,                // interval in blocks for over-solvency checks (approximately 30 days)
@@ -162,8 +155,7 @@ func NewConstantValue() *ConstantVals {
 		},
 		stringValues: map[ConstantName]string{
 			DefaultPoolStatus:    "Staged",
-			DevFundAddress:       "thor1d8c0wv4y72kmlytegjmgx825xwumt9qt5xe07k", // dev fund address for ADR 18,  initially set via to address pre-funded 1M by TC treasury
-			MarketingFundAddress: "thor1usj8cqjmjea32csxn5fma96ffeulln40gyrahn", // marketing fund address for ADR 21
+			DevFundAddress:       "thor1d8c0wv4y72kmlytegjmgx825xwumt9qt5xe07k",
 			OverSolvencyAddress:  "thor1lhufh0mwasa0lk9udppdegmvnkgqt08f0m9p5g", // over-solvency sweep destination address
 			RequiredPriceFeeds:   "ATOM,AVAX,BCH,BNB,BTC,DOGE,ETH,LTC,RUNE,SOL,TRX,USDC,USDT,XRP,ZEC",
 		},
