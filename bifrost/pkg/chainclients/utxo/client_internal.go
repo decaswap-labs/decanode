@@ -11,9 +11,6 @@ import (
 	"github.com/btcsuite/btcd/btcjson"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
-	bchtxscript "github.com/decaswap-labs/decanode/bifrost/txscript/bchd-txscript"
-	dogetxscript "github.com/decaswap-labs/decanode/bifrost/txscript/dogd-txscript"
-	ltctxscript "github.com/decaswap-labs/decanode/bifrost/txscript/ltcd-txscript"
 	btctxscript "github.com/decaswap-labs/decanode/bifrost/txscript/txscript"
 
 	btypes "github.com/decaswap-labs/decanode/bifrost/blockscanner/types"
@@ -63,8 +60,6 @@ func (c *Client) processReorg(block *btcjson.GetBlockVerboseTxResult) ([]types.T
 	if prevBlockMeta == nil {
 		return nil, nil
 	}
-	// the block's previous hash need to be the same as the block hash chain client recorded in block meta
-	// blockMetas[PreviousHeight].BlockHash == Block.PreviousHash
 	if strings.EqualFold(prevBlockMeta.BlockHash, block.PreviousHash) {
 		return nil, nil
 	}
@@ -103,19 +98,14 @@ func (c *Client) processReorg(block *btcjson.GetBlockVerboseTxResult) ([]types.T
 	return txIns, nil
 }
 
-// reConfirmTx is triggered on detection of a re-org. It will walk backwards from the
-// provided height until it finds a block with a matching hash, returning a slice all
-// heights between the re-org height and the height of the common ancestor.
 func (c *Client) reConfirmTx(height int64) ([]int64, error) {
 	var rescanBlockHeights []int64
 
-	// calculate the earliest look back height
 	earliestHeight := height - c.cfg.BlockScanner.MaxReorgRescanBlocks
 	if earliestHeight < 1 {
 		earliestHeight = 1
 	}
 
-	// the current block is not yet in block meta, start from previous block
 	for i := height - 1; i >= earliestHeight; i-- {
 		blockMeta, err := c.temporalStorage.GetBlockMeta(i)
 		if err != nil {
@@ -127,20 +117,18 @@ func (c *Client) reConfirmTx(height int64) ([]int64, error) {
 			c.log.Err(err).Msgf("fail to get block verbose tx result: %d", blockMeta.Height)
 		}
 		if strings.EqualFold(blockMeta.BlockHash, hash) {
-			break // we know about this block, everything prior is okay
+			break
 		}
 
 		c.log.Info().Int64("height", blockMeta.Height).Msg("re-confirming transactions")
 
 		var errataTxs []types.ErrataTx
 		for _, tx := range blockMeta.CustomerTransactions {
-			// check if the tx still exists in chain
 			if c.confirmTx(tx) {
 				c.log.Info().Int64("height", blockMeta.Height).Str("txid", tx).Msg("transaction still exists")
 				continue
 			}
 
-			// otherwise add it to the errata txs
 			c.log.Info().Int64("height", blockMeta.Height).Str("txid", tx).Msg("errata tx")
 			errataTxs = append(errataTxs, types.ErrataTx{
 				TxID:  common.TxID(tx),
@@ -159,7 +147,6 @@ func (c *Client) reConfirmTx(height int64) ([]int64, error) {
 
 		rescanBlockHeights = append(rescanBlockHeights, blockMeta.Height)
 
-		// update the stored block meta with the new block hash
 		var r *btcjson.GetBlockVerboseResult
 		r, err = c.rpc.GetBlockVerbose(hash)
 		if err != nil {
@@ -167,7 +154,8 @@ func (c *Client) reConfirmTx(height int64) ([]int64, error) {
 		}
 		blockMeta.PreviousHash = r.PreviousHash
 		blockMeta.BlockHash = r.Hash
-		if err = c.temporalStorage.SaveBlockMeta(blockMeta.Height, blockMeta); err != nil {
+		err = c.temporalStorage.SaveBlockMeta(blockMeta.Height, blockMeta)
+		if err != nil {
 			c.log.Err(err).Int64("height", blockMeta.Height).Msg("fail to save block meta of height")
 		}
 	}
@@ -175,7 +163,6 @@ func (c *Client) reConfirmTx(height int64) ([]int64, error) {
 }
 
 func (c *Client) confirmTx(txid string) bool {
-	// since daemons are run with the tx index enabled, this covers block and mempool
 	_, err := c.rpc.GetRawTransaction(txid)
 	if err != nil {
 		c.log.Err(err).Str("txid", txid).Msg("fail to get tx")
@@ -188,7 +175,8 @@ func (c *Client) confirmTx(txid string) bool {
 ////////////////////////////////////////////////////////////////////////////////////////
 
 func (c *Client) removeFromMemPoolCache(hash string) {
-	if err := c.temporalStorage.UntrackMempoolTx(hash); err != nil {
+	err := c.temporalStorage.UntrackMempoolTx(hash)
+	if err != nil {
 		c.log.Err(err).Str("txid", hash).Msg("fail to remove from mempool cache")
 	}
 }
@@ -206,7 +194,8 @@ func (c *Client) canDeleteBlock(blockMeta *utxo.BlockMeta) bool {
 		return true
 	}
 	for _, tx := range blockMeta.SelfTransactions {
-		if result, err := c.rpc.GetMempoolEntry(tx); err == nil && result != nil {
+		result, err := c.rpc.GetMempoolEntry(tx)
+		if err == nil && result != nil {
 			c.log.Info().Str("txid", tx).Msg("still in mempool, block cannot be deleted")
 			return false
 		}
@@ -229,26 +218,9 @@ func (c *Client) updateNetworkInfo() {
 }
 
 func (c *Client) sendNetworkFee(height int64) error {
-	// get block stats
 	var feeRate uint64
 	switch c.cfg.ChainID {
-	case common.BCHChain:
-		// BCH is a special case since the response uses floats
-		hash, err := c.rpc.GetBlockHash(height)
-		if err != nil {
-			return fmt.Errorf("fail to get block hash: %w", err)
-		}
-		type BlockStats struct {
-			AverageFeeRate float64 `json:"avgfeerate"`
-		}
-		var bs BlockStats
-		err = c.rpc.Call(&bs, "getblockstats", hash)
-		if err != nil {
-			return fmt.Errorf("fail to get block stats: %w", err)
-		}
-		feeRate = uint64(bs.AverageFeeRate * common.One)
-
-	case common.LTCChain, common.BTCChain:
+	case common.BTCChain:
 		hash, err := c.rpc.GetBlockHash(height)
 		if err != nil {
 			return fmt.Errorf("fail to get block hash: %w", err)
@@ -282,7 +254,6 @@ func (c *Client) sendNetworkFee(height int64) error {
 		feeRate = uint64(c.cfg.UTXO.MinSatsPerVByte)
 	}
 
-	// if gas cache blocks are set, use the max gas over that window
 	if c.cfg.BlockScanner.GasCacheBlocks > 0 {
 		c.feeRateCache = append(c.feeRateCache, feeRate)
 		if len(c.feeRateCache) > c.cfg.BlockScanner.GasCacheBlocks {
@@ -297,7 +268,6 @@ func (c *Client) sendNetworkFee(height int64) error {
 
 	c.m.GetGauge(metrics.GasPrice(c.cfg.ChainID)).Set(float64(feeRate))
 
-	// skip update if fee has not changed
 	if c.lastFeeRate.Load() == feeRate {
 		return nil
 	}
@@ -316,11 +286,9 @@ func (c *Client) sendNetworkFee(height int64) error {
 	return nil
 }
 
-// sendNetworkFeeFromBlock will send network fee to Thornode based on the block result,
-// for chains like Dogecoin which do not support the getblockstats RPC.
 func (c *Client) sendNetworkFeeFromBlock(blockResult *btcjson.GetBlockVerboseTxResult) error {
 	height := blockResult.Height
-	var total float64 // total coinbase value, block reward + all transaction fees in the block
+	var total float64
 	var totalVSize int32
 	for _, tx := range blockResult.Tx {
 		if len(tx.Vin) == 1 && tx.Vin[0].IsCoinBase() {
@@ -332,7 +300,6 @@ func (c *Client) sendNetworkFeeFromBlock(blockResult *btcjson.GetBlockVerboseTxR
 		}
 	}
 
-	// skip updating network fee if there are no utxos (except coinbase) in the block
 	if totalVSize == 0 {
 		return nil
 	}
@@ -341,7 +308,6 @@ func (c *Client) sendNetworkFeeFromBlock(blockResult *btcjson.GetBlockVerboseTxR
 		return fmt.Errorf("fail to parse total block fee amount, err: %w", err)
 	}
 
-	// average fee rate in sats/vbyte or default min relay fee
 	feeRateSats := uint64(amt.ToUnit(btcutil.AmountSatoshi) / float64(totalVSize))
 	if c.cfg.UTXO.DefaultMinRelayFeeSats > feeRateSats {
 		feeRateSats = c.cfg.UTXO.DefaultMinRelayFeeSats
@@ -350,23 +316,18 @@ func (c *Client) sendNetworkFeeFromBlock(blockResult *btcjson.GetBlockVerboseTxR
 	transactionSize := c.cfg.UTXO.EstimatedAverageTxSize
 
 	if c.GetChain() == common.ZECChain {
-		// Report static 'worst case' scenario with the maximum possible
-		// amounts of inputs and max memo size of 80 chars, which counts as
-		// 5 actions and will likely always be lower that max inputs.
 		tx := wire.MsgTx{TxIn: make([]*wire.TxIn, c.getMaximumUtxosToSpend()-1)}
 		memo := strings.Repeat("X", 80)
 		feeRateSats = c.getGasCoinZEC(&tx, memo).Amount.Uint64()
 		transactionSize = 1
 	}
 
-	// round to prevent fee observation noise
 	resolution := uint64(c.cfg.BlockScanner.GasPriceResolution)
 	feeRateSats = ((feeRateSats / resolution) + 1) * resolution
 
 	c.networkFeeLock.Lock()
 	defer c.networkFeeLock.Unlock()
 
-	// skip fee if less than 1 resolution away from the last
 	lastFeeRate := c.lastFeeRate.Load()
 	feeDelta := new(big.Int).Sub(big.NewInt(int64(feeRateSats)), big.NewInt(int64(lastFeeRate)))
 	feeDelta.Abs(feeDelta)
@@ -408,48 +369,7 @@ func (c *Client) isValidUTXO(hexPubKey string) bool {
 	}
 
 	switch c.cfg.ChainID {
-	case common.DOGEChain:
-		scriptType, addresses, requireSigs, err := dogetxscript.ExtractPkScriptAddrs(buf, c.getChainCfgDOGE())
-		if err != nil {
-			c.log.Err(err).Msg("fail to extract pub key script")
-			return false
-		}
-		switch scriptType {
-		case dogetxscript.MultiSigTy:
-			return false
-		default:
-			return len(addresses) == 1 && requireSigs == 1
-		}
-	case common.BCHChain:
-		scriptType, addresses, requireSigs, err := bchtxscript.ExtractPkScriptAddrs(buf, c.getChainCfgBCH())
-		if err != nil {
-			c.log.Err(err).Msg("fail to extract pub key script")
-			return false
-		}
-		switch scriptType {
-		case bchtxscript.MultiSigTy:
-			return false
-
-		default:
-			return len(addresses) == 1 && requireSigs == 1
-		}
-
-	case common.LTCChain:
-		scriptType, addresses, requireSigs, err := ltctxscript.ExtractPkScriptAddrs(buf, c.getChainCfgLTC())
-		if err != nil {
-			c.log.Err(err).Msg("fail to extract pub key script")
-			return false
-		}
-		switch scriptType {
-		case ltctxscript.MultiSigTy:
-			return false
-		default:
-			return len(addresses) == 1 && requireSigs == 1
-		}
-
 	case common.BTCChain, common.ZECChain:
-		// there is no specific txscript package for zcash and vaults are
-		// using p2pkh only, which is compatible to btc
 		scriptType, addresses, requireSigs, err := btctxscript.ExtractPkScriptAddrs(buf, c.getChainCfgBTC())
 		if err != nil {
 			c.log.Err(err).Msg("fail to extract pub key script")
@@ -482,7 +402,6 @@ func (c *Client) getTxIn(tx *btcjson.TxRawResult, height int64, isMemPool bool, 
 		c.log.Debug().Int64("height", height).Str("txid", tx.Hash).Msg("ignore tx not matching format")
 		return types.TxInItem{}, nil
 	}
-	// RBF enabled transaction will not be observed until committed to block
 	if c.isRBFEnabled(tx) && isMemPool {
 		return types.TxInItem{}, nil
 	}
@@ -513,14 +432,8 @@ func (c *Client) getTxIn(tx *btcjson.TxRawResult, height int64, isMemPool bool, 
 	addresses := c.getAddressesFromScriptPubKey(output.ScriptPubKey)
 	toAddr := addresses[0]
 
-	// strip BCH address prefixes
-	if c.cfg.ChainID.Equals(common.BCHChain) {
-		toAddr = c.stripBCHAddress(toAddr)
-	}
-
 	isInbound := c.isAsgardAddress(toAddr)
 	if isInbound {
-		// only inbound UTXO need to be validated against multi-sig
 		if !c.isValidUTXO(output.ScriptPubKey.Hex) {
 			return types.TxInItem{}, fmt.Errorf("invalid utxo")
 		}
@@ -548,32 +461,21 @@ func (c *Client) getTxIn(tx *btcjson.TxRawResult, height int64, isMemPool bool, 
 	}, nil
 }
 
-// stripBCHAddress removes prefix on bch addresses.
-func (c *Client) stripBCHAddress(addr string) string {
-	split := strings.Split(addr, ":")
-	if len(split) > 1 {
-		return split[1]
-	}
-	return split[0]
-}
-
 func (c *Client) getVinZeroTxs(block *btcjson.GetBlockVerboseTxResult) (map[string]*btcjson.TxRawResult, error) {
 	vinZeroTxs := make(map[string]*btcjson.TxRawResult)
 	start := time.Now()
 
 	dustThreshold := c.cfg.ChainID.DustThreshold().Uint64()
 
-	// create our batches
 	batches := [][]string{}
 	batch := []string{}
-	var count, ignoreCount, failMemoSkipCount, skipDustCount int // just for debug logs
+	var count, ignoreCount, failMemoSkipCount, skipDustCount int
 	for i := range block.Tx {
 		if c.ignoreTx(&block.Tx[i], block.Height) {
 			ignoreCount++
 			continue
 		}
 
-		// skip if sum of vout value is under thorchain dust threshold
 		voutSats, err := sumVoutSats(&block.Tx[i])
 		if err != nil {
 			c.log.Error().Err(err).Str("txid", block.Tx[i].Txid).Msg("fail to sum vout sats")
@@ -609,12 +511,10 @@ func (c *Client) getVinZeroTxs(block *btcjson.GetBlockVerboseTxResult) (map[stri
 		Int("batchCount", len(batches)).
 		Msg("getVinZeroTxs")
 
-	// get the vin zero txs one batch at a time
 	retries := 0
 	for i := 0; i < len(batches); i++ {
 		results, errs, err := c.rpc.BatchGetRawTransactionVerbose(batches[i])
 
-		// if there was no rpc error, check for any tx errors
 		txErrCount := 0
 		if err == nil {
 			for _, txErr := range errs {
@@ -625,7 +525,6 @@ func (c *Client) getVinZeroTxs(block *btcjson.GetBlockVerboseTxResult) (map[stri
 			}
 		}
 
-		// retry the batch a few times on any errors to avoid wasted work
 		if err != nil {
 			if retries >= 3 {
 				return nil, err
@@ -634,11 +533,10 @@ func (c *Client) getVinZeroTxs(block *btcjson.GetBlockVerboseTxResult) (map[stri
 			c.log.Err(err).Int("txErrCount", txErrCount).Msgf("retrying block txs batch %d", i)
 			time.Sleep(time.Second)
 			retries++
-			i-- // retry the same batch
+			i--
 			continue
 		}
 
-		// add transactions to block result
 		for _, tx := range results {
 			vinZeroTxs[tx.Txid] = tx
 		}
@@ -669,12 +567,10 @@ func (c *Client) extractTxs(block *btcjson.GetBlockVerboseTxResult) (types.TxIn,
 
 	var txItems []*types.TxInItem
 	for idx, tx := range block.Tx {
-		// mempool transaction get committed to block , thus remove it from mempool cache
 		c.removeFromMemPoolCache(tx.Hash)
 		var txInItem types.TxInItem
 		txInItem, err = c.getTxIn(&block.Tx[idx], block.Height, false, vinZeroTxs)
 		if err != nil {
-			// expected since vouts below dust threshold are skipped for vinZeroTxs
 			c.log.Debug().Str("txid", tx.Txid).Err(err).Msg("fail to get TxInItem")
 			continue
 		}
@@ -702,8 +598,6 @@ func (c *Client) extractTxs(block *btcjson.GetBlockVerboseTxResult) (types.TxIn,
 	return txIn, nil
 }
 
-// ignoreTx checks if we can already ignore a tx according to preset rules
-// Allow up to 10 Vouts with value and 2 OP_RETURN Vouts (for getMemo appending).
 func (c *Client) ignoreTx(tx *btcjson.TxRawResult, height int64) bool {
 	if len(tx.Vin) == 0 || len(tx.Vout) == 0 || len(tx.Vout) > 12 {
 		return true
@@ -711,8 +605,6 @@ func (c *Client) ignoreTx(tx *btcjson.TxRawResult, height int64) bool {
 	if tx.Vin[0].Txid == "" {
 		return true
 	}
-	// LockTime <= current height doesn't affect spendability,
-	// and most wallets for users doing Memoless Savers deposits automatically set LockTime to the current height.
 	if tx.LockTime > uint32(height) {
 		return true
 	}
@@ -724,22 +616,15 @@ func (c *Client) ignoreTx(tx *btcjson.TxRawResult, height int64) bool {
 		}
 	}
 
-	// none of the output has any value
 	if countWithOutput == 0 {
 		return true
 	}
-	// there are more than ten outputs with value in them, not THORChain format
 	if countWithOutput > 10 {
 		return true
 	}
 	return false
 }
 
-// getOutput retrieve the correct output for both inbound
-// outbound tx.
-// logic is if sender is a vault then prefer the first Vout with value,
-// else prefer the first Vout with value that's to a vault
-// an exception need to be made for consolidate tx , because consolidate tx will be send from asgard back asgard itself
 func (c *Client) getOutput(sender string, tx *btcjson.TxRawResult, consolidate bool) (btcjson.Vout, error) {
 	isSenderAsgard := c.isAsgardAddress(sender)
 	for _, vout := range tx.Vout {
@@ -752,18 +637,9 @@ func (c *Client) getOutput(sender string, tx *btcjson.TxRawResult, consolidate b
 		}
 		addresses := c.getAddressesFromScriptPubKey(vout.ScriptPubKey)
 		if len(addresses) != 1 {
-			// If more than one address, ignore this Vout.
-			// TODO check what we do if get multiple addresses
 			continue
 		}
 		receiver := addresses[0]
-		if c.cfg.ChainID.Equals(common.BCHChain) {
-			receiver = c.stripBCHAddress(receiver)
-		}
-		// To be observed, either the sender or receiver must be an observed THORChain vault;
-		// if the sender is a vault then assume the first Vout is the output (and a later Vout could be change).
-		// If the sender isn't a vault, then do do not for instance
-		// return a change address Vout as the output if before the vault-inbound Vout.
 		if !isSenderAsgard && !c.isAsgardAddress(receiver) {
 			continue
 		}
@@ -778,32 +654,22 @@ func (c *Client) getOutput(sender string, tx *btcjson.TxRawResult, consolidate b
 	return btcjson.Vout{}, btypes.ErrFailOutputMatchCriteria
 }
 
-// isFromAsgard returns true if the tx is from asgard and false if not or on error.
-// Since this is used to determine UTXOs used for outbounds, the risk of false negative
-// is only that vault members may not find consensus on the outbound, whereas aborting
-// on the error would guarantee the member is not a part of consensus. Returning a false
-// negative should never be done, as it could result in members using an unconfirmed or
-// dust VIN not sent by asgard in an outbound, which can be gamed by a malicious party.
 func (c *Client) isFromAsgard(txid string) bool {
-	// lookup the txid
 	tx, err := c.rpc.GetRawTransactionVerbose(txid)
 	if err != nil {
 		c.log.Error().Err(err).Str("txid", txid).Msg("fail to get tx")
 		return false
 	}
 
-	// get the sender
 	sender, err := c.getSender(tx, nil)
 	if err != nil {
 		c.log.Error().Err(err).Str("txid", txid).Msg("fail to get sender")
 		return false
 	}
 
-	// check if the sender is an asgard address
 	return c.isAsgardAddress(sender)
 }
 
-// getSender returns sender address for a btc tx, using vin:0
 func (c *Client) getSender(tx *btcjson.TxRawResult, vinZeroTxs map[string]*btcjson.TxRawResult) (string, error) {
 	if len(tx.Vin) == 0 {
 		return "", fmt.Errorf("no vin available in tx")
@@ -813,7 +679,6 @@ func (c *Client) getSender(tx *btcjson.TxRawResult, vinZeroTxs map[string]*btcjs
 	if vinZeroTxs != nil {
 		vinTx, ok := vinZeroTxs[tx.Vin[0].Txid]
 		if !ok {
-			// if vouts are below dust this is expected, so skip log noise
 			value, err := sumVoutSats(tx)
 			if err != nil || value >= c.cfg.ChainID.DustThreshold().Uint64() {
 				c.log.Debug().Str("txid", tx.Txid).Msg("vin zero tx not found")
@@ -835,9 +700,6 @@ func (c *Client) getSender(tx *btcjson.TxRawResult, vinZeroTxs map[string]*btcjs
 	}
 	address := addresses[0]
 
-	if c.cfg.ChainID.Equals(common.BCHChain) {
-		address = c.stripBCHAddress(address)
-	}
 	return address, nil
 }
 
@@ -848,7 +710,6 @@ func (c *Client) getAddressesFromScriptPubKey(scriptPubKey btcjson.ScriptPubKeyR
 	return scriptPubKey.Addresses
 }
 
-// getMemo returns memo for a btc tx, using vout OP_RETURN
 func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 	var memo string
 
@@ -862,7 +723,6 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 	for _, vOut := range tx.Vout {
 		switch strings.ToLower(vOut.ScriptPubKey.Type) {
 		case "witness_v0_keyhash", "pubkeyhash", "nulldata":
-			// do nothing
 		default:
 			continue
 		}
@@ -875,17 +735,8 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 
 		var asm string
 		switch c.cfg.ChainID {
-		case common.DOGEChain:
-			asm, err = dogetxscript.DisasmString(buf)
-		case common.BCHChain:
-			asm, err = bchtxscript.DisasmString(buf)
-		case common.LTCChain:
-			asm, err = ltctxscript.DisasmString(buf)
-		case common.BTCChain:
+		case common.BTCChain, common.ZECChain:
 			asm, err = btctxscript.DisasmString(buf)
-		case common.ZECChain:
-			asm, err = btctxscript.DisasmString(buf)
-
 		default:
 			c.log.Fatal().Msg("unsupported chain")
 		}
@@ -897,12 +748,10 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 		fields := strings.Fields(asm)
 
 		if len(fields) < 2 {
-			// we need at least OP_RETURN + data, or 0 + address
 			continue
 		}
 
 		if fields[0] == "OP_RETURN" {
-			// skip "0" field to avoid log noise
 			if fields[1] == "0" {
 				continue
 			}
@@ -910,21 +759,17 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 			var decoded string
 			decoded, err = c.decodeHexString(fields[1])
 			if err != nil {
-				// silently return no memo to reduce log noise
 				return "", nil
 			}
 			memo += decoded
 			continue
 		}
 
-		// don't inspect further non OP_RETURN outputs unless we found one
 		if len(memo) < constants.MaxOpReturnDataSize {
 			continue
 		}
 
-		// marker can be at position >= 79 for a single / multiple OP_RETURN_
 		if strings.LastIndex(memo, "^") < constants.MaxOpReturnDataSize-1 {
-			// no continuation marker found
 			continue
 		}
 
@@ -932,16 +777,11 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 
 		switch len(fields) {
 		case 2:
-			// Pay-to-witness-public-key-hash (P2WPKH) script format
-			// Format: <0> <20-byte-key-hash>
 			if fields[0] != "0" {
 				continue
 			}
-
 			pubkey = fields[1]
 		case 5:
-			// Pay-to-public-key-hash (P2PKH) script format
-			// Format: OP_DUP OP_HASH160 <20-byte-key-hash> OP_EQUALVERIFY OP_CHECKSIG
 			requiredOps := []string{
 				"OP_DUP", "OP_HASH160", fields[2],
 				"OP_EQUALVERIFY", "OP_CHECKSIG",
@@ -964,29 +804,22 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 			continue
 		}
 
-		// process pubkey
-
-		// pubkey hash is ripemd-160, which is 20 bytes, 40 chars in hex
 		if len(pubkey) != 40 {
 			continue
 		}
 
-		// remove trailing zeros, if found
 		pubkey = c.regexpRemoveTrailingZeros.ReplaceAllString(pubkey, "")
 
 		decoded, err := c.decodeHexString(pubkey)
 		if err != nil {
-			// silently return no memo to reduce log noise
 			return "", nil
 		}
 		memo += decoded
 
-		// if pubkey has been stripped (was ending with "00") stop processing
 		if len(pubkey) != 40 {
 			break
 		}
 
-		// if memo > max size, stop processing
 		if len(memo) >= constants.MaxMemoSize {
 			break
 		}
@@ -999,8 +832,6 @@ func (c *Client) getMemo(tx *btcjson.TxRawResult) (string, error) {
 	return memo, nil
 }
 
-// decodeHexString decodes a provided hex string and returns the result
-// as string or "" if the decoding failed
 func (c *Client) decodeHexString(hexString string) (string, error) {
 	errMsg := "fail to decode data: " + hexString
 
@@ -1010,9 +841,6 @@ func (c *Client) decodeHexString(hexString string) (string, error) {
 		return "", err
 	}
 
-	// check for non alphanumeric chars
-	// only allow letters: a-z A-Z, numbers, space and the following symbols:
-	// !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 	for i, b := range decoded {
 		if b < 0x20 || b > 0x7E {
 			err := fmt.Errorf("invalid hex value at position %d: 0x%X", i, b)
@@ -1024,7 +852,6 @@ func (c *Client) decodeHexString(hexString string) (string, error) {
 	return string(decoded), nil
 }
 
-// getGas returns gas for a tx (sum vin - sum vout)
 func (c *Client) getGas(tx *btcjson.TxRawResult, isInbound bool) (common.Gas, error) {
 	var sumVin uint64 = 0
 	for _, vin := range tx.Vin {
@@ -1041,8 +868,6 @@ func (c *Client) getGas(tx *btcjson.TxRawResult, isInbound bool) (common.Gas, er
 	}
 	var sumVout uint64 = 0
 	for _, vout := range tx.Vout {
-		// Ignore all values after the first OP_RETURN on outbounds to consider the values
-		// in the extra p2wpkh outputs as part of the gas and avoid insolvency.
 		if !isInbound && strings.ToLower(vout.ScriptPubKey.Type) == "nulldata" {
 			break
 		}
@@ -1060,7 +885,6 @@ func (c *Client) getGas(tx *btcjson.TxRawResult, isInbound bool) (common.Gas, er
 }
 
 func (c *Client) getCoinbaseValue(blockHeight int64) (int64, error) {
-	// TODO: this is inefficient, in particular for dogecoin, investigate coinbase cache
 	result, err := c.getBlock(blockHeight)
 	if err != nil {
 		return 0, fmt.Errorf("fail to get block verbose tx: %w", err)
@@ -1082,7 +906,6 @@ func (c *Client) getCoinbaseValue(blockHeight int64) (int64, error) {
 	return 0, fmt.Errorf("fail to get coinbase value")
 }
 
-// getBlockRequiredConfirmation find out how many confirmation the given txIn need to have before it can be send to THORChain
 func (c *Client) getBlockRequiredConfirmation(txIn types.TxIn, height int64) (int64, error) {
 	asgardAddresses, err := c.getAsgardAddress()
 	if err != nil {

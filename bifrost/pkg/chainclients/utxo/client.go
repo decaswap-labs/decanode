@@ -107,11 +107,8 @@ func NewClient(
 ) (*Client, error) {
 	// verify the chain is supported
 	supported := map[common.Chain]bool{
-		common.DOGEChain: true,
-		common.BCHChain:  true,
-		common.LTCChain:  true,
-		common.BTCChain:  true,
-		common.ZECChain:  true,
+		common.BTCChain: true,
+		common.ZECChain: true,
 	}
 	if !supported[cfg.ChainID] {
 		return nil, fmt.Errorf("unsupported utxo chain: %s", cfg.ChainID)
@@ -301,9 +298,8 @@ func (c *Client) RegisterPublicKey(pubkey common.PubKey) error {
 		return fmt.Errorf("fail to get address from pubkey(%s): %w", pubkey, err)
 	}
 
-	// litecoin does not have a default wallet so we need to create one
 	switch c.cfg.ChainID {
-	case common.LTCChain, common.BTCChain:
+	case common.BTCChain:
 		err = c.rpc.CreateWallet("")
 		if err != nil {
 			c.log.Info().Err(err).Msg("fail to create wallet")
@@ -495,9 +491,9 @@ func (c *Client) FetchTxs(height, chainHeight int64) (types.TxIn, error) {
 	// report network fee and solvency if within flexibility blocks of tip
 	if chainHeight-height <= c.cfg.BlockScanner.ObservationFlexibilityBlocks {
 		switch c.cfg.ChainID {
-		case common.DOGEChain, common.ZECChain:
+		case common.ZECChain:
 			err = c.sendNetworkFeeFromBlock(block)
-		case common.BCHChain, common.LTCChain, common.BTCChain:
+		case common.BTCChain:
 			err = c.sendNetworkFee(height)
 		default:
 			c.log.Fatal().Msg("unsupported chain")
@@ -714,12 +710,10 @@ func (c *Client) shouldReportSolvency(height int64) bool {
 	}
 
 	switch c.cfg.ChainID {
-	case common.DOGEChain, common.ZECChain:
+	case common.ZECChain:
 		return height%10 == 0
-	case common.BCHChain, common.BTCChain:
+	case common.BTCChain:
 		return true
-	case common.LTCChain:
-		return height-lastHeight > 5 && height%5 == 0
 	default:
 		c.log.Fatal().Msg("unsupported chain")
 		return false

@@ -30,10 +30,7 @@ func main() {
 
 	// template data
 	data := map[string]string{
-		"doge": "github.com/eager7/dogd/btcec",
-		"btc":  "github.com/btcsuite/btcd/btcec",
-		"bch":  "github.com/gcash/bchd/bchec",
-		"ltc":  "github.com/ltcsuite/ltcd/btcec",
+		"btc": "github.com/btcsuite/btcd/btcec",
 	}
 
 	err = tmpl.ExecuteTemplate(f, "signable.tmpl", data)
@@ -51,10 +48,7 @@ func main() {
 
 	// template data
 	data = map[string]string{
-		"doge": "github.com/eager7/dogd",
-		"bch":  "github.com/gcash/bchd",
-		"ltc":  "github.com/ltcsuite/ltcd",
-		"btc":  "github.com/btcsuite/btcd",
+		"btc": "github.com/btcsuite/btcd",
 	}
 
 	err = tmpl.ExecuteTemplate(f, "wire.tmpl", data)

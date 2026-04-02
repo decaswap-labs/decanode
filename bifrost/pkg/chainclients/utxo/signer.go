@@ -11,19 +11,10 @@ import (
 	"strings"
 	"sync"
 
-	bchwire "github.com/gcash/bchd/wire"
-	"github.com/gcash/bchutil"
-	"github.com/hashicorp/go-multierror"
-	ltcwire "github.com/ltcsuite/ltcd/wire"
-	"github.com/ltcsuite/ltcutil"
 	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/utxo/zecutil"
-
-	ltctxscript "github.com/decaswap-labs/decanode/bifrost/txscript/ltcd-txscript"
 
 	btcwire "github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
-	dogewire "github.com/eager7/dogd/wire"
-	"github.com/eager7/dogutil"
 
 	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/shared/utxo"
 	stypes "github.com/decaswap-labs/decanode/bifrost/thorclient/types"
@@ -31,38 +22,26 @@ import (
 	"github.com/decaswap-labs/decanode/common/cosmos"
 
 	"github.com/btcsuite/btcd/mempool"
+	"github.com/hashicorp/go-multierror"
 )
 
-// ZecTxExpiry (in blocks) is used to calculate the tx expiry height
 const ZecTxExpiry = uint32(40)
 
-// ZecExtraFee (in Zats) is added to the calculated gas costs
 const ZecExtraFee = int(0)
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Client - Signing
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// SignTx builds and signs the outbound transaction. Returns the signed transaction, a
-// serialized checkpoint on error, and an error.
 func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []byte, *stypes.TxInItem, error) {
 	if !tx.Chain.Equals(c.cfg.ChainID) {
 		return nil, nil, nil, errors.New("wrong chain")
 	}
 
-	// skip outbounds without coins
 	if tx.Coins.IsEmpty() {
 		return nil, nil, nil, nil
 	}
 
-	if c.cfg.ChainID.Equals(common.BCHChain) {
-		if !tx.ToAddress.IsValidBCHAddress() {
-			c.log.Error().Msgf("to address: %s is legacy not allowed ", tx.ToAddress)
-			return nil, nil, nil, nil
-		}
-	}
-
-	// skip outbounds that have been signed
 	if c.signerCacheManager.HasSigned(tx.CacheHash()) {
 		c.log.Info().Msgf("ignoring already signed transaction: (%+v)", tx)
 		return nil, nil, nil, nil
@@ -73,28 +52,9 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		return nil, nil, nil, fmt.Errorf("fail to get source pay to address script: %w", err)
 	}
 
-	// get chain specific address type
 	var outputAddr interface{}
 	var outputAddrStr string
 	switch c.cfg.ChainID {
-	case common.DOGEChain:
-		outputAddr, err = dogutil.DecodeAddress(tx.ToAddress.String(), c.getChainCfgDOGE())
-		if err != nil {
-			return nil, nil, nil, fmt.Errorf("fail to decode next address: %w", err)
-		}
-		outputAddrStr = outputAddr.(dogutil.Address).String() // trunk-ignore(golangci-lint/forcetypeassert)
-	case common.BCHChain:
-		outputAddr, err = bchutil.DecodeAddress(tx.ToAddress.String(), c.getChainCfgBCH())
-		if err != nil {
-			return nil, nil, nil, fmt.Errorf("fail to decode next address: %w", err)
-		}
-		outputAddrStr = outputAddr.(bchutil.Address).String() // trunk-ignore(golangci-lint/forcetypeassert)
-	case common.LTCChain:
-		outputAddr, err = ltctxscript.DecodeAddress(tx.ToAddress.String(), c.getChainCfgLTC())
-		if err != nil {
-			return nil, nil, nil, fmt.Errorf("fail to decode next address: %w", err)
-		}
-		outputAddrStr = outputAddr.(ltcutil.Address).String() // trunk-ignore(golangci-lint/forcetypeassert)
 	case common.BTCChain:
 		outputAddr, err = btcutil.DecodeAddress(tx.ToAddress.String(), c.getChainCfgBTC())
 		if err != nil {
@@ -106,25 +66,22 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		if err != nil {
 			return nil, nil, nil, fmt.Errorf("fail to decode next address: %w", err)
 		}
-		// re-encoding addresses would break tex address support
 		outputAddrStr = tx.ToAddress.String()
 	default:
 		c.log.Fatal().Msg("unsupported chain")
 	}
 
-	// verify address
 	if !strings.EqualFold(outputAddrStr, tx.ToAddress.String()) {
 		c.log.Info().Msgf("output address: %s, to address: %s can't roundtrip", outputAddrStr, tx.ToAddress.String())
 		return nil, nil, nil, nil
 	}
 	switch outputAddr.(type) {
-	case *dogutil.AddressPubKey, *bchutil.AddressPubKey, *ltcutil.AddressPubKey, *btcutil.AddressPubKey:
+	case *btcutil.AddressPubKey:
 		c.log.Info().Msgf("address: %s is address pubkey type, should not be used", outputAddrStr)
 		return nil, nil, nil, nil
-	default: // keep lint happy
+	default:
 	}
 
-	// load from checkpoint if it exists
 	checkpoint := utxo.SignCheckpoint{}
 	redeemTx := &btcwire.MsgTx{}
 	if tx.Checkpoint != nil {
@@ -135,7 +92,6 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 			return nil, nil, nil, fmt.Errorf("fail to deserialize tx: %w", err)
 		}
 
-		// abort if any checkpoint VIN is spent
 		c.log.Info().Stringer("in_hash", tx.InHash).Msgf("verifying checkpoint vins")
 		var unspent bool
 		unspent, err = c.vinsUnspent(tx, redeemTx.TxIn)
@@ -159,14 +115,12 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		checkpoint.UnsignedTx = buf.Bytes()
 	}
 
-	// serialize the checkpoint for later
 	var checkpointBytes []byte
 	checkpointBytes, err = json.Marshal(checkpoint)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("fail to marshal checkpoint: %w", err)
 	}
 
-	// create the list of signing requests
 	c.log.Info().Msgf("UTXOs to sign: %d", len(redeemTx.TxIn))
 	signings := []struct{ idx, amount int64 }{}
 	totalAmount := int64(0)
@@ -177,38 +131,25 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		signings = append(signings, struct{ idx, amount int64 }{int64(idx), outputAmount})
 	}
 
-	// convert the wire tx to the chain specific tx for signing
 	var stx interface{}
 	switch c.cfg.ChainID {
-	case common.DOGEChain:
-		stx = wireToDOGE(redeemTx)
-	case common.BCHChain:
-		stx = wireToBCH(redeemTx)
-	case common.LTCChain:
-		stx = wireToLTC(redeemTx)
 	case common.BTCChain:
 		stx = wireToBTC(redeemTx)
 	case common.ZECChain:
-		// signing is slightly different, using zecTx, no need to wire
 	default:
 		c.log.Fatal().Msg("unsupported chain")
 	}
 
 	chainHeight, err := c.rpc.GetBlockCount()
 	if err != nil {
-		// fall back to the scanner height, thornode voter does not use height
 		chainHeight = c.currentBlockHeight.Load()
 		c.log.Warn().Err(err).
 			Int64("fallback_height", chainHeight).
 			Msg("failed to get block height from RPC, falling back to scanner height")
 	}
 
-	// only used for zcash
 	var zecTx *zecutil.MsgTx
 	if c.cfg.ChainID == common.ZECChain {
-		// WARNING: v4 (Sapling) is assumed by both BroadcastTx (double-SHA256 txid)
-		// and zecutil signing (Blake2b sighash). Upgrading to v5 requires updating
-		// txid calculation per ZIP-244 and the signing algorithm.
 		redeemTx.Version = 4
 
 		zecTx = &zecutil.MsgTx{
@@ -217,7 +158,6 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		}
 	}
 
-	// sign the tx
 	wg := &sync.WaitGroup{}
 	wg.Add(len(signings))
 	mu := &sync.Mutex{}
@@ -229,14 +169,7 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 			// trunk-ignore(golangci-lint/govet): shadow
 			var err error
 
-			// chain specific signing
 			switch c.cfg.ChainID {
-			case common.DOGEChain:
-				err = c.signUTXODOGE(stx.(*dogewire.MsgTx), tx, amount, sourceScript, i)
-			case common.BCHChain:
-				err = c.signUTXOBCH(stx.(*bchwire.MsgTx), tx, amount, sourceScript, i)
-			case common.LTCChain:
-				err = c.signUTXOLTC(stx.(*ltcwire.MsgTx), tx, amount, sourceScript, i)
 			case common.BTCChain:
 				err = c.signUTXOBTC(stx.(*btcwire.MsgTx), tx, amount, sourceScript, i)
 			case common.ZECChain:
@@ -258,18 +191,10 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		return nil, checkpointBytes, nil, fmt.Errorf("fail to sign the message: %w", err)
 	}
 
-	// convert back to wire tx
 	switch c.cfg.ChainID {
-	case common.DOGEChain:
-		redeemTx = dogeToWire(stx.(*dogewire.MsgTx))
-	case common.BCHChain:
-		redeemTx = bchToWire(stx.(*bchwire.MsgTx))
-	case common.LTCChain:
-		redeemTx = ltcToWire(stx.(*ltcwire.MsgTx))
 	case common.BTCChain:
 		redeemTx = btcToWire(stx.(*btcwire.MsgTx))
 	case common.ZECChain:
-		// using zecTx directly, no need to convert back
 	default:
 		c.log.Fatal().Msg("unsupported chain")
 	}
@@ -280,7 +205,6 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 	case common.ZECChain:
 		err = zecTx.ZecEncode(&signedTx, 0, btcwire.BaseEncoding)
 	default:
-		// calculate the final transaction size
 		finalSize := redeemTx.SerializeSize()
 		finalVBytes := mempool.GetTxVirtualSize(btcutil.NewTx(redeemTx))
 		c.log.Info().Msgf("final size: %d, final vbyte: %d", finalSize, finalVBytes)
@@ -292,10 +216,9 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		return nil, nil, nil, fmt.Errorf("fail to serialize tx to bytes: %w", err)
 	}
 
-	// create the observation to be sent by the signer before broadcast
-	amt := redeemTx.TxOut[0].Value // the first output is the outbound amount
+	amt := redeemTx.TxOut[0].Value
 	gas := totalAmount
-	for _, txOut := range redeemTx.TxOut { // subtract all vouts to from vins to get the gas
+	for _, txOut := range redeemTx.TxOut {
 		gas -= txOut.Value
 	}
 	var txIn *stypes.TxInItem
@@ -320,7 +243,6 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 		)
 	}
 
-	// keep track of used utxos for Zcash
 	if c.cfg.ChainID == common.ZECChain {
 		var ids []string
 		for _, vin := range redeemTx.TxIn {
@@ -336,8 +258,6 @@ func (c *Client) SignTx(tx stypes.TxOutItem, thorchainHeight int64) ([]byte, []b
 	return signedTx.Bytes(), nil, txIn, nil
 }
 
-// GetVaultLock returns a mutex for the given vault pubkey. This is primarily used to
-// ensure transactions from the signer do not conflict with consolidate transactions.
 func (c *Client) GetVaultLock(vaultPubKey string) *sync.Mutex {
 	c.signerLock.Lock()
 	defer c.signerLock.Unlock()
@@ -354,7 +274,6 @@ func (c *Client) GetVaultLock(vaultPubKey string) *sync.Mutex {
 // Client - Broadcast
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// BroadcastTx will broadcast the given payload.
 func (c *Client) BroadcastTx(txOut stypes.TxOutItem, payload []byte) (string, error) {
 	height, err := c.rpc.GetBlockCount()
 	if err != nil {
@@ -376,7 +295,6 @@ func (c *Client) BroadcastTx(txOut stypes.TxOutItem, payload []byte) (string, er
 
 	redeemTx := btcwire.NewMsgTx(btcwire.TxVersion)
 
-	// broadcast tx
 	var txid string
 	switch c.cfg.ChainID {
 	case common.ZECChain:
@@ -401,9 +319,7 @@ func (c *Client) BroadcastTx(txOut stypes.TxOutItem, payload []byte) (string, er
 
 		var maxFee any
 		switch c.cfg.ChainID {
-		case common.DOGEChain, common.BCHChain:
-			maxFee = true // "allowHighFees"
-		case common.LTCChain, common.BTCChain:
+		case common.BTCChain:
 			maxFee = 10_000_000
 		}
 
@@ -430,7 +346,8 @@ func (c *Client) BroadcastTx(txOut stypes.TxOutItem, payload []byte) (string, er
 
 		if strings.Contains(err.Error(), "already in block chain") {
 			c.log.Info().Str("hash", txid).Msg("broadcasted by another node")
-			if cacheErr := c.signerCacheManager.SetSigned(txOut.CacheHash(), txOut.CacheVault(c.GetChain()), txid); cacheErr != nil {
+			cacheErr := c.signerCacheManager.SetSigned(txOut.CacheHash(), txOut.CacheVault(c.GetChain()), txid)
+			if cacheErr != nil {
 				c.log.Err(cacheErr).Msgf("fail to mark tx out item (%+v) as signed", txOut)
 			}
 			return txid, nil
@@ -439,8 +356,8 @@ func (c *Client) BroadcastTx(txOut stypes.TxOutItem, payload []byte) (string, er
 		return "", fmt.Errorf("fail to broadcast transaction to chain: %w", err)
 	}
 
-	// save tx id to block meta in case we need to errata later
-	if err = c.signerCacheManager.SetSigned(txOut.CacheHash(), txOut.CacheVault(c.GetChain()), txid); err != nil {
+	err = c.signerCacheManager.SetSigned(txOut.CacheHash(), txOut.CacheVault(c.GetChain()), txid)
+	if err != nil {
 		c.log.Err(err).Msgf("fail to mark tx out item (%+v) as signed", txOut)
 	}
 

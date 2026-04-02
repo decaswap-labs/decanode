@@ -22,14 +22,9 @@ import (
 	"github.com/decaswap-labs/decanode/test/simulation/actors/features"
 	"github.com/decaswap-labs/decanode/test/simulation/actors/suites"
 	"github.com/decaswap-labs/decanode/test/simulation/pkg/cli"
-	pkgcosmos "github.com/decaswap-labs/decanode/test/simulation/pkg/cosmos"
 	"github.com/decaswap-labs/decanode/test/simulation/pkg/dag"
-	"github.com/decaswap-labs/decanode/test/simulation/pkg/evm"
-	"github.com/decaswap-labs/decanode/test/simulation/pkg/solana"
-	"github.com/decaswap-labs/decanode/test/simulation/pkg/tron"
 	. "github.com/decaswap-labs/decanode/test/simulation/pkg/types"
 	"github.com/decaswap-labs/decanode/test/simulation/pkg/utxo"
-	"github.com/decaswap-labs/decanode/test/simulation/pkg/xrp"
 	"github.com/decaswap-labs/decanode/test/simulation/watchers"
 )
 
@@ -42,20 +37,8 @@ const (
 )
 
 var liteClientConstructors = map[common.Chain]LiteChainClientConstructor{
-	common.BTCChain:   utxo.NewConstructor(chainRPCs[common.BTCChain]),
-	common.LTCChain:   utxo.NewConstructor(chainRPCs[common.LTCChain]),
-	common.BCHChain:   utxo.NewConstructor(chainRPCs[common.BCHChain]),
-	common.DOGEChain:  utxo.NewConstructor(chainRPCs[common.DOGEChain]),
-	common.ETHChain:   evm.NewConstructor(chainRPCs[common.ETHChain]),
-	common.AVAXChain:  evm.NewConstructor(chainRPCs[common.AVAXChain]),
-	common.GAIAChain:  pkgcosmos.NewConstructor(chainRPCs[common.GAIAChain]),
-	common.BASEChain:  evm.NewConstructor(chainRPCs[common.BASEChain]),
-	common.TRONChain:  tron.NewConstructor(chainRPCs[common.TRONChain]),
-	common.XRPChain:   xrp.NewConstructor(chainRPCs[common.XRPChain]),
-	common.NOBLEChain: pkgcosmos.NewConstructor(chainRPCs[common.NOBLEChain]),
-	common.SOLChain:   solana.NewConstructor(chainRPCs[common.SOLChain]),
-	common.POLChain:   evm.NewConstructor(chainRPCs[common.POLChain]),
-	common.ZECChain:   utxo.NewConstructor(chainRPCs[common.ZECChain]),
+	common.BTCChain: utxo.NewConstructor(chainRPCs[common.BTCChain]),
+	common.ZECChain: utxo.NewConstructor(chainRPCs[common.ZECChain]),
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

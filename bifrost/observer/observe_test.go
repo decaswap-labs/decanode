@@ -2,8 +2,7 @@ package observer
 
 import (
 	"context"
-	"encoding/json"
-	"io"
+	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -27,7 +26,6 @@ import (
 	"github.com/decaswap-labs/decanode/bifrost/p2p"
 	"github.com/decaswap-labs/decanode/bifrost/p2p/conversion"
 	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients"
-	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/evm"
 	"github.com/decaswap-labs/decanode/bifrost/pubkeymanager"
 	"github.com/decaswap-labs/decanode/bifrost/thorclient"
 	"github.com/decaswap-labs/decanode/bifrost/thorclient/types"
@@ -41,11 +39,38 @@ import (
 
 func TestPackage(t *testing.T) { TestingT(t) }
 
+type mockChainClient struct{}
+
+func (m *mockChainClient) Start(_ chan types.TxIn, _ chan types.ErrataBlock, _ chan types.Solvency, _ chan common.NetworkFee) {
+}
+func (m *mockChainClient) Stop()                            {}
+func (m *mockChainClient) IsBlockScannerHealthy() bool      { return true }
+func (m *mockChainClient) GetHeight() (int64, error)        { return 0, nil }
+func (m *mockChainClient) GetChain() common.Chain           { return common.BTCChain }
+func (m *mockChainClient) GetConfig() config.BifrostChainConfiguration {
+	return config.BifrostChainConfiguration{}
+}
+func (m *mockChainClient) GetAddress(_ common.PubKey) string { return "" }
+func (m *mockChainClient) GetAccount(_ common.PubKey, _ *big.Int) (common.Account, error) {
+	return common.Account{}, nil
+}
+func (m *mockChainClient) GetAccountByAddress(_ string, _ *big.Int) (common.Account, error) {
+	return common.Account{}, nil
+}
+func (m *mockChainClient) SignTx(_ types.TxOutItem, _ int64) ([]byte, []byte, *types.TxInItem, error) {
+	return nil, nil, nil, nil
+}
+func (m *mockChainClient) BroadcastTx(_ types.TxOutItem, _ []byte) (string, error) {
+	return "", nil
+}
+func (m *mockChainClient) OnObservedTxIn(_ types.TxInItem, _ int64) {}
+func (m *mockChainClient) ConfirmationCountReady(_ common.Tx) bool  { return true }
+
 type ObserverSuite struct {
 	metrics  *metrics.Metrics
 	thorKeys *thorclient.Keys
 	bridge   thorclient.ThorchainBridge
-	client   *evm.EVMClient
+	client   chainclients.ChainClient
 }
 
 var _ = Suite(&ObserverSuite{})
@@ -55,59 +80,7 @@ var _ = Suite(&ObserverSuite{})
 ////////////////////////////////////////////////////////////////////////////////////////
 
 func (s *ObserverSuite) ResetMockClient(c *C) {
-	pubkeyMgr, err := pubkeymanager.NewPubKeyManager(s.bridge, s.metrics)
-	c.Assert(err, IsNil)
-	poolMgr := thorclient.NewPoolMgr(s.bridge)
-
-	mockEvmRPC := httptest.NewServer(
-		http.HandlerFunc(
-			func(rw http.ResponseWriter, req *http.Request) {
-				var body []byte
-				body, err = io.ReadAll(req.Body)
-				c.Assert(err, IsNil)
-				type RPCRequest struct {
-					JSONRPC string          `json:"jsonrpc"`
-					ID      interface{}     `json:"id"`
-					Method  string          `json:"method"`
-					Params  json.RawMessage `json:"params"`
-				}
-				var rpcRequest RPCRequest
-				err = json.Unmarshal(body, &rpcRequest)
-				c.Assert(err, IsNil)
-				if rpcRequest.Method == "eth_chainId" {
-					_, err = rw.Write([]byte(`{"jsonrpc":"2.0","id":1,"result":"0xf"}`))
-					c.Assert(err, IsNil)
-				}
-				if rpcRequest.Method == "eth_blockNumber" {
-					_, err = rw.Write([]byte(`{"jsonrpc":"2.0","id":1,"result":"0x7"}`))
-					c.Assert(err, IsNil)
-				}
-			}))
-
-	httpRequestTimeout, _ := time.ParseDuration("5s")
-
-	s.client, err = evm.NewEVMClient(
-		s.thorKeys,
-		config.BifrostChainConfiguration{
-			RPCHost:        mockEvmRPC.URL,
-			SolvencyBlocks: 10,
-			BlockScanner: config.BifrostBlockScannerConfiguration{
-				HTTPRequestTimeout:  httpRequestTimeout,
-				BlockScanProcessors: 1,
-				ChainID:             common.AVAXChain,
-				MaxHTTPRequestRetry: 10,
-				EnforceBlockHeight:  true,
-				GasCacheBlocks:      100,
-			},
-		},
-		nil,
-		s.bridge,
-		s.metrics,
-		pubkeyMgr,
-		poolMgr,
-	)
-
-	c.Assert(err, IsNil)
+	s.client = &mockChainClient{}
 	c.Assert(s.client, NotNil)
 }
 
@@ -169,7 +142,7 @@ func (s *ObserverSuite) SetUpSuite(c *C) {
 		ListenPort:   9000,
 		ReadTimeout:  time.Second,
 		WriteTimeout: time.Second,
-		Chains:       common.Chains{common.AVAXChain},
+		Chains:       common.Chains{common.BTCChain},
 	})
 	c.Assert(s.metrics, NotNil)
 	c.Assert(err, IsNil)
@@ -233,7 +206,7 @@ func (s *ObserverSuite) TestProcess(c *C) {
 	c.Assert(err, IsNil)
 	obs, err := NewObserver(
 		pubkeyMgr,
-		map[common.Chain]chainclients.ChainClient{common.AVAXChain: s.client},
+		map[common.Chain]chainclients.ChainClient{common.BTCChain: s.client},
 		s.bridge,
 		s.metrics,
 		"",
@@ -320,7 +293,7 @@ func (s *ObserverSuite) TestObserverDeckStorage(c *C) {
 		c.Assert(err, IsNil)
 		obs, err := NewObserver(
 			pubkeyMgr,
-			map[common.Chain]chainclients.ChainClient{common.AVAXChain: s.client},
+			map[common.Chain]chainclients.ChainClient{common.BTCChain: s.client},
 			s.bridge,
 			s.metrics,
 			tempDir,
