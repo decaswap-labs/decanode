@@ -1,6 +1,7 @@
 package utxo
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
 
@@ -28,14 +29,16 @@ func (c *Client) getChainCfgBTC() *btcchaincfg.Params {
 }
 
 func (c *Client) signUTXOBTC(redeemTx *btcwire.MsgTx, tx stypes.TxOutItem, amount int64, sourceScript []byte, idx int) error {
-	sigHashes := btctxscript.NewTxSigHashes(redeemTx)
-
-	var signable btctxscript.Signable
-	if tx.VaultPubKey.Equals(c.nodePubKey) {
-		signable = btctxscript.NewPrivateKeySignable(c.nodePrivKey)
-	} else {
-		signable = newTssSignableBTC(tx.VaultPubKey, c.tssKeySigner, c.log)
+	if !tx.VaultPubKey.Equals(c.nodePubKey) {
+		return c.signUTXOBTCTaproot(redeemTx, tx, amount, sourceScript, idx)
 	}
+
+	return c.signUTXOBTCSegwit(redeemTx, tx, amount, sourceScript, idx)
+}
+
+func (c *Client) signUTXOBTCSegwit(redeemTx *btcwire.MsgTx, tx stypes.TxOutItem, amount int64, sourceScript []byte, idx int) error {
+	sigHashes := btctxscript.NewTxSigHashes(redeemTx)
+	signable := btctxscript.NewPrivateKeySignable(c.nodePrivKey)
 
 	witness, err := btctxscript.WitnessSignature(redeemTx, sigHashes, idx, amount, sourceScript, btctxscript.SigHashAll, signable, true)
 	if err != nil {
@@ -48,20 +51,77 @@ func (c *Client) signUTXOBTC(redeemTx *btcwire.MsgTx, tx stypes.TxOutItem, amoun
 	if err != nil {
 		return fmt.Errorf("fail to create engine: %w", err)
 	}
-	if err = engine.Execute(); err != nil {
-		// SECURITY FIX (Layer 4 - NULLFAIL Failsafe): This should NEVER happen after Layers 1-3.
-		// If it does occur, it indicates a serious issue: cryptographic failure, TSS corruption, or unknown edge case.
-		// We log and treat as success to prevent retry loops, allowing manual investigation.
+	err = engine.Execute()
+	if err != nil {
 		if btctxscript.IsErrorCode(err, btctxscript.ErrNullFail) {
 			c.log.Error().
 				Err(err).
 				Int("input_idx", idx).
 				Msg("NULLFAIL FAILSAFE TRIGGERED - This should not happen! Investigate immediately!")
-			return nil // Treat as success to prevent retry loop
+			return nil
 		}
 		return fmt.Errorf("fail to execute the script: %w", err)
 	}
 	return nil
+}
+
+func (c *Client) signUTXOBTCTaproot(redeemTx *btcwire.MsgTx, tx stypes.TxOutItem, amount int64, sourceScript []byte, idx int) error {
+	taprootSigner := c.getTaprootSigner()
+
+	var rawTx bytes.Buffer
+	err := redeemTx.Serialize(&rawTx)
+	if err != nil {
+		return fmt.Errorf("fail to serialize tx for taproot sighash: %w", err)
+	}
+
+	prevouts := serializePrevouts(redeemTx, amount, sourceScript)
+
+	sighash, err := taprootSigner.ComputeSighash(rawTx.Bytes(), prevouts, uint32(idx))
+	if err != nil {
+		return fmt.Errorf("fail to compute taproot sighash: %w", err)
+	}
+
+	signable := newTssSignableBTC(tx.VaultPubKey, c.tssKeySigner, c.log)
+	sig, err := signable.Sign(sighash)
+	if err != nil {
+		return fmt.Errorf("fail to sign taproot sighash: %w", err)
+	}
+
+	signedRaw, err := taprootSigner.AttachWitness(rawTx.Bytes(), uint32(idx), sig.Serialize())
+	if err != nil {
+		return fmt.Errorf("fail to attach taproot witness: %w", err)
+	}
+
+	var signed btcwire.MsgTx
+	err = signed.Deserialize(bytes.NewReader(signedRaw))
+	if err != nil {
+		return fmt.Errorf("fail to deserialize signed taproot tx: %w", err)
+	}
+
+	redeemTx.TxIn[idx].Witness = signed.TxIn[idx].Witness
+	return nil
+}
+
+func (c *Client) getTaprootSigner() TaprootSigner {
+	return &stubTaprootSigner{}
+}
+
+func serializePrevouts(redeemTx *btcwire.MsgTx, amount int64, sourceScript []byte) []byte {
+	var buf bytes.Buffer
+	for range redeemTx.TxIn {
+		amtBytes := make([]byte, 8)
+		amtBytes[0] = byte(amount)
+		amtBytes[1] = byte(amount >> 8)
+		amtBytes[2] = byte(amount >> 16)
+		amtBytes[3] = byte(amount >> 24)
+		amtBytes[4] = byte(amount >> 32)
+		amtBytes[5] = byte(amount >> 40)
+		amtBytes[6] = byte(amount >> 48)
+		amtBytes[7] = byte(amount >> 56)
+		buf.Write(amtBytes)
+		buf.Write(sourceScript)
+	}
+	return buf.Bytes()
 }
 
 func (c *Client) getAddressesFromScriptPubKeyBTC(scriptPubKey btcjson.ScriptPubKeyResult) []string {

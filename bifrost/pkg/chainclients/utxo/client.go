@@ -88,6 +88,9 @@ type Client struct {
 	feeRateCache            []uint64
 	lastSolvencyCheckHeight stdatomic.Int64
 
+	// ---------- shielded (ZEC) ----------
+	shieldedSigner ShieldedSigner
+
 	// ---------- testing ----------
 	disableVinZeroBatch bool
 
