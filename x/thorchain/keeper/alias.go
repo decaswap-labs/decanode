@@ -9,7 +9,7 @@ const (
 	ReserveName  = types.ReserveName
 	AsgardName   = types.AsgardName
 	TreasuryName = types.TreasuryName
-	RUNEPoolName = types.RUNEPoolName
+	DECAPoolName = types.DECAPoolName
 	BondName     = types.BondName
 	StoreKey     = types.StoreKey
 
@@ -75,7 +75,7 @@ type (
 	TradeUnit                = types.TradeUnit
 	SecuredAsset             = types.SecuredAsset
 	RUNEProvider             = types.RUNEProvider
-	RUNEPool                 = types.RUNEPool
+	DECAPool                 = types.DECAPool
 	Upgrade                  = types.Upgrade
 	TCYClaimer               = types.TCYClaimer
 	TCYStaker                = types.TCYStaker

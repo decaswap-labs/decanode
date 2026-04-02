@@ -20,7 +20,7 @@ func (s *HandlerObservedTxHelpersSuite) TestGenerateReferenceMemoID(c *C) {
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Create observed tx with specific amount
@@ -53,7 +53,7 @@ func (s *HandlerObservedTxHelpersSuite) TestGenerateReferenceMemoIDWithDifferent
 	gaiaPool.Asset = gaiaAsset
 	gaiaPool.Decimals = 6 // GAIA has 6 decimals
 	gaiaPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	gaiaPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	gaiaPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, gaiaPool), IsNil)
 
 	// For 6 decimals, amount should be divided by 100 (10^(8-6))
@@ -70,7 +70,7 @@ func (s *HandlerObservedTxHelpersSuite) TestGenerateReferenceMemoIDWithDifferent
 	customPool.Asset = customAsset
 	customPool.Decimals = 7
 	customPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	customPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	customPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, customPool), IsNil)
 
 	// For 7 decimals, amount should be divided by 10 (10^(8-7))
@@ -89,7 +89,7 @@ func (s *HandlerObservedTxHelpersSuite) TestGenerateReferenceMemoIDWithZeroPoolD
 	pool.Asset = asset
 	pool.Decimals = 0
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	tx := GetRandomObservedTx()
@@ -155,7 +155,7 @@ func (s *HandlerObservedTxHelpersSuite) TestGenerateReferenceMemoIDDecimalPrecis
 		pool.Asset = asset
 		pool.Decimals = tc.decimals
 		pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-		pool.BalanceRune = cosmos.NewUint(100 * common.One)
+		pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 		c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 		tx := GetRandomObservedTx()
@@ -175,7 +175,7 @@ func (s *HandlerObservedTxHelpersSuite) TestGenerateReferenceMemoIDModulus(c *C)
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Test that modulus operation works correctly for large numbers
@@ -202,7 +202,7 @@ func (s *HandlerObservedTxHelpersSuite) TestReferenceMemoIntegration(c *C) {
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Set TTL for memoless transactions
@@ -247,7 +247,7 @@ func (s *HandlerObservedTxHelpersSuite) TestReferenceMemoIntegrationWithExpiredM
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Set TTL for reference memos
@@ -283,7 +283,7 @@ func (s *HandlerObservedTxHelpersSuite) TestReferenceMemoIntegrationWithUsageLim
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Set usage limit
@@ -340,7 +340,7 @@ func (s *HandlerObservedTxHelpersSuite) TestReferenceMemoIntegrationNonExistentR
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Generate reference memo for non-existent reference
@@ -361,7 +361,7 @@ func (s *HandlerObservedTxHelpersSuite) TestReferenceMemoIntegrationFullWorkflow
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Set TTL for memoless transactions
@@ -464,7 +464,7 @@ func (s *HandlerObservedTxHelpersSuite) TestUnfinalizedHeightUsedInFetchMemoFrom
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Set TTL for memoless transactions

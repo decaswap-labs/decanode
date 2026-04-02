@@ -189,7 +189,7 @@ func (s *HandlerObservedTxOutSuite) TestHandle(c *C) {
 	vault := NewVault(ctx.BlockHeight(), ActiveVault, AsgardVault, pk, common.Chains{common.ETHChain}.Strings(), []ChainContract{})
 	vault.Membership = []string{pk.String()}
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(500)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(500)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(200*common.One)),
 	}
 	keeper := &TestObservedTxOutHandleKeeper{
@@ -198,7 +198,7 @@ func (s *HandlerObservedTxOutSuite) TestHandle(c *C) {
 		txInVoter: NewObservedTxVoter(txInHash, make(ObservedTxs, 0)),
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200_000),
+			BalanceDeca:  cosmos.NewUint(200_000),
 			BalanceAsset: cosmos.NewUint(300_000),
 		},
 		vaultExists: true,
@@ -286,7 +286,7 @@ func (s *HandlerObservedTxOutSuite) TestHandleFailedTransaction(c *C) {
 	vault := NewVault(ctx.BlockHeight(), ActiveVault, AsgardVault, pk, common.Chains{common.ETHChain}.Strings(), []ChainContract{})
 	vault.Membership = []string{pk.String()}
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(500)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(500)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(200*common.One)),
 	}
 	keeper := &TestObservedTxOutHandleKeeper{
@@ -295,7 +295,7 @@ func (s *HandlerObservedTxOutSuite) TestHandleFailedTransaction(c *C) {
 		txInVoter: NewObservedTxVoter(txInHash, make(ObservedTxs, 0)),
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200_000),
+			BalanceDeca:  cosmos.NewUint(200_000),
 			BalanceAsset: cosmos.NewUint(300_000),
 		},
 		vaultExists: true,
@@ -384,7 +384,7 @@ func (s *HandlerObservedTxOutSuite) TestHandleStolenFundsInvalidMemo(c *C) {
 	vault := NewVault(ctx.BlockHeight(), ActiveVault, AsgardVault, pk, common.Chains{common.ETHChain}.Strings(), []ChainContract{})
 	vault.Membership = []string{pk.String()}
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(500*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(500*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(200*common.One)),
 	}
 	keeper := &TestObservedTxOutHandleKeeper{
@@ -392,7 +392,7 @@ func (s *HandlerObservedTxOutSuite) TestHandleStolenFundsInvalidMemo(c *C) {
 		voter: NewObservedTxVoter(tx.ID, make(ObservedTxs, 0)),
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200 * common.One),
+			BalanceDeca:  cosmos.NewUint(200 * common.One),
 			BalanceAsset: cosmos.NewUint(300 * common.One),
 		},
 		vaultExists: true,
@@ -502,7 +502,7 @@ func setupAnObservedTxOut(ctx cosmos.Context, helper *HandlerObservedTxOutTestHe
 	c.Assert(helper.SetVault(ctx, vault), IsNil)
 	p := NewPool()
 	p.Asset = common.ETHAsset
-	p.BalanceRune = cosmos.NewUint(100 * common.One)
+	p.BalanceDeca = cosmos.NewUint(100 * common.One)
 	p.BalanceAsset = cosmos.NewUint(100 * common.One)
 	p.Status = PoolAvailable
 	c.Assert(helper.Keeper.SetPool(ctx, p), IsNil)

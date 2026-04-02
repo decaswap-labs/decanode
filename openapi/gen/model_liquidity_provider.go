@@ -17,15 +17,15 @@ import (
 // LiquidityProvider struct for LiquidityProvider
 type LiquidityProvider struct {
 	Asset string `json:"asset"`
-	RuneAddress *string `json:"rune_address,omitempty"`
+	DecaAddress *string `json:"deca_address,omitempty"`
 	AssetAddress *string `json:"asset_address,omitempty"`
 	LastAddHeight *int64 `json:"last_add_height,omitempty"`
 	LastWithdrawHeight *int64 `json:"last_withdraw_height,omitempty"`
 	Units string `json:"units"`
-	PendingRune string `json:"pending_rune"`
+	PendingDeca string `json:"pending_deca"`
 	PendingAsset string `json:"pending_asset"`
 	PendingTxId *string `json:"pending_tx_id,omitempty"`
-	RuneDepositValue string `json:"rune_deposit_value"`
+	DecaDepositValue string `json:"deca_deposit_value"`
 	AssetDepositValue string `json:"asset_deposit_value"`
 	RuneRedeemValue *string `json:"rune_redeem_value,omitempty"`
 	AssetRedeemValue *string `json:"asset_redeem_value,omitempty"`
@@ -38,13 +38,13 @@ type LiquidityProvider struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLiquidityProvider(asset string, units string, pendingRune string, pendingAsset string, runeDepositValue string, assetDepositValue string) *LiquidityProvider {
+func NewLiquidityProvider(asset string, units string, pendingDeca string, pendingAsset string, decaDepositValue string, assetDepositValue string) *LiquidityProvider {
 	this := LiquidityProvider{}
 	this.Asset = asset
 	this.Units = units
-	this.PendingRune = pendingRune
+	this.PendingDeca = pendingDeca
 	this.PendingAsset = pendingAsset
-	this.RuneDepositValue = runeDepositValue
+	this.DecaDepositValue = decaDepositValue
 	this.AssetDepositValue = assetDepositValue
 	return &this
 }
@@ -81,36 +81,36 @@ func (o *LiquidityProvider) SetAsset(v string) {
 	o.Asset = v
 }
 
-// GetRuneAddress returns the RuneAddress field value if set, zero value otherwise.
-func (o *LiquidityProvider) GetRuneAddress() string {
-	if o == nil || o.RuneAddress == nil {
+// GetDecaAddress returns the DecaAddress field value if set, zero value otherwise.
+func (o *LiquidityProvider) GetDecaAddress() string {
+	if o == nil || o.DecaAddress == nil {
 		var ret string
 		return ret
 	}
-	return *o.RuneAddress
+	return *o.DecaAddress
 }
 
-// GetRuneAddressOk returns a tuple with the RuneAddress field value if set, nil otherwise
+// GetDecaAddressOk returns a tuple with the DecaAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LiquidityProvider) GetRuneAddressOk() (*string, bool) {
-	if o == nil || o.RuneAddress == nil {
+func (o *LiquidityProvider) GetDecaAddressOk() (*string, bool) {
+	if o == nil || o.DecaAddress == nil {
 		return nil, false
 	}
-	return o.RuneAddress, true
+	return o.DecaAddress, true
 }
 
-// HasRuneAddress returns a boolean if a field has been set.
-func (o *LiquidityProvider) HasRuneAddress() bool {
-	if o != nil && o.RuneAddress != nil {
+// HasDecaAddress returns a boolean if a field has been set.
+func (o *LiquidityProvider) HasDecaAddress() bool {
+	if o != nil && o.DecaAddress != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetRuneAddress gets a reference to the given string and assigns it to the RuneAddress field.
-func (o *LiquidityProvider) SetRuneAddress(v string) {
-	o.RuneAddress = &v
+// SetDecaAddress gets a reference to the given string and assigns it to the DecaAddress field.
+func (o *LiquidityProvider) SetDecaAddress(v string) {
+	o.DecaAddress = &v
 }
 
 // GetAssetAddress returns the AssetAddress field value if set, zero value otherwise.
@@ -233,28 +233,28 @@ func (o *LiquidityProvider) SetUnits(v string) {
 	o.Units = v
 }
 
-// GetPendingRune returns the PendingRune field value
-func (o *LiquidityProvider) GetPendingRune() string {
+// GetPendingDeca returns the PendingDeca field value
+func (o *LiquidityProvider) GetPendingDeca() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.PendingRune
+	return o.PendingDeca
 }
 
-// GetPendingRuneOk returns a tuple with the PendingRune field value
+// GetPendingDecaOk returns a tuple with the PendingDeca field value
 // and a boolean to check if the value has been set.
-func (o *LiquidityProvider) GetPendingRuneOk() (*string, bool) {
+func (o *LiquidityProvider) GetPendingDecaOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.PendingRune, true
+	return &o.PendingDeca, true
 }
 
-// SetPendingRune sets field value
-func (o *LiquidityProvider) SetPendingRune(v string) {
-	o.PendingRune = v
+// SetPendingDeca sets field value
+func (o *LiquidityProvider) SetPendingDeca(v string) {
+	o.PendingDeca = v
 }
 
 // GetPendingAsset returns the PendingAsset field value
@@ -313,28 +313,28 @@ func (o *LiquidityProvider) SetPendingTxId(v string) {
 	o.PendingTxId = &v
 }
 
-// GetRuneDepositValue returns the RuneDepositValue field value
-func (o *LiquidityProvider) GetRuneDepositValue() string {
+// GetDecaDepositValue returns the DecaDepositValue field value
+func (o *LiquidityProvider) GetDecaDepositValue() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.RuneDepositValue
+	return o.DecaDepositValue
 }
 
-// GetRuneDepositValueOk returns a tuple with the RuneDepositValue field value
+// GetDecaDepositValueOk returns a tuple with the DecaDepositValue field value
 // and a boolean to check if the value has been set.
-func (o *LiquidityProvider) GetRuneDepositValueOk() (*string, bool) {
+func (o *LiquidityProvider) GetDecaDepositValueOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.RuneDepositValue, true
+	return &o.DecaDepositValue, true
 }
 
-// SetRuneDepositValue sets field value
-func (o *LiquidityProvider) SetRuneDepositValue(v string) {
-	o.RuneDepositValue = v
+// SetDecaDepositValue sets field value
+func (o *LiquidityProvider) SetDecaDepositValue(v string) {
+	o.DecaDepositValue = v
 }
 
 // GetAssetDepositValue returns the AssetDepositValue field value
@@ -526,8 +526,8 @@ func (o LiquidityProvider) MarshalJSON_deprecated() ([]byte, error) {
 	if true {
 		toSerialize["asset"] = o.Asset
 	}
-	if o.RuneAddress != nil {
-		toSerialize["rune_address"] = o.RuneAddress
+	if o.DecaAddress != nil {
+		toSerialize["deca_address"] = o.DecaAddress
 	}
 	if o.AssetAddress != nil {
 		toSerialize["asset_address"] = o.AssetAddress
@@ -542,7 +542,7 @@ func (o LiquidityProvider) MarshalJSON_deprecated() ([]byte, error) {
 		toSerialize["units"] = o.Units
 	}
 	if true {
-		toSerialize["pending_rune"] = o.PendingRune
+		toSerialize["pending_deca"] = o.PendingDeca
 	}
 	if true {
 		toSerialize["pending_asset"] = o.PendingAsset
@@ -551,7 +551,7 @@ func (o LiquidityProvider) MarshalJSON_deprecated() ([]byte, error) {
 		toSerialize["pending_tx_id"] = o.PendingTxId
 	}
 	if true {
-		toSerialize["rune_deposit_value"] = o.RuneDepositValue
+		toSerialize["deca_deposit_value"] = o.DecaDepositValue
 	}
 	if true {
 		toSerialize["asset_deposit_value"] = o.AssetDepositValue

@@ -612,7 +612,7 @@ func (vm *ValidatorMgr) payNodeAccountBondAward(ctx cosmos.Context, lastChurnHei
 
 	// Transfer node operator fees
 	if !nodeOperatorFees.IsZero() {
-		coin := common.NewCoin(common.RuneNative, nodeOperatorFees)
+		coin := common.NewCoin(common.DecaNative, nodeOperatorFees)
 		sdkErr := vm.k.SendFromModuleToAccount(ctx, BondName, nodeOperatorAccAddr, common.NewCoins(coin))
 		if sdkErr != nil {
 			return fmt.Errorf("fail to send node operator fees: %w", sdkErr)
@@ -798,10 +798,10 @@ func (vm *ValidatorMgr) ragnarokBond(ctx cosmos.Context, nth int64, mgr Manager)
 
 		// refund bond
 		txOutItem := TxOutItem{
-			Chain:      common.RuneAsset().Chain,
+			Chain:      common.DecaAsset().Chain,
 			ToAddress:  na.BondAddress,
 			InHash:     common.BlankTxID,
-			Coin:       common.NewCoin(common.RuneAsset(), amt),
+			Coin:       common.NewCoin(common.DecaAsset(), amt),
 			Memo:       NewRagnarokMemo(ctx.BlockHeight()).String(),
 			ModuleName: BondName,
 		}
@@ -917,11 +917,11 @@ func (vm *ValidatorMgr) ragnarokPools(ctx cosmos.Context, nth int64, mgr Manager
 				}
 				var withdrawAddr common.Address
 				withdrawAsset := common.EmptyAsset
-				if !lp.RuneAddress.IsEmpty() {
-					withdrawAddr = lp.RuneAddress
+				if !lp.DecaAddress.IsEmpty() {
+					withdrawAddr = lp.DecaAddress
 					// if liquidity provider only add RUNE , then asset address will be empty
 					if lp.AssetAddress.IsEmpty() {
-						withdrawAsset = common.RuneAsset()
+						withdrawAsset = common.DecaAsset()
 					}
 				} else {
 					// if liquidity provider only add Asset, then RUNE Address will be empty
@@ -940,8 +940,8 @@ func (vm *ValidatorMgr) ragnarokPools(ctx cosmos.Context, nth int64, mgr Manager
 				handler := NewInternalHandler(mgr)
 				_, err = handler(ctx, withdrawMsg)
 				if err != nil {
-					ctx.Logger().Error("fail to withdraw", "liquidity provider", lp.RuneAddress, "error", err)
-				} else if !withdrawAsset.Equals(common.RuneAsset()) {
+					ctx.Logger().Error("fail to withdraw", "liquidity provider", lp.DecaAddress, "error", err)
+				} else if !withdrawAsset.Equals(common.DecaAsset()) {
 					// when withdraw asset is only RUNE , then it should process more , because RUNE asset doesn't leave THORChain
 					count++
 					pending, err := vm.k.GetRagnarokPending(ctx)
@@ -1374,7 +1374,7 @@ func (vm *ValidatorMgr) NodeAccountPreflightCheck(ctx cosmos.Context, na NodeAcc
 	}
 
 	// ensure we have enough rune
-	minBond := vm.k.GetConfigInt64(ctx, constants.MinimumBondInRune)
+	minBond := vm.k.GetConfigInt64(ctx, constants.MinimumBondInDeca)
 	if na.Bond.LT(cosmos.NewUint(uint64(minBond))) {
 		return NodeStandby, fmt.Errorf("node account does not have minimum bond requirement: %d/%d", na.Bond.Uint64(), minBond)
 	}

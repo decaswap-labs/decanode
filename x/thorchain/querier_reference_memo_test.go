@@ -20,7 +20,7 @@ func (s *QuerierReferenceMemoSuite) TestPreflightGasAssetEligible(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Decimals = 8
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -52,7 +52,7 @@ func (s *QuerierReferenceMemoSuite) TestPreflightNonGasAssetEligible(c *C) {
 	pool := NewPool()
 	pool.Asset = asset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Decimals = 6
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -80,7 +80,7 @@ func (s *QuerierReferenceMemoSuite) TestPreflightSynthAssetEligible(c *C) {
 	pool := NewPool()
 	pool.Asset = asset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Decimals = 8
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -145,7 +145,7 @@ func (s *QuerierReferenceMemoSuite) TestPreflightMultipleGasAssets(c *C) {
 		pool := NewPool()
 		pool.Asset = asset
 		pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-		pool.BalanceRune = cosmos.NewUint(100 * common.One)
+		pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 		pool.Decimals = asset.Chain.GetGasAssetDecimal()
 		c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 

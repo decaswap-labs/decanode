@@ -86,15 +86,15 @@ func (m *QueryLiquidityProviderRequest) GetHeight() string {
 // Can we replace this with LiquidityProvider proto? Check json fields...
 type QueryLiquidityProviderResponse struct {
 	Asset              string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset"`
-	RuneAddress        string `protobuf:"bytes,2,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress        string `protobuf:"bytes,2,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	AssetAddress       string `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
 	LastAddHeight      int64  `protobuf:"varint,4,opt,name=last_add_height,json=lastAddHeight,proto3" json:"last_add_height,omitempty"`
 	LastWithdrawHeight int64  `protobuf:"varint,5,opt,name=last_withdraw_height,json=lastWithdrawHeight,proto3" json:"last_withdraw_height,omitempty"`
 	Units              string `protobuf:"bytes,6,opt,name=units,proto3" json:"units"`
-	PendingRune        string `protobuf:"bytes,7,opt,name=pending_rune,json=pendingRune,proto3" json:"pending_rune"`
+	PendingDeca        string `protobuf:"bytes,7,opt,name=pending_deca,json=pendingDeca,proto3" json:"pending_deca"`
 	PendingAsset       string `protobuf:"bytes,8,opt,name=pending_asset,json=pendingAsset,proto3" json:"pending_asset"`
 	PendingTxId        string `protobuf:"bytes,9,opt,name=pending_tx_id,json=pendingTxId,proto3" json:"pending_tx_id,omitempty"`
-	RuneDepositValue   string `protobuf:"bytes,10,opt,name=rune_deposit_value,json=runeDepositValue,proto3" json:"rune_deposit_value"`
+	DecaDepositValue   string `protobuf:"bytes,10,opt,name=deca_deposit_value,json=decaDepositValue,proto3" json:"deca_deposit_value"`
 	AssetDepositValue  string `protobuf:"bytes,11,opt,name=asset_deposit_value,json=assetDepositValue,proto3" json:"asset_deposit_value"`
 	RuneRedeemValue    string `protobuf:"bytes,12,opt,name=rune_redeem_value,json=runeRedeemValue,proto3" json:"rune_redeem_value,omitempty"`
 	AssetRedeemValue   string `protobuf:"bytes,13,opt,name=asset_redeem_value,json=assetRedeemValue,proto3" json:"asset_redeem_value,omitempty"`
@@ -143,9 +143,9 @@ func (m *QueryLiquidityProviderResponse) GetAsset() string {
 	return ""
 }
 
-func (m *QueryLiquidityProviderResponse) GetRuneAddress() string {
+func (m *QueryLiquidityProviderResponse) GetDecaAddress() string {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -178,9 +178,9 @@ func (m *QueryLiquidityProviderResponse) GetUnits() string {
 	return ""
 }
 
-func (m *QueryLiquidityProviderResponse) GetPendingRune() string {
+func (m *QueryLiquidityProviderResponse) GetPendingDeca() string {
 	if m != nil {
-		return m.PendingRune
+		return m.PendingDeca
 	}
 	return ""
 }
@@ -199,9 +199,9 @@ func (m *QueryLiquidityProviderResponse) GetPendingTxId() string {
 	return ""
 }
 
-func (m *QueryLiquidityProviderResponse) GetRuneDepositValue() string {
+func (m *QueryLiquidityProviderResponse) GetDecaDepositValue() string {
 	if m != nil {
-		return m.RuneDepositValue
+		return m.DecaDepositValue
 	}
 	return ""
 }
@@ -504,10 +504,10 @@ func (m *QueryLiquidityProviderResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 		i--
 		dAtA[i] = 0x5a
 	}
-	if len(m.RuneDepositValue) > 0 {
-		i -= len(m.RuneDepositValue)
-		copy(dAtA[i:], m.RuneDepositValue)
-		i = encodeVarintQueryLiquidityProvider(dAtA, i, uint64(len(m.RuneDepositValue)))
+	if len(m.DecaDepositValue) > 0 {
+		i -= len(m.DecaDepositValue)
+		copy(dAtA[i:], m.DecaDepositValue)
+		i = encodeVarintQueryLiquidityProvider(dAtA, i, uint64(len(m.DecaDepositValue)))
 		i--
 		dAtA[i] = 0x52
 	}
@@ -525,10 +525,10 @@ func (m *QueryLiquidityProviderResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 		i--
 		dAtA[i] = 0x42
 	}
-	if len(m.PendingRune) > 0 {
-		i -= len(m.PendingRune)
-		copy(dAtA[i:], m.PendingRune)
-		i = encodeVarintQueryLiquidityProvider(dAtA, i, uint64(len(m.PendingRune)))
+	if len(m.PendingDeca) > 0 {
+		i -= len(m.PendingDeca)
+		copy(dAtA[i:], m.PendingDeca)
+		i = encodeVarintQueryLiquidityProvider(dAtA, i, uint64(len(m.PendingDeca)))
 		i--
 		dAtA[i] = 0x3a
 	}
@@ -556,10 +556,10 @@ func (m *QueryLiquidityProviderResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintQueryLiquidityProvider(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintQueryLiquidityProvider(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -689,7 +689,7 @@ func (m *QueryLiquidityProviderResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQueryLiquidityProvider(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovQueryLiquidityProvider(uint64(l))
 	}
@@ -707,7 +707,7 @@ func (m *QueryLiquidityProviderResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQueryLiquidityProvider(uint64(l))
 	}
-	l = len(m.PendingRune)
+	l = len(m.PendingDeca)
 	if l > 0 {
 		n += 1 + l + sovQueryLiquidityProvider(uint64(l))
 	}
@@ -719,7 +719,7 @@ func (m *QueryLiquidityProviderResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQueryLiquidityProvider(uint64(l))
 	}
-	l = len(m.RuneDepositValue)
+	l = len(m.DecaDepositValue)
 	if l > 0 {
 		n += 1 + l + sovQueryLiquidityProvider(uint64(l))
 	}
@@ -997,7 +997,7 @@ func (m *QueryLiquidityProviderResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1025,7 +1025,7 @@ func (m *QueryLiquidityProviderResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = string(dAtA[iNdEx:postIndex])
+			m.DecaAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -1131,7 +1131,7 @@ func (m *QueryLiquidityProviderResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PendingRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1159,7 +1159,7 @@ func (m *QueryLiquidityProviderResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PendingRune = string(dAtA[iNdEx:postIndex])
+			m.PendingDeca = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 8:
 			if wireType != 2 {
@@ -1227,7 +1227,7 @@ func (m *QueryLiquidityProviderResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneDepositValue", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaDepositValue", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1255,7 +1255,7 @@ func (m *QueryLiquidityProviderResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneDepositValue = string(dAtA[iNdEx:postIndex])
+			m.DecaDepositValue = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {

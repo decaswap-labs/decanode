@@ -123,20 +123,20 @@ func (h AddLiquidityHandler) validate(ctx cosmos.Context, msg MsgAddLiquidity) e
 		}
 	}
 
-	if !msg.RuneAddress.IsEmpty() && !msg.RuneAddress.IsChain(common.THORChain) {
+	if !msg.DecaAddress.IsEmpty() && !msg.DecaAddress.IsChain(common.THORChain) {
 		ctx.Logger().Error("rune address must be THORChain")
 		return errAddLiquidityFailValidation
 	}
 
-	// For secured assets, verify signer is authorized to withdraw from runeAddr
+	// For secured assets, verify signer is authorized to withdraw from decaAddr
 	// This prevents attackers from specifying a victim's address and draining their secured assets
 	if msg.Asset.IsSecuredAsset() && !msg.AssetAmount.IsZero() {
-		runeAccAddr, err := msg.RuneAddress.AccAddress()
+		runeAccAddr, err := msg.DecaAddress.AccAddress()
 		if err != nil {
 			return fmt.Errorf("invalid rune address for secured asset: %w", err)
 		}
 		if !runeAccAddr.Equals(msg.Signer) {
-			return fmt.Errorf("signer %s not authorized to withdraw secured assets from %s", msg.Signer, msg.RuneAddress)
+			return fmt.Errorf("signer %s not authorized to withdraw secured assets from %s", msg.Signer, msg.DecaAddress)
 		}
 	}
 
@@ -157,7 +157,7 @@ func (h AddLiquidityHandler) validate(ctx cosmos.Context, msg MsgAddLiquidity) e
 		if err != nil {
 			return err
 		}
-		if msg.RuneAddress.Equals(polAddress) {
+		if msg.DecaAddress.Equals(polAddress) {
 			return fmt.Errorf("pol lp cannot have asset address")
 		}
 	}
@@ -203,7 +203,7 @@ func (h AddLiquidityHandler) validate(ctx cosmos.Context, msg MsgAddLiquidity) e
 	// total liquidity RUNE after current add liquidity
 	totalLiquidityRUNE = totalLiquidityRUNE.Add(msg.RuneAmount)
 	totalLiquidityRUNE = totalLiquidityRUNE.Add(pool.AssetValueInRune(msg.AssetAmount))
-	maximumLiquidityRune := h.mgr.Keeper().GetConfigInt64(ctx, constants.MaximumLiquidityRune)
+	maximumLiquidityRune := h.mgr.Keeper().GetConfigInt64(ctx, constants.MaximumLiquidityDeca)
 	if maximumLiquidityRune > 0 {
 		if totalLiquidityRUNE.GT(cosmos.NewUint(uint64(maximumLiquidityRune))) {
 			return errAddLiquidityRUNEOverLimit
@@ -211,7 +211,7 @@ func (h AddLiquidityHandler) validate(ctx cosmos.Context, msg MsgAddLiquidity) e
 	}
 
 	coins := common.NewCoins(
-		common.NewCoin(common.RuneAsset(), msg.RuneAmount),
+		common.NewCoin(common.DecaAsset(), msg.RuneAmount),
 		common.NewCoin(msg.Asset, msg.AssetAmount),
 	)
 	if atTVLCap(ctx, coins, h.mgr) {
@@ -239,7 +239,7 @@ func (h AddLiquidityHandler) handle(ctx cosmos.Context, msg MsgAddLiquidity) err
 	}
 
 	if pool.IsEmpty() {
-		ctx.Logger().Info("pool doesn't exist yet, creating a new one...", "symbol", msg.Asset.String(), "creator", msg.RuneAddress)
+		ctx.Logger().Info("pool doesn't exist yet, creating a new one...", "symbol", msg.Asset.String(), "creator", msg.DecaAddress)
 
 		pool.Asset = msg.Asset
 
@@ -278,7 +278,7 @@ func (h AddLiquidityHandler) handle(ctx cosmos.Context, msg MsgAddLiquidity) err
 		if !msg.AssetAddress.IsEmpty() && msg.AssetAmount.IsZero() {
 			stage = true
 		}
-		if !msg.RuneAddress.IsEmpty() && msg.RuneAmount.IsZero() {
+		if !msg.DecaAddress.IsEmpty() && msg.RuneAmount.IsZero() {
 			stage = true
 		}
 	}
@@ -289,7 +289,7 @@ func (h AddLiquidityHandler) handle(ctx cosmos.Context, msg MsgAddLiquidity) err
 			msg.Asset,
 			msg.RuneAmount,
 			msg.AssetAmount,
-			msg.RuneAddress,
+			msg.DecaAddress,
 			msg.AssetAddress,
 			msg.Tx.ID,
 			stage,
@@ -307,7 +307,7 @@ func (h AddLiquidityHandler) handle(ctx cosmos.Context, msg MsgAddLiquidity) err
 		msg.Asset,
 		userRune,
 		userAsset,
-		msg.RuneAddress,
+		msg.DecaAddress,
 		msg.AssetAddress,
 		msg.Tx.ID,
 		stage,
@@ -317,10 +317,10 @@ func (h AddLiquidityHandler) handle(ctx cosmos.Context, msg MsgAddLiquidity) err
 		return err
 	}
 
-	affiliateRuneAddress := common.NoAddress
+	affiliateDecaAddress := common.NoAddress
 	affiliateAssetAddress := common.NoAddress
 	if msg.AffiliateAddress.IsChain(common.THORChain) {
-		affiliateRuneAddress = msg.AffiliateAddress
+		affiliateDecaAddress = msg.AffiliateAddress
 	} else {
 		affiliateAssetAddress = msg.AffiliateAddress
 	}
@@ -330,7 +330,7 @@ func (h AddLiquidityHandler) handle(ctx cosmos.Context, msg MsgAddLiquidity) err
 		msg.Asset,
 		affiliateRune,
 		affiliateAsset,
-		affiliateRuneAddress,
+		affiliateDecaAddress,
 		affiliateAssetAddress,
 		msg.Tx.ID,
 		false,
@@ -384,14 +384,14 @@ func (h AddLiquidityHandler) swap(ctx cosmos.Context, msg MsgAddLiquidity) error
 }
 
 // validateAddLiquidityMessage is to do some validation, and make sure it is legit
-func (h AddLiquidityHandler) validateAddLiquidityMessage(ctx cosmos.Context, keeper keeper.Keeper, asset common.Asset, requestTxHash common.TxID, runeAddr, assetAddr common.Address) error {
+func (h AddLiquidityHandler) validateAddLiquidityMessage(ctx cosmos.Context, keeper keeper.Keeper, asset common.Asset, requestTxHash common.TxID, decaAddr, assetAddr common.Address) error {
 	if asset.IsEmpty() {
 		return errors.New("asset is empty")
 	}
 	if requestTxHash.IsEmpty() {
 		return errors.New("request tx hash is empty")
 	}
-	if runeAddr.IsEmpty() && assetAddr.IsEmpty() {
+	if decaAddr.IsEmpty() && assetAddr.IsEmpty() {
 		return errors.New("rune address and asset address is empty")
 	}
 	if !keeper.PoolExist(ctx, asset) {
@@ -401,7 +401,7 @@ func (h AddLiquidityHandler) validateAddLiquidityMessage(ctx cosmos.Context, kee
 	if err != nil {
 		return ErrInternal(err, fmt.Sprintf("fail to get pool(%s)", asset))
 	}
-	if pool.Status == PoolStaged && (runeAddr.IsEmpty() || assetAddr.IsEmpty()) {
+	if pool.Status == PoolStaged && (decaAddr.IsEmpty() || assetAddr.IsEmpty()) {
 		return fmt.Errorf("cannot add single sided liquidity while a pool is staged")
 	}
 	return nil
@@ -482,13 +482,13 @@ func calculateVaultUnits(oldPoolUnits, poolAmt, addAmt cosmos.Uint) (cosmos.Uint
 func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 	asset common.Asset,
 	addRuneAmount, addAssetAmount cosmos.Uint,
-	runeAddr, assetAddr common.Address,
+	decaAddr, assetAddr common.Address,
 	requestTxHash common.TxID,
 	stage bool,
 	constAccessor constants.ConstantValues,
 ) (err error) {
 	ctx.Logger().Info("liquidity provision", "asset", asset, "rune amount", addRuneAmount, "asset amount", addAssetAmount)
-	if err = h.validateAddLiquidityMessage(ctx, h.mgr.Keeper(), asset, requestTxHash, runeAddr, assetAddr); err != nil {
+	if err = h.validateAddLiquidityMessage(ctx, h.mgr.Keeper(), asset, requestTxHash, decaAddr, assetAddr); err != nil {
 		return fmt.Errorf("add liquidity message fail validation: %w", err)
 	}
 
@@ -503,7 +503,7 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 	synthSupply := h.mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
 	originalUnits := pool.CalcUnits(synthSupply)
 
-	fetchAddr := runeAddr
+	fetchAddr := decaAddr
 	if fetchAddr.IsEmpty() {
 		fetchAddr = assetAddr
 	}
@@ -515,8 +515,8 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 	su.LastAddHeight = ctx.BlockHeight()
 	if su.Units.IsZero() {
 		if su.PendingTxID.IsEmpty() {
-			if su.RuneAddress.IsEmpty() {
-				su.RuneAddress = runeAddr
+			if su.DecaAddress.IsEmpty() {
+				su.DecaAddress = decaAddr
 			}
 			if su.AssetAddress.IsEmpty() {
 				su.AssetAddress = assetAddr
@@ -527,10 +527,10 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 			// new SU, by default, places the thor address to the rune address,
 			// but here we want it to be on the asset address only
 			su.AssetAddress = assetAddr
-			su.RuneAddress = common.NoAddress // no rune to add/withdraw
+			su.DecaAddress = common.NoAddress // no rune to add/withdraw
 		} else {
 			// ensure input addresses match LP position addresses
-			if !runeAddr.Equals(su.RuneAddress) {
+			if !decaAddr.Equals(su.DecaAddress) {
 				return errAddLiquidityMismatchAddr
 			}
 			if !assetAddr.Equals(su.AssetAddress) {
@@ -558,13 +558,13 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 		assetTxID = su.PendingTxID
 	}
 
-	pendingRuneAmt := su.PendingRune.Add(addRuneAmount)
+	pendingDecaAmt := su.PendingDeca.Add(addRuneAmount)
 	pendingAssetAmt := su.PendingAsset.Add(addAssetAmount)
 
 	// if we have an asset address and no asset amount, put the rune pending
 	if stage && pendingAssetAmt.IsZero() {
-		pool.PendingInboundRune = pool.PendingInboundRune.Add(addRuneAmount)
-		su.PendingRune = pendingRuneAmt
+		pool.PendingInboundDeca = pool.PendingInboundDeca.Add(addRuneAmount)
+		su.PendingDeca = pendingDecaAmt
 		su.PendingTxID = requestTxHash
 		h.mgr.Keeper().SetLiquidityProvider(ctx, su)
 		if err = h.mgr.Keeper().SetPool(ctx, pool); err != nil {
@@ -572,7 +572,7 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 		}
 
 		// add pending liquidity event
-		evt := NewEventPendingLiquidity(pool.Asset, AddPendingLiquidity, su.RuneAddress, addRuneAmount, su.AssetAddress, cosmos.ZeroUint(), requestTxHash, common.TxID(""))
+		evt := NewEventPendingLiquidity(pool.Asset, AddPendingLiquidity, su.DecaAddress, addRuneAmount, su.AssetAddress, cosmos.ZeroUint(), requestTxHash, common.TxID(""))
 		if err = h.mgr.EventMgr().EmitEvent(ctx, evt); err != nil {
 			return ErrInternal(err, "fail to emit partial add liquidity event")
 		}
@@ -580,7 +580,7 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 	}
 
 	// if we have a rune address and no rune asset, put the asset in pending
-	if stage && pendingRuneAmt.IsZero() {
+	if stage && pendingDecaAmt.IsZero() {
 		pool.PendingInboundAsset = pool.PendingInboundAsset.Add(addAssetAmount)
 		su.PendingAsset = pendingAssetAmt
 		su.PendingTxID = requestTxHash
@@ -589,7 +589,7 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 			return ErrInternal(err, "fail to save pool pending inbound asset")
 		}
 
-		evt := NewEventPendingLiquidity(pool.Asset, AddPendingLiquidity, su.RuneAddress, cosmos.ZeroUint(), su.AssetAddress, addAssetAmount, common.TxID(""), requestTxHash)
+		evt := NewEventPendingLiquidity(pool.Asset, AddPendingLiquidity, su.DecaAddress, cosmos.ZeroUint(), su.AssetAddress, addAssetAmount, common.TxID(""), requestTxHash)
 		if err = h.mgr.EventMgr().EmitEvent(ctx, evt); err != nil {
 			return ErrInternal(err, "fail to emit partial add liquidity event")
 		}
@@ -597,55 +597,55 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 	}
 
 	// Validate pending amounts before subtraction to detect accounting inconsistencies
-	if su.PendingRune.GT(pool.PendingInboundRune) {
-		return ErrInternal(nil, fmt.Sprintf("pending rune accounting error: LP pending %s > pool pending %s", su.PendingRune, pool.PendingInboundRune))
+	if su.PendingDeca.GT(pool.PendingInboundDeca) {
+		return ErrInternal(nil, fmt.Sprintf("pending rune accounting error: LP pending %s > pool pending %s", su.PendingDeca, pool.PendingInboundDeca))
 	}
 	if su.PendingAsset.GT(pool.PendingInboundAsset) {
 		return ErrInternal(nil, fmt.Sprintf("pending asset accounting error: LP pending %s > pool pending %s", su.PendingAsset, pool.PendingInboundAsset))
 	}
-	pool.PendingInboundRune = pool.PendingInboundRune.Sub(su.PendingRune)
+	pool.PendingInboundDeca = pool.PendingInboundDeca.Sub(su.PendingDeca)
 	pool.PendingInboundAsset = pool.PendingInboundAsset.Sub(su.PendingAsset)
 	su.PendingAsset = cosmos.ZeroUint()
-	su.PendingRune = cosmos.ZeroUint()
+	su.PendingDeca = cosmos.ZeroUint()
 	su.PendingTxID = ""
 
-	ctx.Logger().Info("pre add liquidity", "pool", pool.Asset, "rune", pool.BalanceRune, "asset", pool.BalanceAsset, "LP units", pool.LPUnits, "synth units", pool.SynthUnits)
+	ctx.Logger().Info("pre add liquidity", "pool", pool.Asset, "rune", pool.BalanceDeca, "asset", pool.BalanceAsset, "LP units", pool.LPUnits, "synth units", pool.SynthUnits)
 	ctx.Logger().Info("adding liquidity", "rune", addRuneAmount, "asset", addAssetAmount)
 
-	balanceRune := pool.BalanceRune
+	balanceDeca := pool.BalanceDeca
 	balanceAsset := pool.BalanceAsset
 
 	oldPoolUnits := pool.GetPoolUnits()
 	var newPoolUnits, liquidityUnits cosmos.Uint
 	if asset.IsSyntheticAsset() {
-		pendingRuneAmt = cosmos.ZeroUint() // sanity check
+		pendingDecaAmt = cosmos.ZeroUint() // sanity check
 		if balanceAsset.IsZero() && !oldPoolUnits.IsZero() {
 			return fmt.Errorf("cannot add liquidity: pool has non-zero units with zero asset balance")
 		}
 		newPoolUnits, liquidityUnits = calculateVaultUnits(oldPoolUnits, balanceAsset, pendingAssetAmt)
 	} else {
-		newPoolUnits, liquidityUnits, err = calculatePoolUnits(oldPoolUnits, balanceRune, balanceAsset, pendingRuneAmt, pendingAssetAmt)
+		newPoolUnits, liquidityUnits, err = calculatePoolUnits(oldPoolUnits, balanceDeca, balanceAsset, pendingDecaAmt, pendingAssetAmt)
 		if err != nil {
 			return ErrInternal(err, "fail to calculate pool unit")
 		}
 	}
 
 	ctx.Logger().Info("current pool status", "pool units", newPoolUnits, "liquidity units", liquidityUnits)
-	if liquidityUnits.IsZero() && (!pendingRuneAmt.IsZero() || !pendingAssetAmt.IsZero()) {
+	if liquidityUnits.IsZero() && (!pendingDecaAmt.IsZero() || !pendingAssetAmt.IsZero()) {
 		return ErrInternal(nil, "liquidity units cannot be zero when deposit amounts are non-zero")
 	}
-	// NOTE: pendingRuneAmt and pendingAssetAmt are derived from amounts verified by:
+	// NOTE: pendingDecaAmt and pendingAssetAmt are derived from amounts verified by:
 	// - External chains: Bifrost observers verify actual on-chain transactions before reporting
 	// - Native chain: Cosmos SDK bank module ante handler validates transfers
 	// - Secured assets: SecuredAssetManager.Withdraw validates and burns share tokens
 	// Therefore, explicit balance verification here is unnecessary as it would be redundant.
-	poolRune := balanceRune.Add(pendingRuneAmt)
+	poolRune := balanceDeca.Add(pendingDecaAmt)
 	poolAsset := balanceAsset.Add(pendingAssetAmt)
 	pool.LPUnits = pool.LPUnits.Add(liquidityUnits)
-	pool.BalanceRune = poolRune
+	pool.BalanceDeca = poolRune
 	pool.BalanceAsset = poolAsset
-	ctx.Logger().Info("post add liquidity", "pool", pool.Asset, "rune", pool.BalanceRune, "asset", pool.BalanceAsset, "LP units", pool.LPUnits, "synth units", pool.SynthUnits, "add liquidity units", liquidityUnits)
-	if (pool.BalanceRune.IsZero() && !asset.IsSyntheticAsset()) || pool.BalanceAsset.IsZero() {
+	ctx.Logger().Info("post add liquidity", "pool", pool.Asset, "rune", pool.BalanceDeca, "asset", pool.BalanceAsset, "LP units", pool.LPUnits, "synth units", pool.SynthUnits, "add liquidity units", liquidityUnits)
+	if (pool.BalanceDeca.IsZero() && !asset.IsSyntheticAsset()) || pool.BalanceAsset.IsZero() {
 		return ErrInternal(nil, "pool cannot have zero rune or asset balance")
 	}
 
@@ -665,17 +665,17 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 
 	su.Units = su.Units.Add(liquidityUnits)
 	if pool.Status == PoolAvailable {
-		if su.AssetDepositValue.IsZero() && su.RuneDepositValue.IsZero() {
-			su.RuneDepositValue = common.GetSafeShare(su.Units, pool.GetPoolUnits(), pool.BalanceRune)
+		if su.AssetDepositValue.IsZero() && su.DecaDepositValue.IsZero() {
+			su.DecaDepositValue = common.GetSafeShare(su.Units, pool.GetPoolUnits(), pool.BalanceDeca)
 			su.AssetDepositValue = common.GetSafeShare(su.Units, pool.GetPoolUnits(), pool.BalanceAsset)
 		} else {
-			su.RuneDepositValue = su.RuneDepositValue.Add(common.GetSafeShare(liquidityUnits, pool.GetPoolUnits(), pool.BalanceRune))
+			su.DecaDepositValue = su.DecaDepositValue.Add(common.GetSafeShare(liquidityUnits, pool.GetPoolUnits(), pool.BalanceDeca))
 			su.AssetDepositValue = su.AssetDepositValue.Add(common.GetSafeShare(liquidityUnits, pool.GetPoolUnits(), pool.BalanceAsset))
 		}
 	}
 	h.mgr.Keeper().SetLiquidityProvider(ctx, su)
 
-	evt := NewEventAddLiquidity(asset, liquidityUnits, su.RuneAddress, pendingRuneAmt, pendingAssetAmt, runeTxID, assetTxID, su.AssetAddress)
+	evt := NewEventAddLiquidity(asset, liquidityUnits, su.DecaAddress, pendingDecaAmt, pendingAssetAmt, runeTxID, assetTxID, su.AssetAddress)
 	if err = h.mgr.EventMgr().EmitEvent(ctx, evt); err != nil {
 		return ErrInternal(err, "fail to emit add liquidity event")
 	}
@@ -686,22 +686,22 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 		return err
 	}
 
-	if polAddress.Equals(su.RuneAddress) {
+	if polAddress.Equals(su.DecaAddress) {
 		var pol ProtocolOwnedLiquidity
 		pol, err = h.mgr.Keeper().GetPOL(ctx)
 		if err != nil {
 			return err
 		}
-		pol.RuneDeposited = pol.RuneDeposited.Add(pendingRuneAmt)
+		pol.RuneDeposited = pol.RuneDeposited.Add(pendingDecaAmt)
 
 		if err = h.mgr.Keeper().SetPOL(ctx, pol); err != nil {
 			return err
 		}
 
-		ctx.Logger().Info("POL deposit", "pool", pool.Asset, "rune", pendingRuneAmt)
+		ctx.Logger().Info("POL deposit", "pool", pool.Asset, "rune", pendingDecaAmt)
 		telemetry.IncrCounterWithLabels(
 			[]string{"thornode", "pol", "pool", "rune_deposited"},
-			telem(pendingRuneAmt),
+			telem(pendingDecaAmt),
 			[]metrics.Label{telemetry.NewLabel("pool", pool.Asset.String())},
 		)
 	}
@@ -726,11 +726,11 @@ func (h AddLiquidityHandler) getTotalLiquidityRUNE(ctx cosmos.Context) (cosmos.U
 		if p.Asset.IsDerivedAsset() {
 			continue
 		}
-		total = total.Add(p.BalanceRune)
+		total = total.Add(p.BalanceDeca)
 	}
 	return total, nil
 }
 
 func (h AddLiquidityHandler) needsSwap(msg MsgAddLiquidity) bool {
-	return len(msg.Tx.Coins) == 1 && !msg.Tx.Coins[0].IsRune() && !msg.Asset.Equals(msg.Tx.Coins[0].Asset)
+	return len(msg.Tx.Coins) == 1 && !msg.Tx.Coins[0].IsDeca() && !msg.Asset.Equals(msg.Tx.Coins[0].Asset)
 }

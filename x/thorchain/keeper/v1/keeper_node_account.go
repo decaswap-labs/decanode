@@ -116,7 +116,7 @@ func (k KVStore) RemoveLowBondValidatorAccounts(ctx cosmos.Context) error {
 
 			// No bond providers
 			if len(bps.Providers) == 0 {
-				coin := common.NewCoin(common.RuneAsset(), na.Bond)
+				coin := common.NewCoin(common.DecaAsset(), na.Bond)
 				if err = k.SendFromModuleToAccount(ctx, BondName, to, common.NewCoins(coin)); err != nil {
 					ctx.Logger().Error("failed to return bond pool coins", "error", err)
 					continue
@@ -138,7 +138,7 @@ func (k KVStore) RemoveLowBondValidatorAccounts(ctx cosmos.Context) error {
 				if provider.Bond.IsZero() || provider.BondAddress.Empty() {
 					continue
 				}
-				coin := common.NewCoin(common.RuneAsset(), provider.Bond)
+				coin := common.NewCoin(common.DecaAsset(), provider.Bond)
 				if err = k.SendFromModuleToAccount(ctx, BondName, provider.BondAddress, common.NewCoins(coin)); err != nil {
 					ctx.Logger().Error("failed to return bond pool coins", "error", err)
 					sendFailed = true
@@ -540,7 +540,7 @@ func (k KVStore) DeductNativeTxFeeFromBond(ctx cosmos.Context, nodeAddr cosmos.A
 	}
 
 	// transfer fee from bond module to reserve
-	coins := common.NewCoins(common.NewCoin(common.RuneAsset(), fee))
+	coins := common.NewCoins(common.NewCoin(common.DecaAsset(), fee))
 	if err = k.SendFromModuleToModule(ctx, BondName, ReserveName, coins); err != nil {
 		return err
 	}

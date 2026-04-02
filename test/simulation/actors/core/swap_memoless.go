@@ -95,7 +95,7 @@ func (a *SwapMemolessActor) updateLogContext(config *OpConfig) OpResult {
 
 func (a *SwapMemolessActor) registerSwap(config *OpConfig) OpResult {
 	// build the swap
-	coin := common.NewCoin(common.RuneNative, sdkmath.ZeroUint())
+	coin := common.NewCoin(common.DecaNative, sdkmath.ZeroUint())
 	a.registeredMemo = fmt.Sprintf("=:%s:%s", a.to, a.toAddress)
 	registerMemo := fmt.Sprintf("REFERENCE:%s:%s", a.from, a.registeredMemo)
 

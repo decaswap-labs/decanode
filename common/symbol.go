@@ -46,7 +46,7 @@ func (s Symbol) IsEmpty() bool {
 
 // String implement fmt.Stringer
 func (s Symbol) String() string {
-	// uppercasing again just in case someone created a ticker via Chain("rune")
+	// uppercasing again just in case someone created a ticker via Chain("deca")
 	return strings.ToUpper(string(s))
 }
 

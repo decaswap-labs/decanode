@@ -17,7 +17,7 @@ import (
 
 var (
 	md_MsgTCYClaim              protoreflect.MessageDescriptor
-	fd_MsgTCYClaim_rune_address protoreflect.FieldDescriptor
+	fd_MsgTCYClaim_deca_address protoreflect.FieldDescriptor
 	fd_MsgTCYClaim_l1_address   protoreflect.FieldDescriptor
 	fd_MsgTCYClaim_signer       protoreflect.FieldDescriptor
 )
@@ -25,7 +25,7 @@ var (
 func init() {
 	file_types_msg_tcy_claim_proto_init()
 	md_MsgTCYClaim = File_types_msg_tcy_claim_proto.Messages().ByName("MsgTCYClaim")
-	fd_MsgTCYClaim_rune_address = md_MsgTCYClaim.Fields().ByName("rune_address")
+	fd_MsgTCYClaim_deca_address = md_MsgTCYClaim.Fields().ByName("deca_address")
 	fd_MsgTCYClaim_l1_address = md_MsgTCYClaim.Fields().ByName("l1_address")
 	fd_MsgTCYClaim_signer = md_MsgTCYClaim.Fields().ByName("signer")
 }
@@ -95,9 +95,9 @@ func (x *fastReflection_MsgTCYClaim) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_MsgTCYClaim) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_MsgTCYClaim_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_MsgTCYClaim_deca_address, value) {
 			return
 		}
 	}
@@ -128,8 +128,8 @@ func (x *fastReflection_MsgTCYClaim) Range(f func(protoreflect.FieldDescriptor, 
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_MsgTCYClaim) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.MsgTCYClaim.rune_address":
-		return x.RuneAddress != ""
+	case "types.MsgTCYClaim.deca_address":
+		return x.DecaAddress != ""
 	case "types.MsgTCYClaim.l1_address":
 		return x.L1Address != ""
 	case "types.MsgTCYClaim.signer":
@@ -150,8 +150,8 @@ func (x *fastReflection_MsgTCYClaim) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgTCYClaim) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.MsgTCYClaim.rune_address":
-		x.RuneAddress = ""
+	case "types.MsgTCYClaim.deca_address":
+		x.DecaAddress = ""
 	case "types.MsgTCYClaim.l1_address":
 		x.L1Address = ""
 	case "types.MsgTCYClaim.signer":
@@ -172,8 +172,8 @@ func (x *fastReflection_MsgTCYClaim) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_MsgTCYClaim) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.MsgTCYClaim.rune_address":
-		value := x.RuneAddress
+	case "types.MsgTCYClaim.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.MsgTCYClaim.l1_address":
 		value := x.L1Address
@@ -201,8 +201,8 @@ func (x *fastReflection_MsgTCYClaim) Get(descriptor protoreflect.FieldDescriptor
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgTCYClaim) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.MsgTCYClaim.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.MsgTCYClaim.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.MsgTCYClaim.l1_address":
 		x.L1Address = value.Interface().(string)
 	case "types.MsgTCYClaim.signer":
@@ -227,8 +227,8 @@ func (x *fastReflection_MsgTCYClaim) Set(fd protoreflect.FieldDescriptor, value 
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgTCYClaim) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.MsgTCYClaim.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.MsgTCYClaim is not mutable"))
+	case "types.MsgTCYClaim.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.MsgTCYClaim is not mutable"))
 	case "types.MsgTCYClaim.l1_address":
 		panic(fmt.Errorf("field l1_address of message types.MsgTCYClaim is not mutable"))
 	case "types.MsgTCYClaim.signer":
@@ -246,7 +246,7 @@ func (x *fastReflection_MsgTCYClaim) Mutable(fd protoreflect.FieldDescriptor) pr
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_MsgTCYClaim) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.MsgTCYClaim.rune_address":
+	case "types.MsgTCYClaim.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.MsgTCYClaim.l1_address":
 		return protoreflect.ValueOfString("")
@@ -321,7 +321,7 @@ func (x *fastReflection_MsgTCYClaim) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -376,10 +376,10 @@ func (x *fastReflection_MsgTCYClaim) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -434,7 +434,7 @@ func (x *fastReflection_MsgTCYClaim) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -462,7 +462,7 @@ func (x *fastReflection_MsgTCYClaim) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
@@ -583,7 +583,7 @@ type MsgTCYClaim struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress string `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress string `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	L1Address   string `protobuf:"bytes,2,opt,name=l1_address,json=l1Address,proto3" json:"l1_address,omitempty"`
 	Signer      []byte `protobuf:"bytes,3,opt,name=signer,proto3" json:"signer,omitempty"`
 }
@@ -608,9 +608,9 @@ func (*MsgTCYClaim) Descriptor() ([]byte, []int) {
 	return file_types_msg_tcy_claim_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MsgTCYClaim) GetRuneAddress() string {
+func (x *MsgTCYClaim) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }

@@ -230,7 +230,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 		signer2, err := thorAddr2.AccAddress()
 		c.Assert(err, IsNil)
 
-		runeSource := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeSource := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 		btcTarget := common.NewCoin(common.BTCAsset, cosmos.NewUint(0.1*common.One))
 
 		// Valid case: From and Signer match
@@ -256,7 +256,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 		signer := GetRandomBech32Addr()
 
 		btcSource := common.NewCoin(common.BTCAsset, cosmos.NewUint(0.1*common.One))
-		runeTarget := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeTarget := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 
 		// This should be valid even though From (BTC address) and Signer (THOR address) don't match
 		msg := NewMsgModifyLimitSwap(btcAddr, btcSource, runeTarget, cosmos.NewUint(50*common.One), signer, common.EmptyAsset, cosmos.ZeroUint())
@@ -268,7 +268,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 		// BTC address trying to modify ETH swap
 		btcAddr := GetRandomBTCAddress()
 		ethSource := common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One))
-		runeTarget := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeTarget := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 		signer := GetRandomBech32Addr()
 
 		msg := NewMsgModifyLimitSwap(btcAddr, ethSource, runeTarget, cosmos.NewUint(50*common.One), signer, common.EmptyAsset, cosmos.ZeroUint())
@@ -280,7 +280,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 	// Test Case 4: Empty/Invalid addresses
 	{
 		btcSource := common.NewCoin(common.BTCAsset, cosmos.NewUint(0.1*common.One))
-		runeTarget := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeTarget := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 
 		// Empty signer
 		msg := NewMsgModifyLimitSwap(GetRandomBTCAddress(), btcSource, runeTarget, cosmos.NewUint(50*common.One), cosmos.AccAddress{}, common.EmptyAsset, cosmos.ZeroUint())
@@ -303,7 +303,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 
 		// Test with BTC synth
 		synthBTCSource := common.NewCoin(common.BTCAsset.GetSyntheticAsset(), cosmos.NewUint(0.1*common.One))
-		runeTarget := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeTarget := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 
 		// This should validate properly as synths are on THORChain
 		msg := NewMsgModifyLimitSwap(thorAddr, synthBTCSource, runeTarget, cosmos.NewUint(50*common.One), signer, common.EmptyAsset, cosmos.ZeroUint())
@@ -326,7 +326,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 
 		// Regular BTC swap for comparison
 		btcSource := common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One))
-		runeTarget := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeTarget := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 
 		msg := NewMsgModifyLimitSwap(btcAddr, btcSource, runeTarget, cosmos.NewUint(50*common.One), signer, common.EmptyAsset, cosmos.ZeroUint())
 		c.Assert(msg.ValidateBasic(), IsNil)
@@ -348,7 +348,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 	{
 		btcAddr := GetRandomBTCAddress()
 		btcSource := common.NewCoin(common.BTCAsset, cosmos.NewUint(0.1*common.One))
-		runeTarget := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeTarget := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 		signer := GetRandomBech32Addr()
 
 		// Zero amount (cancellation) should still validate properly
@@ -358,7 +358,7 @@ func (MsgModifyLimitSwapSuite) TestMsgModifyLimitSwapSecurityValidation(c *C) {
 		// But it should still enforce the same security rules
 		thorAddr := GetRandomTHORAddress()
 		wrongSigner := GetRandomBech32Addr() // Different from thorAddr
-		runeSource := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+		runeSource := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 		btcTarget := common.NewCoin(common.BTCAsset, cosmos.NewUint(0.1*common.One))
 
 		invalidCancelMsg := NewMsgModifyLimitSwap(thorAddr, runeSource, btcTarget, cosmos.ZeroUint(), wrongSigner, common.EmptyAsset, cosmos.ZeroUint())

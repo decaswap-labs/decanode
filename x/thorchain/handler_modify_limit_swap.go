@@ -176,7 +176,7 @@ func (h ModifyLimitSwapHandler) modifyLimitSwap(ctx cosmos.Context, msgSwap MsgS
 func (h ModifyLimitSwapHandler) donateToPool(ctx cosmos.Context, asset common.Asset, amount cosmos.Uint, from common.Address) error {
 	// RUNE cannot be donated to a pool directly - it stays in Reserve.
 	// The funds were already sent to Reserve by handler_deposit.go, so we just skip the donation.
-	if asset.IsRune() {
+	if asset.IsDeca() {
 		return nil
 	}
 

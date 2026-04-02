@@ -18,7 +18,7 @@ var (
 	md_PoolMod           protoreflect.MessageDescriptor
 	fd_PoolMod_asset     protoreflect.FieldDescriptor
 	fd_PoolMod_rune_amt  protoreflect.FieldDescriptor
-	fd_PoolMod_rune_add  protoreflect.FieldDescriptor
+	fd_PoolMod_deca_add  protoreflect.FieldDescriptor
 	fd_PoolMod_asset_amt protoreflect.FieldDescriptor
 	fd_PoolMod_asset_add protoreflect.FieldDescriptor
 )
@@ -28,7 +28,7 @@ func init() {
 	md_PoolMod = File_types_type_events_proto.Messages().ByName("PoolMod")
 	fd_PoolMod_asset = md_PoolMod.Fields().ByName("asset")
 	fd_PoolMod_rune_amt = md_PoolMod.Fields().ByName("rune_amt")
-	fd_PoolMod_rune_add = md_PoolMod.Fields().ByName("rune_add")
+	fd_PoolMod_deca_add = md_PoolMod.Fields().ByName("deca_add")
 	fd_PoolMod_asset_amt = md_PoolMod.Fields().ByName("asset_amt")
 	fd_PoolMod_asset_add = md_PoolMod.Fields().ByName("asset_add")
 }
@@ -110,9 +110,9 @@ func (x *fastReflection_PoolMod) Range(f func(protoreflect.FieldDescriptor, prot
 			return
 		}
 	}
-	if x.RuneAdd != false {
-		value := protoreflect.ValueOfBool(x.RuneAdd)
-		if !f(fd_PoolMod_rune_add, value) {
+	if x.DecaAdd != false {
+		value := protoreflect.ValueOfBool(x.DecaAdd)
+		if !f(fd_PoolMod_deca_add, value) {
 			return
 		}
 	}
@@ -147,8 +147,8 @@ func (x *fastReflection_PoolMod) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Asset != nil
 	case "types.PoolMod.rune_amt":
 		return x.RuneAmt != ""
-	case "types.PoolMod.rune_add":
-		return x.RuneAdd != false
+	case "types.PoolMod.deca_add":
+		return x.DecaAdd != false
 	case "types.PoolMod.asset_amt":
 		return x.AssetAmt != ""
 	case "types.PoolMod.asset_add":
@@ -173,8 +173,8 @@ func (x *fastReflection_PoolMod) Clear(fd protoreflect.FieldDescriptor) {
 		x.Asset = nil
 	case "types.PoolMod.rune_amt":
 		x.RuneAmt = ""
-	case "types.PoolMod.rune_add":
-		x.RuneAdd = false
+	case "types.PoolMod.deca_add":
+		x.DecaAdd = false
 	case "types.PoolMod.asset_amt":
 		x.AssetAmt = ""
 	case "types.PoolMod.asset_add":
@@ -201,8 +201,8 @@ func (x *fastReflection_PoolMod) Get(descriptor protoreflect.FieldDescriptor) pr
 	case "types.PoolMod.rune_amt":
 		value := x.RuneAmt
 		return protoreflect.ValueOfString(value)
-	case "types.PoolMod.rune_add":
-		value := x.RuneAdd
+	case "types.PoolMod.deca_add":
+		value := x.DecaAdd
 		return protoreflect.ValueOfBool(value)
 	case "types.PoolMod.asset_amt":
 		value := x.AssetAmt
@@ -234,8 +234,8 @@ func (x *fastReflection_PoolMod) Set(fd protoreflect.FieldDescriptor, value prot
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.PoolMod.rune_amt":
 		x.RuneAmt = value.Interface().(string)
-	case "types.PoolMod.rune_add":
-		x.RuneAdd = value.Bool()
+	case "types.PoolMod.deca_add":
+		x.DecaAdd = value.Bool()
 	case "types.PoolMod.asset_amt":
 		x.AssetAmt = value.Interface().(string)
 	case "types.PoolMod.asset_add":
@@ -267,8 +267,8 @@ func (x *fastReflection_PoolMod) Mutable(fd protoreflect.FieldDescriptor) protor
 		return protoreflect.ValueOfMessage(x.Asset.ProtoReflect())
 	case "types.PoolMod.rune_amt":
 		panic(fmt.Errorf("field rune_amt of message types.PoolMod is not mutable"))
-	case "types.PoolMod.rune_add":
-		panic(fmt.Errorf("field rune_add of message types.PoolMod is not mutable"))
+	case "types.PoolMod.deca_add":
+		panic(fmt.Errorf("field deca_add of message types.PoolMod is not mutable"))
 	case "types.PoolMod.asset_amt":
 		panic(fmt.Errorf("field asset_amt of message types.PoolMod is not mutable"))
 	case "types.PoolMod.asset_add":
@@ -291,7 +291,7 @@ func (x *fastReflection_PoolMod) NewField(fd protoreflect.FieldDescriptor) proto
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.PoolMod.rune_amt":
 		return protoreflect.ValueOfString("")
-	case "types.PoolMod.rune_add":
+	case "types.PoolMod.deca_add":
 		return protoreflect.ValueOfBool(false)
 	case "types.PoolMod.asset_amt":
 		return protoreflect.ValueOfString("")
@@ -374,7 +374,7 @@ func (x *fastReflection_PoolMod) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.RuneAdd {
+		if x.DecaAdd {
 			n += 2
 		}
 		l = len(x.AssetAmt)
@@ -430,9 +430,9 @@ func (x *fastReflection_PoolMod) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x22
 		}
-		if x.RuneAdd {
+		if x.DecaAdd {
 			i--
-			if x.RuneAdd {
+			if x.DecaAdd {
 				dAtA[i] = 1
 			} else {
 				dAtA[i] = 0
@@ -580,7 +580,7 @@ func (x *fastReflection_PoolMod) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAdd", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAdd", wireType)
 				}
 				var v int
 				for shift := uint(0); ; shift += 7 {
@@ -597,7 +597,7 @@ func (x *fastReflection_PoolMod) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-				x.RuneAdd = bool(v != 0)
+				x.DecaAdd = bool(v != 0)
 			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AssetAmt", wireType)
@@ -4811,7 +4811,7 @@ var (
 	fd_EventAffiliateFee_tx_id        protoreflect.FieldDescriptor
 	fd_EventAffiliateFee_memo         protoreflect.FieldDescriptor
 	fd_EventAffiliateFee_thorname     protoreflect.FieldDescriptor
-	fd_EventAffiliateFee_rune_address protoreflect.FieldDescriptor
+	fd_EventAffiliateFee_deca_address protoreflect.FieldDescriptor
 	fd_EventAffiliateFee_asset        protoreflect.FieldDescriptor
 	fd_EventAffiliateFee_gross_amount protoreflect.FieldDescriptor
 	fd_EventAffiliateFee_fee_bps      protoreflect.FieldDescriptor
@@ -4824,7 +4824,7 @@ func init() {
 	fd_EventAffiliateFee_tx_id = md_EventAffiliateFee.Fields().ByName("tx_id")
 	fd_EventAffiliateFee_memo = md_EventAffiliateFee.Fields().ByName("memo")
 	fd_EventAffiliateFee_thorname = md_EventAffiliateFee.Fields().ByName("thorname")
-	fd_EventAffiliateFee_rune_address = md_EventAffiliateFee.Fields().ByName("rune_address")
+	fd_EventAffiliateFee_deca_address = md_EventAffiliateFee.Fields().ByName("deca_address")
 	fd_EventAffiliateFee_asset = md_EventAffiliateFee.Fields().ByName("asset")
 	fd_EventAffiliateFee_gross_amount = md_EventAffiliateFee.Fields().ByName("gross_amount")
 	fd_EventAffiliateFee_fee_bps = md_EventAffiliateFee.Fields().ByName("fee_bps")
@@ -4914,9 +4914,9 @@ func (x *fastReflection_EventAffiliateFee) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventAffiliateFee_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventAffiliateFee_deca_address, value) {
 			return
 		}
 	}
@@ -4965,8 +4965,8 @@ func (x *fastReflection_EventAffiliateFee) Has(fd protoreflect.FieldDescriptor) 
 		return x.Memo != ""
 	case "types.EventAffiliateFee.thorname":
 		return x.Thorname != ""
-	case "types.EventAffiliateFee.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventAffiliateFee.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventAffiliateFee.asset":
 		return x.Asset != nil
 	case "types.EventAffiliateFee.gross_amount":
@@ -4997,8 +4997,8 @@ func (x *fastReflection_EventAffiliateFee) Clear(fd protoreflect.FieldDescriptor
 		x.Memo = ""
 	case "types.EventAffiliateFee.thorname":
 		x.Thorname = ""
-	case "types.EventAffiliateFee.rune_address":
-		x.RuneAddress = ""
+	case "types.EventAffiliateFee.deca_address":
+		x.DecaAddress = ""
 	case "types.EventAffiliateFee.asset":
 		x.Asset = nil
 	case "types.EventAffiliateFee.gross_amount":
@@ -5032,8 +5032,8 @@ func (x *fastReflection_EventAffiliateFee) Get(descriptor protoreflect.FieldDesc
 	case "types.EventAffiliateFee.thorname":
 		value := x.Thorname
 		return protoreflect.ValueOfString(value)
-	case "types.EventAffiliateFee.rune_address":
-		value := x.RuneAddress
+	case "types.EventAffiliateFee.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventAffiliateFee.asset":
 		value := x.Asset
@@ -5073,8 +5073,8 @@ func (x *fastReflection_EventAffiliateFee) Set(fd protoreflect.FieldDescriptor, 
 		x.Memo = value.Interface().(string)
 	case "types.EventAffiliateFee.thorname":
 		x.Thorname = value.Interface().(string)
-	case "types.EventAffiliateFee.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventAffiliateFee.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventAffiliateFee.asset":
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.EventAffiliateFee.gross_amount":
@@ -5114,8 +5114,8 @@ func (x *fastReflection_EventAffiliateFee) Mutable(fd protoreflect.FieldDescript
 		panic(fmt.Errorf("field memo of message types.EventAffiliateFee is not mutable"))
 	case "types.EventAffiliateFee.thorname":
 		panic(fmt.Errorf("field thorname of message types.EventAffiliateFee is not mutable"))
-	case "types.EventAffiliateFee.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventAffiliateFee is not mutable"))
+	case "types.EventAffiliateFee.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventAffiliateFee is not mutable"))
 	case "types.EventAffiliateFee.gross_amount":
 		panic(fmt.Errorf("field gross_amount of message types.EventAffiliateFee is not mutable"))
 	case "types.EventAffiliateFee.fee_bps":
@@ -5141,7 +5141,7 @@ func (x *fastReflection_EventAffiliateFee) NewField(fd protoreflect.FieldDescrip
 		return protoreflect.ValueOfString("")
 	case "types.EventAffiliateFee.thorname":
 		return protoreflect.ValueOfString("")
-	case "types.EventAffiliateFee.rune_address":
+	case "types.EventAffiliateFee.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventAffiliateFee.asset":
 		m := new(common.Asset)
@@ -5233,7 +5233,7 @@ func (x *fastReflection_EventAffiliateFee) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -5314,10 +5314,10 @@ func (x *fastReflection_EventAffiliateFee) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -5489,7 +5489,7 @@ func (x *fastReflection_EventAffiliateFee) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -5517,7 +5517,7 @@ func (x *fastReflection_EventAffiliateFee) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -5677,7 +5677,7 @@ var (
 	md_EventAddLiquidity                protoreflect.MessageDescriptor
 	fd_EventAddLiquidity_pool           protoreflect.FieldDescriptor
 	fd_EventAddLiquidity_provider_units protoreflect.FieldDescriptor
-	fd_EventAddLiquidity_rune_address   protoreflect.FieldDescriptor
+	fd_EventAddLiquidity_deca_address   protoreflect.FieldDescriptor
 	fd_EventAddLiquidity_rune_amount    protoreflect.FieldDescriptor
 	fd_EventAddLiquidity_asset_amount   protoreflect.FieldDescriptor
 	fd_EventAddLiquidity_rune_tx_id     protoreflect.FieldDescriptor
@@ -5690,7 +5690,7 @@ func init() {
 	md_EventAddLiquidity = File_types_type_events_proto.Messages().ByName("EventAddLiquidity")
 	fd_EventAddLiquidity_pool = md_EventAddLiquidity.Fields().ByName("pool")
 	fd_EventAddLiquidity_provider_units = md_EventAddLiquidity.Fields().ByName("provider_units")
-	fd_EventAddLiquidity_rune_address = md_EventAddLiquidity.Fields().ByName("rune_address")
+	fd_EventAddLiquidity_deca_address = md_EventAddLiquidity.Fields().ByName("deca_address")
 	fd_EventAddLiquidity_rune_amount = md_EventAddLiquidity.Fields().ByName("rune_amount")
 	fd_EventAddLiquidity_asset_amount = md_EventAddLiquidity.Fields().ByName("asset_amount")
 	fd_EventAddLiquidity_rune_tx_id = md_EventAddLiquidity.Fields().ByName("rune_tx_id")
@@ -5775,9 +5775,9 @@ func (x *fastReflection_EventAddLiquidity) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventAddLiquidity_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventAddLiquidity_deca_address, value) {
 			return
 		}
 	}
@@ -5830,8 +5830,8 @@ func (x *fastReflection_EventAddLiquidity) Has(fd protoreflect.FieldDescriptor) 
 		return x.Pool != nil
 	case "types.EventAddLiquidity.provider_units":
 		return x.ProviderUnits != ""
-	case "types.EventAddLiquidity.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventAddLiquidity.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventAddLiquidity.rune_amount":
 		return x.RuneAmount != ""
 	case "types.EventAddLiquidity.asset_amount":
@@ -5862,8 +5862,8 @@ func (x *fastReflection_EventAddLiquidity) Clear(fd protoreflect.FieldDescriptor
 		x.Pool = nil
 	case "types.EventAddLiquidity.provider_units":
 		x.ProviderUnits = ""
-	case "types.EventAddLiquidity.rune_address":
-		x.RuneAddress = ""
+	case "types.EventAddLiquidity.deca_address":
+		x.DecaAddress = ""
 	case "types.EventAddLiquidity.rune_amount":
 		x.RuneAmount = ""
 	case "types.EventAddLiquidity.asset_amount":
@@ -5896,8 +5896,8 @@ func (x *fastReflection_EventAddLiquidity) Get(descriptor protoreflect.FieldDesc
 	case "types.EventAddLiquidity.provider_units":
 		value := x.ProviderUnits
 		return protoreflect.ValueOfString(value)
-	case "types.EventAddLiquidity.rune_address":
-		value := x.RuneAddress
+	case "types.EventAddLiquidity.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventAddLiquidity.rune_amount":
 		value := x.RuneAmount
@@ -5938,8 +5938,8 @@ func (x *fastReflection_EventAddLiquidity) Set(fd protoreflect.FieldDescriptor, 
 		x.Pool = value.Message().Interface().(*common.Asset)
 	case "types.EventAddLiquidity.provider_units":
 		x.ProviderUnits = value.Interface().(string)
-	case "types.EventAddLiquidity.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventAddLiquidity.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventAddLiquidity.rune_amount":
 		x.RuneAmount = value.Interface().(string)
 	case "types.EventAddLiquidity.asset_amount":
@@ -5977,8 +5977,8 @@ func (x *fastReflection_EventAddLiquidity) Mutable(fd protoreflect.FieldDescript
 		return protoreflect.ValueOfMessage(x.Pool.ProtoReflect())
 	case "types.EventAddLiquidity.provider_units":
 		panic(fmt.Errorf("field provider_units of message types.EventAddLiquidity is not mutable"))
-	case "types.EventAddLiquidity.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventAddLiquidity is not mutable"))
+	case "types.EventAddLiquidity.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventAddLiquidity is not mutable"))
 	case "types.EventAddLiquidity.rune_amount":
 		panic(fmt.Errorf("field rune_amount of message types.EventAddLiquidity is not mutable"))
 	case "types.EventAddLiquidity.asset_amount":
@@ -6007,7 +6007,7 @@ func (x *fastReflection_EventAddLiquidity) NewField(fd protoreflect.FieldDescrip
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventAddLiquidity.provider_units":
 		return protoreflect.ValueOfString("")
-	case "types.EventAddLiquidity.rune_address":
+	case "types.EventAddLiquidity.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventAddLiquidity.rune_amount":
 		return protoreflect.ValueOfString("")
@@ -6096,7 +6096,7 @@ func (x *fastReflection_EventAddLiquidity) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -6184,10 +6184,10 @@ func (x *fastReflection_EventAddLiquidity) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x22
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x1a
 		}
@@ -6331,7 +6331,7 @@ func (x *fastReflection_EventAddLiquidity) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -6359,7 +6359,7 @@ func (x *fastReflection_EventAddLiquidity) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
@@ -7380,7 +7380,7 @@ var (
 	md_EventPendingLiquidity               protoreflect.MessageDescriptor
 	fd_EventPendingLiquidity_pool          protoreflect.FieldDescriptor
 	fd_EventPendingLiquidity_pending_type  protoreflect.FieldDescriptor
-	fd_EventPendingLiquidity_rune_address  protoreflect.FieldDescriptor
+	fd_EventPendingLiquidity_deca_address  protoreflect.FieldDescriptor
 	fd_EventPendingLiquidity_rune_amount   protoreflect.FieldDescriptor
 	fd_EventPendingLiquidity_asset_address protoreflect.FieldDescriptor
 	fd_EventPendingLiquidity_asset_amount  protoreflect.FieldDescriptor
@@ -7393,7 +7393,7 @@ func init() {
 	md_EventPendingLiquidity = File_types_type_events_proto.Messages().ByName("EventPendingLiquidity")
 	fd_EventPendingLiquidity_pool = md_EventPendingLiquidity.Fields().ByName("pool")
 	fd_EventPendingLiquidity_pending_type = md_EventPendingLiquidity.Fields().ByName("pending_type")
-	fd_EventPendingLiquidity_rune_address = md_EventPendingLiquidity.Fields().ByName("rune_address")
+	fd_EventPendingLiquidity_deca_address = md_EventPendingLiquidity.Fields().ByName("deca_address")
 	fd_EventPendingLiquidity_rune_amount = md_EventPendingLiquidity.Fields().ByName("rune_amount")
 	fd_EventPendingLiquidity_asset_address = md_EventPendingLiquidity.Fields().ByName("asset_address")
 	fd_EventPendingLiquidity_asset_amount = md_EventPendingLiquidity.Fields().ByName("asset_amount")
@@ -7478,9 +7478,9 @@ func (x *fastReflection_EventPendingLiquidity) Range(f func(protoreflect.FieldDe
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventPendingLiquidity_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventPendingLiquidity_deca_address, value) {
 			return
 		}
 	}
@@ -7533,8 +7533,8 @@ func (x *fastReflection_EventPendingLiquidity) Has(fd protoreflect.FieldDescript
 		return x.Pool != nil
 	case "types.EventPendingLiquidity.pending_type":
 		return x.PendingType != 0
-	case "types.EventPendingLiquidity.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventPendingLiquidity.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventPendingLiquidity.rune_amount":
 		return x.RuneAmount != ""
 	case "types.EventPendingLiquidity.asset_address":
@@ -7565,8 +7565,8 @@ func (x *fastReflection_EventPendingLiquidity) Clear(fd protoreflect.FieldDescri
 		x.Pool = nil
 	case "types.EventPendingLiquidity.pending_type":
 		x.PendingType = 0
-	case "types.EventPendingLiquidity.rune_address":
-		x.RuneAddress = ""
+	case "types.EventPendingLiquidity.deca_address":
+		x.DecaAddress = ""
 	case "types.EventPendingLiquidity.rune_amount":
 		x.RuneAmount = ""
 	case "types.EventPendingLiquidity.asset_address":
@@ -7599,8 +7599,8 @@ func (x *fastReflection_EventPendingLiquidity) Get(descriptor protoreflect.Field
 	case "types.EventPendingLiquidity.pending_type":
 		value := x.PendingType
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
-	case "types.EventPendingLiquidity.rune_address":
-		value := x.RuneAddress
+	case "types.EventPendingLiquidity.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventPendingLiquidity.rune_amount":
 		value := x.RuneAmount
@@ -7641,8 +7641,8 @@ func (x *fastReflection_EventPendingLiquidity) Set(fd protoreflect.FieldDescript
 		x.Pool = value.Message().Interface().(*common.Asset)
 	case "types.EventPendingLiquidity.pending_type":
 		x.PendingType = (PendingLiquidityType)(value.Enum())
-	case "types.EventPendingLiquidity.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventPendingLiquidity.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventPendingLiquidity.rune_amount":
 		x.RuneAmount = value.Interface().(string)
 	case "types.EventPendingLiquidity.asset_address":
@@ -7680,8 +7680,8 @@ func (x *fastReflection_EventPendingLiquidity) Mutable(fd protoreflect.FieldDesc
 		return protoreflect.ValueOfMessage(x.Pool.ProtoReflect())
 	case "types.EventPendingLiquidity.pending_type":
 		panic(fmt.Errorf("field pending_type of message types.EventPendingLiquidity is not mutable"))
-	case "types.EventPendingLiquidity.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventPendingLiquidity is not mutable"))
+	case "types.EventPendingLiquidity.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventPendingLiquidity is not mutable"))
 	case "types.EventPendingLiquidity.rune_amount":
 		panic(fmt.Errorf("field rune_amount of message types.EventPendingLiquidity is not mutable"))
 	case "types.EventPendingLiquidity.asset_address":
@@ -7710,7 +7710,7 @@ func (x *fastReflection_EventPendingLiquidity) NewField(fd protoreflect.FieldDes
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventPendingLiquidity.pending_type":
 		return protoreflect.ValueOfEnum(0)
-	case "types.EventPendingLiquidity.rune_address":
+	case "types.EventPendingLiquidity.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventPendingLiquidity.rune_amount":
 		return protoreflect.ValueOfString("")
@@ -7798,7 +7798,7 @@ func (x *fastReflection_EventPendingLiquidity) ProtoMethods() *protoiface.Method
 		if x.PendingType != 0 {
 			n += 1 + runtime.Sov(uint64(x.PendingType))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -7886,10 +7886,10 @@ func (x *fastReflection_EventPendingLiquidity) ProtoMethods() *protoiface.Method
 			i--
 			dAtA[i] = 0x22
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x1a
 		}
@@ -8018,7 +8018,7 @@ func (x *fastReflection_EventPendingLiquidity) ProtoMethods() *protoiface.Method
 				}
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -8046,7 +8046,7 @@ func (x *fastReflection_EventPendingLiquidity) ProtoMethods() *protoiface.Method
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
@@ -21157,7 +21157,7 @@ var (
 	fd_EventTradeAccountDeposit_amount        protoreflect.FieldDescriptor
 	fd_EventTradeAccountDeposit_asset         protoreflect.FieldDescriptor
 	fd_EventTradeAccountDeposit_asset_address protoreflect.FieldDescriptor
-	fd_EventTradeAccountDeposit_rune_address  protoreflect.FieldDescriptor
+	fd_EventTradeAccountDeposit_deca_address  protoreflect.FieldDescriptor
 	fd_EventTradeAccountDeposit_tx_id         protoreflect.FieldDescriptor
 )
 
@@ -21167,7 +21167,7 @@ func init() {
 	fd_EventTradeAccountDeposit_amount = md_EventTradeAccountDeposit.Fields().ByName("amount")
 	fd_EventTradeAccountDeposit_asset = md_EventTradeAccountDeposit.Fields().ByName("asset")
 	fd_EventTradeAccountDeposit_asset_address = md_EventTradeAccountDeposit.Fields().ByName("asset_address")
-	fd_EventTradeAccountDeposit_rune_address = md_EventTradeAccountDeposit.Fields().ByName("rune_address")
+	fd_EventTradeAccountDeposit_deca_address = md_EventTradeAccountDeposit.Fields().ByName("deca_address")
 	fd_EventTradeAccountDeposit_tx_id = md_EventTradeAccountDeposit.Fields().ByName("tx_id")
 }
 
@@ -21254,9 +21254,9 @@ func (x *fastReflection_EventTradeAccountDeposit) Range(f func(protoreflect.Fiel
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventTradeAccountDeposit_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventTradeAccountDeposit_deca_address, value) {
 			return
 		}
 	}
@@ -21287,8 +21287,8 @@ func (x *fastReflection_EventTradeAccountDeposit) Has(fd protoreflect.FieldDescr
 		return x.Asset != nil
 	case "types.EventTradeAccountDeposit.asset_address":
 		return x.AssetAddress != ""
-	case "types.EventTradeAccountDeposit.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventTradeAccountDeposit.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventTradeAccountDeposit.tx_id":
 		return x.TxId != ""
 	default:
@@ -21313,8 +21313,8 @@ func (x *fastReflection_EventTradeAccountDeposit) Clear(fd protoreflect.FieldDes
 		x.Asset = nil
 	case "types.EventTradeAccountDeposit.asset_address":
 		x.AssetAddress = ""
-	case "types.EventTradeAccountDeposit.rune_address":
-		x.RuneAddress = ""
+	case "types.EventTradeAccountDeposit.deca_address":
+		x.DecaAddress = ""
 	case "types.EventTradeAccountDeposit.tx_id":
 		x.TxId = ""
 	default:
@@ -21342,8 +21342,8 @@ func (x *fastReflection_EventTradeAccountDeposit) Get(descriptor protoreflect.Fi
 	case "types.EventTradeAccountDeposit.asset_address":
 		value := x.AssetAddress
 		return protoreflect.ValueOfString(value)
-	case "types.EventTradeAccountDeposit.rune_address":
-		value := x.RuneAddress
+	case "types.EventTradeAccountDeposit.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventTradeAccountDeposit.tx_id":
 		value := x.TxId
@@ -21374,8 +21374,8 @@ func (x *fastReflection_EventTradeAccountDeposit) Set(fd protoreflect.FieldDescr
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.EventTradeAccountDeposit.asset_address":
 		x.AssetAddress = value.Interface().(string)
-	case "types.EventTradeAccountDeposit.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventTradeAccountDeposit.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventTradeAccountDeposit.tx_id":
 		x.TxId = value.Interface().(string)
 	default:
@@ -21407,8 +21407,8 @@ func (x *fastReflection_EventTradeAccountDeposit) Mutable(fd protoreflect.FieldD
 		panic(fmt.Errorf("field amount of message types.EventTradeAccountDeposit is not mutable"))
 	case "types.EventTradeAccountDeposit.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.EventTradeAccountDeposit is not mutable"))
-	case "types.EventTradeAccountDeposit.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventTradeAccountDeposit is not mutable"))
+	case "types.EventTradeAccountDeposit.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventTradeAccountDeposit is not mutable"))
 	case "types.EventTradeAccountDeposit.tx_id":
 		panic(fmt.Errorf("field tx_id of message types.EventTradeAccountDeposit is not mutable"))
 	default:
@@ -21431,7 +21431,7 @@ func (x *fastReflection_EventTradeAccountDeposit) NewField(fd protoreflect.Field
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventTradeAccountDeposit.asset_address":
 		return protoreflect.ValueOfString("")
-	case "types.EventTradeAccountDeposit.rune_address":
+	case "types.EventTradeAccountDeposit.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventTradeAccountDeposit.tx_id":
 		return protoreflect.ValueOfString("")
@@ -21516,7 +21516,7 @@ func (x *fastReflection_EventTradeAccountDeposit) ProtoMethods() *protoiface.Met
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -21560,10 +21560,10 @@ func (x *fastReflection_EventTradeAccountDeposit) ProtoMethods() *protoiface.Met
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -21746,7 +21746,7 @@ func (x *fastReflection_EventTradeAccountDeposit) ProtoMethods() *protoiface.Met
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -21774,7 +21774,7 @@ func (x *fastReflection_EventTradeAccountDeposit) ProtoMethods() *protoiface.Met
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -21848,7 +21848,7 @@ var (
 	fd_EventTradeAccountWithdraw_amount        protoreflect.FieldDescriptor
 	fd_EventTradeAccountWithdraw_asset         protoreflect.FieldDescriptor
 	fd_EventTradeAccountWithdraw_asset_address protoreflect.FieldDescriptor
-	fd_EventTradeAccountWithdraw_rune_address  protoreflect.FieldDescriptor
+	fd_EventTradeAccountWithdraw_deca_address  protoreflect.FieldDescriptor
 	fd_EventTradeAccountWithdraw_tx_id         protoreflect.FieldDescriptor
 )
 
@@ -21858,7 +21858,7 @@ func init() {
 	fd_EventTradeAccountWithdraw_amount = md_EventTradeAccountWithdraw.Fields().ByName("amount")
 	fd_EventTradeAccountWithdraw_asset = md_EventTradeAccountWithdraw.Fields().ByName("asset")
 	fd_EventTradeAccountWithdraw_asset_address = md_EventTradeAccountWithdraw.Fields().ByName("asset_address")
-	fd_EventTradeAccountWithdraw_rune_address = md_EventTradeAccountWithdraw.Fields().ByName("rune_address")
+	fd_EventTradeAccountWithdraw_deca_address = md_EventTradeAccountWithdraw.Fields().ByName("deca_address")
 	fd_EventTradeAccountWithdraw_tx_id = md_EventTradeAccountWithdraw.Fields().ByName("tx_id")
 }
 
@@ -21945,9 +21945,9 @@ func (x *fastReflection_EventTradeAccountWithdraw) Range(f func(protoreflect.Fie
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventTradeAccountWithdraw_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventTradeAccountWithdraw_deca_address, value) {
 			return
 		}
 	}
@@ -21978,8 +21978,8 @@ func (x *fastReflection_EventTradeAccountWithdraw) Has(fd protoreflect.FieldDesc
 		return x.Asset != nil
 	case "types.EventTradeAccountWithdraw.asset_address":
 		return x.AssetAddress != ""
-	case "types.EventTradeAccountWithdraw.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventTradeAccountWithdraw.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventTradeAccountWithdraw.tx_id":
 		return x.TxId != ""
 	default:
@@ -22004,8 +22004,8 @@ func (x *fastReflection_EventTradeAccountWithdraw) Clear(fd protoreflect.FieldDe
 		x.Asset = nil
 	case "types.EventTradeAccountWithdraw.asset_address":
 		x.AssetAddress = ""
-	case "types.EventTradeAccountWithdraw.rune_address":
-		x.RuneAddress = ""
+	case "types.EventTradeAccountWithdraw.deca_address":
+		x.DecaAddress = ""
 	case "types.EventTradeAccountWithdraw.tx_id":
 		x.TxId = ""
 	default:
@@ -22033,8 +22033,8 @@ func (x *fastReflection_EventTradeAccountWithdraw) Get(descriptor protoreflect.F
 	case "types.EventTradeAccountWithdraw.asset_address":
 		value := x.AssetAddress
 		return protoreflect.ValueOfString(value)
-	case "types.EventTradeAccountWithdraw.rune_address":
-		value := x.RuneAddress
+	case "types.EventTradeAccountWithdraw.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventTradeAccountWithdraw.tx_id":
 		value := x.TxId
@@ -22065,8 +22065,8 @@ func (x *fastReflection_EventTradeAccountWithdraw) Set(fd protoreflect.FieldDesc
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.EventTradeAccountWithdraw.asset_address":
 		x.AssetAddress = value.Interface().(string)
-	case "types.EventTradeAccountWithdraw.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventTradeAccountWithdraw.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventTradeAccountWithdraw.tx_id":
 		x.TxId = value.Interface().(string)
 	default:
@@ -22098,8 +22098,8 @@ func (x *fastReflection_EventTradeAccountWithdraw) Mutable(fd protoreflect.Field
 		panic(fmt.Errorf("field amount of message types.EventTradeAccountWithdraw is not mutable"))
 	case "types.EventTradeAccountWithdraw.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.EventTradeAccountWithdraw is not mutable"))
-	case "types.EventTradeAccountWithdraw.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventTradeAccountWithdraw is not mutable"))
+	case "types.EventTradeAccountWithdraw.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventTradeAccountWithdraw is not mutable"))
 	case "types.EventTradeAccountWithdraw.tx_id":
 		panic(fmt.Errorf("field tx_id of message types.EventTradeAccountWithdraw is not mutable"))
 	default:
@@ -22122,7 +22122,7 @@ func (x *fastReflection_EventTradeAccountWithdraw) NewField(fd protoreflect.Fiel
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventTradeAccountWithdraw.asset_address":
 		return protoreflect.ValueOfString("")
-	case "types.EventTradeAccountWithdraw.rune_address":
+	case "types.EventTradeAccountWithdraw.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventTradeAccountWithdraw.tx_id":
 		return protoreflect.ValueOfString("")
@@ -22207,7 +22207,7 @@ func (x *fastReflection_EventTradeAccountWithdraw) ProtoMethods() *protoiface.Me
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -22251,10 +22251,10 @@ func (x *fastReflection_EventTradeAccountWithdraw) ProtoMethods() *protoiface.Me
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -22437,7 +22437,7 @@ func (x *fastReflection_EventTradeAccountWithdraw) ProtoMethods() *protoiface.Me
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -22465,7 +22465,7 @@ func (x *fastReflection_EventTradeAccountWithdraw) ProtoMethods() *protoiface.Me
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -22539,7 +22539,7 @@ var (
 	fd_EventSecuredAssetDeposit_amount        protoreflect.FieldDescriptor
 	fd_EventSecuredAssetDeposit_asset         protoreflect.FieldDescriptor
 	fd_EventSecuredAssetDeposit_asset_address protoreflect.FieldDescriptor
-	fd_EventSecuredAssetDeposit_rune_address  protoreflect.FieldDescriptor
+	fd_EventSecuredAssetDeposit_deca_address  protoreflect.FieldDescriptor
 	fd_EventSecuredAssetDeposit_tx_id         protoreflect.FieldDescriptor
 )
 
@@ -22549,7 +22549,7 @@ func init() {
 	fd_EventSecuredAssetDeposit_amount = md_EventSecuredAssetDeposit.Fields().ByName("amount")
 	fd_EventSecuredAssetDeposit_asset = md_EventSecuredAssetDeposit.Fields().ByName("asset")
 	fd_EventSecuredAssetDeposit_asset_address = md_EventSecuredAssetDeposit.Fields().ByName("asset_address")
-	fd_EventSecuredAssetDeposit_rune_address = md_EventSecuredAssetDeposit.Fields().ByName("rune_address")
+	fd_EventSecuredAssetDeposit_deca_address = md_EventSecuredAssetDeposit.Fields().ByName("deca_address")
 	fd_EventSecuredAssetDeposit_tx_id = md_EventSecuredAssetDeposit.Fields().ByName("tx_id")
 }
 
@@ -22636,9 +22636,9 @@ func (x *fastReflection_EventSecuredAssetDeposit) Range(f func(protoreflect.Fiel
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventSecuredAssetDeposit_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventSecuredAssetDeposit_deca_address, value) {
 			return
 		}
 	}
@@ -22669,8 +22669,8 @@ func (x *fastReflection_EventSecuredAssetDeposit) Has(fd protoreflect.FieldDescr
 		return x.Asset != nil
 	case "types.EventSecuredAssetDeposit.asset_address":
 		return x.AssetAddress != ""
-	case "types.EventSecuredAssetDeposit.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventSecuredAssetDeposit.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventSecuredAssetDeposit.tx_id":
 		return x.TxId != ""
 	default:
@@ -22695,8 +22695,8 @@ func (x *fastReflection_EventSecuredAssetDeposit) Clear(fd protoreflect.FieldDes
 		x.Asset = nil
 	case "types.EventSecuredAssetDeposit.asset_address":
 		x.AssetAddress = ""
-	case "types.EventSecuredAssetDeposit.rune_address":
-		x.RuneAddress = ""
+	case "types.EventSecuredAssetDeposit.deca_address":
+		x.DecaAddress = ""
 	case "types.EventSecuredAssetDeposit.tx_id":
 		x.TxId = ""
 	default:
@@ -22724,8 +22724,8 @@ func (x *fastReflection_EventSecuredAssetDeposit) Get(descriptor protoreflect.Fi
 	case "types.EventSecuredAssetDeposit.asset_address":
 		value := x.AssetAddress
 		return protoreflect.ValueOfString(value)
-	case "types.EventSecuredAssetDeposit.rune_address":
-		value := x.RuneAddress
+	case "types.EventSecuredAssetDeposit.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventSecuredAssetDeposit.tx_id":
 		value := x.TxId
@@ -22756,8 +22756,8 @@ func (x *fastReflection_EventSecuredAssetDeposit) Set(fd protoreflect.FieldDescr
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.EventSecuredAssetDeposit.asset_address":
 		x.AssetAddress = value.Interface().(string)
-	case "types.EventSecuredAssetDeposit.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventSecuredAssetDeposit.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventSecuredAssetDeposit.tx_id":
 		x.TxId = value.Interface().(string)
 	default:
@@ -22789,8 +22789,8 @@ func (x *fastReflection_EventSecuredAssetDeposit) Mutable(fd protoreflect.FieldD
 		panic(fmt.Errorf("field amount of message types.EventSecuredAssetDeposit is not mutable"))
 	case "types.EventSecuredAssetDeposit.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.EventSecuredAssetDeposit is not mutable"))
-	case "types.EventSecuredAssetDeposit.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventSecuredAssetDeposit is not mutable"))
+	case "types.EventSecuredAssetDeposit.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventSecuredAssetDeposit is not mutable"))
 	case "types.EventSecuredAssetDeposit.tx_id":
 		panic(fmt.Errorf("field tx_id of message types.EventSecuredAssetDeposit is not mutable"))
 	default:
@@ -22813,7 +22813,7 @@ func (x *fastReflection_EventSecuredAssetDeposit) NewField(fd protoreflect.Field
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventSecuredAssetDeposit.asset_address":
 		return protoreflect.ValueOfString("")
-	case "types.EventSecuredAssetDeposit.rune_address":
+	case "types.EventSecuredAssetDeposit.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventSecuredAssetDeposit.tx_id":
 		return protoreflect.ValueOfString("")
@@ -22898,7 +22898,7 @@ func (x *fastReflection_EventSecuredAssetDeposit) ProtoMethods() *protoiface.Met
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -22942,10 +22942,10 @@ func (x *fastReflection_EventSecuredAssetDeposit) ProtoMethods() *protoiface.Met
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -23128,7 +23128,7 @@ func (x *fastReflection_EventSecuredAssetDeposit) ProtoMethods() *protoiface.Met
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -23156,7 +23156,7 @@ func (x *fastReflection_EventSecuredAssetDeposit) ProtoMethods() *protoiface.Met
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -23230,7 +23230,7 @@ var (
 	fd_EventSecuredAssetWithdraw_amount        protoreflect.FieldDescriptor
 	fd_EventSecuredAssetWithdraw_asset         protoreflect.FieldDescriptor
 	fd_EventSecuredAssetWithdraw_asset_address protoreflect.FieldDescriptor
-	fd_EventSecuredAssetWithdraw_rune_address  protoreflect.FieldDescriptor
+	fd_EventSecuredAssetWithdraw_deca_address  protoreflect.FieldDescriptor
 	fd_EventSecuredAssetWithdraw_tx_id         protoreflect.FieldDescriptor
 )
 
@@ -23240,7 +23240,7 @@ func init() {
 	fd_EventSecuredAssetWithdraw_amount = md_EventSecuredAssetWithdraw.Fields().ByName("amount")
 	fd_EventSecuredAssetWithdraw_asset = md_EventSecuredAssetWithdraw.Fields().ByName("asset")
 	fd_EventSecuredAssetWithdraw_asset_address = md_EventSecuredAssetWithdraw.Fields().ByName("asset_address")
-	fd_EventSecuredAssetWithdraw_rune_address = md_EventSecuredAssetWithdraw.Fields().ByName("rune_address")
+	fd_EventSecuredAssetWithdraw_deca_address = md_EventSecuredAssetWithdraw.Fields().ByName("deca_address")
 	fd_EventSecuredAssetWithdraw_tx_id = md_EventSecuredAssetWithdraw.Fields().ByName("tx_id")
 }
 
@@ -23327,9 +23327,9 @@ func (x *fastReflection_EventSecuredAssetWithdraw) Range(f func(protoreflect.Fie
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventSecuredAssetWithdraw_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventSecuredAssetWithdraw_deca_address, value) {
 			return
 		}
 	}
@@ -23360,8 +23360,8 @@ func (x *fastReflection_EventSecuredAssetWithdraw) Has(fd protoreflect.FieldDesc
 		return x.Asset != nil
 	case "types.EventSecuredAssetWithdraw.asset_address":
 		return x.AssetAddress != ""
-	case "types.EventSecuredAssetWithdraw.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventSecuredAssetWithdraw.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventSecuredAssetWithdraw.tx_id":
 		return x.TxId != ""
 	default:
@@ -23386,8 +23386,8 @@ func (x *fastReflection_EventSecuredAssetWithdraw) Clear(fd protoreflect.FieldDe
 		x.Asset = nil
 	case "types.EventSecuredAssetWithdraw.asset_address":
 		x.AssetAddress = ""
-	case "types.EventSecuredAssetWithdraw.rune_address":
-		x.RuneAddress = ""
+	case "types.EventSecuredAssetWithdraw.deca_address":
+		x.DecaAddress = ""
 	case "types.EventSecuredAssetWithdraw.tx_id":
 		x.TxId = ""
 	default:
@@ -23415,8 +23415,8 @@ func (x *fastReflection_EventSecuredAssetWithdraw) Get(descriptor protoreflect.F
 	case "types.EventSecuredAssetWithdraw.asset_address":
 		value := x.AssetAddress
 		return protoreflect.ValueOfString(value)
-	case "types.EventSecuredAssetWithdraw.rune_address":
-		value := x.RuneAddress
+	case "types.EventSecuredAssetWithdraw.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventSecuredAssetWithdraw.tx_id":
 		value := x.TxId
@@ -23447,8 +23447,8 @@ func (x *fastReflection_EventSecuredAssetWithdraw) Set(fd protoreflect.FieldDesc
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.EventSecuredAssetWithdraw.asset_address":
 		x.AssetAddress = value.Interface().(string)
-	case "types.EventSecuredAssetWithdraw.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventSecuredAssetWithdraw.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventSecuredAssetWithdraw.tx_id":
 		x.TxId = value.Interface().(string)
 	default:
@@ -23480,8 +23480,8 @@ func (x *fastReflection_EventSecuredAssetWithdraw) Mutable(fd protoreflect.Field
 		panic(fmt.Errorf("field amount of message types.EventSecuredAssetWithdraw is not mutable"))
 	case "types.EventSecuredAssetWithdraw.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.EventSecuredAssetWithdraw is not mutable"))
-	case "types.EventSecuredAssetWithdraw.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventSecuredAssetWithdraw is not mutable"))
+	case "types.EventSecuredAssetWithdraw.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventSecuredAssetWithdraw is not mutable"))
 	case "types.EventSecuredAssetWithdraw.tx_id":
 		panic(fmt.Errorf("field tx_id of message types.EventSecuredAssetWithdraw is not mutable"))
 	default:
@@ -23504,7 +23504,7 @@ func (x *fastReflection_EventSecuredAssetWithdraw) NewField(fd protoreflect.Fiel
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventSecuredAssetWithdraw.asset_address":
 		return protoreflect.ValueOfString("")
-	case "types.EventSecuredAssetWithdraw.rune_address":
+	case "types.EventSecuredAssetWithdraw.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventSecuredAssetWithdraw.tx_id":
 		return protoreflect.ValueOfString("")
@@ -23589,7 +23589,7 @@ func (x *fastReflection_EventSecuredAssetWithdraw) ProtoMethods() *protoiface.Me
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -23633,10 +23633,10 @@ func (x *fastReflection_EventSecuredAssetWithdraw) ProtoMethods() *protoiface.Me
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -23819,7 +23819,7 @@ func (x *fastReflection_EventSecuredAssetWithdraw) ProtoMethods() *protoiface.Me
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -23847,7 +23847,7 @@ func (x *fastReflection_EventSecuredAssetWithdraw) ProtoMethods() *protoiface.Me
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -23917,31 +23917,31 @@ func (x *fastReflection_EventSecuredAssetWithdraw) ProtoMethods() *protoiface.Me
 }
 
 var (
-	md_EventRUNEPoolDeposit              protoreflect.MessageDescriptor
-	fd_EventRUNEPoolDeposit_rune_address protoreflect.FieldDescriptor
-	fd_EventRUNEPoolDeposit_rune_amount  protoreflect.FieldDescriptor
-	fd_EventRUNEPoolDeposit_units        protoreflect.FieldDescriptor
-	fd_EventRUNEPoolDeposit_tx_id        protoreflect.FieldDescriptor
+	md_EventDECAPoolDeposit              protoreflect.MessageDescriptor
+	fd_EventDECAPoolDeposit_deca_address protoreflect.FieldDescriptor
+	fd_EventDECAPoolDeposit_rune_amount  protoreflect.FieldDescriptor
+	fd_EventDECAPoolDeposit_units        protoreflect.FieldDescriptor
+	fd_EventDECAPoolDeposit_tx_id        protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_types_type_events_proto_init()
-	md_EventRUNEPoolDeposit = File_types_type_events_proto.Messages().ByName("EventRUNEPoolDeposit")
-	fd_EventRUNEPoolDeposit_rune_address = md_EventRUNEPoolDeposit.Fields().ByName("rune_address")
-	fd_EventRUNEPoolDeposit_rune_amount = md_EventRUNEPoolDeposit.Fields().ByName("rune_amount")
-	fd_EventRUNEPoolDeposit_units = md_EventRUNEPoolDeposit.Fields().ByName("units")
-	fd_EventRUNEPoolDeposit_tx_id = md_EventRUNEPoolDeposit.Fields().ByName("tx_id")
+	md_EventDECAPoolDeposit = File_types_type_events_proto.Messages().ByName("EventDECAPoolDeposit")
+	fd_EventDECAPoolDeposit_deca_address = md_EventDECAPoolDeposit.Fields().ByName("deca_address")
+	fd_EventDECAPoolDeposit_rune_amount = md_EventDECAPoolDeposit.Fields().ByName("rune_amount")
+	fd_EventDECAPoolDeposit_units = md_EventDECAPoolDeposit.Fields().ByName("units")
+	fd_EventDECAPoolDeposit_tx_id = md_EventDECAPoolDeposit.Fields().ByName("tx_id")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventRUNEPoolDeposit)(nil)
+var _ protoreflect.Message = (*fastReflection_EventDECAPoolDeposit)(nil)
 
-type fastReflection_EventRUNEPoolDeposit EventRUNEPoolDeposit
+type fastReflection_EventDECAPoolDeposit EventDECAPoolDeposit
 
-func (x *EventRUNEPoolDeposit) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventRUNEPoolDeposit)(x)
+func (x *EventDECAPoolDeposit) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventDECAPoolDeposit)(x)
 }
 
-func (x *EventRUNEPoolDeposit) slowProtoReflect() protoreflect.Message {
+func (x *EventDECAPoolDeposit) slowProtoReflect() protoreflect.Message {
 	mi := &file_types_type_events_proto_msgTypes[37]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -23953,43 +23953,43 @@ func (x *EventRUNEPoolDeposit) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventRUNEPoolDeposit_messageType fastReflection_EventRUNEPoolDeposit_messageType
-var _ protoreflect.MessageType = fastReflection_EventRUNEPoolDeposit_messageType{}
+var _fastReflection_EventDECAPoolDeposit_messageType fastReflection_EventDECAPoolDeposit_messageType
+var _ protoreflect.MessageType = fastReflection_EventDECAPoolDeposit_messageType{}
 
-type fastReflection_EventRUNEPoolDeposit_messageType struct{}
+type fastReflection_EventDECAPoolDeposit_messageType struct{}
 
-func (x fastReflection_EventRUNEPoolDeposit_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventRUNEPoolDeposit)(nil)
+func (x fastReflection_EventDECAPoolDeposit_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventDECAPoolDeposit)(nil)
 }
-func (x fastReflection_EventRUNEPoolDeposit_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventRUNEPoolDeposit)
+func (x fastReflection_EventDECAPoolDeposit_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventDECAPoolDeposit)
 }
-func (x fastReflection_EventRUNEPoolDeposit_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRUNEPoolDeposit
+func (x fastReflection_EventDECAPoolDeposit_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventDECAPoolDeposit
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventRUNEPoolDeposit) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRUNEPoolDeposit
+func (x *fastReflection_EventDECAPoolDeposit) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventDECAPoolDeposit
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventRUNEPoolDeposit) Type() protoreflect.MessageType {
-	return _fastReflection_EventRUNEPoolDeposit_messageType
+func (x *fastReflection_EventDECAPoolDeposit) Type() protoreflect.MessageType {
+	return _fastReflection_EventDECAPoolDeposit_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventRUNEPoolDeposit) New() protoreflect.Message {
-	return new(fastReflection_EventRUNEPoolDeposit)
+func (x *fastReflection_EventDECAPoolDeposit) New() protoreflect.Message {
+	return new(fastReflection_EventDECAPoolDeposit)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventRUNEPoolDeposit) Interface() protoreflect.ProtoMessage {
-	return (*EventRUNEPoolDeposit)(x)
+func (x *fastReflection_EventDECAPoolDeposit) Interface() protoreflect.ProtoMessage {
+	return (*EventDECAPoolDeposit)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -23997,28 +23997,28 @@ func (x *fastReflection_EventRUNEPoolDeposit) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventRUNEPoolDeposit) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.RuneAddress) != 0 {
-		value := protoreflect.ValueOfBytes(x.RuneAddress)
-		if !f(fd_EventRUNEPoolDeposit_rune_address, value) {
+func (x *fastReflection_EventDECAPoolDeposit) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.DecaAddress) != 0 {
+		value := protoreflect.ValueOfBytes(x.DecaAddress)
+		if !f(fd_EventDECAPoolDeposit_deca_address, value) {
 			return
 		}
 	}
 	if x.RuneAmount != "" {
 		value := protoreflect.ValueOfString(x.RuneAmount)
-		if !f(fd_EventRUNEPoolDeposit_rune_amount, value) {
+		if !f(fd_EventDECAPoolDeposit_rune_amount, value) {
 			return
 		}
 	}
 	if x.Units != "" {
 		value := protoreflect.ValueOfString(x.Units)
-		if !f(fd_EventRUNEPoolDeposit_units, value) {
+		if !f(fd_EventDECAPoolDeposit_units, value) {
 			return
 		}
 	}
 	if x.TxId != "" {
 		value := protoreflect.ValueOfString(x.TxId)
-		if !f(fd_EventRUNEPoolDeposit_tx_id, value) {
+		if !f(fd_EventDECAPoolDeposit_tx_id, value) {
 			return
 		}
 	}
@@ -24035,21 +24035,21 @@ func (x *fastReflection_EventRUNEPoolDeposit) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventRUNEPoolDeposit) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventDECAPoolDeposit) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolDeposit.rune_address":
-		return len(x.RuneAddress) != 0
-	case "types.EventRUNEPoolDeposit.rune_amount":
+	case "types.EventDECAPoolDeposit.deca_address":
+		return len(x.DecaAddress) != 0
+	case "types.EventDECAPoolDeposit.rune_amount":
 		return x.RuneAmount != ""
-	case "types.EventRUNEPoolDeposit.units":
+	case "types.EventDECAPoolDeposit.units":
 		return x.Units != ""
-	case "types.EventRUNEPoolDeposit.tx_id":
+	case "types.EventDECAPoolDeposit.tx_id":
 		return x.TxId != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolDeposit"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolDeposit"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolDeposit does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolDeposit does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -24059,21 +24059,21 @@ func (x *fastReflection_EventRUNEPoolDeposit) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolDeposit) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventDECAPoolDeposit) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolDeposit.rune_address":
-		x.RuneAddress = nil
-	case "types.EventRUNEPoolDeposit.rune_amount":
+	case "types.EventDECAPoolDeposit.deca_address":
+		x.DecaAddress = nil
+	case "types.EventDECAPoolDeposit.rune_amount":
 		x.RuneAmount = ""
-	case "types.EventRUNEPoolDeposit.units":
+	case "types.EventDECAPoolDeposit.units":
 		x.Units = ""
-	case "types.EventRUNEPoolDeposit.tx_id":
+	case "types.EventDECAPoolDeposit.tx_id":
 		x.TxId = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolDeposit"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolDeposit"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolDeposit does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolDeposit does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -24083,25 +24083,25 @@ func (x *fastReflection_EventRUNEPoolDeposit) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventRUNEPoolDeposit) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDECAPoolDeposit) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.EventRUNEPoolDeposit.rune_address":
-		value := x.RuneAddress
+	case "types.EventDECAPoolDeposit.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfBytes(value)
-	case "types.EventRUNEPoolDeposit.rune_amount":
+	case "types.EventDECAPoolDeposit.rune_amount":
 		value := x.RuneAmount
 		return protoreflect.ValueOfString(value)
-	case "types.EventRUNEPoolDeposit.units":
+	case "types.EventDECAPoolDeposit.units":
 		value := x.Units
 		return protoreflect.ValueOfString(value)
-	case "types.EventRUNEPoolDeposit.tx_id":
+	case "types.EventDECAPoolDeposit.tx_id":
 		value := x.TxId
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolDeposit"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolDeposit"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolDeposit does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolDeposit does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -24115,21 +24115,21 @@ func (x *fastReflection_EventRUNEPoolDeposit) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolDeposit) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventDECAPoolDeposit) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolDeposit.rune_address":
-		x.RuneAddress = value.Bytes()
-	case "types.EventRUNEPoolDeposit.rune_amount":
+	case "types.EventDECAPoolDeposit.deca_address":
+		x.DecaAddress = value.Bytes()
+	case "types.EventDECAPoolDeposit.rune_amount":
 		x.RuneAmount = value.Interface().(string)
-	case "types.EventRUNEPoolDeposit.units":
+	case "types.EventDECAPoolDeposit.units":
 		x.Units = value.Interface().(string)
-	case "types.EventRUNEPoolDeposit.tx_id":
+	case "types.EventDECAPoolDeposit.tx_id":
 		x.TxId = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolDeposit"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolDeposit"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolDeposit does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolDeposit does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -24143,52 +24143,52 @@ func (x *fastReflection_EventRUNEPoolDeposit) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolDeposit) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDECAPoolDeposit) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolDeposit.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventRUNEPoolDeposit is not mutable"))
-	case "types.EventRUNEPoolDeposit.rune_amount":
-		panic(fmt.Errorf("field rune_amount of message types.EventRUNEPoolDeposit is not mutable"))
-	case "types.EventRUNEPoolDeposit.units":
-		panic(fmt.Errorf("field units of message types.EventRUNEPoolDeposit is not mutable"))
-	case "types.EventRUNEPoolDeposit.tx_id":
-		panic(fmt.Errorf("field tx_id of message types.EventRUNEPoolDeposit is not mutable"))
+	case "types.EventDECAPoolDeposit.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventDECAPoolDeposit is not mutable"))
+	case "types.EventDECAPoolDeposit.rune_amount":
+		panic(fmt.Errorf("field rune_amount of message types.EventDECAPoolDeposit is not mutable"))
+	case "types.EventDECAPoolDeposit.units":
+		panic(fmt.Errorf("field units of message types.EventDECAPoolDeposit is not mutable"))
+	case "types.EventDECAPoolDeposit.tx_id":
+		panic(fmt.Errorf("field tx_id of message types.EventDECAPoolDeposit is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolDeposit"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolDeposit"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolDeposit does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolDeposit does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventRUNEPoolDeposit) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDECAPoolDeposit) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolDeposit.rune_address":
+	case "types.EventDECAPoolDeposit.deca_address":
 		return protoreflect.ValueOfBytes(nil)
-	case "types.EventRUNEPoolDeposit.rune_amount":
+	case "types.EventDECAPoolDeposit.rune_amount":
 		return protoreflect.ValueOfString("")
-	case "types.EventRUNEPoolDeposit.units":
+	case "types.EventDECAPoolDeposit.units":
 		return protoreflect.ValueOfString("")
-	case "types.EventRUNEPoolDeposit.tx_id":
+	case "types.EventDECAPoolDeposit.tx_id":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolDeposit"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolDeposit"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolDeposit does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolDeposit does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventRUNEPoolDeposit) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventDECAPoolDeposit) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.EventRUNEPoolDeposit", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.EventDECAPoolDeposit", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -24196,7 +24196,7 @@ func (x *fastReflection_EventRUNEPoolDeposit) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventRUNEPoolDeposit) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventDECAPoolDeposit) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -24207,7 +24207,7 @@ func (x *fastReflection_EventRUNEPoolDeposit) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolDeposit) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventDECAPoolDeposit) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -24219,7 +24219,7 @@ func (x *fastReflection_EventRUNEPoolDeposit) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventRUNEPoolDeposit) IsValid() bool {
+func (x *fastReflection_EventDECAPoolDeposit) IsValid() bool {
 	return x != nil
 }
 
@@ -24229,9 +24229,9 @@ func (x *fastReflection_EventRUNEPoolDeposit) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventDECAPoolDeposit) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventRUNEPoolDeposit)
+		x := input.Message.Interface().(*EventDECAPoolDeposit)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -24243,7 +24243,7 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -24269,7 +24269,7 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventRUNEPoolDeposit)
+		x := input.Message.Interface().(*EventDECAPoolDeposit)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -24309,10 +24309,10 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -24327,7 +24327,7 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventRUNEPoolDeposit)
+		x := input.Message.Interface().(*EventDECAPoolDeposit)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -24359,15 +24359,15 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRUNEPoolDeposit: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventDECAPoolDeposit: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRUNEPoolDeposit: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventDECAPoolDeposit: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -24394,9 +24394,9 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = append(x.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-				if x.RuneAddress == nil {
-					x.RuneAddress = []byte{}
+				x.DecaAddress = append(x.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+				if x.DecaAddress == nil {
+					x.DecaAddress = []byte{}
 				}
 				iNdEx = postIndex
 			case 2:
@@ -24531,39 +24531,39 @@ func (x *fastReflection_EventRUNEPoolDeposit) ProtoMethods() *protoiface.Methods
 }
 
 var (
-	md_EventRUNEPoolWithdraw                     protoreflect.MessageDescriptor
-	fd_EventRUNEPoolWithdraw_rune_address        protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_basis_points        protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_rune_amount         protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_units               protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_tx_id               protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_affiliate_basis_pts protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_affiliate_amount    protoreflect.FieldDescriptor
-	fd_EventRUNEPoolWithdraw_affiliate_address   protoreflect.FieldDescriptor
+	md_EventDECAPoolWithdraw                     protoreflect.MessageDescriptor
+	fd_EventDECAPoolWithdraw_deca_address        protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_basis_points        protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_rune_amount         protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_units               protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_tx_id               protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_affiliate_basis_pts protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_affiliate_amount    protoreflect.FieldDescriptor
+	fd_EventDECAPoolWithdraw_affiliate_address   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_types_type_events_proto_init()
-	md_EventRUNEPoolWithdraw = File_types_type_events_proto.Messages().ByName("EventRUNEPoolWithdraw")
-	fd_EventRUNEPoolWithdraw_rune_address = md_EventRUNEPoolWithdraw.Fields().ByName("rune_address")
-	fd_EventRUNEPoolWithdraw_basis_points = md_EventRUNEPoolWithdraw.Fields().ByName("basis_points")
-	fd_EventRUNEPoolWithdraw_rune_amount = md_EventRUNEPoolWithdraw.Fields().ByName("rune_amount")
-	fd_EventRUNEPoolWithdraw_units = md_EventRUNEPoolWithdraw.Fields().ByName("units")
-	fd_EventRUNEPoolWithdraw_tx_id = md_EventRUNEPoolWithdraw.Fields().ByName("tx_id")
-	fd_EventRUNEPoolWithdraw_affiliate_basis_pts = md_EventRUNEPoolWithdraw.Fields().ByName("affiliate_basis_pts")
-	fd_EventRUNEPoolWithdraw_affiliate_amount = md_EventRUNEPoolWithdraw.Fields().ByName("affiliate_amount")
-	fd_EventRUNEPoolWithdraw_affiliate_address = md_EventRUNEPoolWithdraw.Fields().ByName("affiliate_address")
+	md_EventDECAPoolWithdraw = File_types_type_events_proto.Messages().ByName("EventDECAPoolWithdraw")
+	fd_EventDECAPoolWithdraw_deca_address = md_EventDECAPoolWithdraw.Fields().ByName("deca_address")
+	fd_EventDECAPoolWithdraw_basis_points = md_EventDECAPoolWithdraw.Fields().ByName("basis_points")
+	fd_EventDECAPoolWithdraw_rune_amount = md_EventDECAPoolWithdraw.Fields().ByName("rune_amount")
+	fd_EventDECAPoolWithdraw_units = md_EventDECAPoolWithdraw.Fields().ByName("units")
+	fd_EventDECAPoolWithdraw_tx_id = md_EventDECAPoolWithdraw.Fields().ByName("tx_id")
+	fd_EventDECAPoolWithdraw_affiliate_basis_pts = md_EventDECAPoolWithdraw.Fields().ByName("affiliate_basis_pts")
+	fd_EventDECAPoolWithdraw_affiliate_amount = md_EventDECAPoolWithdraw.Fields().ByName("affiliate_amount")
+	fd_EventDECAPoolWithdraw_affiliate_address = md_EventDECAPoolWithdraw.Fields().ByName("affiliate_address")
 }
 
-var _ protoreflect.Message = (*fastReflection_EventRUNEPoolWithdraw)(nil)
+var _ protoreflect.Message = (*fastReflection_EventDECAPoolWithdraw)(nil)
 
-type fastReflection_EventRUNEPoolWithdraw EventRUNEPoolWithdraw
+type fastReflection_EventDECAPoolWithdraw EventDECAPoolWithdraw
 
-func (x *EventRUNEPoolWithdraw) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_EventRUNEPoolWithdraw)(x)
+func (x *EventDECAPoolWithdraw) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_EventDECAPoolWithdraw)(x)
 }
 
-func (x *EventRUNEPoolWithdraw) slowProtoReflect() protoreflect.Message {
+func (x *EventDECAPoolWithdraw) slowProtoReflect() protoreflect.Message {
 	mi := &file_types_type_events_proto_msgTypes[38]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -24575,43 +24575,43 @@ func (x *EventRUNEPoolWithdraw) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_EventRUNEPoolWithdraw_messageType fastReflection_EventRUNEPoolWithdraw_messageType
-var _ protoreflect.MessageType = fastReflection_EventRUNEPoolWithdraw_messageType{}
+var _fastReflection_EventDECAPoolWithdraw_messageType fastReflection_EventDECAPoolWithdraw_messageType
+var _ protoreflect.MessageType = fastReflection_EventDECAPoolWithdraw_messageType{}
 
-type fastReflection_EventRUNEPoolWithdraw_messageType struct{}
+type fastReflection_EventDECAPoolWithdraw_messageType struct{}
 
-func (x fastReflection_EventRUNEPoolWithdraw_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_EventRUNEPoolWithdraw)(nil)
+func (x fastReflection_EventDECAPoolWithdraw_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_EventDECAPoolWithdraw)(nil)
 }
-func (x fastReflection_EventRUNEPoolWithdraw_messageType) New() protoreflect.Message {
-	return new(fastReflection_EventRUNEPoolWithdraw)
+func (x fastReflection_EventDECAPoolWithdraw_messageType) New() protoreflect.Message {
+	return new(fastReflection_EventDECAPoolWithdraw)
 }
-func (x fastReflection_EventRUNEPoolWithdraw_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRUNEPoolWithdraw
+func (x fastReflection_EventDECAPoolWithdraw_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventDECAPoolWithdraw
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_EventRUNEPoolWithdraw) Descriptor() protoreflect.MessageDescriptor {
-	return md_EventRUNEPoolWithdraw
+func (x *fastReflection_EventDECAPoolWithdraw) Descriptor() protoreflect.MessageDescriptor {
+	return md_EventDECAPoolWithdraw
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_EventRUNEPoolWithdraw) Type() protoreflect.MessageType {
-	return _fastReflection_EventRUNEPoolWithdraw_messageType
+func (x *fastReflection_EventDECAPoolWithdraw) Type() protoreflect.MessageType {
+	return _fastReflection_EventDECAPoolWithdraw_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_EventRUNEPoolWithdraw) New() protoreflect.Message {
-	return new(fastReflection_EventRUNEPoolWithdraw)
+func (x *fastReflection_EventDECAPoolWithdraw) New() protoreflect.Message {
+	return new(fastReflection_EventDECAPoolWithdraw)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_EventRUNEPoolWithdraw) Interface() protoreflect.ProtoMessage {
-	return (*EventRUNEPoolWithdraw)(x)
+func (x *fastReflection_EventDECAPoolWithdraw) Interface() protoreflect.ProtoMessage {
+	return (*EventDECAPoolWithdraw)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -24619,52 +24619,52 @@ func (x *fastReflection_EventRUNEPoolWithdraw) Interface() protoreflect.ProtoMes
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_EventRUNEPoolWithdraw) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.RuneAddress) != 0 {
-		value := protoreflect.ValueOfBytes(x.RuneAddress)
-		if !f(fd_EventRUNEPoolWithdraw_rune_address, value) {
+func (x *fastReflection_EventDECAPoolWithdraw) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.DecaAddress) != 0 {
+		value := protoreflect.ValueOfBytes(x.DecaAddress)
+		if !f(fd_EventDECAPoolWithdraw_deca_address, value) {
 			return
 		}
 	}
 	if x.BasisPoints != int64(0) {
 		value := protoreflect.ValueOfInt64(x.BasisPoints)
-		if !f(fd_EventRUNEPoolWithdraw_basis_points, value) {
+		if !f(fd_EventDECAPoolWithdraw_basis_points, value) {
 			return
 		}
 	}
 	if x.RuneAmount != "" {
 		value := protoreflect.ValueOfString(x.RuneAmount)
-		if !f(fd_EventRUNEPoolWithdraw_rune_amount, value) {
+		if !f(fd_EventDECAPoolWithdraw_rune_amount, value) {
 			return
 		}
 	}
 	if x.Units != "" {
 		value := protoreflect.ValueOfString(x.Units)
-		if !f(fd_EventRUNEPoolWithdraw_units, value) {
+		if !f(fd_EventDECAPoolWithdraw_units, value) {
 			return
 		}
 	}
 	if x.TxId != "" {
 		value := protoreflect.ValueOfString(x.TxId)
-		if !f(fd_EventRUNEPoolWithdraw_tx_id, value) {
+		if !f(fd_EventDECAPoolWithdraw_tx_id, value) {
 			return
 		}
 	}
 	if x.AffiliateBasisPts != int64(0) {
 		value := protoreflect.ValueOfInt64(x.AffiliateBasisPts)
-		if !f(fd_EventRUNEPoolWithdraw_affiliate_basis_pts, value) {
+		if !f(fd_EventDECAPoolWithdraw_affiliate_basis_pts, value) {
 			return
 		}
 	}
 	if x.AffiliateAmount != "" {
 		value := protoreflect.ValueOfString(x.AffiliateAmount)
-		if !f(fd_EventRUNEPoolWithdraw_affiliate_amount, value) {
+		if !f(fd_EventDECAPoolWithdraw_affiliate_amount, value) {
 			return
 		}
 	}
 	if x.AffiliateAddress != "" {
 		value := protoreflect.ValueOfString(x.AffiliateAddress)
-		if !f(fd_EventRUNEPoolWithdraw_affiliate_address, value) {
+		if !f(fd_EventDECAPoolWithdraw_affiliate_address, value) {
 			return
 		}
 	}
@@ -24681,29 +24681,29 @@ func (x *fastReflection_EventRUNEPoolWithdraw) Range(f func(protoreflect.FieldDe
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_EventRUNEPoolWithdraw) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_EventDECAPoolWithdraw) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolWithdraw.rune_address":
-		return len(x.RuneAddress) != 0
-	case "types.EventRUNEPoolWithdraw.basis_points":
+	case "types.EventDECAPoolWithdraw.deca_address":
+		return len(x.DecaAddress) != 0
+	case "types.EventDECAPoolWithdraw.basis_points":
 		return x.BasisPoints != int64(0)
-	case "types.EventRUNEPoolWithdraw.rune_amount":
+	case "types.EventDECAPoolWithdraw.rune_amount":
 		return x.RuneAmount != ""
-	case "types.EventRUNEPoolWithdraw.units":
+	case "types.EventDECAPoolWithdraw.units":
 		return x.Units != ""
-	case "types.EventRUNEPoolWithdraw.tx_id":
+	case "types.EventDECAPoolWithdraw.tx_id":
 		return x.TxId != ""
-	case "types.EventRUNEPoolWithdraw.affiliate_basis_pts":
+	case "types.EventDECAPoolWithdraw.affiliate_basis_pts":
 		return x.AffiliateBasisPts != int64(0)
-	case "types.EventRUNEPoolWithdraw.affiliate_amount":
+	case "types.EventDECAPoolWithdraw.affiliate_amount":
 		return x.AffiliateAmount != ""
-	case "types.EventRUNEPoolWithdraw.affiliate_address":
+	case "types.EventDECAPoolWithdraw.affiliate_address":
 		return x.AffiliateAddress != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolWithdraw"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolWithdraw"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolWithdraw does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolWithdraw does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -24713,29 +24713,29 @@ func (x *fastReflection_EventRUNEPoolWithdraw) Has(fd protoreflect.FieldDescript
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolWithdraw) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_EventDECAPoolWithdraw) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolWithdraw.rune_address":
-		x.RuneAddress = nil
-	case "types.EventRUNEPoolWithdraw.basis_points":
+	case "types.EventDECAPoolWithdraw.deca_address":
+		x.DecaAddress = nil
+	case "types.EventDECAPoolWithdraw.basis_points":
 		x.BasisPoints = int64(0)
-	case "types.EventRUNEPoolWithdraw.rune_amount":
+	case "types.EventDECAPoolWithdraw.rune_amount":
 		x.RuneAmount = ""
-	case "types.EventRUNEPoolWithdraw.units":
+	case "types.EventDECAPoolWithdraw.units":
 		x.Units = ""
-	case "types.EventRUNEPoolWithdraw.tx_id":
+	case "types.EventDECAPoolWithdraw.tx_id":
 		x.TxId = ""
-	case "types.EventRUNEPoolWithdraw.affiliate_basis_pts":
+	case "types.EventDECAPoolWithdraw.affiliate_basis_pts":
 		x.AffiliateBasisPts = int64(0)
-	case "types.EventRUNEPoolWithdraw.affiliate_amount":
+	case "types.EventDECAPoolWithdraw.affiliate_amount":
 		x.AffiliateAmount = ""
-	case "types.EventRUNEPoolWithdraw.affiliate_address":
+	case "types.EventDECAPoolWithdraw.affiliate_address":
 		x.AffiliateAddress = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolWithdraw"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolWithdraw"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolWithdraw does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolWithdraw does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -24745,37 +24745,37 @@ func (x *fastReflection_EventRUNEPoolWithdraw) Clear(fd protoreflect.FieldDescri
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_EventRUNEPoolWithdraw) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDECAPoolWithdraw) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.EventRUNEPoolWithdraw.rune_address":
-		value := x.RuneAddress
+	case "types.EventDECAPoolWithdraw.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfBytes(value)
-	case "types.EventRUNEPoolWithdraw.basis_points":
+	case "types.EventDECAPoolWithdraw.basis_points":
 		value := x.BasisPoints
 		return protoreflect.ValueOfInt64(value)
-	case "types.EventRUNEPoolWithdraw.rune_amount":
+	case "types.EventDECAPoolWithdraw.rune_amount":
 		value := x.RuneAmount
 		return protoreflect.ValueOfString(value)
-	case "types.EventRUNEPoolWithdraw.units":
+	case "types.EventDECAPoolWithdraw.units":
 		value := x.Units
 		return protoreflect.ValueOfString(value)
-	case "types.EventRUNEPoolWithdraw.tx_id":
+	case "types.EventDECAPoolWithdraw.tx_id":
 		value := x.TxId
 		return protoreflect.ValueOfString(value)
-	case "types.EventRUNEPoolWithdraw.affiliate_basis_pts":
+	case "types.EventDECAPoolWithdraw.affiliate_basis_pts":
 		value := x.AffiliateBasisPts
 		return protoreflect.ValueOfInt64(value)
-	case "types.EventRUNEPoolWithdraw.affiliate_amount":
+	case "types.EventDECAPoolWithdraw.affiliate_amount":
 		value := x.AffiliateAmount
 		return protoreflect.ValueOfString(value)
-	case "types.EventRUNEPoolWithdraw.affiliate_address":
+	case "types.EventDECAPoolWithdraw.affiliate_address":
 		value := x.AffiliateAddress
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolWithdraw"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolWithdraw"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolWithdraw does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolWithdraw does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -24789,29 +24789,29 @@ func (x *fastReflection_EventRUNEPoolWithdraw) Get(descriptor protoreflect.Field
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolWithdraw) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_EventDECAPoolWithdraw) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolWithdraw.rune_address":
-		x.RuneAddress = value.Bytes()
-	case "types.EventRUNEPoolWithdraw.basis_points":
+	case "types.EventDECAPoolWithdraw.deca_address":
+		x.DecaAddress = value.Bytes()
+	case "types.EventDECAPoolWithdraw.basis_points":
 		x.BasisPoints = value.Int()
-	case "types.EventRUNEPoolWithdraw.rune_amount":
+	case "types.EventDECAPoolWithdraw.rune_amount":
 		x.RuneAmount = value.Interface().(string)
-	case "types.EventRUNEPoolWithdraw.units":
+	case "types.EventDECAPoolWithdraw.units":
 		x.Units = value.Interface().(string)
-	case "types.EventRUNEPoolWithdraw.tx_id":
+	case "types.EventDECAPoolWithdraw.tx_id":
 		x.TxId = value.Interface().(string)
-	case "types.EventRUNEPoolWithdraw.affiliate_basis_pts":
+	case "types.EventDECAPoolWithdraw.affiliate_basis_pts":
 		x.AffiliateBasisPts = value.Int()
-	case "types.EventRUNEPoolWithdraw.affiliate_amount":
+	case "types.EventDECAPoolWithdraw.affiliate_amount":
 		x.AffiliateAmount = value.Interface().(string)
-	case "types.EventRUNEPoolWithdraw.affiliate_address":
+	case "types.EventDECAPoolWithdraw.affiliate_address":
 		x.AffiliateAddress = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolWithdraw"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolWithdraw"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolWithdraw does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolWithdraw does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -24825,68 +24825,68 @@ func (x *fastReflection_EventRUNEPoolWithdraw) Set(fd protoreflect.FieldDescript
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolWithdraw) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDECAPoolWithdraw) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolWithdraw.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.basis_points":
-		panic(fmt.Errorf("field basis_points of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.rune_amount":
-		panic(fmt.Errorf("field rune_amount of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.units":
-		panic(fmt.Errorf("field units of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.tx_id":
-		panic(fmt.Errorf("field tx_id of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.affiliate_basis_pts":
-		panic(fmt.Errorf("field affiliate_basis_pts of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.affiliate_amount":
-		panic(fmt.Errorf("field affiliate_amount of message types.EventRUNEPoolWithdraw is not mutable"))
-	case "types.EventRUNEPoolWithdraw.affiliate_address":
-		panic(fmt.Errorf("field affiliate_address of message types.EventRUNEPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.basis_points":
+		panic(fmt.Errorf("field basis_points of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.rune_amount":
+		panic(fmt.Errorf("field rune_amount of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.units":
+		panic(fmt.Errorf("field units of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.tx_id":
+		panic(fmt.Errorf("field tx_id of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.affiliate_basis_pts":
+		panic(fmt.Errorf("field affiliate_basis_pts of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.affiliate_amount":
+		panic(fmt.Errorf("field affiliate_amount of message types.EventDECAPoolWithdraw is not mutable"))
+	case "types.EventDECAPoolWithdraw.affiliate_address":
+		panic(fmt.Errorf("field affiliate_address of message types.EventDECAPoolWithdraw is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolWithdraw"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolWithdraw"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolWithdraw does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolWithdraw does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_EventRUNEPoolWithdraw) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_EventDECAPoolWithdraw) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventRUNEPoolWithdraw.rune_address":
+	case "types.EventDECAPoolWithdraw.deca_address":
 		return protoreflect.ValueOfBytes(nil)
-	case "types.EventRUNEPoolWithdraw.basis_points":
+	case "types.EventDECAPoolWithdraw.basis_points":
 		return protoreflect.ValueOfInt64(int64(0))
-	case "types.EventRUNEPoolWithdraw.rune_amount":
+	case "types.EventDECAPoolWithdraw.rune_amount":
 		return protoreflect.ValueOfString("")
-	case "types.EventRUNEPoolWithdraw.units":
+	case "types.EventDECAPoolWithdraw.units":
 		return protoreflect.ValueOfString("")
-	case "types.EventRUNEPoolWithdraw.tx_id":
+	case "types.EventDECAPoolWithdraw.tx_id":
 		return protoreflect.ValueOfString("")
-	case "types.EventRUNEPoolWithdraw.affiliate_basis_pts":
+	case "types.EventDECAPoolWithdraw.affiliate_basis_pts":
 		return protoreflect.ValueOfInt64(int64(0))
-	case "types.EventRUNEPoolWithdraw.affiliate_amount":
+	case "types.EventDECAPoolWithdraw.affiliate_amount":
 		return protoreflect.ValueOfString("")
-	case "types.EventRUNEPoolWithdraw.affiliate_address":
+	case "types.EventDECAPoolWithdraw.affiliate_address":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventRUNEPoolWithdraw"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.EventDECAPoolWithdraw"))
 		}
-		panic(fmt.Errorf("message types.EventRUNEPoolWithdraw does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.EventDECAPoolWithdraw does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_EventRUNEPoolWithdraw) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_EventDECAPoolWithdraw) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.EventRUNEPoolWithdraw", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.EventDECAPoolWithdraw", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -24894,7 +24894,7 @@ func (x *fastReflection_EventRUNEPoolWithdraw) WhichOneof(d protoreflect.OneofDe
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_EventRUNEPoolWithdraw) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_EventDECAPoolWithdraw) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -24905,7 +24905,7 @@ func (x *fastReflection_EventRUNEPoolWithdraw) GetUnknown() protoreflect.RawFiel
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_EventRUNEPoolWithdraw) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_EventDECAPoolWithdraw) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -24917,7 +24917,7 @@ func (x *fastReflection_EventRUNEPoolWithdraw) SetUnknown(fields protoreflect.Ra
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_EventRUNEPoolWithdraw) IsValid() bool {
+func (x *fastReflection_EventDECAPoolWithdraw) IsValid() bool {
 	return x != nil
 }
 
@@ -24927,9 +24927,9 @@ func (x *fastReflection_EventRUNEPoolWithdraw) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_EventDECAPoolWithdraw) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*EventRUNEPoolWithdraw)
+		x := input.Message.Interface().(*EventDECAPoolWithdraw)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -24941,7 +24941,7 @@ func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Method
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -24981,7 +24981,7 @@ func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Method
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*EventRUNEPoolWithdraw)
+		x := input.Message.Interface().(*EventDECAPoolWithdraw)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -25045,10 +25045,10 @@ func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Method
 			i--
 			dAtA[i] = 0x10
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -25063,7 +25063,7 @@ func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Method
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*EventRUNEPoolWithdraw)
+		x := input.Message.Interface().(*EventDECAPoolWithdraw)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -25095,15 +25095,15 @@ func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Method
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRUNEPoolWithdraw: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventDECAPoolWithdraw: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventRUNEPoolWithdraw: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: EventDECAPoolWithdraw: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -25130,9 +25130,9 @@ func (x *fastReflection_EventRUNEPoolWithdraw) ProtoMethods() *protoiface.Method
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = append(x.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-				if x.RuneAddress == nil {
-					x.RuneAddress = []byte{}
+				x.DecaAddress = append(x.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+				if x.DecaAddress == nil {
+					x.DecaAddress = []byte{}
 				}
 				iNdEx = postIndex
 			case 2:
@@ -27615,7 +27615,7 @@ var (
 	fd_EventSwitch_amount        protoreflect.FieldDescriptor
 	fd_EventSwitch_asset         protoreflect.FieldDescriptor
 	fd_EventSwitch_asset_address protoreflect.FieldDescriptor
-	fd_EventSwitch_rune_address  protoreflect.FieldDescriptor
+	fd_EventSwitch_deca_address  protoreflect.FieldDescriptor
 	fd_EventSwitch_tx_id         protoreflect.FieldDescriptor
 )
 
@@ -27625,7 +27625,7 @@ func init() {
 	fd_EventSwitch_amount = md_EventSwitch.Fields().ByName("amount")
 	fd_EventSwitch_asset = md_EventSwitch.Fields().ByName("asset")
 	fd_EventSwitch_asset_address = md_EventSwitch.Fields().ByName("asset_address")
-	fd_EventSwitch_rune_address = md_EventSwitch.Fields().ByName("rune_address")
+	fd_EventSwitch_deca_address = md_EventSwitch.Fields().ByName("deca_address")
 	fd_EventSwitch_tx_id = md_EventSwitch.Fields().ByName("tx_id")
 }
 
@@ -27712,9 +27712,9 @@ func (x *fastReflection_EventSwitch) Range(f func(protoreflect.FieldDescriptor, 
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventSwitch_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventSwitch_deca_address, value) {
 			return
 		}
 	}
@@ -27745,8 +27745,8 @@ func (x *fastReflection_EventSwitch) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Asset != nil
 	case "types.EventSwitch.asset_address":
 		return x.AssetAddress != ""
-	case "types.EventSwitch.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventSwitch.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventSwitch.tx_id":
 		return x.TxId != ""
 	default:
@@ -27771,8 +27771,8 @@ func (x *fastReflection_EventSwitch) Clear(fd protoreflect.FieldDescriptor) {
 		x.Asset = nil
 	case "types.EventSwitch.asset_address":
 		x.AssetAddress = ""
-	case "types.EventSwitch.rune_address":
-		x.RuneAddress = ""
+	case "types.EventSwitch.deca_address":
+		x.DecaAddress = ""
 	case "types.EventSwitch.tx_id":
 		x.TxId = ""
 	default:
@@ -27800,8 +27800,8 @@ func (x *fastReflection_EventSwitch) Get(descriptor protoreflect.FieldDescriptor
 	case "types.EventSwitch.asset_address":
 		value := x.AssetAddress
 		return protoreflect.ValueOfString(value)
-	case "types.EventSwitch.rune_address":
-		value := x.RuneAddress
+	case "types.EventSwitch.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventSwitch.tx_id":
 		value := x.TxId
@@ -27832,8 +27832,8 @@ func (x *fastReflection_EventSwitch) Set(fd protoreflect.FieldDescriptor, value 
 		x.Asset = value.Message().Interface().(*common.Asset)
 	case "types.EventSwitch.asset_address":
 		x.AssetAddress = value.Interface().(string)
-	case "types.EventSwitch.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventSwitch.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventSwitch.tx_id":
 		x.TxId = value.Interface().(string)
 	default:
@@ -27865,8 +27865,8 @@ func (x *fastReflection_EventSwitch) Mutable(fd protoreflect.FieldDescriptor) pr
 		panic(fmt.Errorf("field amount of message types.EventSwitch is not mutable"))
 	case "types.EventSwitch.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.EventSwitch is not mutable"))
-	case "types.EventSwitch.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventSwitch is not mutable"))
+	case "types.EventSwitch.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventSwitch is not mutable"))
 	case "types.EventSwitch.tx_id":
 		panic(fmt.Errorf("field tx_id of message types.EventSwitch is not mutable"))
 	default:
@@ -27889,7 +27889,7 @@ func (x *fastReflection_EventSwitch) NewField(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "types.EventSwitch.asset_address":
 		return protoreflect.ValueOfString("")
-	case "types.EventSwitch.rune_address":
+	case "types.EventSwitch.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventSwitch.tx_id":
 		return protoreflect.ValueOfString("")
@@ -27974,7 +27974,7 @@ func (x *fastReflection_EventSwitch) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -28018,10 +28018,10 @@ func (x *fastReflection_EventSwitch) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x2a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x22
 		}
@@ -28204,7 +28204,7 @@ func (x *fastReflection_EventSwitch) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -28232,7 +28232,7 @@ func (x *fastReflection_EventSwitch) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
@@ -28857,14 +28857,14 @@ func (x *fastReflection_EventOperatorRotate) ProtoMethods() *protoiface.Methods 
 
 var (
 	md_EventTCYDistribution              protoreflect.MessageDescriptor
-	fd_EventTCYDistribution_rune_address protoreflect.FieldDescriptor
+	fd_EventTCYDistribution_deca_address protoreflect.FieldDescriptor
 	fd_EventTCYDistribution_rune_amount  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_types_type_events_proto_init()
 	md_EventTCYDistribution = File_types_type_events_proto.Messages().ByName("EventTCYDistribution")
-	fd_EventTCYDistribution_rune_address = md_EventTCYDistribution.Fields().ByName("rune_address")
+	fd_EventTCYDistribution_deca_address = md_EventTCYDistribution.Fields().ByName("deca_address")
 	fd_EventTCYDistribution_rune_amount = md_EventTCYDistribution.Fields().ByName("rune_amount")
 }
 
@@ -28933,9 +28933,9 @@ func (x *fastReflection_EventTCYDistribution) Interface() protoreflect.ProtoMess
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_EventTCYDistribution) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.RuneAddress) != 0 {
-		value := protoreflect.ValueOfBytes(x.RuneAddress)
-		if !f(fd_EventTCYDistribution_rune_address, value) {
+	if len(x.DecaAddress) != 0 {
+		value := protoreflect.ValueOfBytes(x.DecaAddress)
+		if !f(fd_EventTCYDistribution_deca_address, value) {
 			return
 		}
 	}
@@ -28960,8 +28960,8 @@ func (x *fastReflection_EventTCYDistribution) Range(f func(protoreflect.FieldDes
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_EventTCYDistribution) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.EventTCYDistribution.rune_address":
-		return len(x.RuneAddress) != 0
+	case "types.EventTCYDistribution.deca_address":
+		return len(x.DecaAddress) != 0
 	case "types.EventTCYDistribution.rune_amount":
 		return x.RuneAmount != ""
 	default:
@@ -28980,8 +28980,8 @@ func (x *fastReflection_EventTCYDistribution) Has(fd protoreflect.FieldDescripto
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventTCYDistribution) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.EventTCYDistribution.rune_address":
-		x.RuneAddress = nil
+	case "types.EventTCYDistribution.deca_address":
+		x.DecaAddress = nil
 	case "types.EventTCYDistribution.rune_amount":
 		x.RuneAmount = ""
 	default:
@@ -29000,8 +29000,8 @@ func (x *fastReflection_EventTCYDistribution) Clear(fd protoreflect.FieldDescrip
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_EventTCYDistribution) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.EventTCYDistribution.rune_address":
-		value := x.RuneAddress
+	case "types.EventTCYDistribution.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfBytes(value)
 	case "types.EventTCYDistribution.rune_amount":
 		value := x.RuneAmount
@@ -29026,8 +29026,8 @@ func (x *fastReflection_EventTCYDistribution) Get(descriptor protoreflect.FieldD
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventTCYDistribution) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.EventTCYDistribution.rune_address":
-		x.RuneAddress = value.Bytes()
+	case "types.EventTCYDistribution.deca_address":
+		x.DecaAddress = value.Bytes()
 	case "types.EventTCYDistribution.rune_amount":
 		x.RuneAmount = value.Interface().(string)
 	default:
@@ -29050,8 +29050,8 @@ func (x *fastReflection_EventTCYDistribution) Set(fd protoreflect.FieldDescripto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventTCYDistribution) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventTCYDistribution.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventTCYDistribution is not mutable"))
+	case "types.EventTCYDistribution.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventTCYDistribution is not mutable"))
 	case "types.EventTCYDistribution.rune_amount":
 		panic(fmt.Errorf("field rune_amount of message types.EventTCYDistribution is not mutable"))
 	default:
@@ -29067,7 +29067,7 @@ func (x *fastReflection_EventTCYDistribution) Mutable(fd protoreflect.FieldDescr
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_EventTCYDistribution) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventTCYDistribution.rune_address":
+	case "types.EventTCYDistribution.deca_address":
 		return protoreflect.ValueOfBytes(nil)
 	case "types.EventTCYDistribution.rune_amount":
 		return protoreflect.ValueOfString("")
@@ -29140,7 +29140,7 @@ func (x *fastReflection_EventTCYDistribution) ProtoMethods() *protoiface.Methods
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -29184,10 +29184,10 @@ func (x *fastReflection_EventTCYDistribution) ProtoMethods() *protoiface.Methods
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -29242,7 +29242,7 @@ func (x *fastReflection_EventTCYDistribution) ProtoMethods() *protoiface.Methods
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -29269,9 +29269,9 @@ func (x *fastReflection_EventTCYDistribution) ProtoMethods() *protoiface.Methods
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = append(x.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-				if x.RuneAddress == nil {
-					x.RuneAddress = []byte{}
+				x.DecaAddress = append(x.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+				if x.DecaAddress == nil {
+					x.DecaAddress = []byte{}
 				}
 				iNdEx = postIndex
 			case 2:
@@ -29343,7 +29343,7 @@ func (x *fastReflection_EventTCYDistribution) ProtoMethods() *protoiface.Methods
 
 var (
 	md_EventTCYClaim              protoreflect.MessageDescriptor
-	fd_EventTCYClaim_rune_address protoreflect.FieldDescriptor
+	fd_EventTCYClaim_deca_address protoreflect.FieldDescriptor
 	fd_EventTCYClaim_tcy_amount   protoreflect.FieldDescriptor
 	fd_EventTCYClaim_l1_address   protoreflect.FieldDescriptor
 	fd_EventTCYClaim_asset        protoreflect.FieldDescriptor
@@ -29352,7 +29352,7 @@ var (
 func init() {
 	file_types_type_events_proto_init()
 	md_EventTCYClaim = File_types_type_events_proto.Messages().ByName("EventTCYClaim")
-	fd_EventTCYClaim_rune_address = md_EventTCYClaim.Fields().ByName("rune_address")
+	fd_EventTCYClaim_deca_address = md_EventTCYClaim.Fields().ByName("deca_address")
 	fd_EventTCYClaim_tcy_amount = md_EventTCYClaim.Fields().ByName("tcy_amount")
 	fd_EventTCYClaim_l1_address = md_EventTCYClaim.Fields().ByName("l1_address")
 	fd_EventTCYClaim_asset = md_EventTCYClaim.Fields().ByName("asset")
@@ -29423,9 +29423,9 @@ func (x *fastReflection_EventTCYClaim) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_EventTCYClaim) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_EventTCYClaim_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_EventTCYClaim_deca_address, value) {
 			return
 		}
 	}
@@ -29462,8 +29462,8 @@ func (x *fastReflection_EventTCYClaim) Range(f func(protoreflect.FieldDescriptor
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_EventTCYClaim) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.EventTCYClaim.rune_address":
-		return x.RuneAddress != ""
+	case "types.EventTCYClaim.deca_address":
+		return x.DecaAddress != ""
 	case "types.EventTCYClaim.tcy_amount":
 		return x.TcyAmount != ""
 	case "types.EventTCYClaim.l1_address":
@@ -29486,8 +29486,8 @@ func (x *fastReflection_EventTCYClaim) Has(fd protoreflect.FieldDescriptor) bool
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventTCYClaim) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.EventTCYClaim.rune_address":
-		x.RuneAddress = ""
+	case "types.EventTCYClaim.deca_address":
+		x.DecaAddress = ""
 	case "types.EventTCYClaim.tcy_amount":
 		x.TcyAmount = ""
 	case "types.EventTCYClaim.l1_address":
@@ -29510,8 +29510,8 @@ func (x *fastReflection_EventTCYClaim) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_EventTCYClaim) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.EventTCYClaim.rune_address":
-		value := x.RuneAddress
+	case "types.EventTCYClaim.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.EventTCYClaim.tcy_amount":
 		value := x.TcyAmount
@@ -29542,8 +29542,8 @@ func (x *fastReflection_EventTCYClaim) Get(descriptor protoreflect.FieldDescript
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_EventTCYClaim) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.EventTCYClaim.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.EventTCYClaim.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.EventTCYClaim.tcy_amount":
 		x.TcyAmount = value.Interface().(string)
 	case "types.EventTCYClaim.l1_address":
@@ -29575,8 +29575,8 @@ func (x *fastReflection_EventTCYClaim) Mutable(fd protoreflect.FieldDescriptor) 
 			x.Asset = new(common.Asset)
 		}
 		return protoreflect.ValueOfMessage(x.Asset.ProtoReflect())
-	case "types.EventTCYClaim.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.EventTCYClaim is not mutable"))
+	case "types.EventTCYClaim.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.EventTCYClaim is not mutable"))
 	case "types.EventTCYClaim.tcy_amount":
 		panic(fmt.Errorf("field tcy_amount of message types.EventTCYClaim is not mutable"))
 	case "types.EventTCYClaim.l1_address":
@@ -29594,7 +29594,7 @@ func (x *fastReflection_EventTCYClaim) Mutable(fd protoreflect.FieldDescriptor) 
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_EventTCYClaim) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.EventTCYClaim.rune_address":
+	case "types.EventTCYClaim.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.EventTCYClaim.tcy_amount":
 		return protoreflect.ValueOfString("")
@@ -29672,7 +29672,7 @@ func (x *fastReflection_EventTCYClaim) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -29745,10 +29745,10 @@ func (x *fastReflection_EventTCYClaim) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -29803,7 +29803,7 @@ func (x *fastReflection_EventTCYClaim) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -29831,7 +29831,7 @@ func (x *fastReflection_EventTCYClaim) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
@@ -33380,7 +33380,7 @@ type PoolMod struct {
 
 	Asset    *common.Asset `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
 	RuneAmt  string        `protobuf:"bytes,2,opt,name=rune_amt,json=runeAmt,proto3" json:"rune_amt,omitempty"`
-	RuneAdd  bool          `protobuf:"varint,3,opt,name=rune_add,json=runeAdd,proto3" json:"rune_add,omitempty"`
+	DecaAdd  bool          `protobuf:"varint,3,opt,name=deca_add,json=decaAdd,proto3" json:"deca_add,omitempty"`
 	AssetAmt string        `protobuf:"bytes,4,opt,name=asset_amt,json=assetAmt,proto3" json:"asset_amt,omitempty"`
 	AssetAdd bool          `protobuf:"varint,5,opt,name=asset_add,json=assetAdd,proto3" json:"asset_add,omitempty"`
 }
@@ -33419,9 +33419,9 @@ func (x *PoolMod) GetRuneAmt() string {
 	return ""
 }
 
-func (x *PoolMod) GetRuneAdd() bool {
+func (x *PoolMod) GetDecaAdd() bool {
 	if x != nil {
-		return x.RuneAdd
+		return x.DecaAdd
 	}
 	return false
 }
@@ -33847,7 +33847,7 @@ type EventAffiliateFee struct {
 	TxId        string        `protobuf:"bytes,1,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 	Memo        string        `protobuf:"bytes,2,opt,name=memo,proto3" json:"memo,omitempty"`
 	Thorname    string        `protobuf:"bytes,3,opt,name=thorname,proto3" json:"thorname,omitempty"`
-	RuneAddress string        `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress string        `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	Asset       *common.Asset `protobuf:"bytes,5,opt,name=asset,proto3" json:"asset,omitempty"`
 	GrossAmount string        `protobuf:"bytes,6,opt,name=gross_amount,json=grossAmount,proto3" json:"gross_amount,omitempty"`
 	FeeBps      uint64        `protobuf:"varint,7,opt,name=fee_bps,json=feeBps,proto3" json:"fee_bps,omitempty"`
@@ -33895,9 +33895,9 @@ func (x *EventAffiliateFee) GetThorname() string {
 	return ""
 }
 
-func (x *EventAffiliateFee) GetRuneAddress() string {
+func (x *EventAffiliateFee) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -33937,7 +33937,7 @@ type EventAddLiquidity struct {
 
 	Pool          *common.Asset `protobuf:"bytes,1,opt,name=pool,proto3" json:"pool,omitempty"`
 	ProviderUnits string        `protobuf:"bytes,2,opt,name=provider_units,json=providerUnits,proto3" json:"provider_units,omitempty"`
-	RuneAddress   string        `protobuf:"bytes,3,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress   string        `protobuf:"bytes,3,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	RuneAmount    string        `protobuf:"bytes,4,opt,name=rune_amount,json=runeAmount,proto3" json:"rune_amount,omitempty"`
 	AssetAmount   string        `protobuf:"bytes,5,opt,name=asset_amount,json=assetAmount,proto3" json:"asset_amount,omitempty"`
 	RuneTxId      string        `protobuf:"bytes,6,opt,name=rune_tx_id,json=runeTxId,proto3" json:"rune_tx_id,omitempty"`
@@ -33979,9 +33979,9 @@ func (x *EventAddLiquidity) GetProviderUnits() string {
 	return ""
 }
 
-func (x *EventAddLiquidity) GetRuneAddress() string {
+func (x *EventAddLiquidity) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -34111,7 +34111,7 @@ type EventPendingLiquidity struct {
 
 	Pool         *common.Asset        `protobuf:"bytes,1,opt,name=pool,proto3" json:"pool,omitempty"`
 	PendingType  PendingLiquidityType `protobuf:"varint,2,opt,name=pending_type,json=pendingType,proto3,enum=types.PendingLiquidityType" json:"pending_type,omitempty"`
-	RuneAddress  string               `protobuf:"bytes,3,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress  string               `protobuf:"bytes,3,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	RuneAmount   string               `protobuf:"bytes,4,opt,name=rune_amount,json=runeAmount,proto3" json:"rune_amount,omitempty"`
 	AssetAddress string               `protobuf:"bytes,5,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
 	AssetAmount  string               `protobuf:"bytes,6,opt,name=asset_amount,json=assetAmount,proto3" json:"asset_amount,omitempty"`
@@ -34153,9 +34153,9 @@ func (x *EventPendingLiquidity) GetPendingType() PendingLiquidityType {
 	return PendingLiquidityType_add
 }
 
-func (x *EventPendingLiquidity) GetRuneAddress() string {
+func (x *EventPendingLiquidity) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -35352,7 +35352,7 @@ type EventTradeAccountDeposit struct {
 	Amount       string        `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 	Asset        *common.Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	AssetAddress string        `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
-	RuneAddress  string        `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress  string        `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	TxId         string        `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 }
 
@@ -35397,9 +35397,9 @@ func (x *EventTradeAccountDeposit) GetAssetAddress() string {
 	return ""
 }
 
-func (x *EventTradeAccountDeposit) GetRuneAddress() string {
+func (x *EventTradeAccountDeposit) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -35419,7 +35419,7 @@ type EventTradeAccountWithdraw struct {
 	Amount       string        `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 	Asset        *common.Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	AssetAddress string        `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
-	RuneAddress  string        `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress  string        `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	TxId         string        `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 }
 
@@ -35464,9 +35464,9 @@ func (x *EventTradeAccountWithdraw) GetAssetAddress() string {
 	return ""
 }
 
-func (x *EventTradeAccountWithdraw) GetRuneAddress() string {
+func (x *EventTradeAccountWithdraw) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -35486,7 +35486,7 @@ type EventSecuredAssetDeposit struct {
 	Amount       string        `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 	Asset        *common.Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	AssetAddress string        `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
-	RuneAddress  string        `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress  string        `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	TxId         string        `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 }
 
@@ -35531,9 +35531,9 @@ func (x *EventSecuredAssetDeposit) GetAssetAddress() string {
 	return ""
 }
 
-func (x *EventSecuredAssetDeposit) GetRuneAddress() string {
+func (x *EventSecuredAssetDeposit) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -35553,7 +35553,7 @@ type EventSecuredAssetWithdraw struct {
 	Amount       string        `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 	Asset        *common.Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	AssetAddress string        `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
-	RuneAddress  string        `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress  string        `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	TxId         string        `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 }
 
@@ -35598,9 +35598,9 @@ func (x *EventSecuredAssetWithdraw) GetAssetAddress() string {
 	return ""
 }
 
-func (x *EventSecuredAssetWithdraw) GetRuneAddress() string {
+func (x *EventSecuredAssetWithdraw) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -35612,19 +35612,19 @@ func (x *EventSecuredAssetWithdraw) GetTxId() string {
 	return ""
 }
 
-type EventRUNEPoolDeposit struct {
+type EventDECAPoolDeposit struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress []byte `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress []byte `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	RuneAmount  string `protobuf:"bytes,2,opt,name=rune_amount,json=runeAmount,proto3" json:"rune_amount,omitempty"`
 	Units       string `protobuf:"bytes,3,opt,name=units,proto3" json:"units,omitempty"`
 	TxId        string `protobuf:"bytes,4,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 }
 
-func (x *EventRUNEPoolDeposit) Reset() {
-	*x = EventRUNEPoolDeposit{}
+func (x *EventDECAPoolDeposit) Reset() {
+	*x = EventDECAPoolDeposit{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_types_type_events_proto_msgTypes[37]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -35632,51 +35632,51 @@ func (x *EventRUNEPoolDeposit) Reset() {
 	}
 }
 
-func (x *EventRUNEPoolDeposit) String() string {
+func (x *EventDECAPoolDeposit) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventRUNEPoolDeposit) ProtoMessage() {}
+func (*EventDECAPoolDeposit) ProtoMessage() {}
 
-// Deprecated: Use EventRUNEPoolDeposit.ProtoReflect.Descriptor instead.
-func (*EventRUNEPoolDeposit) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventDECAPoolDeposit.ProtoReflect.Descriptor instead.
+func (*EventDECAPoolDeposit) Descriptor() ([]byte, []int) {
 	return file_types_type_events_proto_rawDescGZIP(), []int{37}
 }
 
-func (x *EventRUNEPoolDeposit) GetRuneAddress() []byte {
+func (x *EventDECAPoolDeposit) GetDecaAddress() []byte {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return nil
 }
 
-func (x *EventRUNEPoolDeposit) GetRuneAmount() string {
+func (x *EventDECAPoolDeposit) GetRuneAmount() string {
 	if x != nil {
 		return x.RuneAmount
 	}
 	return ""
 }
 
-func (x *EventRUNEPoolDeposit) GetUnits() string {
+func (x *EventDECAPoolDeposit) GetUnits() string {
 	if x != nil {
 		return x.Units
 	}
 	return ""
 }
 
-func (x *EventRUNEPoolDeposit) GetTxId() string {
+func (x *EventDECAPoolDeposit) GetTxId() string {
 	if x != nil {
 		return x.TxId
 	}
 	return ""
 }
 
-type EventRUNEPoolWithdraw struct {
+type EventDECAPoolWithdraw struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress       []byte `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress       []byte `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	BasisPoints       int64  `protobuf:"varint,2,opt,name=basis_points,json=basisPoints,proto3" json:"basis_points,omitempty"`
 	RuneAmount        string `protobuf:"bytes,3,opt,name=rune_amount,json=runeAmount,proto3" json:"rune_amount,omitempty"`
 	Units             string `protobuf:"bytes,4,opt,name=units,proto3" json:"units,omitempty"`
@@ -35686,8 +35686,8 @@ type EventRUNEPoolWithdraw struct {
 	AffiliateAddress  string `protobuf:"bytes,8,opt,name=affiliate_address,json=affiliateAddress,proto3" json:"affiliate_address,omitempty"`
 }
 
-func (x *EventRUNEPoolWithdraw) Reset() {
-	*x = EventRUNEPoolWithdraw{}
+func (x *EventDECAPoolWithdraw) Reset() {
+	*x = EventDECAPoolWithdraw{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_types_type_events_proto_msgTypes[38]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -35695,67 +35695,67 @@ func (x *EventRUNEPoolWithdraw) Reset() {
 	}
 }
 
-func (x *EventRUNEPoolWithdraw) String() string {
+func (x *EventDECAPoolWithdraw) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EventRUNEPoolWithdraw) ProtoMessage() {}
+func (*EventDECAPoolWithdraw) ProtoMessage() {}
 
-// Deprecated: Use EventRUNEPoolWithdraw.ProtoReflect.Descriptor instead.
-func (*EventRUNEPoolWithdraw) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventDECAPoolWithdraw.ProtoReflect.Descriptor instead.
+func (*EventDECAPoolWithdraw) Descriptor() ([]byte, []int) {
 	return file_types_type_events_proto_rawDescGZIP(), []int{38}
 }
 
-func (x *EventRUNEPoolWithdraw) GetRuneAddress() []byte {
+func (x *EventDECAPoolWithdraw) GetDecaAddress() []byte {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return nil
 }
 
-func (x *EventRUNEPoolWithdraw) GetBasisPoints() int64 {
+func (x *EventDECAPoolWithdraw) GetBasisPoints() int64 {
 	if x != nil {
 		return x.BasisPoints
 	}
 	return 0
 }
 
-func (x *EventRUNEPoolWithdraw) GetRuneAmount() string {
+func (x *EventDECAPoolWithdraw) GetRuneAmount() string {
 	if x != nil {
 		return x.RuneAmount
 	}
 	return ""
 }
 
-func (x *EventRUNEPoolWithdraw) GetUnits() string {
+func (x *EventDECAPoolWithdraw) GetUnits() string {
 	if x != nil {
 		return x.Units
 	}
 	return ""
 }
 
-func (x *EventRUNEPoolWithdraw) GetTxId() string {
+func (x *EventDECAPoolWithdraw) GetTxId() string {
 	if x != nil {
 		return x.TxId
 	}
 	return ""
 }
 
-func (x *EventRUNEPoolWithdraw) GetAffiliateBasisPts() int64 {
+func (x *EventDECAPoolWithdraw) GetAffiliateBasisPts() int64 {
 	if x != nil {
 		return x.AffiliateBasisPts
 	}
 	return 0
 }
 
-func (x *EventRUNEPoolWithdraw) GetAffiliateAmount() string {
+func (x *EventDECAPoolWithdraw) GetAffiliateAmount() string {
 	if x != nil {
 		return x.AffiliateAmount
 	}
 	return ""
 }
 
-func (x *EventRUNEPoolWithdraw) GetAffiliateAddress() string {
+func (x *EventDECAPoolWithdraw) GetAffiliateAddress() string {
 	if x != nil {
 		return x.AffiliateAddress
 	}
@@ -35982,7 +35982,7 @@ type EventSwitch struct {
 	Amount       string        `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 	Asset        *common.Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	AssetAddress string        `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
-	RuneAddress  string        `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress  string        `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	TxId         string        `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"`
 }
 
@@ -36027,9 +36027,9 @@ func (x *EventSwitch) GetAssetAddress() string {
 	return ""
 }
 
-func (x *EventSwitch) GetRuneAddress() string {
+func (x *EventSwitch) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -36097,7 +36097,7 @@ type EventTCYDistribution struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress []byte `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress []byte `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	RuneAmount  string `protobuf:"bytes,2,opt,name=rune_amount,json=runeAmount,proto3" json:"rune_amount,omitempty"`
 }
 
@@ -36121,9 +36121,9 @@ func (*EventTCYDistribution) Descriptor() ([]byte, []int) {
 	return file_types_type_events_proto_rawDescGZIP(), []int{45}
 }
 
-func (x *EventTCYDistribution) GetRuneAddress() []byte {
+func (x *EventTCYDistribution) GetDecaAddress() []byte {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return nil
 }
@@ -36140,7 +36140,7 @@ type EventTCYClaim struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress string        `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress string        `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	TcyAmount   string        `protobuf:"bytes,2,opt,name=tcy_amount,json=tcyAmount,proto3" json:"tcy_amount,omitempty"`
 	L1Address   string        `protobuf:"bytes,3,opt,name=l1_address,json=l1Address,proto3" json:"l1_address,omitempty"`
 	Asset       *common.Asset `protobuf:"bytes,4,opt,name=asset,proto3" json:"asset,omitempty"`
@@ -36166,9 +36166,9 @@ func (*EventTCYClaim) Descriptor() ([]byte, []int) {
 	return file_types_type_events_proto_rawDescGZIP(), []int{46}
 }
 
-func (x *EventTCYClaim) GetRuneAddress() string {
+func (x *EventTCYClaim) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -37435,8 +37435,8 @@ var file_types_type_events_proto_goTypes = []interface{}{
 	(*EventTradeAccountWithdraw)(nil),   // 37: types.EventTradeAccountWithdraw
 	(*EventSecuredAssetDeposit)(nil),    // 38: types.EventSecuredAssetDeposit
 	(*EventSecuredAssetWithdraw)(nil),   // 39: types.EventSecuredAssetWithdraw
-	(*EventRUNEPoolDeposit)(nil),        // 40: types.EventRUNEPoolDeposit
-	(*EventRUNEPoolWithdraw)(nil),       // 41: types.EventRUNEPoolWithdraw
+	(*EventDECAPoolDeposit)(nil),        // 40: types.EventDECAPoolDeposit
+	(*EventDECAPoolWithdraw)(nil),       // 41: types.EventDECAPoolWithdraw
 	(*EventTHORName)(nil),               // 42: types.EventTHORName
 	(*EventSetMimir)(nil),               // 43: types.EventSetMimir
 	(*EventSetNodeMimir)(nil),           // 44: types.EventSetNodeMimir
@@ -37972,7 +37972,7 @@ func file_types_type_events_proto_init() {
 			}
 		}
 		file_types_type_events_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventRUNEPoolDeposit); i {
+			switch v := v.(*EventDECAPoolDeposit); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -37984,7 +37984,7 @@ func file_types_type_events_proto_init() {
 			}
 		}
 		file_types_type_events_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EventRUNEPoolWithdraw); i {
+			switch v := v.(*EventDECAPoolWithdraw); i {
 			case 0:
 				return &v.state
 			case 1:

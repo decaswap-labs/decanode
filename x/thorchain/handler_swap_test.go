@@ -38,7 +38,7 @@ func (s *HandlerSwapSuite) TestValidate(c *C) {
 		signerDOGEAddr,
 		signerDOGEAddr,
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.OneUint()),
+			common.NewCoin(common.DecaAsset(), cosmos.OneUint()),
 		},
 		common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
@@ -181,7 +181,7 @@ func (s *HandlerSwapSuite) TestValidation(c *C) {
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pools := make(map[common.Asset]Pool)
 	pools[pool.Asset] = pool
 	keeper := &TestSwapHandleKeeper{
@@ -202,7 +202,7 @@ func (s *HandlerSwapSuite) TestValidation(c *C) {
 		signerDOGEAddr,
 		signerDOGEAddr,
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(common.One*100)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(common.One*100)),
 		},
 		common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
@@ -237,7 +237,7 @@ func (s *HandlerSwapSuite) TestValidationWithStreamingSwap(c *C) {
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 	mgr.txOutStore = NewTxStoreDummy()
 
@@ -254,7 +254,7 @@ func (s *HandlerSwapSuite) TestValidationWithStreamingSwap(c *C) {
 		signerDOGEAddr,
 		signerDOGEAddr,
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(common.One*100)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(common.One*100)),
 		},
 		common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
@@ -309,7 +309,7 @@ func (s *HandlerSwapSuite) TestHandle(c *C) {
 		signerDOGEAddr,
 		signerDOGEAddr,
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.OneUint()),
+			common.NewCoin(common.DecaAsset(), cosmos.OneUint()),
 		},
 		common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
@@ -321,7 +321,7 @@ func (s *HandlerSwapSuite) TestHandle(c *C) {
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	// swap of only 0.00000001 would emit 0, thus rejected.
@@ -333,7 +333,7 @@ func (s *HandlerSwapSuite) TestHandle(c *C) {
 		signerDOGEAddr,
 		signerDOGEAddr,
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)),
 		},
 		common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
@@ -350,7 +350,7 @@ func (s *HandlerSwapSuite) TestHandle(c *C) {
 	c.Assert(err, IsNil)
 	poolTCAN.Asset = tCanAsset
 	poolTCAN.BalanceAsset = cosmos.NewUint(334850000)
-	poolTCAN.BalanceRune = cosmos.NewUint(2349500000)
+	poolTCAN.BalanceDeca = cosmos.NewUint(2349500000)
 	c.Assert(mgr.Keeper().SetPool(ctx, poolTCAN), IsNil)
 	dogeAddr := GetRandomDOGEAddress()
 	m, err := ParseMemo(mgr.GetVersion(), "swap:DOGE.DOGE:"+dogeAddr.String()+":121855738")
@@ -405,7 +405,7 @@ func (s *HandlerSwapSuite) TestHandleStreamingSwap(c *C) {
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 	mgr.txOutStore = NewTxStoreDummy()
 
@@ -422,7 +422,7 @@ func (s *HandlerSwapSuite) TestHandleStreamingSwap(c *C) {
 		signerDOGEAddr,
 		signerDOGEAddr,
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(2_123400000)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(2_123400000)),
 		},
 		common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
@@ -481,7 +481,7 @@ func (s *HandlerSwapSuite) TestHandleWithEmitUsesStateStreamingQuantityForV2Swap
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	na := GetRandomValidatorNode(NodeActive)
@@ -493,7 +493,7 @@ func (s *HandlerSwapSuite) TestHandleWithEmitUsesStateStreamingQuantityForV2Swap
 		GetRandomTxHash(),
 		GetRandomDOGEAddress(),
 		GetRandomDOGEAddress(),
-		common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(5*common.One))},
+		common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(5*common.One))},
 		common.Gas{common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000))},
 		"=:DOGE.DOGE:"+GetRandomDOGEAddress().String(),
 	)
@@ -544,7 +544,7 @@ func (s *HandlerSwapSuite) TestSwapSynthERC20(c *C) {
 	c.Assert(err, IsNil)
 	pool.Asset = asset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.K.SetPool(ctx, pool), IsNil)
 
 	m, err := ParseMemo(mgr.GetVersion(), "=:ETH/AAVE-0X7FC66:thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2::thor1a427q3v96psuj4fnughdw8glt5r7j38lj7rkp8:100")
@@ -588,7 +588,7 @@ func (s *HandlerSwapSuite) TestDoubleSwap(c *C) {
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	poolTCAN := NewPool()
@@ -596,7 +596,7 @@ func (s *HandlerSwapSuite) TestDoubleSwap(c *C) {
 	c.Assert(err, IsNil)
 	poolTCAN.Asset = tCanAsset
 	poolTCAN.BalanceAsset = cosmos.NewUint(334850000)
-	poolTCAN.BalanceRune = cosmos.NewUint(2349500000)
+	poolTCAN.BalanceDeca = cosmos.NewUint(2349500000)
 	c.Assert(mgr.Keeper().SetPool(ctx, poolTCAN), IsNil)
 
 	signerDOGEAddr := GetRandomDOGEAddress()
@@ -679,7 +679,7 @@ func (s *HandlerSwapSuite) TestSwapOutDexIntegration(c *C) {
 	c.Assert(err, IsNil)
 	pool.Asset = asset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.K.SetPool(ctx, pool), IsNil)
 
 	swapMemo := "swap:ETH.ETH:" + types.GetRandomETHAddress().String() + "::::2f2386f3848:" + types.GetRandomETHAddress().String()
@@ -689,10 +689,10 @@ func (s *HandlerSwapSuite) TestSwapOutDexIntegration(c *C) {
 	txIn := NewObservedTx(
 		common.NewTx(GetRandomTxHash(), GetRandomTHORAddress(), GetRandomTHORAddress(),
 			common.Coins{
-				common.NewCoin(common.RuneNative, cosmos.NewUint(2000000000)),
+				common.NewCoin(common.DecaNative, cosmos.NewUint(2000000000)),
 			},
 			common.Gas{
-				common.NewCoin(common.RuneNative, cosmos.NewUint(20000000)),
+				common.NewCoin(common.DecaNative, cosmos.NewUint(20000000)),
 			},
 			swapMemo,
 		),

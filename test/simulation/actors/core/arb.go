@@ -74,7 +74,7 @@ func (a *ArbActor) init(config *OpConfig) OpResult {
 
 	for _, pool := range pools {
 		a.originalPools[pool.Asset] = types.Pool{
-			BalanceRune:  cosmos.NewUintFromString(pool.BalanceRune),
+			BalanceDeca:  cosmos.NewUintFromString(pool.BalanceDeca),
 			BalanceAsset: cosmos.NewUintFromString(pool.BalanceAsset),
 		}
 	}
@@ -267,7 +267,7 @@ func (a *ArbActor) arb(config *OpConfig) OpResult {
 	arbPools := []openapi.Pool{}
 	for _, pool := range pools {
 		// skip unavailable pools and those with no liquidity
-		if pool.BalanceRune == "0" || pool.BalanceAsset == "0" || pool.Status != types.PoolStatus_Available.String() {
+		if pool.BalanceDeca == "0" || pool.BalanceAsset == "0" || pool.Status != types.PoolStatus_Available.String() {
 			continue
 		}
 
@@ -285,8 +285,8 @@ func (a *ArbActor) arb(config *OpConfig) OpResult {
 	// sort pools by price change
 	priceChangeBps := func(pool openapi.Pool) int64 {
 		originalPool := a.originalPools[pool.Asset]
-		originalPrice := originalPool.BalanceRune.MulUint64(1e8).Quo(originalPool.BalanceAsset)
-		currentPrice := cosmos.NewUintFromString(pool.BalanceRune).MulUint64(1e8).Quo(cosmos.NewUintFromString(pool.BalanceAsset))
+		originalPrice := originalPool.BalanceDeca.MulUint64(1e8).Quo(originalPool.BalanceAsset)
+		currentPrice := cosmos.NewUintFromString(pool.BalanceDeca).MulUint64(1e8).Quo(cosmos.NewUintFromString(pool.BalanceAsset))
 		return int64(currentPrice.MulUint64(constants.MaxBasisPts).Quo(originalPrice).Uint64()) - int64(constants.MaxBasisPts)
 	}
 	sort.Slice(arbPools, func(i, j int) bool {
@@ -310,9 +310,9 @@ func (a *ArbActor) arb(config *OpConfig) OpResult {
 	adjustmentBps := int64(50)
 
 	// build the swap
-	minRuneDepth := common.Min(cosmos.NewUintFromString(send.BalanceRune).Uint64(), cosmos.NewUintFromString(receive.BalanceRune).Uint64())
-	runeValue := cosmos.NewUint(uint64(adjustmentBps)).MulUint64(minRuneDepth).QuoUint64(2).QuoUint64(constants.MaxBasisPts)
-	assetAmount := runeValue.Mul(cosmos.NewUintFromString(send.BalanceAsset)).Quo(cosmos.NewUintFromString(send.BalanceRune))
+	minDecaDepth := common.Min(cosmos.NewUintFromString(send.BalanceDeca).Uint64(), cosmos.NewUintFromString(receive.BalanceDeca).Uint64())
+	decaValue := cosmos.NewUint(uint64(adjustmentBps)).MulUint64(minDecaDepth).QuoUint64(2).QuoUint64(constants.MaxBasisPts)
+	assetAmount := decaValue.Mul(cosmos.NewUintFromString(send.BalanceAsset)).Quo(cosmos.NewUintFromString(send.BalanceDeca))
 	memo := fmt.Sprintf("=:%s", strings.Replace(receive.Asset, ".", "~", 1))
 	asset, err := common.NewAsset(strings.Replace(send.Asset, ".", "~", 1))
 	if err != nil {

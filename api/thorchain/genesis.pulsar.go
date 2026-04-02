@@ -2459,8 +2459,8 @@ var (
 	fd_GenesisState_trade_units                protoreflect.FieldDescriptor
 	fd_GenesisState_outbound_fee_withheld_rune protoreflect.FieldDescriptor
 	fd_GenesisState_outbound_fee_spent_rune    protoreflect.FieldDescriptor
-	fd_GenesisState_rune_providers             protoreflect.FieldDescriptor
-	fd_GenesisState_rune_pool                  protoreflect.FieldDescriptor
+	fd_GenesisState_deca_providers             protoreflect.FieldDescriptor
+	fd_GenesisState_deca_pool                  protoreflect.FieldDescriptor
 	fd_GenesisState_nodeMimirs                 protoreflect.FieldDescriptor
 	fd_GenesisState_affiliate_collectors       protoreflect.FieldDescriptor
 	fd_GenesisState_secured_assets             protoreflect.FieldDescriptor
@@ -2499,8 +2499,8 @@ func init() {
 	fd_GenesisState_trade_units = md_GenesisState.Fields().ByName("trade_units")
 	fd_GenesisState_outbound_fee_withheld_rune = md_GenesisState.Fields().ByName("outbound_fee_withheld_rune")
 	fd_GenesisState_outbound_fee_spent_rune = md_GenesisState.Fields().ByName("outbound_fee_spent_rune")
-	fd_GenesisState_rune_providers = md_GenesisState.Fields().ByName("rune_providers")
-	fd_GenesisState_rune_pool = md_GenesisState.Fields().ByName("rune_pool")
+	fd_GenesisState_deca_providers = md_GenesisState.Fields().ByName("deca_providers")
+	fd_GenesisState_deca_pool = md_GenesisState.Fields().ByName("deca_pool")
 	fd_GenesisState_nodeMimirs = md_GenesisState.Fields().ByName("nodeMimirs")
 	fd_GenesisState_affiliate_collectors = md_GenesisState.Fields().ByName("affiliate_collectors")
 	fd_GenesisState_secured_assets = md_GenesisState.Fields().ByName("secured_assets")
@@ -2736,15 +2736,15 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.RuneProviders) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_36_list{list: &x.RuneProviders})
-		if !f(fd_GenesisState_rune_providers, value) {
+	if len(x.DecaProviders) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_36_list{list: &x.DecaProviders})
+		if !f(fd_GenesisState_deca_providers, value) {
 			return
 		}
 	}
-	if x.RunePool != nil {
-		value := protoreflect.ValueOfMessage(x.RunePool.ProtoReflect())
-		if !f(fd_GenesisState_rune_pool, value) {
+	if x.DecaPool != nil {
+		value := protoreflect.ValueOfMessage(x.DecaPool.ProtoReflect())
+		if !f(fd_GenesisState_deca_pool, value) {
 			return
 		}
 	}
@@ -2853,10 +2853,10 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return len(x.OutboundFeeWithheldRune) != 0
 	case "thorchain.GenesisState.outbound_fee_spent_rune":
 		return len(x.OutboundFeeSpentRune) != 0
-	case "thorchain.GenesisState.rune_providers":
-		return len(x.RuneProviders) != 0
-	case "thorchain.GenesisState.rune_pool":
-		return x.RunePool != nil
+	case "thorchain.GenesisState.deca_providers":
+		return len(x.DecaProviders) != 0
+	case "thorchain.GenesisState.deca_pool":
+		return x.DecaPool != nil
 	case "thorchain.GenesisState.nodeMimirs":
 		return len(x.NodeMimirs) != 0
 	case "thorchain.GenesisState.affiliate_collectors":
@@ -2939,10 +2939,10 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.OutboundFeeWithheldRune = nil
 	case "thorchain.GenesisState.outbound_fee_spent_rune":
 		x.OutboundFeeSpentRune = nil
-	case "thorchain.GenesisState.rune_providers":
-		x.RuneProviders = nil
-	case "thorchain.GenesisState.rune_pool":
-		x.RunePool = nil
+	case "thorchain.GenesisState.deca_providers":
+		x.DecaProviders = nil
+	case "thorchain.GenesisState.deca_pool":
+		x.DecaPool = nil
 	case "thorchain.GenesisState.nodeMimirs":
 		x.NodeMimirs = nil
 	case "thorchain.GenesisState.affiliate_collectors":
@@ -3118,14 +3118,14 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_35_list{list: &x.OutboundFeeSpentRune}
 		return protoreflect.ValueOfList(listValue)
-	case "thorchain.GenesisState.rune_providers":
-		if len(x.RuneProviders) == 0 {
+	case "thorchain.GenesisState.deca_providers":
+		if len(x.DecaProviders) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_36_list{})
 		}
-		listValue := &_GenesisState_36_list{list: &x.RuneProviders}
+		listValue := &_GenesisState_36_list{list: &x.DecaProviders}
 		return protoreflect.ValueOfList(listValue)
-	case "thorchain.GenesisState.rune_pool":
-		value := x.RunePool
+	case "thorchain.GenesisState.deca_pool":
+		value := x.DecaPool
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "thorchain.GenesisState.nodeMimirs":
 		if len(x.NodeMimirs) == 0 {
@@ -3281,12 +3281,12 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_35_list)
 		x.OutboundFeeSpentRune = *clv.list
-	case "thorchain.GenesisState.rune_providers":
+	case "thorchain.GenesisState.deca_providers":
 		lv := value.List()
 		clv := lv.(*_GenesisState_36_list)
-		x.RuneProviders = *clv.list
-	case "thorchain.GenesisState.rune_pool":
-		x.RunePool = value.Message().Interface().(*types.RUNEPool)
+		x.DecaProviders = *clv.list
+	case "thorchain.GenesisState.deca_pool":
+		x.DecaPool = value.Message().Interface().(*types.DECAPool)
 	case "thorchain.GenesisState.nodeMimirs":
 		lv := value.List()
 		clv := lv.(*_GenesisState_38_list)
@@ -3473,17 +3473,17 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_35_list{list: &x.OutboundFeeSpentRune}
 		return protoreflect.ValueOfList(value)
-	case "thorchain.GenesisState.rune_providers":
-		if x.RuneProviders == nil {
-			x.RuneProviders = []*types.RUNEProvider{}
+	case "thorchain.GenesisState.deca_providers":
+		if x.DecaProviders == nil {
+			x.DecaProviders = []*types.RUNEProvider{}
 		}
-		value := &_GenesisState_36_list{list: &x.RuneProviders}
+		value := &_GenesisState_36_list{list: &x.DecaProviders}
 		return protoreflect.ValueOfList(value)
-	case "thorchain.GenesisState.rune_pool":
-		if x.RunePool == nil {
-			x.RunePool = new(types.RUNEPool)
+	case "thorchain.GenesisState.deca_pool":
+		if x.DecaPool == nil {
+			x.DecaPool = new(types.DECAPool)
 		}
-		return protoreflect.ValueOfMessage(x.RunePool.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.DecaPool.ProtoReflect())
 	case "thorchain.GenesisState.nodeMimirs":
 		if x.NodeMimirs == nil {
 			x.NodeMimirs = []*types.NodeMimir{}
@@ -3617,11 +3617,11 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "thorchain.GenesisState.outbound_fee_spent_rune":
 		list := []*common.Coin{}
 		return protoreflect.ValueOfList(&_GenesisState_35_list{list: &list})
-	case "thorchain.GenesisState.rune_providers":
+	case "thorchain.GenesisState.deca_providers":
 		list := []*types.RUNEProvider{}
 		return protoreflect.ValueOfList(&_GenesisState_36_list{list: &list})
-	case "thorchain.GenesisState.rune_pool":
-		m := new(types.RUNEPool)
+	case "thorchain.GenesisState.deca_pool":
+		m := new(types.DECAPool)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "thorchain.GenesisState.nodeMimirs":
 		list := []*types.NodeMimir{}
@@ -3859,14 +3859,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.RuneProviders) > 0 {
-			for _, e := range x.RuneProviders {
+		if len(x.DecaProviders) > 0 {
+			for _, e := range x.DecaProviders {
 				l = options.Size(e)
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if x.RunePool != nil {
-			l = options.Size(x.RunePool)
+		if x.DecaPool != nil {
+			l = options.Size(x.DecaPool)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.NodeMimirs) > 0 {
@@ -4042,8 +4042,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0xb2
 			}
 		}
-		if x.RunePool != nil {
-			encoded, err := options.Marshal(x.RunePool)
+		if x.DecaPool != nil {
+			encoded, err := options.Marshal(x.DecaPool)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -4058,9 +4058,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0xaa
 		}
-		if len(x.RuneProviders) > 0 {
-			for iNdEx := len(x.RuneProviders) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.RuneProviders[iNdEx])
+		if len(x.DecaProviders) > 0 {
+			for iNdEx := len(x.DecaProviders) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.DecaProviders[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -5429,7 +5429,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 36:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneProviders", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaProviders", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -5456,14 +5456,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneProviders = append(x.RuneProviders, &types.RUNEProvider{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.RuneProviders[len(x.RuneProviders)-1]); err != nil {
+				x.DecaProviders = append(x.DecaProviders, &types.RUNEProvider{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DecaProviders[len(x.DecaProviders)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 37:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RunePool", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaPool", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -5490,10 +5490,10 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.RunePool == nil {
-					x.RunePool = &types.RUNEPool{}
+				if x.DecaPool == nil {
+					x.DecaPool = &types.DECAPool{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.RunePool); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DecaPool); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -5870,8 +5870,8 @@ type GenesisState struct {
 	TradeUnits              []*types.TradeUnit             `protobuf:"bytes,33,rep,name=trade_units,json=tradeUnits,proto3" json:"trade_units,omitempty"`
 	OutboundFeeWithheldRune []*common.Coin                 `protobuf:"bytes,34,rep,name=outbound_fee_withheld_rune,json=outboundFeeWithheldRune,proto3" json:"outbound_fee_withheld_rune,omitempty"`
 	OutboundFeeSpentRune    []*common.Coin                 `protobuf:"bytes,35,rep,name=outbound_fee_spent_rune,json=outboundFeeSpentRune,proto3" json:"outbound_fee_spent_rune,omitempty"`
-	RuneProviders           []*types.RUNEProvider          `protobuf:"bytes,36,rep,name=rune_providers,json=runeProviders,proto3" json:"rune_providers,omitempty"`
-	RunePool                *types.RUNEPool                `protobuf:"bytes,37,opt,name=rune_pool,json=runePool,proto3" json:"rune_pool,omitempty"`
+	DecaProviders           []*types.RUNEProvider          `protobuf:"bytes,36,rep,name=deca_providers,json=decaProviders,proto3" json:"deca_providers,omitempty"`
+	DecaPool                *types.DECAPool                `protobuf:"bytes,37,opt,name=deca_pool,json=decaPool,proto3" json:"deca_pool,omitempty"`
 	NodeMimirs              []*types.NodeMimir             `protobuf:"bytes,38,rep,name=nodeMimirs,proto3" json:"nodeMimirs,omitempty"`
 	AffiliateCollectors     []*types.AffiliateFeeCollector `protobuf:"bytes,39,rep,name=affiliate_collectors,json=affiliateCollectors,proto3" json:"affiliate_collectors,omitempty"`
 	SecuredAssets           []*types.SecuredAsset          `protobuf:"bytes,41,rep,name=secured_assets,json=securedAssets,proto3" json:"secured_assets,omitempty"`
@@ -6090,16 +6090,16 @@ func (x *GenesisState) GetOutboundFeeSpentRune() []*common.Coin {
 	return nil
 }
 
-func (x *GenesisState) GetRuneProviders() []*types.RUNEProvider {
+func (x *GenesisState) GetDecaProviders() []*types.RUNEProvider {
 	if x != nil {
-		return x.RuneProviders
+		return x.DecaProviders
 	}
 	return nil
 }
 
-func (x *GenesisState) GetRunePool() *types.RUNEPool {
+func (x *GenesisState) GetDecaPool() *types.DECAPool {
 	if x != nil {
-		return x.RunePool
+		return x.DecaPool
 	}
 	return nil
 }
@@ -6427,7 +6427,7 @@ var file_thorchain_genesis_proto_goTypes = []interface{}{
 	(*types.TradeUnit)(nil),              // 20: types.TradeUnit
 	(*common.Coin)(nil),                  // 21: common.Coin
 	(*types.RUNEProvider)(nil),           // 22: types.RUNEProvider
-	(*types.RUNEPool)(nil),               // 23: types.RUNEPool
+	(*types.DECAPool)(nil),               // 23: types.DECAPool
 	(*types.NodeMimir)(nil),              // 24: types.NodeMimir
 	(*types.AffiliateFeeCollector)(nil),  // 25: types.AffiliateFeeCollector
 	(*types.SecuredAsset)(nil),           // 26: types.SecuredAsset
@@ -6460,8 +6460,8 @@ var file_thorchain_genesis_proto_depIdxs = []int32{
 	20, // 21: thorchain.GenesisState.trade_units:type_name -> types.TradeUnit
 	21, // 22: thorchain.GenesisState.outbound_fee_withheld_rune:type_name -> common.Coin
 	21, // 23: thorchain.GenesisState.outbound_fee_spent_rune:type_name -> common.Coin
-	22, // 24: thorchain.GenesisState.rune_providers:type_name -> types.RUNEProvider
-	23, // 25: thorchain.GenesisState.rune_pool:type_name -> types.RUNEPool
+	22, // 24: thorchain.GenesisState.deca_providers:type_name -> types.RUNEProvider
+	23, // 25: thorchain.GenesisState.deca_pool:type_name -> types.DECAPool
 	24, // 26: thorchain.GenesisState.nodeMimirs:type_name -> types.NodeMimir
 	25, // 27: thorchain.GenesisState.affiliate_collectors:type_name -> types.AffiliateFeeCollector
 	26, // 28: thorchain.GenesisState.secured_assets:type_name -> types.SecuredAsset

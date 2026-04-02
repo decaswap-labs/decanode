@@ -29,7 +29,7 @@ func (s *EventManagerTestSuite) TestEmitErrataEvent(c *C) {
 		PoolMod{
 			Asset:    common.ETHAsset,
 			RuneAmt:  cosmos.ZeroUint(),
-			RuneAdd:  false,
+			DecaAdd:  false,
 			AssetAmt: cosmos.NewUint(100),
 			AssetAdd: true,
 		},

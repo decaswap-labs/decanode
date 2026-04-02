@@ -203,8 +203,8 @@ func newOutboundTxHandlerTestHelper(c *C) outboundTxHandlerTestHelper {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
-	pool.LPUnits = pool.BalanceRune
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
+	pool.LPUnits = pool.BalanceDeca
 
 	version := GetCurrentVersion()
 	asgardVault := GetRandomVault()
@@ -218,14 +218,14 @@ func newOutboundTxHandlerTestHelper(c *C) outboundTxHandlerTestHelper {
 	}
 	asgardVault.AddFunds(vaultCoins)
 	c.Assert(mgr.Keeper().SetVault(ctx, asgardVault), IsNil)
-	addr, err := asgardVault.GetAddress(common.RuneAsset().Chain)
+	addr, err := asgardVault.GetAddress(common.DecaAsset().Chain)
 	c.Check(err, IsNil)
 
 	tx := NewObservedTx(common.Tx{
 		ID:          GetRandomTxHash(),
-		Chain:       common.RuneAsset().Chain,
+		Chain:       common.DecaAsset().Chain,
 		Coins:       common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(1*common.One))},
-		Memo:        "SWAP:" + common.RuneAsset().String(),
+		Memo:        "SWAP:" + common.DecaAsset().String(),
 		FromAddress: GetRandomBTCAddress(),
 		ToAddress:   addr,
 		Gas: common.Gas{
@@ -407,7 +407,7 @@ func (s *HandlerOutboundTxSuite) TestOuboundTxHandlerSendExtraFundShouldBeSlashe
 		ID:    GetRandomTxHash(),
 		Chain: common.BTCChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)),
 		},
 		Memo:        NewOutboundMemo(helper.inboundTx.Tx.ID).String(),
 		FromAddress: fromAddr,
@@ -424,7 +424,7 @@ func (s *HandlerOutboundTxSuite) TestOuboundTxHandlerSendExtraFundShouldBeSlashe
 	c.Assert(err, IsNil)
 	na, err := helper.keeper.GetNodeAccount(helper.ctx, helper.nodeAccount.NodeAddress)
 	c.Assert(na.Bond, DeepEquals, expectedBond)
-	newReserve := helper.keeper.GetRuneBalanceOfModule(helper.ctx, ReserveName)
+	newReserve := helper.keeper.GetDecaBalanceOfModule(helper.ctx, ReserveName)
 	c.Assert(err, IsNil)
 	c.Assert(newReserve, DeepEquals, expectedVaultTotalReserve)
 }
@@ -438,7 +438,7 @@ func (s *HandlerOutboundTxSuite) TestOutboundTxHandlerSendAdditionalCoinsShouldB
 		ID:    GetRandomTxHash(),
 		Chain: common.BTCChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)),
 			common.NewCoin(common.BTCAsset, cosmos.NewUint(1*common.One)),
 		},
 		Memo:        NewOutboundMemo(helper.inboundTx.Tx.ID).String(),
@@ -467,7 +467,7 @@ func (s *HandlerOutboundTxSuite) TestOutboundTxHandlerInvalidObservedTxVoterShou
 		ID:    GetRandomTxHash(),
 		Chain: common.BTCChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)),
 			common.NewCoin(common.BTCAsset, cosmos.NewUint(1*common.One)),
 		},
 		Memo:        NewOutboundMemo(helper.inboundTx.Tx.ID).String(),
@@ -495,11 +495,11 @@ func (s *HandlerOutboundTxSuite) TestOutboundTxHandlerInvalidObservedTxVoterShou
 	c.Assert(err, IsNil)
 	c.Assert(na.Bond, DeepEquals, expectedBond)
 
-	newReserve := helper.keeper.GetRuneBalanceOfModule(helper.ctx, ReserveName)
+	newReserve := helper.keeper.GetDecaBalanceOfModule(helper.ctx, ReserveName)
 	c.Assert(newReserve, DeepEquals, expectedVaultTotalReserve)
 	pool, err = helper.keeper.GetPool(helper.ctx, common.BTCAsset)
 	c.Assert(err, IsNil)
-	c.Assert(pool.BalanceRune, DeepEquals, cosmos.NewUint(10093462163))
+	c.Assert(pool.BalanceDeca, DeepEquals, cosmos.NewUint(10093462163))
 	c.Assert(pool.BalanceAsset, DeepEquals, poolBTC)
 }
 
@@ -509,8 +509,8 @@ func (s *HandlerOutboundTxSuite) TestOutboundTxHandlerETHChainSpendTooMuchGasSho
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
-	pool.LPUnits = pool.BalanceRune
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
+	pool.LPUnits = pool.BalanceDeca
 	c.Assert(helper.keeper.SetPool(helper.ctx, pool), IsNil)
 	fromAddr, err := helper.asgardVault.GetAddress(common.ETHChain)
 	c.Assert(err, IsNil)
@@ -559,8 +559,8 @@ func (s *HandlerOutboundTxSuite) TestOutboundTxHandlerETHChainSpendTooMuchGasPer
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
-	pool.LPUnits = pool.BalanceRune
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
+	pool.LPUnits = pool.BalanceDeca
 	c.Assert(helper.keeper.SetPool(helper.ctx, pool), IsNil)
 	fromAddr, err := helper.asgardVault.GetAddress(common.ETHChain)
 	c.Assert(err, IsNil)
@@ -615,9 +615,9 @@ func (s *HandlerOutboundTxSuite) TestOutboundTxHandlerMismatchDecimalShouldNotSl
 	pool := NewPool()
 	pool.Asset = usdtAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Decimals = 6
-	pool.LPUnits = pool.BalanceRune
+	pool.LPUnits = pool.BalanceDeca
 	c.Assert(helper.keeper.SetPool(helper.ctx, pool), IsNil)
 	fromAddr, err := helper.asgardVault.GetAddress(common.ETHChain)
 	c.Assert(err, IsNil)

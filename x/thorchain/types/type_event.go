@@ -47,8 +47,8 @@ const (
 	SecuredAssetWithdrawEventType   = "secured_asset_withdraw"
 	SwitchEventType                 = "switch"
 	OperatorRotateEventType         = "operator_rotate"
-	RUNEPoolDepositEventType        = "rune_pool_deposit"
-	RUNEPoolWithdrawEventType       = "rune_pool_withdraw"
+	DECAPoolDepositEventType        = "deca_pool_deposit"
+	DECAPoolWithdrawEventType       = "deca_pool_withdraw"
 	TSSKeygenSuccess                = "tss_keygen_success"
 	TSSKeygenFailure                = "tss_keygen_failure"
 	TSSKeygenMetricEventType        = "tss_keygen"
@@ -68,11 +68,11 @@ const (
 type PoolMods []PoolMod
 
 // NewPoolMod create a new instance of PoolMod
-func NewPoolMod(asset common.Asset, runeAmt cosmos.Uint, runeAdd bool, assetAmt cosmos.Uint, assetAdd bool) PoolMod {
+func NewPoolMod(asset common.Asset, runeAmt cosmos.Uint, decaAdd bool, assetAmt cosmos.Uint, assetAdd bool) PoolMod {
 	return PoolMod{
 		Asset:    asset,
 		RuneAmt:  runeAmt,
-		RuneAdd:  runeAdd,
+		DecaAdd:  decaAdd,
 		AssetAmt: assetAmt,
 		AssetAdd: assetAdd,
 	}
@@ -237,12 +237,12 @@ func (m *EventStreamingSwap) Events() (cosmos.Events, error) {
 	return cosmos.Events{evt}, nil
 }
 
-func NewEventAffiliateFee(txId common.TxID, memo, thorname string, runeAddr common.Address, asset common.Asset, feeBps uint64, grossAmount, feeAmt cosmos.Uint) *EventAffiliateFee {
+func NewEventAffiliateFee(txId common.TxID, memo, thorname string, decaAddr common.Address, asset common.Asset, feeBps uint64, grossAmount, feeAmt cosmos.Uint) *EventAffiliateFee {
 	return &EventAffiliateFee{
 		TxID:        txId,
 		Memo:        memo,
 		Thorname:    thorname,
-		RuneAddress: runeAddr,
+		DecaAddress: decaAddr,
 		Asset:       asset,
 		GrossAmount: grossAmount,
 		FeeBps:      feeBps,
@@ -260,7 +260,7 @@ func (m *EventAffiliateFee) Events() (cosmos.Events, error) {
 			cosmos.NewAttribute("tx_id", m.TxID.String()),
 			cosmos.NewAttribute("memo", m.Memo),
 			cosmos.NewAttribute("thorname", m.Thorname),
-			cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+			cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 			cosmos.NewAttribute("asset", m.Asset.String()),
 			cosmos.NewAttribute("gross_amount", m.GrossAmount.String()),
 			cosmos.NewAttribute("fee_bps", strconv.FormatUint(m.FeeBps, 10)),
@@ -272,7 +272,7 @@ func (m *EventAffiliateFee) Events() (cosmos.Events, error) {
 // NewEventAddLiquidity create a new add liquidity event
 func NewEventAddLiquidity(pool common.Asset,
 	su cosmos.Uint,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	runeAmount,
 	assetAmount cosmos.Uint,
 	runeTxID,
@@ -282,7 +282,7 @@ func NewEventAddLiquidity(pool common.Asset,
 	return &EventAddLiquidity{
 		Pool:          pool,
 		ProviderUnits: su,
-		RuneAddress:   runeAddress,
+		DecaAddress:   decaAddress,
 		RuneAmount:    runeAmount,
 		AssetAmount:   assetAmount,
 		RuneTxID:      runeTxID,
@@ -301,13 +301,13 @@ func (m *EventAddLiquidity) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("pool", m.Pool.String()),
 		cosmos.NewAttribute("liquidity_provider_units", m.ProviderUnits.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("rune_amount", m.RuneAmount.String()),
 		cosmos.NewAttribute("asset_amount", m.AssetAmount.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 	)
 	if !m.RuneTxID.Equals(m.AssetTxID) && !m.RuneTxID.IsEmpty() {
-		evt = evt.AppendAttributes(cosmos.NewAttribute(fmt.Sprintf("%s_txid", common.RuneAsset().Chain), m.RuneTxID.String()))
+		evt = evt.AppendAttributes(cosmos.NewAttribute(fmt.Sprintf("%s_txid", common.DecaAsset().Chain), m.RuneTxID.String()))
 	}
 
 	if !m.AssetTxID.IsEmpty() {
@@ -672,7 +672,7 @@ func (m *EventErrata) Events() (cosmos.Events, error) {
 			cosmos.NewAttribute("in_tx_id", m.TxID.String()),
 			cosmos.NewAttribute("asset", item.Asset.String()),
 			cosmos.NewAttribute("rune_amt", item.RuneAmt.String()),
-			cosmos.NewAttribute("rune_add", strconv.FormatBool(item.RuneAdd)),
+			cosmos.NewAttribute("deca_add", strconv.FormatBool(item.DecaAdd)),
 			cosmos.NewAttribute("asset_amt", item.AssetAmt.String()),
 			cosmos.NewAttribute("asset_add", strconv.FormatBool(item.AssetAdd)))
 		events = append(events, evt)
@@ -864,7 +864,7 @@ func (m *EventPoolBalanceChanged) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("asset", m.PoolChange.Asset.String()),
 		cosmos.NewAttribute("rune_amt", m.PoolChange.RuneAmt.String()),
-		cosmos.NewAttribute("rune_add", strconv.FormatBool(m.PoolChange.RuneAdd)),
+		cosmos.NewAttribute("deca_add", strconv.FormatBool(m.PoolChange.DecaAdd)),
 		cosmos.NewAttribute("asset_amt", m.PoolChange.AssetAmt.String()),
 		cosmos.NewAttribute("asset_add", strconv.FormatBool(m.PoolChange.AssetAdd)),
 		cosmos.NewAttribute("reason", m.GetReason()))
@@ -874,7 +874,7 @@ func (m *EventPoolBalanceChanged) Events() (cosmos.Events, error) {
 // NewEventPendingLiquidity create a new add pending liquidity event
 func NewEventPendingLiquidity(pool common.Asset,
 	ptype PendingLiquidityType,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	runeAmount cosmos.Uint,
 	assetAddress common.Address,
 	assetAmount cosmos.Uint,
@@ -884,7 +884,7 @@ func NewEventPendingLiquidity(pool common.Asset,
 	return &EventPendingLiquidity{
 		Pool:         pool,
 		PendingType:  ptype,
-		RuneAddress:  runeAddress,
+		DecaAddress:  decaAddress,
 		RuneAmount:   runeAmount,
 		AssetAddress: assetAddress,
 		AssetAmount:  assetAmount,
@@ -903,13 +903,13 @@ func (m *EventPendingLiquidity) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("pool", m.Pool.String()),
 		cosmos.NewAttribute("type", m.PendingType.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("rune_amount", m.RuneAmount.String()),
 		cosmos.NewAttribute("asset_amount", m.AssetAmount.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 	)
 	if !m.RuneTxID.Equals(m.AssetTxID) && !m.RuneTxID.IsEmpty() {
-		evt = evt.AppendAttributes(cosmos.NewAttribute(fmt.Sprintf("%s_txid", common.RuneAsset().Chain), m.RuneTxID.String()))
+		evt = evt.AppendAttributes(cosmos.NewAttribute(fmt.Sprintf("%s_txid", common.DecaAsset().Chain), m.RuneTxID.String()))
 	}
 
 	if !m.AssetTxID.IsEmpty() {
@@ -956,14 +956,14 @@ func NewEventTradeAccountDeposit(
 	amt cosmos.Uint,
 	asset common.Asset,
 	assetAddress common.Address,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	txID common.TxID,
 ) *EventTradeAccountDeposit {
 	return &EventTradeAccountDeposit{
 		Amount:       amt,
 		Asset:        asset,
 		AssetAddress: assetAddress,
-		RuneAddress:  runeAddress,
+		DecaAddress:  decaAddress,
 		TxID:         txID,
 	}
 }
@@ -978,7 +978,7 @@ func (m *EventTradeAccountDeposit) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("amount", m.Amount.String()),
 		cosmos.NewAttribute("asset", m.Asset.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 		cosmos.NewAttribute("tx_id", m.TxID.String()))
 	return cosmos.Events{evt}, nil
@@ -989,14 +989,14 @@ func NewEventTradeAccountWithdraw(
 	amt cosmos.Uint,
 	asset common.Asset,
 	assetAddress common.Address,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	txID common.TxID,
 ) *EventTradeAccountWithdraw {
 	return &EventTradeAccountWithdraw{
 		Amount:       amt,
 		Asset:        asset,
 		AssetAddress: assetAddress,
-		RuneAddress:  runeAddress,
+		DecaAddress:  decaAddress,
 		TxID:         txID,
 	}
 }
@@ -1011,7 +1011,7 @@ func (m *EventTradeAccountWithdraw) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("amount", m.Amount.String()),
 		cosmos.NewAttribute("asset", m.Asset.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 		cosmos.NewAttribute("tx_id", m.TxID.String()))
 	return cosmos.Events{evt}, nil
@@ -1022,14 +1022,14 @@ func NewEventSecuredAssetDeposit(
 	amt cosmos.Uint,
 	asset common.Asset,
 	assetAddress common.Address,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	txID common.TxID,
 ) *EventSecuredAssetDeposit {
 	return &EventSecuredAssetDeposit{
 		Amount:       amt,
 		Asset:        asset,
 		AssetAddress: assetAddress,
-		RuneAddress:  runeAddress,
+		DecaAddress:  decaAddress,
 		TxID:         txID,
 	}
 }
@@ -1044,7 +1044,7 @@ func (m *EventSecuredAssetDeposit) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("amount", m.Amount.String()),
 		cosmos.NewAttribute("asset", m.Asset.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 		cosmos.NewAttribute("tx_id", m.TxID.String()))
 	return cosmos.Events{evt}, nil
@@ -1055,14 +1055,14 @@ func NewEventSecuredAssetWithdraw(
 	amt cosmos.Uint,
 	asset common.Asset,
 	assetAddress common.Address,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	txID common.TxID,
 ) *EventSecuredAssetWithdraw {
 	return &EventSecuredAssetWithdraw{
 		Amount:       amt,
 		Asset:        asset,
 		AssetAddress: assetAddress,
-		RuneAddress:  runeAddress,
+		DecaAddress:  decaAddress,
 		TxID:         txID,
 	}
 }
@@ -1077,15 +1077,15 @@ func (m *EventSecuredAssetWithdraw) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("amount", m.Amount.String()),
 		cosmos.NewAttribute("asset", m.Asset.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 		cosmos.NewAttribute("tx_id", m.TxID.String()))
 	return cosmos.Events{evt}, nil
 }
 
-// NewEventRUNEPoolWithdraw create a new RUNEPool withdraw event
-func NewEventRUNEPoolWithdraw(
-	runeAddress cosmos.AccAddress,
+// NewEventDECAPoolWithdraw create a new DECAPool withdraw event
+func NewEventDECAPoolWithdraw(
+	decaAddress cosmos.AccAddress,
 	basisPts int64,
 	runeAmount cosmos.Uint,
 	units cosmos.Uint,
@@ -1093,9 +1093,9 @@ func NewEventRUNEPoolWithdraw(
 	affAddr common.Address,
 	affBps int64,
 	affAmt cosmos.Uint,
-) *EventRUNEPoolWithdraw {
-	return &EventRUNEPoolWithdraw{
-		RuneAddress:       runeAddress,
+) *EventDECAPoolWithdraw {
+	return &EventDECAPoolWithdraw{
+		DecaAddress:       decaAddress,
 		BasisPoints:       basisPts,
 		RuneAmount:        runeAmount,
 		Units:             units,
@@ -1107,14 +1107,14 @@ func NewEventRUNEPoolWithdraw(
 }
 
 // Type return the withdraw event type
-func (m *EventRUNEPoolWithdraw) Type() string {
-	return RUNEPoolWithdrawEventType
+func (m *EventDECAPoolWithdraw) Type() string {
+	return DECAPoolWithdrawEventType
 }
 
 // Events return the cosmos event
-func (m *EventRUNEPoolWithdraw) Events() (cosmos.Events, error) {
+func (m *EventDECAPoolWithdraw) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("basis_points", strconv.FormatInt(m.BasisPoints, 10)),
 		cosmos.NewAttribute("rune_amount", m.RuneAmount.String()),
 		cosmos.NewAttribute("units", m.Units.String()),
@@ -1125,15 +1125,15 @@ func (m *EventRUNEPoolWithdraw) Events() (cosmos.Events, error) {
 	return cosmos.Events{evt}, nil
 }
 
-// NewEventRUNEPoolDeposit create a new RUNEPool deposit event
-func NewEventRUNEPoolDeposit(
-	runeAddress cosmos.AccAddress,
+// NewEventDECAPoolDeposit create a new DECAPool deposit event
+func NewEventDECAPoolDeposit(
+	decaAddress cosmos.AccAddress,
 	runeAmount cosmos.Uint,
 	units cosmos.Uint,
 	txid common.TxID,
-) *EventRUNEPoolDeposit {
-	return &EventRUNEPoolDeposit{
-		RuneAddress: runeAddress,
+) *EventDECAPoolDeposit {
+	return &EventDECAPoolDeposit{
+		DecaAddress: decaAddress,
 		RuneAmount:  runeAmount,
 		Units:       units,
 		TxId:        txid,
@@ -1141,14 +1141,14 @@ func NewEventRUNEPoolDeposit(
 }
 
 // Type return the deposit event type
-func (m *EventRUNEPoolDeposit) Type() string {
-	return RUNEPoolDepositEventType
+func (m *EventDECAPoolDeposit) Type() string {
+	return DECAPoolDepositEventType
 }
 
 // Events return the cosmos event
-func (m *EventRUNEPoolDeposit) Events() (cosmos.Events, error) {
+func (m *EventDECAPoolDeposit) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("rune_amount", m.RuneAmount.String()),
 		cosmos.NewAttribute("units", m.Units.String()),
 		cosmos.NewAttribute("tx_id", m.TxId.String()),
@@ -1250,14 +1250,14 @@ func NewEventSwitch(
 	amt cosmos.Uint,
 	asset common.Asset,
 	assetAddress common.Address,
-	runeAddress common.Address,
+	decaAddress common.Address,
 	txID common.TxID,
 ) *EventSwitch {
 	return &EventSwitch{
 		Amount:       amt,
 		Asset:        asset,
 		AssetAddress: assetAddress,
-		RuneAddress:  runeAddress,
+		DecaAddress:  decaAddress,
 		TxID:         txID,
 	}
 }
@@ -1272,16 +1272,16 @@ func (m *EventSwitch) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
 		cosmos.NewAttribute("amount", m.Amount.String()),
 		cosmos.NewAttribute("asset", m.Asset.String()),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("asset_address", m.AssetAddress.String()),
 		cosmos.NewAttribute("tx_id", m.TxID.String()))
 	return cosmos.Events{evt}, nil
 }
 
 // NewEventTCYDistribution create a new EventTCYDistribution
-func NewEventTCYDistribution(runeAddress cosmos.AccAddress, runeAmount cosmos.Uint) *EventTCYDistribution {
+func NewEventTCYDistribution(decaAddress cosmos.AccAddress, runeAmount cosmos.Uint) *EventTCYDistribution {
 	return &EventTCYDistribution{
-		RuneAddress: runeAddress,
+		DecaAddress: decaAddress,
 		RuneAmount:  runeAmount,
 	}
 }
@@ -1294,16 +1294,16 @@ func (m *EventTCYDistribution) Type() string {
 // Events return events
 func (m *EventTCYDistribution) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("rune_amount", m.RuneAmount.String()),
 	)
 	return cosmos.Events{evt}, nil
 }
 
 // NewEventTCYClaim create a new EventTCYClaim
-func NewEventTCYClaim(runeAddress, l1Address common.Address, tcyAmount cosmos.Uint, asset common.Asset) *EventTCYClaim {
+func NewEventTCYClaim(decaAddress, l1Address common.Address, tcyAmount cosmos.Uint, asset common.Asset) *EventTCYClaim {
 	return &EventTCYClaim{
-		RuneAddress: runeAddress,
+		DecaAddress: decaAddress,
 		L1Address:   l1Address,
 		Asset:       asset,
 		TcyAmount:   tcyAmount,
@@ -1318,7 +1318,7 @@ func (m *EventTCYClaim) Type() string {
 // Events return events
 func (m *EventTCYClaim) Events() (cosmos.Events, error) {
 	evt := cosmos.NewEvent(m.Type(),
-		cosmos.NewAttribute("rune_address", m.RuneAddress.String()),
+		cosmos.NewAttribute("deca_address", m.DecaAddress.String()),
 		cosmos.NewAttribute("l1_address", m.L1Address.String()),
 		cosmos.NewAttribute("asset", m.Asset.String()),
 		cosmos.NewAttribute("tcy_amount", m.TcyAmount.String()),

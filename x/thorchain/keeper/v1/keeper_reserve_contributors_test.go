@@ -16,25 +16,25 @@ func (KeeperReserveContributorsSuite) TestReserveContributors(c *C) {
 
 	poolFee := cosmos.NewUint(common.One * 100)
 	FundModule(c, ctx, k, AsgardName, poolFee.Uint64())
-	asgardBefore := k.GetRuneBalanceOfModule(ctx, AsgardName)
-	reserveBefore := k.GetRuneBalanceOfModule(ctx, ReserveName)
+	asgardBefore := k.GetDecaBalanceOfModule(ctx, AsgardName)
+	reserveBefore := k.GetDecaBalanceOfModule(ctx, ReserveName)
 
 	c.Assert(k.AddPoolFeeToReserve(ctx, poolFee), IsNil)
 
-	asgardAfter := k.GetRuneBalanceOfModule(ctx, AsgardName)
-	reserveAfter := k.GetRuneBalanceOfModule(ctx, ReserveName)
+	asgardAfter := k.GetDecaBalanceOfModule(ctx, AsgardName)
+	reserveAfter := k.GetDecaBalanceOfModule(ctx, ReserveName)
 	c.Assert(asgardAfter.String(), Equals, asgardBefore.Sub(poolFee).String())
 	c.Assert(reserveAfter.String(), Equals, reserveBefore.Add(poolFee).String())
 
 	bondFee := cosmos.NewUint(common.One * 200)
 	FundModule(c, ctx, k, BondName, bondFee.Uint64())
-	bondBefore := k.GetRuneBalanceOfModule(ctx, BondName)
+	bondBefore := k.GetDecaBalanceOfModule(ctx, BondName)
 	reserveBefore = reserveAfter
 
 	c.Assert(k.AddBondFeeToReserve(ctx, bondFee), IsNil)
 
-	bondAfter := k.GetRuneBalanceOfModule(ctx, BondName)
-	reserveAfter = k.GetRuneBalanceOfModule(ctx, ReserveName)
+	bondAfter := k.GetDecaBalanceOfModule(ctx, BondName)
+	reserveAfter = k.GetDecaBalanceOfModule(ctx, ReserveName)
 	c.Assert(bondAfter.String(), Equals, bondBefore.Sub(bondFee).String())
 	c.Assert(reserveAfter.String(), Equals, reserveBefore.Add(bondFee).String())
 }

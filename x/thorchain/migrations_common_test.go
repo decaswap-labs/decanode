@@ -68,8 +68,8 @@ func (s *MigrationCommonSuite) TestBurnReserveAndReduceMaxSupply(c *C) {
 	k := mgr.Keeper()
 
 	// Verify pre-state: reserve > 9.3M and total supply > 360M
-	reserveBefore := k.GetRuneBalanceOfModule(ctx, ReserveName)
-	supplyBefore := k.GetTotalSupply(ctx, common.RuneAsset())
+	reserveBefore := k.GetDecaBalanceOfModule(ctx, ReserveName)
+	supplyBefore := k.GetTotalSupply(ctx, common.DecaAsset())
 	c.Assert(reserveBefore.GT(cosmos.NewUint(9_300_000_00000000)), Equals, true,
 		Commentf("reserve should be > 9.3M, got %s", reserveBefore.String()))
 	c.Assert(supplyBefore.GT(cosmos.NewUint(360_000_000_00000000)), Equals, true,
@@ -80,18 +80,18 @@ func (s *MigrationCommonSuite) TestBurnReserveAndReduceMaxSupply(c *C) {
 	c.Assert(err, IsNil)
 
 	// Post-burn reserve should be 9.3M
-	reserveAfter := k.GetRuneBalanceOfModule(ctx, ReserveName)
+	reserveAfter := k.GetDecaBalanceOfModule(ctx, ReserveName)
 	c.Assert(reserveAfter.Equal(cosmos.NewUint(9_300_000_00000000)), Equals, true,
 		Commentf("reserve should be 9.3M, got %s", reserveAfter.String()))
 
-	// MaxRuneSupply must equal post-burn total supply (no state drift)
-	postBurnSupply := k.GetTotalSupply(ctx, common.RuneAsset())
-	maxSupplyMimir, _ := k.GetMimir(ctx, "MaxRuneSupply")
+	// MaxDecaSupply must equal post-burn total supply (no state drift)
+	postBurnSupply := k.GetTotalSupply(ctx, common.DecaAsset())
+	maxSupplyMimir, _ := k.GetMimir(ctx, "MaxDecaSupply")
 	c.Assert(maxSupplyMimir > 0, Equals, true)
 	c.Assert(postBurnSupply.Equal(cosmos.NewUint(uint64(maxSupplyMimir))), Equals, true,
-		Commentf("MaxRuneSupply (%d) should equal post-burn total supply (%s)", maxSupplyMimir, postBurnSupply.String()))
+		Commentf("MaxDecaSupply (%d) should equal post-burn total supply (%s)", maxSupplyMimir, postBurnSupply.String()))
 
-	// Total supply must be <= MaxRuneSupply
+	// Total supply must be <= MaxDecaSupply
 	c.Assert(postBurnSupply.LTE(cosmos.NewUint(uint64(maxSupplyMimir))), Equals, true,
-		Commentf("total supply (%s) should be <= MaxRuneSupply (%d)", postBurnSupply.String(), maxSupplyMimir))
+		Commentf("total supply (%s) should be <= MaxDecaSupply (%d)", postBurnSupply.String(), maxSupplyMimir))
 }

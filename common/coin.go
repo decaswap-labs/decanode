@@ -87,9 +87,8 @@ func (c Coin) IsNative() bool {
 	return c.Asset.GetChain().Equals(THORChain)
 }
 
-// IsRune checks whether the coin's Asset is RUNE.
-func (c Coin) IsRune() bool {
-	return c.Asset.IsRune()
+func (c Coin) IsDeca() bool {
+	return c.Asset.IsDeca()
 }
 
 // IsTCY checks whether the coin's Asset is TCY.

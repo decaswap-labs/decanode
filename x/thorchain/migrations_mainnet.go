@@ -119,7 +119,7 @@ func (m Migrator) Migrate4to5(ctx sdk.Context) error {
 			continue
 		}
 		amount := cosmos.NewUint(slashRefund.amount)
-		refundCoins := common.NewCoins(common.NewCoin(common.RuneAsset(), amount))
+		refundCoins := common.NewCoins(common.NewCoin(common.DecaAsset(), amount))
 		if err := m.mgr.Keeper().SendFromModuleToAccount(ctx, ReserveName, recipient, refundCoins); err != nil {
 			ctx.Logger().Error("fail to store migration transfer RUNE from Reserve to recipient", "error", err, "recipient", recipient, "amount", amount)
 		}
@@ -143,7 +143,7 @@ func (m Migrator) Migrate5to6(ctx sdk.Context) error {
 
 	// Validate Reserve module has sufficient funds before starting refunds
 	totalRefundAmount := cosmos.NewUint(14856919212689) // Total amount to be refunded
-	reserveBalance := m.mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
+	reserveBalance := m.mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
 	if reserveBalance.LT(totalRefundAmount) {
 		return fmt.Errorf("insufficient reserve balance for migration: have %s, need %s",
 			reserveBalance.String(), totalRefundAmount.String())
@@ -161,7 +161,7 @@ func (m Migrator) Migrate5to6(ctx sdk.Context) error {
 			continue
 		}
 		amount := cosmos.NewUint(slashRefund.amount)
-		refundCoins := common.NewCoins(common.NewCoin(common.RuneAsset(), amount))
+		refundCoins := common.NewCoins(common.NewCoin(common.DecaAsset(), amount))
 		if err := m.mgr.Keeper().SendFromModuleToAccount(ctx, ReserveName, recipient, refundCoins); err != nil {
 			ctx.Logger().Error("fail to store migration transfer RUNE from Reserve to recipient",
 				"error", err,
@@ -309,17 +309,17 @@ func (m Migrator) Migrate11to12(ctx sdk.Context) error {
 	removeLPs := []LiquidityProvider{
 		// https://gateway.liquify.com/chain/thorchain_api/cosmos/tx/v1beta1/txs/5BF8911A9DD947EC1EE7E990085ECB21DD7E395F152B5137F7CD73B76E46870A
 		{
-			RuneAddress:  "thor1pe0pspu4ep85gxr5h9l6k49g024vemtr80hg4c",
+			DecaAddress:  "thor1pe0pspu4ep85gxr5h9l6k49g024vemtr80hg4c",
 			AssetAddress: "0x03c42ab083bd46202ee430AfC4D3dd8eD8c76c07",
 		},
 		// https://gateway.liquify.com/chain/thorchain_api/cosmos/tx/v1beta1/txs/248CE4B07E6A63E8CA3E111754849DD560FA9F4BF83BF2FD0B0B40947633B1B9
 		{
-			RuneAddress:  "",
+			DecaAddress:  "",
 			AssetAddress: "0x467a0ec2d2f23f0bb165eb7e44a9b16b12f5a7b4",
 		},
 		// affiliate position for the prior add liquidity transaction
 		{
-			RuneAddress:  "thor122h9hlrugzdny9ct95z6g7afvpzu34s73uklju",
+			DecaAddress:  "thor122h9hlrugzdny9ct95z6g7afvpzu34s73uklju",
 			AssetAddress: "",
 		},
 	}
@@ -336,7 +336,7 @@ func (m Migrator) Migrate11to12(ctx sdk.Context) error {
 		if err != nil {
 			ctx.Logger().Error("failed to get liquidity provider ",
 				"error", err,
-				"rune_address", lp.RuneAddress,
+				"deca_address", lp.DecaAddress,
 				"asset_address", lp.AssetAddress)
 			continue
 		}
@@ -352,7 +352,7 @@ func (m Migrator) Migrate11to12(ctx sdk.Context) error {
 		m.mgr.Keeper().RemoveLiquidityProvider(ctx, lp)
 		ctx.Logger().Info("removed bad liquidity provider record",
 			"asset", avaxUSDC.String(),
-			"rune_address", lp.RuneAddress,
+			"deca_address", lp.DecaAddress,
 			"asset_address", lp.AssetAddress,
 		)
 	}
@@ -392,7 +392,7 @@ func (m Migrator) Migrate11to12(ctx sdk.Context) error {
 	}
 
 	// refund 43F310A416A4ED8CF8B645B1EBBB5E25FB89F9777A4350F7023DEB62B90EA3AD
-	refundRune := common.NewCoin(common.RuneNative, cosmos.NewUint(40000000000))
+	refundRune := common.NewCoin(common.DecaNative, cosmos.NewUint(40000000000))
 	userAddr, err := common.NewAddress("thor1dvvr4kdeurs8fdwgrql6je7l2v9ma73dp50n7m")
 	if err != nil {
 		return err
@@ -422,7 +422,7 @@ func (m Migrator) Migrate12to13(ctx sdk.Context) error {
 
 	// Validate Reserve module has sufficient funds before starting refunds
 	totalRefundAmount := cosmos.NewUint(mainnetSlashRefunds12to13Total) // Total amount to be refunded
-	reserveBalance := m.mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
+	reserveBalance := m.mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
 	if reserveBalance.LT(totalRefundAmount) {
 		return fmt.Errorf("insufficient reserve balance for migration: have %s, need %s",
 			reserveBalance.String(), totalRefundAmount.String())
@@ -440,7 +440,7 @@ func (m Migrator) Migrate12to13(ctx sdk.Context) error {
 			continue
 		}
 		amount := cosmos.NewUint(slashRefund.amount)
-		refundCoins := common.NewCoins(common.NewCoin(common.RuneAsset(), amount))
+		refundCoins := common.NewCoins(common.NewCoin(common.DecaAsset(), amount))
 		if err := m.mgr.Keeper().SendFromModuleToAccount(ctx, ReserveName, recipient, refundCoins); err != nil {
 			ctx.Logger().Error("fail to store migration transfer RUNE from Reserve to recipient",
 				"error", err,
@@ -463,6 +463,6 @@ func (m Migrator) Migrate13to14(ctx sdk.Context) error {
 		return err
 	}
 
-	// ADR-023: Burn ~87% of Reserve and reduce MaxRuneSupply to 360M.
+	// ADR-023: Burn ~87% of Reserve and reduce MaxDecaSupply to 360M.
 	return m.BurnReserveAndReduceMaxSupply(ctx)
 }

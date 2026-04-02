@@ -41,7 +41,7 @@ func (h DonateHandler) validate(ctx cosmos.Context, msg MsgDonate) error {
 	if err := msg.ValidateBasic(); err != nil {
 		return err
 	}
-	if !msg.Asset.IsRune() && msg.Asset.IsNative() {
+	if !msg.Asset.IsDeca() && msg.Asset.IsNative() {
 		ctx.Logger().Error("asset cannot be a non-RUNE native asset", "error", errInvalidMessage)
 		return errInvalidMessage
 	}
@@ -65,7 +65,7 @@ func (h DonateHandler) handle(ctx cosmos.Context, msg MsgDonate) error {
 	// - Native chain: Cosmos SDK bank module ante handler validates transfers
 	// The getMsgDonateFromMemo function extracts amounts from tx.Tx.Coins, so this check
 	// ensures message integrity and guards against any potential manipulation.
-	txRuneCoin := msg.Tx.Coins.GetCoin(common.RuneAsset())
+	txRuneCoin := msg.Tx.Coins.GetCoin(common.DecaAsset())
 	txAssetCoin := msg.Tx.Coins.GetCoin(msg.Asset)
 	if !msg.RuneAmount.Equal(txRuneCoin.Amount) {
 		return fmt.Errorf("rune amount mismatch: msg has %s but tx has %s", msg.RuneAmount, txRuneCoin.Amount)
@@ -75,7 +75,7 @@ func (h DonateHandler) handle(ctx cosmos.Context, msg MsgDonate) error {
 	}
 
 	pool.BalanceAsset = pool.BalanceAsset.Add(msg.AssetAmount)
-	pool.BalanceRune = pool.BalanceRune.Add(msg.RuneAmount)
+	pool.BalanceDeca = pool.BalanceDeca.Add(msg.RuneAmount)
 
 	if err = h.mgr.Keeper().SetPool(ctx, pool); err != nil {
 		return ErrInternal(err, fmt.Sprintf("fail to set pool(%s)", pool))

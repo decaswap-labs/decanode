@@ -71,7 +71,7 @@ func (k KVStore) GetSurplusForTargetMultiplier(ctx cosmos.Context, targetMultipl
 	//	(max - 10_000) = (surplus / target) * (max - min)
 	//	surplus = ((max - 10_000) / (max - min)) * target
 
-	targetSurplus := cosmos.SafeUintFromInt64(k.GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusRune))
+	targetSurplus := cosmos.SafeUintFromInt64(k.GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusDeca))
 	maxMultiplier := cosmos.SafeUintFromInt64(k.GetConfigInt64(ctx, constants.MaxOutboundFeeMultiplierBasisPoints))
 	minMultiplier := cosmos.SafeUintFromInt64(k.GetConfigInt64(ctx, constants.MinOutboundFeeMultiplierBasisPoints))
 

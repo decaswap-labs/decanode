@@ -164,7 +164,7 @@ func (c Chain) GetSigningAlgo() SigningAlgo {
 func (c Chain) GetGasAsset() Asset {
 	switch c {
 	case THORChain:
-		return RuneNative
+		return DecaNative
 	case BSCChain:
 		return BNBBEP20Asset
 	case BTCChain:

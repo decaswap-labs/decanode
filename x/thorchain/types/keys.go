@@ -17,8 +17,7 @@ const (
 	AffiliateCollectorName = "affiliate_collector"
 	// TreasuryName the name of the account used for treasury governance
 	TreasuryName = "treasury"
-	// RUNEPoolName the name of the account used to track RUNEPool
-	RUNEPoolName = "rune_pool"
+	DECAPoolName = "deca_pool"
 	// TCYClaimingName the name of the account used to track claming funds from $TCY
 	TCYClaimingName = "tcy_claim"
 	// TCYStakeName the name of the account used to track stake funds from $TCY

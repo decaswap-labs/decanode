@@ -11,35 +11,35 @@ import (
 
 // "pool+"
 
-type RunePoolDepositMemo struct {
+type DecaPoolDepositMemo struct {
 	MemoBase
 }
 
-func (m RunePoolDepositMemo) String() string {
+func (m DecaPoolDepositMemo) String() string {
 	return m.string(false)
 }
 
-func (m RunePoolDepositMemo) ShortString() string {
+func (m DecaPoolDepositMemo) ShortString() string {
 	return m.string(true)
 }
 
-func (m RunePoolDepositMemo) string(short bool) string {
+func (m DecaPoolDepositMemo) string(short bool) string {
 	return "pool+"
 }
 
-func NewRunePoolDepositMemo() RunePoolDepositMemo {
-	return RunePoolDepositMemo{
-		MemoBase: MemoBase{TxType: TxRunePoolDeposit},
+func NewDecaPoolDepositMemo() DecaPoolDepositMemo {
+	return DecaPoolDepositMemo{
+		MemoBase: MemoBase{TxType: TxDecaPoolDeposit},
 	}
 }
 
-func (p *parser) ParseRunePoolDepositMemo() (RunePoolDepositMemo, error) {
-	return NewRunePoolDepositMemo(), nil
+func (p *parser) ParseDecaPoolDepositMemo() (DecaPoolDepositMemo, error) {
+	return NewDecaPoolDepositMemo(), nil
 }
 
 // "pool-:<basis-points>:<affiliate>:<affiliate-basis-points>"
 
-type RunePoolWithdrawMemo struct {
+type DecaPoolWithdrawMemo struct {
 	MemoBase
 	BasisPoints          cosmos.Uint
 	AffiliateAddress     common.Address
@@ -47,19 +47,19 @@ type RunePoolWithdrawMemo struct {
 	AffiliateTHORName    *types.THORName
 }
 
-func (m RunePoolWithdrawMemo) GetBasisPts() cosmos.Uint              { return m.BasisPoints }
-func (m RunePoolWithdrawMemo) GetAffiliateAddress() common.Address   { return m.AffiliateAddress }
-func (m RunePoolWithdrawMemo) GetAffiliateBasisPoints() cosmos.Uint  { return m.AffiliateBasisPoints }
-func (m RunePoolWithdrawMemo) GetAffiliateTHORName() *types.THORName { return m.AffiliateTHORName }
+func (m DecaPoolWithdrawMemo) GetBasisPts() cosmos.Uint              { return m.BasisPoints }
+func (m DecaPoolWithdrawMemo) GetAffiliateAddress() common.Address   { return m.AffiliateAddress }
+func (m DecaPoolWithdrawMemo) GetAffiliateBasisPoints() cosmos.Uint  { return m.AffiliateBasisPoints }
+func (m DecaPoolWithdrawMemo) GetAffiliateTHORName() *types.THORName { return m.AffiliateTHORName }
 
-func (m RunePoolWithdrawMemo) String() string {
-	args := []string{TxRunePoolWithdraw.String(), m.BasisPoints.String(), m.AffiliateAddress.String(), m.AffiliateBasisPoints.String()}
+func (m DecaPoolWithdrawMemo) String() string {
+	args := []string{TxDecaPoolWithdraw.String(), m.BasisPoints.String(), m.AffiliateAddress.String(), m.AffiliateBasisPoints.String()}
 	return strings.Join(args, ":")
 }
 
-func NewRunePoolWithdrawMemo(basisPoints cosmos.Uint, affAddr common.Address, affBps cosmos.Uint, tn types.THORName) RunePoolWithdrawMemo {
-	mem := RunePoolWithdrawMemo{
-		MemoBase:             MemoBase{TxType: TxRunePoolWithdraw},
+func NewDecaPoolWithdrawMemo(basisPoints cosmos.Uint, affAddr common.Address, affBps cosmos.Uint, tn types.THORName) DecaPoolWithdrawMemo {
+	mem := DecaPoolWithdrawMemo{
+		MemoBase:             MemoBase{TxType: TxDecaPoolWithdraw},
 		BasisPoints:          basisPoints,
 		AffiliateAddress:     affAddr,
 		AffiliateBasisPoints: affBps,
@@ -70,10 +70,10 @@ func NewRunePoolWithdrawMemo(basisPoints cosmos.Uint, affAddr common.Address, af
 	return mem
 }
 
-func (p *parser) ParseRunePoolWithdrawMemo() (RunePoolWithdrawMemo, error) {
+func (p *parser) ParseDecaPoolWithdrawMemo() (DecaPoolWithdrawMemo, error) {
 	basisPoints := p.getUint(1, true, cosmos.ZeroInt().Uint64())
 	affiliateAddress := p.getAddressWithKeeper(2, false, common.NoAddress, common.THORChain)
 	tn := p.getTHORName(2, false, types.NewTHORName("", 0, nil), -1)
 	affiliateBasisPoints := p.getUintWithMaxValue(3, false, 0, constants.MaxBasisPts)
-	return NewRunePoolWithdrawMemo(basisPoints, affiliateAddress, affiliateBasisPoints, tn), p.Error()
+	return NewDecaPoolWithdrawMemo(basisPoints, affiliateAddress, affiliateBasisPoints, tn), p.Error()
 }

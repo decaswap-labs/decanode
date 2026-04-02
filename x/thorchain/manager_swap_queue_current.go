@@ -314,7 +314,7 @@ func (vm *SwapQueueImpl) scoreMsgs(ctx cosmos.Context, items swapItems, synthVir
 		targetAsset := item.msg.TargetAsset
 
 		for _, a := range []common.Asset{sourceAsset, targetAsset} {
-			if a.IsRune() {
+			if a.IsDeca() {
 				continue
 			}
 
@@ -328,12 +328,12 @@ func (vm *SwapQueueImpl) scoreMsgs(ctx cosmos.Context, items swapItems, synthVir
 			}
 		}
 
-		nonRuneAsset := sourceAsset
-		if nonRuneAsset.IsRune() {
-			nonRuneAsset = targetAsset
+		nonDecaAsset := sourceAsset
+		if nonDecaAsset.IsDeca() {
+			nonDecaAsset = targetAsset
 		}
-		pool := pools[nonRuneAsset]
-		if pool.IsEmpty() || pool.BalanceRune.IsZero() || pool.BalanceAsset.IsZero() {
+		pool := pools[nonDecaAsset]
+		if pool.IsEmpty() || pool.BalanceDeca.IsZero() || pool.BalanceAsset.IsZero() {
 			continue
 		}
 		// synths may be redeemed on unavailable pools, score them
@@ -341,20 +341,20 @@ func (vm *SwapQueueImpl) scoreMsgs(ctx cosmos.Context, items swapItems, synthVir
 			continue
 		}
 		virtualDepthMult := int64(10_000)
-		if nonRuneAsset.IsSyntheticAsset() {
+		if nonDecaAsset.IsSyntheticAsset() {
 			virtualDepthMult = synthVirtualDepthMult
 		}
 		vm.getLiquidityFeeAndSlip(ctx, pool, item.msg.Tx.Coins[0], &items[i], virtualDepthMult)
 
-		if sourceAsset.IsRune() || targetAsset.IsRune() {
+		if sourceAsset.IsDeca() || targetAsset.IsDeca() {
 			// single swap , stop here
 			continue
 		}
 		// double swap , thus need to convert source coin to RUNE and calculate fee and slip again
-		runeCoin := common.NewCoin(common.RuneAsset(), pool.AssetValueInRune(item.msg.Tx.Coins[0].Amount))
-		nonRuneAsset = targetAsset
-		pool = pools[nonRuneAsset]
-		if pool.IsEmpty() || !pool.IsAvailable() || pool.BalanceRune.IsZero() || pool.BalanceAsset.IsZero() {
+		runeCoin := common.NewCoin(common.DecaAsset(), pool.AssetValueInRune(item.msg.Tx.Coins[0].Amount))
+		nonDecaAsset = targetAsset
+		pool = pools[nonDecaAsset]
+		if pool.IsEmpty() || !pool.IsAvailable() || pool.BalanceDeca.IsZero() || pool.BalanceAsset.IsZero() {
 			// Reset first-leg scoring to prevent inflated priority from partial scoring
 			items[i].fee = cosmos.ZeroUint()
 			items[i].slip = cosmos.ZeroUint()
@@ -375,11 +375,11 @@ func (vm *SwapQueueImpl) getLiquidityFeeAndSlip(ctx cosmos.Context, pool Pool, s
 	// Get our X, x, Y values
 	var X, x, Y cosmos.Uint
 	x = sourceCoin.Amount
-	if sourceCoin.IsRune() {
-		X = pool.BalanceRune
+	if sourceCoin.IsDeca() {
+		X = pool.BalanceDeca
 		Y = pool.BalanceAsset
 	} else {
-		Y = pool.BalanceRune
+		Y = pool.BalanceDeca
 		X = pool.BalanceAsset
 	}
 
@@ -392,7 +392,7 @@ func (vm *SwapQueueImpl) getLiquidityFeeAndSlip(ctx cosmos.Context, pool Pool, s
 	}
 
 	fee := swapper.CalcLiquidityFee(X, x, Y)
-	if sourceCoin.IsRune() {
+	if sourceCoin.IsDeca() {
 		fee = pool.AssetValueInRune(fee)
 	}
 	slip := swapper.CalcSwapSlip(X, x)

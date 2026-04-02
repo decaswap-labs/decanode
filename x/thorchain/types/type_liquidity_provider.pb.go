@@ -28,15 +28,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type LiquidityProvider struct {
 	Asset              gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,1,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
-	RuneAddress        gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,2,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress        gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,2,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	AssetAddress       gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
 	LastAddHeight      int64                                           `protobuf:"varint,4,opt,name=last_add_height,json=lastAddHeight,proto3" json:"last_add_height,omitempty"`
 	LastWithdrawHeight int64                                           `protobuf:"varint,5,opt,name=last_withdraw_height,json=lastWithdrawHeight,proto3" json:"last_withdraw_height,omitempty"`
 	Units              cosmossdk_io_math.Uint                          `protobuf:"bytes,6,opt,name=units,proto3,customtype=cosmossdk.io/math.Uint" json:"units"`
-	PendingRune        cosmossdk_io_math.Uint                          `protobuf:"bytes,7,opt,name=pending_rune,json=pendingRune,proto3,customtype=cosmossdk.io/math.Uint" json:"pending_rune"`
+	PendingDeca        cosmossdk_io_math.Uint                          `protobuf:"bytes,7,opt,name=pending_deca,json=pendingDeca,proto3,customtype=cosmossdk.io/math.Uint" json:"pending_deca"`
 	PendingAsset       cosmossdk_io_math.Uint                          `protobuf:"bytes,8,opt,name=pending_asset,json=pendingAsset,proto3,customtype=cosmossdk.io/math.Uint" json:"pending_asset"`
 	PendingTxID        gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,9,opt,name=pending_tx_Id,json=pendingTxId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"pending_tx_Id,omitempty"`
-	RuneDepositValue   cosmossdk_io_math.Uint                          `protobuf:"bytes,10,opt,name=rune_deposit_value,json=runeDepositValue,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_deposit_value"`
+	DecaDepositValue   cosmossdk_io_math.Uint                          `protobuf:"bytes,10,opt,name=deca_deposit_value,json=decaDepositValue,proto3,customtype=cosmossdk.io/math.Uint" json:"deca_deposit_value"`
 	AssetDepositValue  cosmossdk_io_math.Uint                          `protobuf:"bytes,11,opt,name=asset_deposit_value,json=assetDepositValue,proto3,customtype=cosmossdk.io/math.Uint" json:"asset_deposit_value"`
 }
 
@@ -73,9 +73,9 @@ func (m *LiquidityProvider) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LiquidityProvider proto.InternalMessageInfo
 
-func (m *LiquidityProvider) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *LiquidityProvider) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -181,9 +181,9 @@ func (m *LiquidityProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i--
 	dAtA[i] = 0x5a
 	{
-		size := m.RuneDepositValue.Size()
+		size := m.DecaDepositValue.Size()
 		i -= size
-		if _, err := m.RuneDepositValue.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.DecaDepositValue.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintTypeLiquidityProvider(dAtA, i, uint64(size))
@@ -208,9 +208,9 @@ func (m *LiquidityProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i--
 	dAtA[i] = 0x42
 	{
-		size := m.PendingRune.Size()
+		size := m.PendingDeca.Size()
 		i -= size
-		if _, err := m.PendingRune.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.PendingDeca.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintTypeLiquidityProvider(dAtA, i, uint64(size))
@@ -244,10 +244,10 @@ func (m *LiquidityProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeLiquidityProvider(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeLiquidityProvider(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -283,7 +283,7 @@ func (m *LiquidityProvider) Size() (n int) {
 	_ = l
 	l = m.Asset.Size()
 	n += 1 + l + sovTypeLiquidityProvider(uint64(l))
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeLiquidityProvider(uint64(l))
 	}
@@ -299,7 +299,7 @@ func (m *LiquidityProvider) Size() (n int) {
 	}
 	l = m.Units.Size()
 	n += 1 + l + sovTypeLiquidityProvider(uint64(l))
-	l = m.PendingRune.Size()
+	l = m.PendingDeca.Size()
 	n += 1 + l + sovTypeLiquidityProvider(uint64(l))
 	l = m.PendingAsset.Size()
 	n += 1 + l + sovTypeLiquidityProvider(uint64(l))
@@ -307,7 +307,7 @@ func (m *LiquidityProvider) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeLiquidityProvider(uint64(l))
 	}
-	l = m.RuneDepositValue.Size()
+	l = m.DecaDepositValue.Size()
 	n += 1 + l + sovTypeLiquidityProvider(uint64(l))
 	l = m.AssetDepositValue.Size()
 	n += 1 + l + sovTypeLiquidityProvider(uint64(l))
@@ -384,7 +384,7 @@ func (m *LiquidityProvider) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -412,7 +412,7 @@ func (m *LiquidityProvider) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -520,7 +520,7 @@ func (m *LiquidityProvider) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PendingRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -548,7 +548,7 @@ func (m *LiquidityProvider) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.PendingRune.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.PendingDeca.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -620,7 +620,7 @@ func (m *LiquidityProvider) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneDepositValue", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaDepositValue", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -648,7 +648,7 @@ func (m *LiquidityProvider) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.RuneDepositValue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.DecaDepositValue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

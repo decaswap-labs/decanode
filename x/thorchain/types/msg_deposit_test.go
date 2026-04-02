@@ -21,7 +21,7 @@ func (MsgDepositSuite) TestMsgDepositSuite(c *C) {
 	c.Assert(acc1.Empty(), Equals, false)
 
 	coins := common.Coins{
-		common.NewCoin(common.RuneNative, cosmos.NewUint(12*common.One)),
+		common.NewCoin(common.DecaNative, cosmos.NewUint(12*common.One)),
 	}
 	memo := "hello"
 	msg := NewMsgDeposit(coins, memo, acc1)
@@ -51,14 +51,14 @@ func (MsgDepositSuite) TestMsgDepositSuite(c *C) {
 	c.Assert(errors.Is(err2, se.ErrUnknownRequest), Equals, true)
 
 	msg3 := NewMsgDeposit(common.Coins{
-		common.NewCoin(common.RuneNative, cosmos.NewUint(12*common.One)),
+		common.NewCoin(common.DecaNative, cosmos.NewUint(12*common.One)),
 	}, "asdfsdkljadslfasfaqcvbncvncvbncvbncvbncvbncvbncvbncvbncvbncvbnsdfasdfasfasdfkjqwerqlkwerqlerqwlkerjqlwkerjqwlkerjqwlkerjqlkwerjklqwerjqwlkerjqlwkerjwqelrasdfsdkljadslfasfaqcvbncvncvbncvbncvbncvbncvbncvbncvbncvbncvbnsdfasdfasfasdfkjqwerqlkwerqlerqwlkerjqlwkerjqwlkerjqwlkerjqlkwerjklqwerjqwlkerjqlwkerjwqelr", acc1)
 	err3 := msg3.ValidateBasic()
 	c.Assert(err3, NotNil)
 	c.Assert(errors.Is(err3, se.ErrUnknownRequest), Equals, true)
 
 	msg4 := NewMsgDeposit(common.Coins{
-		common.NewCoin(common.RuneNative, cosmos.NewUint(12*common.One)),
+		common.NewCoin(common.DecaNative, cosmos.NewUint(12*common.One)),
 	}, "memo", acc1)
 	msg4.Salt = []byte(strings.Repeat("s", constants.MaxDepositSaltSize+1))
 	err4 := msg4.ValidateBasic()

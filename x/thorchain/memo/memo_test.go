@@ -89,7 +89,7 @@ func (s *MemoSuite) SetUpSuite(c *C) {
 		log.NewNopLogger(),
 	)
 	c.Assert(bk.MintCoins(ctx, types.ModuleName, cosmos.Coins{
-		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
+		cosmos.NewCoin(common.DecaAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
 	}), IsNil)
 	uk := upgradekeeper.NewKeeper(
 		nil,
@@ -116,17 +116,17 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 	k := s.k
 
 	// happy paths
-	memo, err := ParseMemoWithTHORNames(ctx, k, "d:"+common.RuneAsset().String())
+	memo, err := ParseMemoWithTHORNames(ctx, k, "d:"+common.DecaAsset().String())
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxDonate), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.IsInbound(), Equals, true)
 	c.Check(memo.IsInternal(), Equals, false)
 	c.Check(memo.IsOutbound(), Equals, false)
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "+:"+common.RuneAsset().String())
+	memo, err = ParseMemoWithTHORNames(ctx, k, "+:"+common.DecaAsset().String())
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxAdd), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.IsInbound(), Equals, true)
 	c.Check(memo.IsInternal(), Equals, false)
@@ -135,9 +135,9 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 	_, err = ParseMemoWithTHORNames(ctx, k, "add:BTC.BTC:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:xxxx")
 	c.Assert(err, NotNil)
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("-:%s:25", common.RuneAsset().String()))
+	memo, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("-:%s:25", common.DecaAsset().String()))
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxWithdraw), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetAmount().Uint64(), Equals, uint64(25), Commentf("%d", memo.GetAmount().Uint64()))
 	c.Check(memo.IsInbound(), Equals, true)
@@ -146,7 +146,7 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 
 	memo, err = ParseMemoWithTHORNames(ctx, k, "=:r:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:87e7")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Equal(cosmos.NewUint(870000000)), Equals, true)
@@ -249,9 +249,9 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 	c.Check(memo.GetAffiliatesBasisPoints()[1].Uint64(), Equals, uint64(30))
 
 	// test streaming swap
-	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/20")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/20")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Equal(cosmos.NewUint(1200)), Equals, true)
@@ -264,7 +264,7 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 	c.Check(swapMemo.GetStreamInterval(), Equals, uint64(10))
 	c.Check(swapMemo.String(), Equals, "=:THOR.RUNE:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/20")
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a://")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a://")
 	c.Assert(err, IsNil)
 	c.Check(memo.GetSlipLimit().String(), Equals, "0")
 	swapMemo, ok = memo.(SwapMemo)
@@ -273,29 +273,29 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 	c.Check(swapMemo.GetStreamInterval(), Equals, uint64(0))
 
 	// wacky lending tests
-	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/20abc", common.RuneAsset()))
+	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/20abc", common.DecaAsset()))
 	c.Assert(err, NotNil)
-	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/////", common.RuneAsset()))
+	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/////", common.DecaAsset()))
 	c.Assert(err, NotNil)
-	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/-20", common.RuneAsset()))
+	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/10/-20", common.DecaAsset()))
 	c.Assert(err, NotNil)
-	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/-10/20", common.RuneAsset()))
+	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/-10/20", common.DecaAsset()))
 	c.Assert(err, NotNil)
-	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/102103980982304982058230492830429384080/20", common.RuneAsset()))
+	_, err = ParseMemoWithTHORNames(ctx, k, fmt.Sprintf("=:%s:0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:1200/102103980982304982058230492830429384080/20", common.DecaAsset()))
 	c.Assert(err, NotNil)
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Uint64(), Equals, uint64(0))
 	c.Check(memo.IsInbound(), Equals, true)
 	c.Check(memo.GetDexAggregator(), Equals, "")
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a::::123:0x2354234523452345:1234444")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a::::123:0x2354234523452345:1234444")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Equal(cosmos.ZeroUint()), Equals, true)
@@ -304,7 +304,7 @@ func (s *MemoSuite) TestParseWithAbbreviated(c *C) {
 	c.Check(memo.GetDexTargetLimit().Equal(cosmos.NewUint(1234444)), Equals, true)
 
 	// test dex agg limit with scientific notation - long number
-	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a::::123:0x2354234523452345:1425e18")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "=:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a::::123:0x2354234523452345:1425e18")
 	c.Assert(err, IsNil)
 	c.Check(memo.GetDexTargetLimit().Equal(cosmos.NewUintFromString("1425000000000000000000")), Equals, true) // noting the large number overflows `cosmos.NewUint`
 
@@ -418,15 +418,15 @@ func (s *MemoSuite) TestParse(c *C) {
 	k.SetTHORName(ctx, name)
 
 	// happy paths
-	memo, err := ParseMemoWithTHORNames(ctx, k, "d:"+common.RuneAsset().String())
+	memo, err := ParseMemoWithTHORNames(ctx, k, "d:"+common.DecaAsset().String())
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxDonate), Equals, true, Commentf("MEMO: %+v", memo))
-	c.Check(memo.String(), Equals, "DONATE:"+common.RuneAsset().String())
+	c.Check(memo.String(), Equals, "DONATE:"+common.DecaAsset().String())
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "ADD:"+common.RuneAsset().String())
+	memo, err = ParseMemoWithTHORNames(ctx, k, "ADD:"+common.DecaAsset().String())
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxAdd), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.String(), Equals, "+:THOR.RUNE")
 
@@ -469,15 +469,15 @@ func (s *MemoSuite) TestParse(c *C) {
 	fmt.Println(tr2)
 	c.Check(tr2.GetAddress().Equals(ethAddr), Equals, true)
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "WITHDRAW:"+common.RuneAsset().String()+":25")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "WITHDRAW:"+common.DecaAsset().String()+":25")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxWithdraw), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetAmount().Equal(cosmos.NewUint(25)), Equals, true, Commentf("%d", memo.GetAmount().Uint64()))
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "SWAP:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:870000000:hello:100")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "SWAP:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:870000000:hello:100")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Equal(cosmos.NewUint(870000000)), Equals, true)
@@ -486,16 +486,16 @@ func (s *MemoSuite) TestParse(c *C) {
 	c.Check(memo.GetAffiliates()[0], Equals, "hello")
 	c.Check(memo.GetAffiliatesBasisPoints()[0].Uint64(), Equals, uint64(100))
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "SWAP:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "SWAP:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Uint64(), Equals, uint64(0))
 
-	memo, err = ParseMemoWithTHORNames(ctx, k, "SWAP:"+common.RuneAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:")
+	memo, err = ParseMemoWithTHORNames(ctx, k, "SWAP:"+common.DecaAsset().String()+":0x90f2b1ae50e6018230e90a33f98c7844a0ab635a:")
 	c.Assert(err, IsNil)
-	c.Check(memo.GetAsset().String(), Equals, common.RuneAsset().String())
+	c.Check(memo.GetAsset().String(), Equals, common.DecaAsset().String())
 	c.Check(memo.IsType(TxSwap), Equals, true, Commentf("MEMO: %+v", memo))
 	c.Check(memo.GetDestination().String(), Equals, "0x90f2b1ae50e6018230e90a33f98c7844a0ab635a")
 	c.Check(memo.GetSlipLimit().Uint64(), Equals, uint64(0))

@@ -55,7 +55,7 @@ func (HandlerBondSuite) TestBondHandler_ValidateActive(c *C) {
 		GetRandomETHAddress(),
 		GetRandomETHAddress(),
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)),
 		},
 		common.Gas{
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(10000)),
@@ -89,13 +89,13 @@ func (HandlerBondSuite) TestBondHandler_Run(c *C) {
 	handler := NewBondHandler(NewDummyMgrWithKeeper(k1))
 	ver := GetCurrentVersion()
 	constAccessor := constants.GetConstantValues(ver)
-	minimumBondInRune := constAccessor.GetInt64Value(constants.MinimumBondInRune)
+	minimumBondInRune := constAccessor.GetInt64Value(constants.MinimumBondInDeca)
 	txIn := common.NewTx(
 		GetRandomTxHash(),
 		GetRandomTHORAddress(),
 		GetRandomTHORAddress(),
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(uint64(minimumBondInRune+common.One))),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(uint64(minimumBondInRune+common.One))),
 		},
 		common.Gas{
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(10000)),
@@ -106,7 +106,7 @@ func (HandlerBondSuite) TestBondHandler_Run(c *C) {
 	msg := NewMsgBond(txIn, GetRandomValidatorNode(NodeStandby).NodeAddress, cosmos.NewUint(uint64(minimumBondInRune)+common.One), GetRandomTHORAddress(), nil, standbyNodeAccount.NodeAddress, -1)
 	_, err := handler.Run(ctx, msg)
 	c.Assert(err, IsNil)
-	coin := common.NewCoin(common.RuneNative, cosmos.NewUint(common.One))
+	coin := common.NewCoin(common.DecaNative, cosmos.NewUint(common.One))
 	nativeRuneCoin, err := coin.Native()
 	c.Assert(err, IsNil)
 	c.Assert(k1.HasCoins(ctx, msg.NodeAddress, cosmos.NewCoins(nativeRuneCoin)), Equals, true)
@@ -134,13 +134,13 @@ func (HandlerBondSuite) TestBondHandlerFailValidation(c *C) {
 	handler := NewBondHandler(NewDummyMgrWithKeeper(k))
 	ver := GetCurrentVersion()
 	constAccessor := constants.GetConstantValues(ver)
-	minimumBondInRune := constAccessor.GetInt64Value(constants.MinimumBondInRune)
+	minimumBondInRune := constAccessor.GetInt64Value(constants.MinimumBondInDeca)
 	txIn := common.NewTx(
 		GetRandomTxHash(),
 		GetRandomTHORAddress(),
 		GetRandomTHORAddress(),
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(uint64(minimumBondInRune))),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(uint64(minimumBondInRune))),
 		},
 		common.Gas{
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(10000)),
@@ -201,7 +201,7 @@ func (HandlerBondSuite) TestBondProvider_Validate(c *C) {
 	handler := NewBondHandler(NewDummyMgrWithKeeper(k))
 	txIn := GetRandomTx()
 	amt := cosmos.NewUint(100 * common.One)
-	txIn.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), amt))
+	txIn.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), amt))
 	activeNA := activeNodeAccount.NodeAddress
 	activeNAAddress := common.Address(activeNA.String())
 	standbyNA := standbyNodeAccount.NodeAddress
@@ -263,7 +263,7 @@ func (HandlerBondSuite) TestBondProvider_OperatorFee(c *C) {
 	standbyNodeAddr := standbyNodeAccount.NodeAddress
 	amt := cosmos.NewUint(100 * common.One)
 	txIn := GetRandomTx()
-	txIn.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), amt))
+	txIn.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), amt))
 
 	// Fund the bond module with the bond amount (needed for first-time bond 1 RUNE transfer)
 	FundModule(c, ctx, k, BondName, amt.Uint64())
@@ -327,7 +327,7 @@ func (HandlerBondSuite) TestBondProvider_Handler(c *C) {
 	handler := NewBondHandler(NewDummyMgrWithKeeper(k))
 	txIn := GetRandomTx()
 	amt := cosmos.NewUint(100 * common.One)
-	txIn.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), amt))
+	txIn.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), amt))
 	activeNA := activeNodeAccount.NodeAddress
 	standbyNA := standbyNodeAccount.NodeAddress
 	standbyNAAddress := common.Address(standbyNA.String())

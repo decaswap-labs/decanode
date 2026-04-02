@@ -68,7 +68,7 @@ func (s *HandlerSuite) SetUpSuite(*C) {
 }
 
 func FundModule(c *C, ctx cosmos.Context, k keeper.Keeper, name string, amt uint64) {
-	coin := common.NewCoin(common.RuneNative, cosmos.NewUint(amt))
+	coin := common.NewCoin(common.DecaNative, cosmos.NewUint(amt))
 	err := k.MintToModule(ctx, ModuleName, coin)
 	c.Assert(err, IsNil)
 	err = k.SendFromModuleToModule(ctx, ModuleName, name, common.NewCoins(coin))
@@ -76,7 +76,7 @@ func FundModule(c *C, ctx cosmos.Context, k keeper.Keeper, name string, amt uint
 }
 
 func FundAccount(c *C, ctx cosmos.Context, k keeper.Keeper, addr cosmos.AccAddress, amt uint64) {
-	coin := common.NewCoin(common.RuneNative, cosmos.NewUint(amt))
+	coin := common.NewCoin(common.DecaNative, cosmos.NewUint(amt))
 	err := k.MintToModule(ctx, ModuleName, coin)
 	c.Assert(err, IsNil)
 	err = k.SendFromModuleToAccount(ctx, ModuleName, addr, common.NewCoins(coin))
@@ -123,7 +123,7 @@ func setupManagerForTest(c *C) (cosmos.Context, *Mgrs) {
 			types.LendingName:            {},
 			types.AffiliateCollectorName: {},
 			types.TreasuryName:           {},
-			types.RUNEPoolName:           {},
+			types.DECAPoolName:           {},
 			types.TCYStakeName:           {},
 			types.TCYClaimingName:        {},
 		},
@@ -141,7 +141,7 @@ func setupManagerForTest(c *C) (cosmos.Context, *Mgrs) {
 		sdklog.NewNopLogger(),
 	)
 	c.Assert(bk.MintCoins(ctx, ModuleName, cosmos.Coins{
-		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
+		cosmos.NewCoin(common.DecaAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
 	}), IsNil)
 	uk := upgradekeeper.NewKeeper(
 		nil,
@@ -246,10 +246,10 @@ func setupKeeperForTest(c *C) (cosmos.Context, keeper.Keeper) {
 	)
 
 	c.Assert(bk.MintCoins(ctx, ModuleName, cosmos.Coins{
-		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
+		cosmos.NewCoin(common.DecaAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
 	}), IsNil)
 	c.Assert(bk.BurnCoins(ctx, ModuleName, cosmos.Coins{
-		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
+		cosmos.NewCoin(common.DecaAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
 	}), IsNil)
 	uk := upgradekeeper.NewKeeper(
 		nil,
@@ -300,7 +300,7 @@ func getHandlerTestWrapper(c *C, height int64, withActiveNode, withActieDOGEPool
 		c.Assert(err, IsNil)
 		p.Asset = common.DOGEAsset
 		p.Status = PoolAvailable
-		p.BalanceRune = cosmos.NewUint(100 * common.One)
+		p.BalanceDeca = cosmos.NewUint(100 * common.One)
 		p.BalanceAsset = cosmos.NewUint(100 * common.One)
 		p.LPUnits = cosmos.NewUint(100 * common.One)
 		c.Assert(mgr.Keeper().SetPool(ctx, p), IsNil)
@@ -325,7 +325,7 @@ func (HandlerSuite) TestHandleTxInWithdrawLiquidityMemo(c *C) {
 	vault := GetRandomVault()
 	vault.Coins = common.Coins{
 		common.NewCoin(common.DOGEAsset, cosmos.NewUint(100*common.One)),
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, vault), IsNil)
 	vaultAddr, err := vault.PubKey.GetAddress(common.ETHChain)
@@ -333,16 +333,16 @@ func (HandlerSuite) TestHandleTxInWithdrawLiquidityMemo(c *C) {
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.LPUnits = cosmos.NewUint(100)
 	c.Assert(w.keeper.SetPool(w.ctx, pool), IsNil)
 
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	lp := LiquidityProvider{
 		Asset:        common.DOGEAsset,
-		RuneAddress:  runeAddr,
+		DecaAddress:  decaAddr,
 		AssetAddress: GetRandomDOGEAddress(),
-		PendingRune:  cosmos.ZeroUint(),
+		PendingDeca:  cosmos.ZeroUint(),
 		Units:        cosmos.NewUint(100),
 	}
 	w.keeper.SetLiquidityProvider(w.ctx, lp)
@@ -351,17 +351,17 @@ func (HandlerSuite) TestHandleTxInWithdrawLiquidityMemo(c *C) {
 		ID:    GetRandomTxHash(),
 		Chain: common.ETHChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)),
 		},
 		Memo:        "withdraw:DOGE.DOGE",
-		FromAddress: lp.RuneAddress,
+		FromAddress: lp.DecaAddress,
 		ToAddress:   vaultAddr,
 		Gas: common.Gas{
 			common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000)),
 		},
 	}
 
-	msg := NewMsgWithdrawLiquidity(tx, lp.RuneAddress, cosmos.NewUint(uint64(MaxWithdrawBasisPoints)), common.DOGEAsset, common.EmptyAsset, w.activeNodeAccount.NodeAddress)
+	msg := NewMsgWithdrawLiquidity(tx, lp.DecaAddress, cosmos.NewUint(uint64(MaxWithdrawBasisPoints)), common.DOGEAsset, common.EmptyAsset, w.activeNodeAccount.NodeAddress)
 	c.Assert(err, IsNil)
 
 	handler := NewInternalHandler(w.mgr)
@@ -380,7 +380,7 @@ func (HandlerSuite) TestHandleTxInWithdrawLiquidityMemo(c *C) {
 	c.Assert(pool.IsEmpty(), Equals, false)
 	c.Check(pool.Status, Equals, PoolStaged)
 	c.Check(pool.LPUnits.Uint64(), Equals, uint64(0), Commentf("%d", pool.LPUnits.Uint64()))
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(0), Commentf("%d", pool.BalanceRune.Uint64()))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(0), Commentf("%d", pool.BalanceDeca.Uint64()))
 	remainGas := uint64(15000)
 	c.Check(pool.BalanceAsset.Uint64(), Equals, remainGas, Commentf("%d", pool.BalanceAsset.Uint64())) // leave a little behind for gas
 }
@@ -390,7 +390,7 @@ func (HandlerSuite) TestRefund(c *C) {
 
 	pool := Pool{
 		Asset:        common.DOGEAsset,
-		BalanceRune:  cosmos.NewUint(100 * common.One),
+		BalanceDeca:  cosmos.NewUint(100 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 	}
 	c.Assert(w.keeper.SetPool(w.ctx, pool), IsNil)
@@ -461,7 +461,7 @@ func (HandlerSuite) TestGetMsgSwapFromMemo(c *C) {
 			Chain: common.ETHChain,
 			Coins: common.Coins{
 				common.NewCoin(
-					common.RuneAsset(),
+					common.DecaAsset(),
 					cosmos.NewUint(100*common.One),
 				),
 			},
@@ -485,7 +485,7 @@ func (HandlerSuite) TestGetMsgWithdrawFromMemo(c *C) {
 	w := getHandlerTestWrapper(c, 1, true, false)
 	tx := GetRandomTx()
 	tx.Memo = "withdraw:BTC.BTC:10000"
-	if common.RuneAsset().Equals(common.RuneNative) {
+	if common.DecaAsset().Equals(common.DecaNative) {
 		tx.FromAddress = GetRandomTHORAddress()
 	}
 	obTx := NewObservedTx(tx, w.ctx.BlockHeight(), GetRandomPubKey(), w.ctx.BlockHeight())
@@ -512,7 +512,7 @@ func (HandlerSuite) TestGetMsgBondFromMemo(c *C) {
 	w := getHandlerTestWrapper(c, 1, true, false)
 	tx := GetRandomTx()
 	tx.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)),
 	}
 	tx.Memo = "bond:" + GetRandomBech32Addr().String()
 	obTx := NewObservedTx(tx, w.ctx.BlockHeight(), GetRandomPubKey(), w.ctx.BlockHeight())
@@ -527,7 +527,7 @@ func (HandlerSuite) TestGetMsgUnBondFromMemo(c *C) {
 	w := getHandlerTestWrapper(c, 1, true, false)
 	tx := GetRandomTx()
 	tx.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)),
 	}
 	tx.Memo = "unbond:" + GetRandomTHORAddress().String() + ":1000"
 	obTx := NewObservedTx(tx, w.ctx.BlockHeight(), GetRandomPubKey(), w.ctx.BlockHeight())
@@ -542,7 +542,7 @@ func (HandlerSuite) TestGetMsgReBondFromMemo(c *C) {
 	w := getHandlerTestWrapper(c, 1, true, false)
 	tx := GetRandomTx()
 	tx.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)),
 	}
 	for _, template := range []string{
 		"rebond:%s:%s:123456789",
@@ -572,7 +572,7 @@ func (HandlerSuite) TestGetMsgLiquidityFromMemo(c *C) {
 	c.Assert(ok, Equals, true)
 	tcanAsset, err := common.NewAsset("DOGE.TCAN-014")
 	c.Assert(err, IsNil)
-	runeAsset := common.RuneAsset()
+	runeAsset := common.DecaAsset()
 	c.Assert(err, IsNil)
 
 	txin := common.NewObservedTx(
@@ -632,8 +632,8 @@ func (HandlerSuite) TestGetMsgLiquidityFromMemo(c *C) {
 			cosmos.NewUint(100*common.One)),
 	}
 
-	runeAddr := GetRandomRUNEAddress()
-	lokiAddLiquidityMemo, err := ParseMemo(GetCurrentVersion(), fmt.Sprintf("add:DOGE.LOKI:%s", runeAddr))
+	decaAddr := GetRandomRUNEAddress()
+	lokiAddLiquidityMemo, err := ParseMemo(GetCurrentVersion(), fmt.Sprintf("add:DOGE.LOKI:%s", decaAddr))
 	c.Assert(err, IsNil)
 	msg4, err4 := getMsgAddLiquidityFromMemo(w.ctx, lokiAddLiquidityMemo.(AddLiquidityMemo), txin, GetRandomBech32Addr())
 	c.Assert(err4, IsNil)
@@ -641,7 +641,7 @@ func (HandlerSuite) TestGetMsgLiquidityFromMemo(c *C) {
 	msgAddLiquidity, ok := msg4.(*MsgAddLiquidity)
 	c.Assert(ok, Equals, true)
 	c.Assert(msgAddLiquidity, NotNil)
-	c.Assert(msgAddLiquidity.RuneAddress, Equals, runeAddr)
+	c.Assert(msgAddLiquidity.DecaAddress, Equals, decaAddr)
 	c.Assert(msgAddLiquidity.AssetAddress, Equals, txin.Tx.FromAddress)
 }
 
@@ -652,7 +652,7 @@ func (HandlerSuite) TestMsgLeaveFromMemo(c *C) {
 		common.Tx{
 			ID:          GetRandomTxHash(),
 			Chain:       common.ETHChain,
-			Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1))},
+			Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1))},
 			Memo:        fmt.Sprintf("LEAVE:%s", addr.String()),
 			FromAddress: GetRandomDOGEAddress(),
 			ToAddress:   GetRandomDOGEAddress(),
@@ -678,7 +678,7 @@ func (s *HandlerSuite) TestReserveContributor(c *C) {
 		common.Tx{
 			ID:          GetRandomTxHash(),
 			Chain:       common.ETHChain,
-			Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1))},
+			Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1))},
 			Memo:        "reserve",
 			FromAddress: GetRandomDOGEAddress(),
 			ToAddress:   GetRandomDOGEAddress(),
@@ -721,37 +721,37 @@ func (s *HandlerSuite) TestFuzzyMatching(c *C) {
 	k := mgr.Keeper()
 	p1 := NewPool()
 	p1.Asset = common.DOGEAsset
-	p1.BalanceRune = cosmos.NewUint(10 * common.One)
+	p1.BalanceDeca = cosmos.NewUint(10 * common.One)
 	c.Assert(k.SetPool(ctx, p1), IsNil)
 
 	// real USDT
 	p2 := NewPool()
 	p2.Asset, _ = common.NewAsset("ETH.USDT-0XDAC17F958D2EE523A2206206994597C13D831EC7")
-	p2.BalanceRune = cosmos.NewUint(80 * common.One)
+	p2.BalanceDeca = cosmos.NewUint(80 * common.One)
 	c.Assert(k.SetPool(ctx, p2), IsNil)
 
 	// fake USDT, attempt to clone end of contract address
 	p3 := NewPool()
 	p3.Asset, _ = common.NewAsset("ETH.USDT-0XD084B83C305DAFD76AE3E1B4E1F1FE213D831EC7")
-	p3.BalanceRune = cosmos.NewUint(20 * common.One)
+	p3.BalanceDeca = cosmos.NewUint(20 * common.One)
 	c.Assert(k.SetPool(ctx, p3), IsNil)
 
 	// fake USDT, bad contract address
 	p4 := NewPool()
 	p4.Asset, _ = common.NewAsset("ETH.USDT-0XD084B83C305DAFD76AE3E1B4E1F1FE2ECCCB3988")
-	p4.BalanceRune = cosmos.NewUint(20 * common.One)
+	p4.BalanceDeca = cosmos.NewUint(20 * common.One)
 	c.Assert(k.SetPool(ctx, p4), IsNil)
 
 	// fake USDT, on different chain
 	p5 := NewPool()
 	p5.Asset, _ = common.NewAsset("BSC.USDT-0XDAC17F958D2EE523A2206206994597C13D831EC7")
-	p5.BalanceRune = cosmos.NewUint(30 * common.One)
+	p5.BalanceDeca = cosmos.NewUint(30 * common.One)
 	c.Assert(k.SetPool(ctx, p5), IsNil)
 
 	// fake USDT, right contract address, wrong ticker
 	p6 := NewPool()
 	p6.Asset, _ = common.NewAsset("ETH.UST-0XDAC17F958D2EE523A2206206994597C13D831EC7")
-	p6.BalanceRune = cosmos.NewUint(90 * common.One)
+	p6.BalanceDeca = cosmos.NewUint(90 * common.One)
 	c.Assert(k.SetPool(ctx, p6), IsNil)
 
 	result := fuzzyAssetMatch(ctx, k, p1.Asset)

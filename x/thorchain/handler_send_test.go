@@ -139,7 +139,7 @@ func (s *HandlerSendSuiteV87) TestHandle(c *C) {
 
 	FundAccount(c, ctx, k, addr1, 200*common.One)
 
-	coin, err := common.NewCoin(common.RuneNative, cosmos.NewUint(12*common.One)).Native()
+	coin, err := common.NewCoin(common.DecaNative, cosmos.NewUint(12*common.One)).Native()
 	c.Assert(err, IsNil)
 	msg := &MsgSend{
 		FromAddress: addr1,
@@ -156,7 +156,7 @@ func (s *HandlerSendSuiteV87) TestHandle(c *C) {
 	c.Assert(err, NotNil)
 	c.Assert(result, IsNil)
 	// insufficient funds
-	coin, err = common.NewCoin(common.RuneNative, cosmos.NewUint(3000*common.One)).Native()
+	coin, err = common.NewCoin(common.DecaNative, cosmos.NewUint(3000*common.One)).Native()
 	c.Assert(err, IsNil)
 	msg = &MsgSend{
 		FromAddress: addr1,

@@ -20,15 +20,15 @@ func (m *LiquidityProvider) Valid() error {
 	if m.LastAddHeight == 0 {
 		return errors.New("last add liquidity height cannot be empty")
 	}
-	if m.AssetAddress.IsEmpty() && m.RuneAddress.IsEmpty() {
+	if m.AssetAddress.IsEmpty() && m.DecaAddress.IsEmpty() {
 		return errors.New("asset address and rune address cannot be empty")
 	}
 	return nil
 }
 
 func (lp LiquidityProvider) GetAddress() common.Address {
-	if !lp.RuneAddress.IsEmpty() {
-		return lp.RuneAddress
+	if !lp.DecaAddress.IsEmpty() {
+		return lp.DecaAddress
 	}
 	return lp.AssetAddress
 }
@@ -45,7 +45,7 @@ func (lp LiquidityProvider) GetRuneRedeemValue(pool Pool, synthSupply cosmos.Uin
 
 	bigInt := &big.Int{}
 	lpUnits := lp.Units.BigInt()
-	poolRuneDepth := pool.BalanceRune.BigInt()
+	poolRuneDepth := pool.BalanceDeca.BigInt()
 	num := bigInt.Mul(lpUnits, poolRuneDepth)
 
 	pool.CalcUnits(synthSupply)
@@ -82,7 +82,7 @@ func (lp LiquidityProvider) GetLuviDepositValue(pool Pool) (error, cosmos.Uint) 
 	}
 
 	bigInt := &big.Int{}
-	runeDeposit := lp.RuneDepositValue.MulUint64(1e8).BigInt()
+	runeDeposit := lp.DecaDepositValue.MulUint64(1e8).BigInt()
 	assetDeposit := lp.AssetDepositValue.MulUint64(1e8).BigInt()
 	num := bigInt.Mul(runeDeposit, assetDeposit)
 	num = bigInt.Sqrt(num)

@@ -23,14 +23,14 @@ func (s *PoolMgrSuite) TestEnableNextPool(c *C) {
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.BTCAsset // gas pool should be enabled by default
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(50 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(50 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(50 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -39,7 +39,7 @@ func (s *PoolMgrSuite) TestEnableNextPool(c *C) {
 	pool = NewPool()
 	pool.Asset = usdcAsset
 	pool.Status = PoolStaged
-	pool.BalanceRune = cosmos.NewUint(40 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(40 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(40 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -48,7 +48,7 @@ func (s *PoolMgrSuite) TestEnableNextPool(c *C) {
 	pool = NewPool()
 	pool.Asset = xmrAsset
 	pool.Status = PoolStaged
-	pool.BalanceRune = cosmos.NewUint(40 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(40 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(0 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -58,7 +58,7 @@ func (s *PoolMgrSuite) TestEnableNextPool(c *C) {
 	pool = NewPool()
 	pool.Asset = usdAsset
 	pool.Status = PoolStaged
-	pool.BalanceRune = cosmos.NewUint(140 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(140 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(0 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -82,7 +82,7 @@ func (s *PoolMgrSuite) TestEnableNextPool(c *C) {
 	c.Assert(err, IsNil)
 	c.Assert(pool.IsEmpty(), Equals, false)
 	c.Check(pool.Status, Equals, PoolStaged)
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(30*common.One))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(30*common.One))
 }
 
 func (s *PoolMgrSuite) TestAbandonPool(c *C) {
@@ -95,7 +95,7 @@ func (s *PoolMgrSuite) TestAbandonPool(c *C) {
 	pool := NewPool()
 	pool.Asset = usdAsset
 	pool.Status = PoolStaged
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -106,14 +106,14 @@ func (s *PoolMgrSuite) TestAbandonPool(c *C) {
 	}
 	c.Assert(k.SetVault(ctx, vault), IsNil)
 
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	ethAddr := GetRandomETHAddress()
 	lp := LiquidityProvider{
 		Asset:        usdAsset,
-		RuneAddress:  runeAddr,
+		DecaAddress:  decaAddr,
 		AssetAddress: ethAddr,
 		Units:        cosmos.ZeroUint(),
-		PendingRune:  cosmos.ZeroUint(),
+		PendingDeca:  cosmos.ZeroUint(),
 		PendingAsset: cosmos.ZeroUint(),
 	}
 	k.SetLiquidityProvider(ctx, lp)
@@ -140,7 +140,7 @@ func (s *PoolMgrSuite) TestAbandonPool(c *C) {
 		"emit_rune":                "0",
 		"id":                       "0000000000000000000000000000000000000000000000000000000000000000",
 		"chain":                    "THOR",
-		"from":                     runeAddr.String(),
+		"from":                     decaAddr.String(),
 		"to":                       "",
 		"coin":                     "0 THOR.RUNE",
 		"memo":                     "",
@@ -158,7 +158,7 @@ func (s *PoolMgrSuite) TestAbandonPool(c *C) {
 	// check pool was deleted
 	pool, err = k.GetPool(ctx, usdAsset)
 	c.Assert(err, IsNil)
-	c.Assert(pool.BalanceRune.IsZero(), Equals, true)
+	c.Assert(pool.BalanceDeca.IsZero(), Equals, true)
 	c.Assert(pool.BalanceAsset.IsZero(), Equals, true)
 
 	// check vault remove pool asset
@@ -187,14 +187,14 @@ func (s *PoolMgrSuite) TestDemotePoolWithLowLiquidityFees(c *C) {
 	pool := NewPool()
 	pool.Asset = usdAsset
 	pool.Status = PoolStaged
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	poolETH := NewPool()
 	poolETH.Asset = common.ETHAsset
 	poolETH.Status = PoolAvailable
-	poolETH.BalanceRune = cosmos.NewUint(100000 * common.One)
+	poolETH.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	poolETH.BalanceAsset = cosmos.NewUint(100000 * common.One)
 	c.Assert(k.SetPool(ctx, poolETH), IsNil)
 
@@ -203,7 +203,7 @@ func (s *PoolMgrSuite) TestDemotePoolWithLowLiquidityFees(c *C) {
 	poolUsdc := NewPool()
 	poolUsdc.Asset = ethUsdc
 	poolUsdc.Status = PoolAvailable
-	poolUsdc.BalanceRune = cosmos.NewUint(100000 * common.One)
+	poolUsdc.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	poolUsdc.BalanceAsset = cosmos.NewUint(100000 * common.One)
 	c.Assert(k.SetPool(ctx, poolUsdc), IsNil)
 
@@ -214,14 +214,14 @@ func (s *PoolMgrSuite) TestDemotePoolWithLowLiquidityFees(c *C) {
 	}
 	c.Assert(k.SetVault(ctx, vault), IsNil)
 
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	ethAddr := GetRandomETHAddress()
 	lp := LiquidityProvider{
 		Asset:        usdAsset,
-		RuneAddress:  runeAddr,
+		DecaAddress:  decaAddr,
 		AssetAddress: ethAddr,
 		Units:        cosmos.ZeroUint(),
-		PendingRune:  cosmos.ZeroUint(),
+		PendingDeca:  cosmos.ZeroUint(),
 		PendingAsset: cosmos.ZeroUint(),
 	}
 	k.SetLiquidityProvider(ctx, lp)
@@ -235,7 +235,7 @@ func (s *PoolMgrSuite) TestDemotePoolWithLowLiquidityFees(c *C) {
 	// check pool was deleted
 	pool, err = k.GetPool(ctx, usdAsset)
 	c.Assert(err, IsNil)
-	c.Assert(pool.BalanceRune.IsZero(), Equals, true)
+	c.Assert(pool.BalanceDeca.IsZero(), Equals, true)
 	c.Assert(pool.BalanceAsset.IsZero(), Equals, true)
 
 	// check vault remove pool asset
@@ -270,7 +270,7 @@ func (s *PoolMgrSuite) TestPoolMeetTradingVolumeCriteria(c *C) {
 	pool := Pool{
 		Asset:        asset,
 		BalanceAsset: cosmos.NewUint(1000 * common.One),
-		BalanceRune:  cosmos.NewUint(1000 * common.One),
+		BalanceDeca:  cosmos.NewUint(1000 * common.One),
 	}
 
 	minFee := cosmos.ZeroUint()
@@ -354,11 +354,11 @@ func (s *PoolMgrSuite) TestRemoveLiquidityProviders(c *C) {
 
 	k.SetLiquidityProvider(ctx, LiquidityProvider{
 		Asset:       asset,
-		RuneAddress: GetRandomRUNEAddress(),
+		DecaAddress: GetRandomRUNEAddress(),
 	})
 	k.SetLiquidityProvider(ctx, LiquidityProvider{
 		Asset:       asset,
-		RuneAddress: GetRandomRUNEAddress(),
+		DecaAddress: GetRandomRUNEAddress(),
 	})
 	c.Assert(countLiquidityProviders(ctx, k, asset), Equals, 2,
 		Commentf("should have 2 lps after adding"))
@@ -385,22 +385,22 @@ func (s *PoolMgrSuite) TestCommitPendingLiquidity(c *C) {
 
 	pool := NewPool()
 	pool.Asset = asset
-	pool.BalanceRune = cosmos.NewUint(100_000)
+	pool.BalanceDeca = cosmos.NewUint(100_000)
 	pool.BalanceAsset = cosmos.NewUint(100_000)
-	// PendingInboundRune/Asset must equal the sum of LP pending amounts that will be committed
-	// lp1 has PendingRune=501 and will be committed (old LastAddHeight)
+	// PendingInboundDeca/Asset must equal the sum of LP pending amounts that will be committed
+	// lp1 has PendingDeca=501 and will be committed (old LastAddHeight)
 	// lp2 has PendingAsset=600 and will be committed (old LastAddHeight)
 	// lp3 has PendingAsset=811 but will NOT be committed (recent LastAddHeight)
-	pool.PendingInboundRune = cosmos.NewUint(501)
+	pool.PendingInboundDeca = cosmos.NewUint(501)
 	pool.PendingInboundAsset = cosmos.NewUint(600 + 811) // 600 from lp2 (to be committed) + 811 from lp3 (not to be committed)
 	pool.LPUnits = cosmos.NewUint(1000)
 	c.Check(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	lp1 := LiquidityProvider{
 		Asset:         pool.Asset,
-		RuneAddress:   GetRandomRUNEAddress(),
+		DecaAddress:   GetRandomRUNEAddress(),
 		AssetAddress:  GetRandomBTCAddress(),
-		PendingRune:   cosmos.NewUint(501),
+		PendingDeca:   cosmos.NewUint(501),
 		Units:         cosmos.NewUint(300),
 		LastAddHeight: 1,
 	}
@@ -408,7 +408,7 @@ func (s *PoolMgrSuite) TestCommitPendingLiquidity(c *C) {
 
 	lp2 := LiquidityProvider{
 		Asset:         pool.Asset,
-		RuneAddress:   GetRandomRUNEAddress(),
+		DecaAddress:   GetRandomRUNEAddress(),
 		AssetAddress:  GetRandomBTCAddress(),
 		PendingAsset:  cosmos.NewUint(600),
 		Units:         cosmos.NewUint(500),
@@ -418,7 +418,7 @@ func (s *PoolMgrSuite) TestCommitPendingLiquidity(c *C) {
 
 	lp3 := LiquidityProvider{
 		Asset:         pool.Asset,
-		RuneAddress:   GetRandomRUNEAddress(),
+		DecaAddress:   GetRandomRUNEAddress(),
 		AssetAddress:  GetRandomBTCAddress(),
 		PendingAsset:  cosmos.NewUint(811),
 		Units:         cosmos.NewUint(200),
@@ -431,24 +431,24 @@ func (s *PoolMgrSuite) TestCommitPendingLiquidity(c *C) {
 
 	pool, err = mgr.Keeper().GetPool(ctx, pool.Asset)
 	c.Assert(err, IsNil)
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(100_501), Commentf("%d", pool.BalanceRune.Uint64()))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(100_501), Commentf("%d", pool.BalanceDeca.Uint64()))
 	c.Check(pool.BalanceAsset.Uint64(), Equals, uint64(100_600), Commentf("%d", pool.BalanceAsset.Uint64()))
 
 	lp, err := mgr.Keeper().GetLiquidityProvider(ctx, pool.Asset, lp1.GetAddress())
 	c.Assert(err, IsNil)
 	c.Check(lp.Units.Uint64(), Equals, uint64(302), Commentf("%d", lp.Units.Uint64()))
-	c.Check(lp.PendingRune.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingRune.Uint64()))
+	c.Check(lp.PendingDeca.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingDeca.Uint64()))
 	c.Check(lp.PendingAsset.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingAsset.Uint64()))
 
 	lp, err = mgr.Keeper().GetLiquidityProvider(ctx, pool.Asset, lp2.GetAddress())
 	c.Assert(err, IsNil)
 	c.Check(lp.Units.Uint64(), Equals, uint64(502), Commentf("%d", lp.Units.Uint64()))
-	c.Check(lp.PendingRune.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingRune.Uint64()))
+	c.Check(lp.PendingDeca.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingDeca.Uint64()))
 	c.Check(lp.PendingAsset.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingAsset.Uint64()))
 
 	lp, err = mgr.Keeper().GetLiquidityProvider(ctx, pool.Asset, lp3.GetAddress())
 	c.Assert(err, IsNil)
 	c.Check(lp.Units.Uint64(), Equals, uint64(200), Commentf("%d", lp.Units.Uint64()))
-	c.Check(lp.PendingRune.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingRune.Uint64()))
+	c.Check(lp.PendingDeca.Uint64(), Equals, uint64(0), Commentf("%d", lp.PendingDeca.Uint64()))
 	c.Check(lp.PendingAsset.Uint64(), Equals, uint64(811), Commentf("%d", lp.PendingAsset.Uint64()))
 }

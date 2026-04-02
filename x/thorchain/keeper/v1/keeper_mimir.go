@@ -107,7 +107,7 @@ func (k KVStore) IsOperationalMimir(key string) bool {
 	exactMatches := []string{
 		"MintSynths",
 		"TradeAccountsEnabled",
-		"RUNEPoolEnabled",
+		"DECAPoolEnabled",
 		"EVMDisableContractWhitelist",
 		"MaxOutboundAttempts",
 		"AdvSwapQueueRapidSwapMax",

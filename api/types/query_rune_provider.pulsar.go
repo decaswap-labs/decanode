@@ -14,28 +14,28 @@ import (
 )
 
 var (
-	md_QueryRuneProviderRequest         protoreflect.MessageDescriptor
-	fd_QueryRuneProviderRequest_address protoreflect.FieldDescriptor
-	fd_QueryRuneProviderRequest_height  protoreflect.FieldDescriptor
+	md_QueryDecaProviderRequest         protoreflect.MessageDescriptor
+	fd_QueryDecaProviderRequest_address protoreflect.FieldDescriptor
+	fd_QueryDecaProviderRequest_height  protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_rune_provider_proto_init()
-	md_QueryRuneProviderRequest = File_types_query_rune_provider_proto.Messages().ByName("QueryRuneProviderRequest")
-	fd_QueryRuneProviderRequest_address = md_QueryRuneProviderRequest.Fields().ByName("address")
-	fd_QueryRuneProviderRequest_height = md_QueryRuneProviderRequest.Fields().ByName("height")
+	file_types_query_deca_provider_proto_init()
+	md_QueryDecaProviderRequest = File_types_query_deca_provider_proto.Messages().ByName("QueryDecaProviderRequest")
+	fd_QueryDecaProviderRequest_address = md_QueryDecaProviderRequest.Fields().ByName("address")
+	fd_QueryDecaProviderRequest_height = md_QueryDecaProviderRequest.Fields().ByName("height")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryRuneProviderRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryDecaProviderRequest)(nil)
 
-type fastReflection_QueryRuneProviderRequest QueryRuneProviderRequest
+type fastReflection_QueryDecaProviderRequest QueryDecaProviderRequest
 
-func (x *QueryRuneProviderRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryRuneProviderRequest)(x)
+func (x *QueryDecaProviderRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDecaProviderRequest)(x)
 }
 
-func (x *QueryRuneProviderRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_rune_provider_proto_msgTypes[0]
+func (x *QueryDecaProviderRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_deca_provider_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -46,43 +46,43 @@ func (x *QueryRuneProviderRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryRuneProviderRequest_messageType fastReflection_QueryRuneProviderRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryRuneProviderRequest_messageType{}
+var _fastReflection_QueryDecaProviderRequest_messageType fastReflection_QueryDecaProviderRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDecaProviderRequest_messageType{}
 
-type fastReflection_QueryRuneProviderRequest_messageType struct{}
+type fastReflection_QueryDecaProviderRequest_messageType struct{}
 
-func (x fastReflection_QueryRuneProviderRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryRuneProviderRequest)(nil)
+func (x fastReflection_QueryDecaProviderRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDecaProviderRequest)(nil)
 }
-func (x fastReflection_QueryRuneProviderRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProviderRequest)
+func (x fastReflection_QueryDecaProviderRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProviderRequest)
 }
-func (x fastReflection_QueryRuneProviderRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProviderRequest
+func (x fastReflection_QueryDecaProviderRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProviderRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryRuneProviderRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProviderRequest
+func (x *fastReflection_QueryDecaProviderRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProviderRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryRuneProviderRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryRuneProviderRequest_messageType
+func (x *fastReflection_QueryDecaProviderRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDecaProviderRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryRuneProviderRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProviderRequest)
+func (x *fastReflection_QueryDecaProviderRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProviderRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryRuneProviderRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryRuneProviderRequest)(x)
+func (x *fastReflection_QueryDecaProviderRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryDecaProviderRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -90,16 +90,16 @@ func (x *fastReflection_QueryRuneProviderRequest) Interface() protoreflect.Proto
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryRuneProviderRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryDecaProviderRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Address != "" {
 		value := protoreflect.ValueOfString(x.Address)
-		if !f(fd_QueryRuneProviderRequest_address, value) {
+		if !f(fd_QueryDecaProviderRequest_address, value) {
 			return
 		}
 	}
 	if x.Height != "" {
 		value := protoreflect.ValueOfString(x.Height)
-		if !f(fd_QueryRuneProviderRequest_height, value) {
+		if !f(fd_QueryDecaProviderRequest_height, value) {
 			return
 		}
 	}
@@ -116,17 +116,17 @@ func (x *fastReflection_QueryRuneProviderRequest) Range(f func(protoreflect.Fiel
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryRuneProviderRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryDecaProviderRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderRequest.address":
+	case "types.QueryDecaProviderRequest.address":
 		return x.Address != ""
-	case "types.QueryRuneProviderRequest.height":
+	case "types.QueryDecaProviderRequest.height":
 		return x.Height != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -136,17 +136,17 @@ func (x *fastReflection_QueryRuneProviderRequest) Has(fd protoreflect.FieldDescr
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryDecaProviderRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderRequest.address":
+	case "types.QueryDecaProviderRequest.address":
 		x.Address = ""
-	case "types.QueryRuneProviderRequest.height":
+	case "types.QueryDecaProviderRequest.height":
 		x.Height = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -156,19 +156,19 @@ func (x *fastReflection_QueryRuneProviderRequest) Clear(fd protoreflect.FieldDes
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryRuneProviderRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProviderRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryRuneProviderRequest.address":
+	case "types.QueryDecaProviderRequest.address":
 		value := x.Address
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderRequest.height":
+	case "types.QueryDecaProviderRequest.height":
 		value := x.Height
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -182,17 +182,17 @@ func (x *fastReflection_QueryRuneProviderRequest) Get(descriptor protoreflect.Fi
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryDecaProviderRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderRequest.address":
+	case "types.QueryDecaProviderRequest.address":
 		x.Address = value.Interface().(string)
-	case "types.QueryRuneProviderRequest.height":
+	case "types.QueryDecaProviderRequest.height":
 		x.Height = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -206,44 +206,44 @@ func (x *fastReflection_QueryRuneProviderRequest) Set(fd protoreflect.FieldDescr
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProviderRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderRequest.address":
-		panic(fmt.Errorf("field address of message types.QueryRuneProviderRequest is not mutable"))
-	case "types.QueryRuneProviderRequest.height":
-		panic(fmt.Errorf("field height of message types.QueryRuneProviderRequest is not mutable"))
+	case "types.QueryDecaProviderRequest.address":
+		panic(fmt.Errorf("field address of message types.QueryDecaProviderRequest is not mutable"))
+	case "types.QueryDecaProviderRequest.height":
+		panic(fmt.Errorf("field height of message types.QueryDecaProviderRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryRuneProviderRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProviderRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderRequest.address":
+	case "types.QueryDecaProviderRequest.address":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderRequest.height":
+	case "types.QueryDecaProviderRequest.height":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryRuneProviderRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryDecaProviderRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryRuneProviderRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryDecaProviderRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -251,7 +251,7 @@ func (x *fastReflection_QueryRuneProviderRequest) WhichOneof(d protoreflect.Oneo
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryRuneProviderRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryDecaProviderRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -262,7 +262,7 @@ func (x *fastReflection_QueryRuneProviderRequest) GetUnknown() protoreflect.RawF
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryDecaProviderRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -274,7 +274,7 @@ func (x *fastReflection_QueryRuneProviderRequest) SetUnknown(fields protoreflect
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryRuneProviderRequest) IsValid() bool {
+func (x *fastReflection_QueryDecaProviderRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -284,9 +284,9 @@ func (x *fastReflection_QueryRuneProviderRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryRuneProviderRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryDecaProviderRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryRuneProviderRequest)
+		x := input.Message.Interface().(*QueryDecaProviderRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -316,7 +316,7 @@ func (x *fastReflection_QueryRuneProviderRequest) ProtoMethods() *protoiface.Met
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProviderRequest)
+		x := input.Message.Interface().(*QueryDecaProviderRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -360,7 +360,7 @@ func (x *fastReflection_QueryRuneProviderRequest) ProtoMethods() *protoiface.Met
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProviderRequest)
+		x := input.Message.Interface().(*QueryDecaProviderRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -392,10 +392,10 @@ func (x *fastReflection_QueryRuneProviderRequest) ProtoMethods() *protoiface.Met
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProviderRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProviderRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProviderRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProviderRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -498,40 +498,40 @@ func (x *fastReflection_QueryRuneProviderRequest) ProtoMethods() *protoiface.Met
 }
 
 var (
-	md_QueryRuneProviderResponse                      protoreflect.MessageDescriptor
-	fd_QueryRuneProviderResponse_rune_address         protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_units                protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_value                protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_pnl                  protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_deposit_amount       protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_withdraw_amount      protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_last_deposit_height  protoreflect.FieldDescriptor
-	fd_QueryRuneProviderResponse_last_withdraw_height protoreflect.FieldDescriptor
+	md_QueryDecaProviderResponse                      protoreflect.MessageDescriptor
+	fd_QueryDecaProviderResponse_deca_address         protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_units                protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_value                protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_pnl                  protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_deposit_amount       protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_withdraw_amount      protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_last_deposit_height  protoreflect.FieldDescriptor
+	fd_QueryDecaProviderResponse_last_withdraw_height protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_rune_provider_proto_init()
-	md_QueryRuneProviderResponse = File_types_query_rune_provider_proto.Messages().ByName("QueryRuneProviderResponse")
-	fd_QueryRuneProviderResponse_rune_address = md_QueryRuneProviderResponse.Fields().ByName("rune_address")
-	fd_QueryRuneProviderResponse_units = md_QueryRuneProviderResponse.Fields().ByName("units")
-	fd_QueryRuneProviderResponse_value = md_QueryRuneProviderResponse.Fields().ByName("value")
-	fd_QueryRuneProviderResponse_pnl = md_QueryRuneProviderResponse.Fields().ByName("pnl")
-	fd_QueryRuneProviderResponse_deposit_amount = md_QueryRuneProviderResponse.Fields().ByName("deposit_amount")
-	fd_QueryRuneProviderResponse_withdraw_amount = md_QueryRuneProviderResponse.Fields().ByName("withdraw_amount")
-	fd_QueryRuneProviderResponse_last_deposit_height = md_QueryRuneProviderResponse.Fields().ByName("last_deposit_height")
-	fd_QueryRuneProviderResponse_last_withdraw_height = md_QueryRuneProviderResponse.Fields().ByName("last_withdraw_height")
+	file_types_query_deca_provider_proto_init()
+	md_QueryDecaProviderResponse = File_types_query_deca_provider_proto.Messages().ByName("QueryDecaProviderResponse")
+	fd_QueryDecaProviderResponse_deca_address = md_QueryDecaProviderResponse.Fields().ByName("deca_address")
+	fd_QueryDecaProviderResponse_units = md_QueryDecaProviderResponse.Fields().ByName("units")
+	fd_QueryDecaProviderResponse_value = md_QueryDecaProviderResponse.Fields().ByName("value")
+	fd_QueryDecaProviderResponse_pnl = md_QueryDecaProviderResponse.Fields().ByName("pnl")
+	fd_QueryDecaProviderResponse_deposit_amount = md_QueryDecaProviderResponse.Fields().ByName("deposit_amount")
+	fd_QueryDecaProviderResponse_withdraw_amount = md_QueryDecaProviderResponse.Fields().ByName("withdraw_amount")
+	fd_QueryDecaProviderResponse_last_deposit_height = md_QueryDecaProviderResponse.Fields().ByName("last_deposit_height")
+	fd_QueryDecaProviderResponse_last_withdraw_height = md_QueryDecaProviderResponse.Fields().ByName("last_withdraw_height")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryRuneProviderResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryDecaProviderResponse)(nil)
 
-type fastReflection_QueryRuneProviderResponse QueryRuneProviderResponse
+type fastReflection_QueryDecaProviderResponse QueryDecaProviderResponse
 
-func (x *QueryRuneProviderResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryRuneProviderResponse)(x)
+func (x *QueryDecaProviderResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDecaProviderResponse)(x)
 }
 
-func (x *QueryRuneProviderResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_rune_provider_proto_msgTypes[1]
+func (x *QueryDecaProviderResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_deca_provider_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -542,43 +542,43 @@ func (x *QueryRuneProviderResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryRuneProviderResponse_messageType fastReflection_QueryRuneProviderResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryRuneProviderResponse_messageType{}
+var _fastReflection_QueryDecaProviderResponse_messageType fastReflection_QueryDecaProviderResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDecaProviderResponse_messageType{}
 
-type fastReflection_QueryRuneProviderResponse_messageType struct{}
+type fastReflection_QueryDecaProviderResponse_messageType struct{}
 
-func (x fastReflection_QueryRuneProviderResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryRuneProviderResponse)(nil)
+func (x fastReflection_QueryDecaProviderResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDecaProviderResponse)(nil)
 }
-func (x fastReflection_QueryRuneProviderResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProviderResponse)
+func (x fastReflection_QueryDecaProviderResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProviderResponse)
 }
-func (x fastReflection_QueryRuneProviderResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProviderResponse
+func (x fastReflection_QueryDecaProviderResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProviderResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryRuneProviderResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProviderResponse
+func (x *fastReflection_QueryDecaProviderResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProviderResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryRuneProviderResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryRuneProviderResponse_messageType
+func (x *fastReflection_QueryDecaProviderResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDecaProviderResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryRuneProviderResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProviderResponse)
+func (x *fastReflection_QueryDecaProviderResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProviderResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryRuneProviderResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryRuneProviderResponse)(x)
+func (x *fastReflection_QueryDecaProviderResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryDecaProviderResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -586,52 +586,52 @@ func (x *fastReflection_QueryRuneProviderResponse) Interface() protoreflect.Prot
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryRuneProviderResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_QueryRuneProviderResponse_rune_address, value) {
+func (x *fastReflection_QueryDecaProviderResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_QueryDecaProviderResponse_deca_address, value) {
 			return
 		}
 	}
 	if x.Units != "" {
 		value := protoreflect.ValueOfString(x.Units)
-		if !f(fd_QueryRuneProviderResponse_units, value) {
+		if !f(fd_QueryDecaProviderResponse_units, value) {
 			return
 		}
 	}
 	if x.Value != "" {
 		value := protoreflect.ValueOfString(x.Value)
-		if !f(fd_QueryRuneProviderResponse_value, value) {
+		if !f(fd_QueryDecaProviderResponse_value, value) {
 			return
 		}
 	}
 	if x.Pnl != "" {
 		value := protoreflect.ValueOfString(x.Pnl)
-		if !f(fd_QueryRuneProviderResponse_pnl, value) {
+		if !f(fd_QueryDecaProviderResponse_pnl, value) {
 			return
 		}
 	}
 	if x.DepositAmount != "" {
 		value := protoreflect.ValueOfString(x.DepositAmount)
-		if !f(fd_QueryRuneProviderResponse_deposit_amount, value) {
+		if !f(fd_QueryDecaProviderResponse_deposit_amount, value) {
 			return
 		}
 	}
 	if x.WithdrawAmount != "" {
 		value := protoreflect.ValueOfString(x.WithdrawAmount)
-		if !f(fd_QueryRuneProviderResponse_withdraw_amount, value) {
+		if !f(fd_QueryDecaProviderResponse_withdraw_amount, value) {
 			return
 		}
 	}
 	if x.LastDepositHeight != int64(0) {
 		value := protoreflect.ValueOfInt64(x.LastDepositHeight)
-		if !f(fd_QueryRuneProviderResponse_last_deposit_height, value) {
+		if !f(fd_QueryDecaProviderResponse_last_deposit_height, value) {
 			return
 		}
 	}
 	if x.LastWithdrawHeight != int64(0) {
 		value := protoreflect.ValueOfInt64(x.LastWithdrawHeight)
-		if !f(fd_QueryRuneProviderResponse_last_withdraw_height, value) {
+		if !f(fd_QueryDecaProviderResponse_last_withdraw_height, value) {
 			return
 		}
 	}
@@ -648,29 +648,29 @@ func (x *fastReflection_QueryRuneProviderResponse) Range(f func(protoreflect.Fie
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryRuneProviderResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryDecaProviderResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderResponse.rune_address":
-		return x.RuneAddress != ""
-	case "types.QueryRuneProviderResponse.units":
+	case "types.QueryDecaProviderResponse.deca_address":
+		return x.DecaAddress != ""
+	case "types.QueryDecaProviderResponse.units":
 		return x.Units != ""
-	case "types.QueryRuneProviderResponse.value":
+	case "types.QueryDecaProviderResponse.value":
 		return x.Value != ""
-	case "types.QueryRuneProviderResponse.pnl":
+	case "types.QueryDecaProviderResponse.pnl":
 		return x.Pnl != ""
-	case "types.QueryRuneProviderResponse.deposit_amount":
+	case "types.QueryDecaProviderResponse.deposit_amount":
 		return x.DepositAmount != ""
-	case "types.QueryRuneProviderResponse.withdraw_amount":
+	case "types.QueryDecaProviderResponse.withdraw_amount":
 		return x.WithdrawAmount != ""
-	case "types.QueryRuneProviderResponse.last_deposit_height":
+	case "types.QueryDecaProviderResponse.last_deposit_height":
 		return x.LastDepositHeight != int64(0)
-	case "types.QueryRuneProviderResponse.last_withdraw_height":
+	case "types.QueryDecaProviderResponse.last_withdraw_height":
 		return x.LastWithdrawHeight != int64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -680,29 +680,29 @@ func (x *fastReflection_QueryRuneProviderResponse) Has(fd protoreflect.FieldDesc
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryDecaProviderResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderResponse.rune_address":
-		x.RuneAddress = ""
-	case "types.QueryRuneProviderResponse.units":
+	case "types.QueryDecaProviderResponse.deca_address":
+		x.DecaAddress = ""
+	case "types.QueryDecaProviderResponse.units":
 		x.Units = ""
-	case "types.QueryRuneProviderResponse.value":
+	case "types.QueryDecaProviderResponse.value":
 		x.Value = ""
-	case "types.QueryRuneProviderResponse.pnl":
+	case "types.QueryDecaProviderResponse.pnl":
 		x.Pnl = ""
-	case "types.QueryRuneProviderResponse.deposit_amount":
+	case "types.QueryDecaProviderResponse.deposit_amount":
 		x.DepositAmount = ""
-	case "types.QueryRuneProviderResponse.withdraw_amount":
+	case "types.QueryDecaProviderResponse.withdraw_amount":
 		x.WithdrawAmount = ""
-	case "types.QueryRuneProviderResponse.last_deposit_height":
+	case "types.QueryDecaProviderResponse.last_deposit_height":
 		x.LastDepositHeight = int64(0)
-	case "types.QueryRuneProviderResponse.last_withdraw_height":
+	case "types.QueryDecaProviderResponse.last_withdraw_height":
 		x.LastWithdrawHeight = int64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -712,37 +712,37 @@ func (x *fastReflection_QueryRuneProviderResponse) Clear(fd protoreflect.FieldDe
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryRuneProviderResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProviderResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryRuneProviderResponse.rune_address":
-		value := x.RuneAddress
+	case "types.QueryDecaProviderResponse.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderResponse.units":
+	case "types.QueryDecaProviderResponse.units":
 		value := x.Units
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderResponse.value":
+	case "types.QueryDecaProviderResponse.value":
 		value := x.Value
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderResponse.pnl":
+	case "types.QueryDecaProviderResponse.pnl":
 		value := x.Pnl
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderResponse.deposit_amount":
+	case "types.QueryDecaProviderResponse.deposit_amount":
 		value := x.DepositAmount
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderResponse.withdraw_amount":
+	case "types.QueryDecaProviderResponse.withdraw_amount":
 		value := x.WithdrawAmount
 		return protoreflect.ValueOfString(value)
-	case "types.QueryRuneProviderResponse.last_deposit_height":
+	case "types.QueryDecaProviderResponse.last_deposit_height":
 		value := x.LastDepositHeight
 		return protoreflect.ValueOfInt64(value)
-	case "types.QueryRuneProviderResponse.last_withdraw_height":
+	case "types.QueryDecaProviderResponse.last_withdraw_height":
 		value := x.LastWithdrawHeight
 		return protoreflect.ValueOfInt64(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -756,29 +756,29 @@ func (x *fastReflection_QueryRuneProviderResponse) Get(descriptor protoreflect.F
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryDecaProviderResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderResponse.rune_address":
-		x.RuneAddress = value.Interface().(string)
-	case "types.QueryRuneProviderResponse.units":
+	case "types.QueryDecaProviderResponse.deca_address":
+		x.DecaAddress = value.Interface().(string)
+	case "types.QueryDecaProviderResponse.units":
 		x.Units = value.Interface().(string)
-	case "types.QueryRuneProviderResponse.value":
+	case "types.QueryDecaProviderResponse.value":
 		x.Value = value.Interface().(string)
-	case "types.QueryRuneProviderResponse.pnl":
+	case "types.QueryDecaProviderResponse.pnl":
 		x.Pnl = value.Interface().(string)
-	case "types.QueryRuneProviderResponse.deposit_amount":
+	case "types.QueryDecaProviderResponse.deposit_amount":
 		x.DepositAmount = value.Interface().(string)
-	case "types.QueryRuneProviderResponse.withdraw_amount":
+	case "types.QueryDecaProviderResponse.withdraw_amount":
 		x.WithdrawAmount = value.Interface().(string)
-	case "types.QueryRuneProviderResponse.last_deposit_height":
+	case "types.QueryDecaProviderResponse.last_deposit_height":
 		x.LastDepositHeight = value.Int()
-	case "types.QueryRuneProviderResponse.last_withdraw_height":
+	case "types.QueryDecaProviderResponse.last_withdraw_height":
 		x.LastWithdrawHeight = value.Int()
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -792,68 +792,68 @@ func (x *fastReflection_QueryRuneProviderResponse) Set(fd protoreflect.FieldDesc
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProviderResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderResponse.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.units":
-		panic(fmt.Errorf("field units of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.value":
-		panic(fmt.Errorf("field value of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.pnl":
-		panic(fmt.Errorf("field pnl of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.deposit_amount":
-		panic(fmt.Errorf("field deposit_amount of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.withdraw_amount":
-		panic(fmt.Errorf("field withdraw_amount of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.last_deposit_height":
-		panic(fmt.Errorf("field last_deposit_height of message types.QueryRuneProviderResponse is not mutable"))
-	case "types.QueryRuneProviderResponse.last_withdraw_height":
-		panic(fmt.Errorf("field last_withdraw_height of message types.QueryRuneProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.units":
+		panic(fmt.Errorf("field units of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.value":
+		panic(fmt.Errorf("field value of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.pnl":
+		panic(fmt.Errorf("field pnl of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.deposit_amount":
+		panic(fmt.Errorf("field deposit_amount of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.withdraw_amount":
+		panic(fmt.Errorf("field withdraw_amount of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.last_deposit_height":
+		panic(fmt.Errorf("field last_deposit_height of message types.QueryDecaProviderResponse is not mutable"))
+	case "types.QueryDecaProviderResponse.last_withdraw_height":
+		panic(fmt.Errorf("field last_withdraw_height of message types.QueryDecaProviderResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryRuneProviderResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProviderResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProviderResponse.rune_address":
+	case "types.QueryDecaProviderResponse.deca_address":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderResponse.units":
+	case "types.QueryDecaProviderResponse.units":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderResponse.value":
+	case "types.QueryDecaProviderResponse.value":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderResponse.pnl":
+	case "types.QueryDecaProviderResponse.pnl":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderResponse.deposit_amount":
+	case "types.QueryDecaProviderResponse.deposit_amount":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderResponse.withdraw_amount":
+	case "types.QueryDecaProviderResponse.withdraw_amount":
 		return protoreflect.ValueOfString("")
-	case "types.QueryRuneProviderResponse.last_deposit_height":
+	case "types.QueryDecaProviderResponse.last_deposit_height":
 		return protoreflect.ValueOfInt64(int64(0))
-	case "types.QueryRuneProviderResponse.last_withdraw_height":
+	case "types.QueryDecaProviderResponse.last_withdraw_height":
 		return protoreflect.ValueOfInt64(int64(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProviderResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProviderResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProviderResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProviderResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryRuneProviderResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryDecaProviderResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryRuneProviderResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryDecaProviderResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -861,7 +861,7 @@ func (x *fastReflection_QueryRuneProviderResponse) WhichOneof(d protoreflect.One
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryRuneProviderResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryDecaProviderResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -872,7 +872,7 @@ func (x *fastReflection_QueryRuneProviderResponse) GetUnknown() protoreflect.Raw
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProviderResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryDecaProviderResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -884,7 +884,7 @@ func (x *fastReflection_QueryRuneProviderResponse) SetUnknown(fields protoreflec
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryRuneProviderResponse) IsValid() bool {
+func (x *fastReflection_QueryDecaProviderResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -894,9 +894,9 @@ func (x *fastReflection_QueryRuneProviderResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryDecaProviderResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryRuneProviderResponse)
+		x := input.Message.Interface().(*QueryDecaProviderResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -908,7 +908,7 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -948,7 +948,7 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProviderResponse)
+		x := input.Message.Interface().(*QueryDecaProviderResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1012,10 +1012,10 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -1030,7 +1030,7 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProviderResponse)
+		x := input.Message.Interface().(*QueryDecaProviderResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1062,15 +1062,15 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProviderResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProviderResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProviderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProviderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1098,7 +1098,7 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
@@ -1334,26 +1334,26 @@ func (x *fastReflection_QueryRuneProviderResponse) ProtoMethods() *protoiface.Me
 }
 
 var (
-	md_QueryRuneProvidersRequest        protoreflect.MessageDescriptor
-	fd_QueryRuneProvidersRequest_height protoreflect.FieldDescriptor
+	md_QueryDecaProvidersRequest        protoreflect.MessageDescriptor
+	fd_QueryDecaProvidersRequest_height protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_rune_provider_proto_init()
-	md_QueryRuneProvidersRequest = File_types_query_rune_provider_proto.Messages().ByName("QueryRuneProvidersRequest")
-	fd_QueryRuneProvidersRequest_height = md_QueryRuneProvidersRequest.Fields().ByName("height")
+	file_types_query_deca_provider_proto_init()
+	md_QueryDecaProvidersRequest = File_types_query_deca_provider_proto.Messages().ByName("QueryDecaProvidersRequest")
+	fd_QueryDecaProvidersRequest_height = md_QueryDecaProvidersRequest.Fields().ByName("height")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryRuneProvidersRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryDecaProvidersRequest)(nil)
 
-type fastReflection_QueryRuneProvidersRequest QueryRuneProvidersRequest
+type fastReflection_QueryDecaProvidersRequest QueryDecaProvidersRequest
 
-func (x *QueryRuneProvidersRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryRuneProvidersRequest)(x)
+func (x *QueryDecaProvidersRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDecaProvidersRequest)(x)
 }
 
-func (x *QueryRuneProvidersRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_rune_provider_proto_msgTypes[2]
+func (x *QueryDecaProvidersRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_deca_provider_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1364,43 +1364,43 @@ func (x *QueryRuneProvidersRequest) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryRuneProvidersRequest_messageType fastReflection_QueryRuneProvidersRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryRuneProvidersRequest_messageType{}
+var _fastReflection_QueryDecaProvidersRequest_messageType fastReflection_QueryDecaProvidersRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDecaProvidersRequest_messageType{}
 
-type fastReflection_QueryRuneProvidersRequest_messageType struct{}
+type fastReflection_QueryDecaProvidersRequest_messageType struct{}
 
-func (x fastReflection_QueryRuneProvidersRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryRuneProvidersRequest)(nil)
+func (x fastReflection_QueryDecaProvidersRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDecaProvidersRequest)(nil)
 }
-func (x fastReflection_QueryRuneProvidersRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProvidersRequest)
+func (x fastReflection_QueryDecaProvidersRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProvidersRequest)
 }
-func (x fastReflection_QueryRuneProvidersRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProvidersRequest
+func (x fastReflection_QueryDecaProvidersRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProvidersRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryRuneProvidersRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProvidersRequest
+func (x *fastReflection_QueryDecaProvidersRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProvidersRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryRuneProvidersRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryRuneProvidersRequest_messageType
+func (x *fastReflection_QueryDecaProvidersRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDecaProvidersRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryRuneProvidersRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProvidersRequest)
+func (x *fastReflection_QueryDecaProvidersRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProvidersRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryRuneProvidersRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryRuneProvidersRequest)(x)
+func (x *fastReflection_QueryDecaProvidersRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryDecaProvidersRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1408,10 +1408,10 @@ func (x *fastReflection_QueryRuneProvidersRequest) Interface() protoreflect.Prot
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryRuneProvidersRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryDecaProvidersRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Height != "" {
 		value := protoreflect.ValueOfString(x.Height)
-		if !f(fd_QueryRuneProvidersRequest_height, value) {
+		if !f(fd_QueryDecaProvidersRequest_height, value) {
 			return
 		}
 	}
@@ -1428,15 +1428,15 @@ func (x *fastReflection_QueryRuneProvidersRequest) Range(f func(protoreflect.Fie
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryRuneProvidersRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryDecaProvidersRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersRequest.height":
+	case "types.QueryDecaProvidersRequest.height":
 		return x.Height != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1446,15 +1446,15 @@ func (x *fastReflection_QueryRuneProvidersRequest) Has(fd protoreflect.FieldDesc
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryDecaProvidersRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersRequest.height":
+	case "types.QueryDecaProvidersRequest.height":
 		x.Height = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1464,16 +1464,16 @@ func (x *fastReflection_QueryRuneProvidersRequest) Clear(fd protoreflect.FieldDe
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryRuneProvidersRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProvidersRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryRuneProvidersRequest.height":
+	case "types.QueryDecaProvidersRequest.height":
 		value := x.Height
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1487,15 +1487,15 @@ func (x *fastReflection_QueryRuneProvidersRequest) Get(descriptor protoreflect.F
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryDecaProvidersRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersRequest.height":
+	case "types.QueryDecaProvidersRequest.height":
 		x.Height = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1509,40 +1509,40 @@ func (x *fastReflection_QueryRuneProvidersRequest) Set(fd protoreflect.FieldDesc
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProvidersRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersRequest.height":
-		panic(fmt.Errorf("field height of message types.QueryRuneProvidersRequest is not mutable"))
+	case "types.QueryDecaProvidersRequest.height":
+		panic(fmt.Errorf("field height of message types.QueryDecaProvidersRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryRuneProvidersRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProvidersRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersRequest.height":
+	case "types.QueryDecaProvidersRequest.height":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersRequest"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryRuneProvidersRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryDecaProvidersRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryRuneProvidersRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryDecaProvidersRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1550,7 +1550,7 @@ func (x *fastReflection_QueryRuneProvidersRequest) WhichOneof(d protoreflect.One
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryRuneProvidersRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryDecaProvidersRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1561,7 +1561,7 @@ func (x *fastReflection_QueryRuneProvidersRequest) GetUnknown() protoreflect.Raw
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryDecaProvidersRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1573,7 +1573,7 @@ func (x *fastReflection_QueryRuneProvidersRequest) SetUnknown(fields protoreflec
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryRuneProvidersRequest) IsValid() bool {
+func (x *fastReflection_QueryDecaProvidersRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -1583,9 +1583,9 @@ func (x *fastReflection_QueryRuneProvidersRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryRuneProvidersRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryDecaProvidersRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryRuneProvidersRequest)
+		x := input.Message.Interface().(*QueryDecaProvidersRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1611,7 +1611,7 @@ func (x *fastReflection_QueryRuneProvidersRequest) ProtoMethods() *protoiface.Me
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProvidersRequest)
+		x := input.Message.Interface().(*QueryDecaProvidersRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1648,7 +1648,7 @@ func (x *fastReflection_QueryRuneProvidersRequest) ProtoMethods() *protoiface.Me
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProvidersRequest)
+		x := input.Message.Interface().(*QueryDecaProvidersRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1680,10 +1680,10 @@ func (x *fastReflection_QueryRuneProvidersRequest) ProtoMethods() *protoiface.Me
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProvidersRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProvidersRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProvidersRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProvidersRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1753,78 +1753,78 @@ func (x *fastReflection_QueryRuneProvidersRequest) ProtoMethods() *protoiface.Me
 	}
 }
 
-var _ protoreflect.List = (*_QueryRuneProvidersResponse_1_list)(nil)
+var _ protoreflect.List = (*_QueryDecaProvidersResponse_1_list)(nil)
 
-type _QueryRuneProvidersResponse_1_list struct {
-	list *[]*QueryRuneProviderResponse
+type _QueryDecaProvidersResponse_1_list struct {
+	list *[]*QueryDecaProviderResponse
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) Len() int {
+func (x *_QueryDecaProvidersResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_QueryDecaProvidersResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_QueryDecaProvidersResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*QueryRuneProviderResponse)
+	concreteValue := valueUnwrapped.Interface().(*QueryDecaProviderResponse)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) Append(value protoreflect.Value) {
+func (x *_QueryDecaProvidersResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*QueryRuneProviderResponse)
+	concreteValue := valueUnwrapped.Interface().(*QueryDecaProviderResponse)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) AppendMutable() protoreflect.Value {
-	v := new(QueryRuneProviderResponse)
+func (x *_QueryDecaProvidersResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(QueryDecaProviderResponse)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) Truncate(n int) {
+func (x *_QueryDecaProvidersResponse_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) NewElement() protoreflect.Value {
-	v := new(QueryRuneProviderResponse)
+func (x *_QueryDecaProvidersResponse_1_list) NewElement() protoreflect.Value {
+	v := new(QueryDecaProviderResponse)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_QueryRuneProvidersResponse_1_list) IsValid() bool {
+func (x *_QueryDecaProvidersResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_QueryRuneProvidersResponse           protoreflect.MessageDescriptor
-	fd_QueryRuneProvidersResponse_providers protoreflect.FieldDescriptor
+	md_QueryDecaProvidersResponse           protoreflect.MessageDescriptor
+	fd_QueryDecaProvidersResponse_providers protoreflect.FieldDescriptor
 )
 
 func init() {
-	file_types_query_rune_provider_proto_init()
-	md_QueryRuneProvidersResponse = File_types_query_rune_provider_proto.Messages().ByName("QueryRuneProvidersResponse")
-	fd_QueryRuneProvidersResponse_providers = md_QueryRuneProvidersResponse.Fields().ByName("providers")
+	file_types_query_deca_provider_proto_init()
+	md_QueryDecaProvidersResponse = File_types_query_deca_provider_proto.Messages().ByName("QueryDecaProvidersResponse")
+	fd_QueryDecaProvidersResponse_providers = md_QueryDecaProvidersResponse.Fields().ByName("providers")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryRuneProvidersResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryDecaProvidersResponse)(nil)
 
-type fastReflection_QueryRuneProvidersResponse QueryRuneProvidersResponse
+type fastReflection_QueryDecaProvidersResponse QueryDecaProvidersResponse
 
-func (x *QueryRuneProvidersResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryRuneProvidersResponse)(x)
+func (x *QueryDecaProvidersResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDecaProvidersResponse)(x)
 }
 
-func (x *QueryRuneProvidersResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_query_rune_provider_proto_msgTypes[3]
+func (x *QueryDecaProvidersResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_types_query_deca_provider_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1835,43 +1835,43 @@ func (x *QueryRuneProvidersResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryRuneProvidersResponse_messageType fastReflection_QueryRuneProvidersResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryRuneProvidersResponse_messageType{}
+var _fastReflection_QueryDecaProvidersResponse_messageType fastReflection_QueryDecaProvidersResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDecaProvidersResponse_messageType{}
 
-type fastReflection_QueryRuneProvidersResponse_messageType struct{}
+type fastReflection_QueryDecaProvidersResponse_messageType struct{}
 
-func (x fastReflection_QueryRuneProvidersResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryRuneProvidersResponse)(nil)
+func (x fastReflection_QueryDecaProvidersResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDecaProvidersResponse)(nil)
 }
-func (x fastReflection_QueryRuneProvidersResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProvidersResponse)
+func (x fastReflection_QueryDecaProvidersResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProvidersResponse)
 }
-func (x fastReflection_QueryRuneProvidersResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProvidersResponse
+func (x fastReflection_QueryDecaProvidersResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProvidersResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryRuneProvidersResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryRuneProvidersResponse
+func (x *fastReflection_QueryDecaProvidersResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDecaProvidersResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryRuneProvidersResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryRuneProvidersResponse_messageType
+func (x *fastReflection_QueryDecaProvidersResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDecaProvidersResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryRuneProvidersResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryRuneProvidersResponse)
+func (x *fastReflection_QueryDecaProvidersResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryDecaProvidersResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryRuneProvidersResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryRuneProvidersResponse)(x)
+func (x *fastReflection_QueryDecaProvidersResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryDecaProvidersResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1879,10 +1879,10 @@ func (x *fastReflection_QueryRuneProvidersResponse) Interface() protoreflect.Pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryRuneProvidersResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryDecaProvidersResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Providers) != 0 {
-		value := protoreflect.ValueOfList(&_QueryRuneProvidersResponse_1_list{list: &x.Providers})
-		if !f(fd_QueryRuneProvidersResponse_providers, value) {
+		value := protoreflect.ValueOfList(&_QueryDecaProvidersResponse_1_list{list: &x.Providers})
+		if !f(fd_QueryDecaProvidersResponse_providers, value) {
 			return
 		}
 	}
@@ -1899,15 +1899,15 @@ func (x *fastReflection_QueryRuneProvidersResponse) Range(f func(protoreflect.Fi
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryRuneProvidersResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryDecaProvidersResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersResponse.providers":
+	case "types.QueryDecaProvidersResponse.providers":
 		return len(x.Providers) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1917,15 +1917,15 @@ func (x *fastReflection_QueryRuneProvidersResponse) Has(fd protoreflect.FieldDes
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryDecaProvidersResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersResponse.providers":
+	case "types.QueryDecaProvidersResponse.providers":
 		x.Providers = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1935,19 +1935,19 @@ func (x *fastReflection_QueryRuneProvidersResponse) Clear(fd protoreflect.FieldD
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryRuneProvidersResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProvidersResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.QueryRuneProvidersResponse.providers":
+	case "types.QueryDecaProvidersResponse.providers":
 		if len(x.Providers) == 0 {
-			return protoreflect.ValueOfList(&_QueryRuneProvidersResponse_1_list{})
+			return protoreflect.ValueOfList(&_QueryDecaProvidersResponse_1_list{})
 		}
-		listValue := &_QueryRuneProvidersResponse_1_list{list: &x.Providers}
+		listValue := &_QueryDecaProvidersResponse_1_list{list: &x.Providers}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1961,17 +1961,17 @@ func (x *fastReflection_QueryRuneProvidersResponse) Get(descriptor protoreflect.
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryDecaProvidersResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersResponse.providers":
+	case "types.QueryDecaProvidersResponse.providers":
 		lv := value.List()
-		clv := lv.(*_QueryRuneProvidersResponse_1_list)
+		clv := lv.(*_QueryDecaProvidersResponse_1_list)
 		x.Providers = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1985,45 +1985,45 @@ func (x *fastReflection_QueryRuneProvidersResponse) Set(fd protoreflect.FieldDes
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProvidersResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersResponse.providers":
+	case "types.QueryDecaProvidersResponse.providers":
 		if x.Providers == nil {
-			x.Providers = []*QueryRuneProviderResponse{}
+			x.Providers = []*QueryDecaProviderResponse{}
 		}
-		value := &_QueryRuneProvidersResponse_1_list{list: &x.Providers}
+		value := &_QueryDecaProvidersResponse_1_list{list: &x.Providers}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryRuneProvidersResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryDecaProvidersResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.QueryRuneProvidersResponse.providers":
-		list := []*QueryRuneProviderResponse{}
-		return protoreflect.ValueOfList(&_QueryRuneProvidersResponse_1_list{list: &list})
+	case "types.QueryDecaProvidersResponse.providers":
+		list := []*QueryDecaProviderResponse{}
+		return protoreflect.ValueOfList(&_QueryDecaProvidersResponse_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryRuneProvidersResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: types.QueryDecaProvidersResponse"))
 		}
-		panic(fmt.Errorf("message types.QueryRuneProvidersResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message types.QueryDecaProvidersResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryRuneProvidersResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryDecaProvidersResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in types.QueryRuneProvidersResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in types.QueryDecaProvidersResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2031,7 +2031,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) WhichOneof(d protoreflect.On
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryRuneProvidersResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryDecaProvidersResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2042,7 +2042,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) GetUnknown() protoreflect.Ra
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryRuneProvidersResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryDecaProvidersResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2054,7 +2054,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) SetUnknown(fields protorefle
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryRuneProvidersResponse) IsValid() bool {
+func (x *fastReflection_QueryDecaProvidersResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -2064,9 +2064,9 @@ func (x *fastReflection_QueryRuneProvidersResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryRuneProvidersResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryDecaProvidersResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryRuneProvidersResponse)
+		x := input.Message.Interface().(*QueryDecaProvidersResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2094,7 +2094,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) ProtoMethods() *protoiface.M
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProvidersResponse)
+		x := input.Message.Interface().(*QueryDecaProvidersResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2140,7 +2140,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) ProtoMethods() *protoiface.M
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryRuneProvidersResponse)
+		x := input.Message.Interface().(*QueryDecaProvidersResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2172,10 +2172,10 @@ func (x *fastReflection_QueryRuneProvidersResponse) ProtoMethods() *protoiface.M
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProvidersResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProvidersResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRuneProvidersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDecaProvidersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2207,7 +2207,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) ProtoMethods() *protoiface.M
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Providers = append(x.Providers, &QueryRuneProviderResponse{})
+				x.Providers = append(x.Providers, &QueryDecaProviderResponse{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Providers[len(x.Providers)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -2251,7 +2251,7 @@ func (x *fastReflection_QueryRuneProvidersResponse) ProtoMethods() *protoiface.M
 // versions:
 // 	protoc-gen-go v1.27.0
 // 	protoc        (unknown)
-// source: types/query_rune_provider.proto
+// source: types/query_deca_provider.proto
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.
@@ -2260,7 +2260,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type QueryRuneProviderRequest struct {
+type QueryDecaProviderRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2269,46 +2269,46 @@ type QueryRuneProviderRequest struct {
 	Height  string `protobuf:"bytes,2,opt,name=height,proto3" json:"height,omitempty"`
 }
 
-func (x *QueryRuneProviderRequest) Reset() {
-	*x = QueryRuneProviderRequest{}
+func (x *QueryDecaProviderRequest) Reset() {
+	*x = QueryDecaProviderRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_rune_provider_proto_msgTypes[0]
+		mi := &file_types_query_deca_provider_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryRuneProviderRequest) String() string {
+func (x *QueryDecaProviderRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryRuneProviderRequest) ProtoMessage() {}
+func (*QueryDecaProviderRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryRuneProviderRequest.ProtoReflect.Descriptor instead.
-func (*QueryRuneProviderRequest) Descriptor() ([]byte, []int) {
-	return file_types_query_rune_provider_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use QueryDecaProviderRequest.ProtoReflect.Descriptor instead.
+func (*QueryDecaProviderRequest) Descriptor() ([]byte, []int) {
+	return file_types_query_deca_provider_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *QueryRuneProviderRequest) GetAddress() string {
+func (x *QueryDecaProviderRequest) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderRequest) GetHeight() string {
+func (x *QueryDecaProviderRequest) GetHeight() string {
 	if x != nil {
 		return x.Height
 	}
 	return ""
 }
 
-type QueryRuneProviderResponse struct {
+type QueryDecaProviderResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress        string `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress        string `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	Units              string `protobuf:"bytes,2,opt,name=units,proto3" json:"units,omitempty"`
 	Value              string `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
 	Pnl                string `protobuf:"bytes,4,opt,name=pnl,proto3" json:"pnl,omitempty"`
@@ -2318,83 +2318,83 @@ type QueryRuneProviderResponse struct {
 	LastWithdrawHeight int64  `protobuf:"varint,8,opt,name=last_withdraw_height,json=lastWithdrawHeight,proto3" json:"last_withdraw_height,omitempty"`
 }
 
-func (x *QueryRuneProviderResponse) Reset() {
-	*x = QueryRuneProviderResponse{}
+func (x *QueryDecaProviderResponse) Reset() {
+	*x = QueryDecaProviderResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_rune_provider_proto_msgTypes[1]
+		mi := &file_types_query_deca_provider_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryRuneProviderResponse) String() string {
+func (x *QueryDecaProviderResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryRuneProviderResponse) ProtoMessage() {}
+func (*QueryDecaProviderResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryRuneProviderResponse.ProtoReflect.Descriptor instead.
-func (*QueryRuneProviderResponse) Descriptor() ([]byte, []int) {
-	return file_types_query_rune_provider_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use QueryDecaProviderResponse.ProtoReflect.Descriptor instead.
+func (*QueryDecaProviderResponse) Descriptor() ([]byte, []int) {
+	return file_types_query_deca_provider_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *QueryRuneProviderResponse) GetRuneAddress() string {
+func (x *QueryDecaProviderResponse) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderResponse) GetUnits() string {
+func (x *QueryDecaProviderResponse) GetUnits() string {
 	if x != nil {
 		return x.Units
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderResponse) GetValue() string {
+func (x *QueryDecaProviderResponse) GetValue() string {
 	if x != nil {
 		return x.Value
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderResponse) GetPnl() string {
+func (x *QueryDecaProviderResponse) GetPnl() string {
 	if x != nil {
 		return x.Pnl
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderResponse) GetDepositAmount() string {
+func (x *QueryDecaProviderResponse) GetDepositAmount() string {
 	if x != nil {
 		return x.DepositAmount
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderResponse) GetWithdrawAmount() string {
+func (x *QueryDecaProviderResponse) GetWithdrawAmount() string {
 	if x != nil {
 		return x.WithdrawAmount
 	}
 	return ""
 }
 
-func (x *QueryRuneProviderResponse) GetLastDepositHeight() int64 {
+func (x *QueryDecaProviderResponse) GetLastDepositHeight() int64 {
 	if x != nil {
 		return x.LastDepositHeight
 	}
 	return 0
 }
 
-func (x *QueryRuneProviderResponse) GetLastWithdrawHeight() int64 {
+func (x *QueryDecaProviderResponse) GetLastWithdrawHeight() int64 {
 	if x != nil {
 		return x.LastWithdrawHeight
 	}
 	return 0
 }
 
-type QueryRuneProvidersRequest struct {
+type QueryDecaProvidersRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2402,71 +2402,71 @@ type QueryRuneProvidersRequest struct {
 	Height string `protobuf:"bytes,1,opt,name=height,proto3" json:"height,omitempty"`
 }
 
-func (x *QueryRuneProvidersRequest) Reset() {
-	*x = QueryRuneProvidersRequest{}
+func (x *QueryDecaProvidersRequest) Reset() {
+	*x = QueryDecaProvidersRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_rune_provider_proto_msgTypes[2]
+		mi := &file_types_query_deca_provider_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryRuneProvidersRequest) String() string {
+func (x *QueryDecaProvidersRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryRuneProvidersRequest) ProtoMessage() {}
+func (*QueryDecaProvidersRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryRuneProvidersRequest.ProtoReflect.Descriptor instead.
-func (*QueryRuneProvidersRequest) Descriptor() ([]byte, []int) {
-	return file_types_query_rune_provider_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use QueryDecaProvidersRequest.ProtoReflect.Descriptor instead.
+func (*QueryDecaProvidersRequest) Descriptor() ([]byte, []int) {
+	return file_types_query_deca_provider_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *QueryRuneProvidersRequest) GetHeight() string {
+func (x *QueryDecaProvidersRequest) GetHeight() string {
 	if x != nil {
 		return x.Height
 	}
 	return ""
 }
 
-type QueryRuneProvidersResponse struct {
+type QueryDecaProvidersResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Providers []*QueryRuneProviderResponse `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
+	Providers []*QueryDecaProviderResponse `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers,omitempty"`
 }
 
-func (x *QueryRuneProvidersResponse) Reset() {
-	*x = QueryRuneProvidersResponse{}
+func (x *QueryDecaProvidersResponse) Reset() {
+	*x = QueryDecaProvidersResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_query_rune_provider_proto_msgTypes[3]
+		mi := &file_types_query_deca_provider_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *QueryRuneProvidersResponse) String() string {
+func (x *QueryDecaProvidersResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryRuneProvidersResponse) ProtoMessage() {}
+func (*QueryDecaProvidersResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryRuneProvidersResponse.ProtoReflect.Descriptor instead.
-func (*QueryRuneProvidersResponse) Descriptor() ([]byte, []int) {
-	return file_types_query_rune_provider_proto_rawDescGZIP(), []int{3}
+// Deprecated: Use QueryDecaProvidersResponse.ProtoReflect.Descriptor instead.
+func (*QueryDecaProvidersResponse) Descriptor() ([]byte, []int) {
+	return file_types_query_deca_provider_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *QueryRuneProvidersResponse) GetProviders() []*QueryRuneProviderResponse {
+func (x *QueryDecaProvidersResponse) GetProviders() []*QueryDecaProviderResponse {
 	if x != nil {
 		return x.Providers
 	}
 	return nil
 }
 
-var File_types_query_rune_provider_proto protoreflect.FileDescriptor
+var File_types_query_deca_provider_proto protoreflect.FileDescriptor
 
-var file_types_query_rune_provider_proto_rawDesc = []byte{
+var file_types_query_deca_provider_proto_rawDesc = []byte{
 	0x0a, 0x1f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f, 0x71, 0x75, 0x65, 0x72, 0x79, 0x5f, 0x72, 0x75,
 	0x6e, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x12, 0x05, 0x74, 0x79, 0x70, 0x65, 0x73, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72,
@@ -2525,26 +2525,26 @@ var file_types_query_rune_provider_proto_rawDesc = []byte{
 }
 
 var (
-	file_types_query_rune_provider_proto_rawDescOnce sync.Once
-	file_types_query_rune_provider_proto_rawDescData = file_types_query_rune_provider_proto_rawDesc
+	file_types_query_deca_provider_proto_rawDescOnce sync.Once
+	file_types_query_deca_provider_proto_rawDescData = file_types_query_deca_provider_proto_rawDesc
 )
 
-func file_types_query_rune_provider_proto_rawDescGZIP() []byte {
-	file_types_query_rune_provider_proto_rawDescOnce.Do(func() {
-		file_types_query_rune_provider_proto_rawDescData = protoimpl.X.CompressGZIP(file_types_query_rune_provider_proto_rawDescData)
+func file_types_query_deca_provider_proto_rawDescGZIP() []byte {
+	file_types_query_deca_provider_proto_rawDescOnce.Do(func() {
+		file_types_query_deca_provider_proto_rawDescData = protoimpl.X.CompressGZIP(file_types_query_deca_provider_proto_rawDescData)
 	})
-	return file_types_query_rune_provider_proto_rawDescData
+	return file_types_query_deca_provider_proto_rawDescData
 }
 
-var file_types_query_rune_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_types_query_rune_provider_proto_goTypes = []interface{}{
-	(*QueryRuneProviderRequest)(nil),   // 0: types.QueryRuneProviderRequest
-	(*QueryRuneProviderResponse)(nil),  // 1: types.QueryRuneProviderResponse
-	(*QueryRuneProvidersRequest)(nil),  // 2: types.QueryRuneProvidersRequest
-	(*QueryRuneProvidersResponse)(nil), // 3: types.QueryRuneProvidersResponse
+var file_types_query_deca_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_types_query_deca_provider_proto_goTypes = []interface{}{
+	(*QueryDecaProviderRequest)(nil),   // 0: types.QueryDecaProviderRequest
+	(*QueryDecaProviderResponse)(nil),  // 1: types.QueryDecaProviderResponse
+	(*QueryDecaProvidersRequest)(nil),  // 2: types.QueryDecaProvidersRequest
+	(*QueryDecaProvidersResponse)(nil), // 3: types.QueryDecaProvidersResponse
 }
-var file_types_query_rune_provider_proto_depIdxs = []int32{
-	1, // 0: types.QueryRuneProvidersResponse.providers:type_name -> types.QueryRuneProviderResponse
+var file_types_query_deca_provider_proto_depIdxs = []int32{
+	1, // 0: types.QueryDecaProvidersResponse.providers:type_name -> types.QueryDecaProviderResponse
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -2552,14 +2552,14 @@ var file_types_query_rune_provider_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_types_query_rune_provider_proto_init() }
-func file_types_query_rune_provider_proto_init() {
-	if File_types_query_rune_provider_proto != nil {
+func init() { file_types_query_deca_provider_proto_init() }
+func file_types_query_deca_provider_proto_init() {
+	if File_types_query_deca_provider_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_types_query_rune_provider_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryRuneProviderRequest); i {
+		file_types_query_deca_provider_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDecaProviderRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2570,8 +2570,8 @@ func file_types_query_rune_provider_proto_init() {
 				return nil
 			}
 		}
-		file_types_query_rune_provider_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryRuneProviderResponse); i {
+		file_types_query_deca_provider_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDecaProviderResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2582,8 +2582,8 @@ func file_types_query_rune_provider_proto_init() {
 				return nil
 			}
 		}
-		file_types_query_rune_provider_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryRuneProvidersRequest); i {
+		file_types_query_deca_provider_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDecaProvidersRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2594,8 +2594,8 @@ func file_types_query_rune_provider_proto_init() {
 				return nil
 			}
 		}
-		file_types_query_rune_provider_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryRuneProvidersResponse); i {
+		file_types_query_deca_provider_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDecaProvidersResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2611,18 +2611,18 @@ func file_types_query_rune_provider_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_types_query_rune_provider_proto_rawDesc,
+			RawDescriptor: file_types_query_deca_provider_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_types_query_rune_provider_proto_goTypes,
-		DependencyIndexes: file_types_query_rune_provider_proto_depIdxs,
-		MessageInfos:      file_types_query_rune_provider_proto_msgTypes,
+		GoTypes:           file_types_query_deca_provider_proto_goTypes,
+		DependencyIndexes: file_types_query_deca_provider_proto_depIdxs,
+		MessageInfos:      file_types_query_deca_provider_proto_msgTypes,
 	}.Build()
-	File_types_query_rune_provider_proto = out.File
-	file_types_query_rune_provider_proto_rawDesc = nil
-	file_types_query_rune_provider_proto_goTypes = nil
-	file_types_query_rune_provider_proto_depIdxs = nil
+	File_types_query_deca_provider_proto = out.File
+	file_types_query_deca_provider_proto_rawDesc = nil
+	file_types_query_deca_provider_proto_goTypes = nil
+	file_types_query_deca_provider_proto_depIdxs = nil
 }

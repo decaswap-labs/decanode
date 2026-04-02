@@ -129,7 +129,7 @@ func (s *HandlerConsolidateSuite) TestConsolidateHandler_Slash_DifferentAddresse
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -175,7 +175,7 @@ func (s *HandlerConsolidateSuite) TestConsolidateHandler_Slash_NonAsgardVault(c 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 

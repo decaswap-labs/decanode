@@ -167,7 +167,7 @@ func quoteConvertAsset(ctx cosmos.Context, mgr *Mgrs, fromAsset common.Asset, am
 	}
 
 	// convert to rune
-	if !fromAsset.IsRune() {
+	if !fromAsset.IsDeca() {
 		// get the fromPool for the from asset
 		fromPool, err := mgr.Keeper().GetPool(ctx, fromAsset.GetLayer1Asset())
 		if err != nil {
@@ -183,7 +183,7 @@ func quoteConvertAsset(ctx cosmos.Context, mgr *Mgrs, fromAsset common.Asset, am
 	}
 
 	// convert to target asset
-	if !toAsset.IsRune() {
+	if !toAsset.IsDeca() {
 
 		toPool, err := mgr.Keeper().GetPool(ctx, toAsset.GetLayer1Asset())
 		if err != nil {
@@ -304,7 +304,7 @@ func quoteSimulateSwap(ctx cosmos.Context, mgr *Mgrs, amount sdkmath.Uint, msg *
 		liquidityFee = liquidityFee.Add(sdkmath.NewUintFromString(s["liquidity_fee_in_rune"]))
 	}
 	var targetPool types.Pool
-	if !msg.TargetAsset.IsRune() {
+	if !msg.TargetAsset.IsDeca() {
 		targetPool, err = mgr.Keeper().GetPool(ctx, msg.TargetAsset.GetLayer1Asset())
 		if err != nil {
 			return nil, sdkmath.ZeroUint(), sdkmath.ZeroUint(), fmt.Errorf("unable to get pool: %w", err)
@@ -506,7 +506,7 @@ func quoteCalculateLimitExpectedOutput(ctx cosmos.Context, mgr *Mgrs, toAsset co
 
 	// calculate outbound fee for destination asset
 	outboundFeeAmount := sdkmath.ZeroUint()
-	if !toAsset.IsRune() {
+	if !toAsset.IsDeca() {
 		outboundFeeAmount = mgr.Keeper().GetOutboundTxFee(ctx)
 	}
 
@@ -930,7 +930,7 @@ func (qs queryServer) queryQuoteSwap(ctx cosmos.Context, req *types.QueryQuoteSw
 				},
 			},
 			Gas: []common.Coin{{
-				Asset:  common.RuneAsset(),
+				Asset:  common.DecaAsset(),
 				Amount: sdkmath.NewUint(1),
 			}},
 			Memo: memoString,

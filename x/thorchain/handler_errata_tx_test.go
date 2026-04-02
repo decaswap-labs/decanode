@@ -48,7 +48,7 @@ func (k *TestErrataTxKeeper) SetPool(_ cosmos.Context, pool Pool) error {
 
 func (k *TestErrataTxKeeper) GetLiquidityProvider(_ cosmos.Context, asset common.Asset, addr common.Address) (LiquidityProvider, error) {
 	for _, lp := range k.lps {
-		if lp.RuneAddress.Equals(addr) {
+		if lp.DecaAddress.Equals(addr) {
 			return lp, k.err
 		}
 	}
@@ -57,7 +57,7 @@ func (k *TestErrataTxKeeper) GetLiquidityProvider(_ cosmos.Context, asset common
 
 func (k *TestErrataTxKeeper) SetLiquidityProvider(_ cosmos.Context, lp LiquidityProvider) {
 	for i, skr := range k.lps {
-		if skr.RuneAddress.Equals(lp.RuneAddress) {
+		if skr.DecaAddress.Equals(lp.DecaAddress) {
 			k.lps[i] = lp
 		}
 	}
@@ -99,7 +99,7 @@ func (s *HandlerErrataTxSuite) TestErrataHandlerHappyPath(c *C) {
 			Chain:       common.ETHChain,
 			FromAddress: addr,
 			Coins: common.Coins{
-				common.NewCoin(common.RuneAsset(), cosmos.NewUint(30*common.One)),
+				common.NewCoin(common.DecaAsset(), cosmos.NewUint(30*common.One)),
 			},
 			Memo: fmt.Sprintf("ADD:ETH.ETH:%s", GetRandomRUNEAddress()),
 		},
@@ -114,21 +114,21 @@ func (s *HandlerErrataTxSuite) TestErrataHandlerHappyPath(c *C) {
 		pool: Pool{
 			Asset:        common.ETHAsset,
 			LPUnits:      totalUnits,
-			BalanceRune:  cosmos.NewUint(100 * common.One),
+			BalanceDeca:  cosmos.NewUint(100 * common.One),
 			BalanceAsset: cosmos.NewUint(100 * common.One),
 		},
 		lps: LiquidityProviders{
 			{
-				RuneAddress:   addr,
+				DecaAddress:   addr,
 				LastAddHeight: 5,
 				Units:         totalUnits.QuoUint64(2),
-				PendingRune:   cosmos.ZeroUint(),
+				PendingDeca:   cosmos.ZeroUint(),
 			},
 			{
-				RuneAddress:   GetRandomETHAddress(),
+				DecaAddress:   GetRandomETHAddress(),
 				LastAddHeight: 10,
 				Units:         totalUnits.QuoUint64(2),
-				PendingRune:   cosmos.ZeroUint(),
+				PendingDeca:   cosmos.ZeroUint(),
 			},
 		},
 	}
@@ -138,7 +138,7 @@ func (s *HandlerErrataTxSuite) TestErrataHandlerHappyPath(c *C) {
 	msg := NewMsgErrataTx(txID, common.ETHChain, na.NodeAddress)
 	_, err := handler.handle(ctx, *msg)
 	c.Assert(err, IsNil)
-	c.Check(keeper.pool.BalanceRune.Equal(cosmos.NewUint(70*common.One)), Equals, true)
+	c.Check(keeper.pool.BalanceDeca.Equal(cosmos.NewUint(70*common.One)), Equals, true)
 	c.Check(keeper.pool.BalanceAsset.Equal(cosmos.NewUint(100*common.One)), Equals, true)
 	c.Check(keeper.lps[0].Units.IsZero(), Equals, true, Commentf("%d", keeper.lps[0].Units.Uint64()))
 	c.Check(keeper.lps[0].LastAddHeight, Equals, int64(18))
@@ -414,13 +414,13 @@ func (s *HandlerErrataTxSuite) TestErrataHandlerDifferentError(c *C) {
 					Asset:         common.BTCAsset,
 					AssetAddress:  GetRandomETHAddress(),
 					LastAddHeight: 1024,
-					RuneAddress:   observedTx.Tx.FromAddress,
+					DecaAddress:   observedTx.Tx.FromAddress,
 				}
 				helper.SetLiquidityProvider(ctx, lp)
 				helper.failGetLiquidityProvider = true
 				pool := NewPool()
 				pool.Asset = common.BTCAsset
-				pool.BalanceRune = cosmos.NewUint(common.One * 100)
+				pool.BalanceDeca = cosmos.NewUint(common.One * 100)
 				pool.BalanceAsset = cosmos.NewUint(common.One * 100)
 				pool.Status = PoolAvailable
 				c.Assert(helper.Keeper.SetPool(ctx, pool), IsNil)
@@ -450,7 +450,7 @@ func (s *HandlerErrataTxSuite) TestErrataHandlerDifferentError(c *C) {
 				helper.failSetPool = true
 				pool := NewPool()
 				pool.Asset = common.BTCAsset
-				pool.BalanceRune = cosmos.NewUint(common.One * 100)
+				pool.BalanceDeca = cosmos.NewUint(common.One * 100)
 				pool.BalanceAsset = cosmos.NewUint(common.One * 100)
 				pool.Status = PoolAvailable
 				c.Assert(helper.Keeper.SetPool(ctx, pool), IsNil)
@@ -567,7 +567,7 @@ func (*HandlerErrataTxSuite) TestProcessErrataOutboundTx(c *C) {
 	pool := NewPool()
 	pool.Asset = common.LTCAsset
 	pool.BalanceAsset = cosmos.NewUint(1024 * common.One)
-	pool.BalanceRune = cosmos.NewUint(1024 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(1024 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(helper.Keeper.SetPool(ctx, pool), IsNil)
 	err = processErrataOutboundTx(ctx, k, eventMgr, er)
@@ -776,7 +776,7 @@ func (s *HandlerErrataTxSuite) TestObservingSlashing(c *C) {
 			Chain:       common.ETHChain,
 			FromAddress: addr,
 			Coins: common.Coins{
-				common.NewCoin(common.RuneAsset(), cosmos.NewUint(30*common.One)),
+				common.NewCoin(common.DecaAsset(), cosmos.NewUint(30*common.One)),
 			},
 			Memo: fmt.Sprintf("ADD:ETH.ETH:%s", GetRandomRUNEAddress()),
 		},
@@ -795,24 +795,24 @@ func (s *HandlerErrataTxSuite) TestObservingSlashing(c *C) {
 	pool := Pool{
 		Asset:        common.ETHAsset,
 		LPUnits:      totalUnits,
-		BalanceRune:  cosmos.NewUint(100 * common.One),
+		BalanceDeca:  cosmos.NewUint(100 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 		Status:       PoolAvailable,
 	}
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	lp := LiquidityProvider{
-		RuneAddress:   addr,
+		DecaAddress:   addr,
 		LastAddHeight: 5,
 		Units:         totalUnits.QuoUint64(2),
-		PendingRune:   cosmos.ZeroUint(),
+		PendingDeca:   cosmos.ZeroUint(),
 	}
 	mgr.Keeper().SetLiquidityProvider(ctx, lp)
 	lp = LiquidityProvider{
-		RuneAddress:   GetRandomETHAddress(),
+		DecaAddress:   GetRandomETHAddress(),
 		LastAddHeight: 10,
 		Units:         totalUnits.QuoUint64(2),
-		PendingRune:   cosmos.ZeroUint(),
+		PendingDeca:   cosmos.ZeroUint(),
 	}
 	mgr.Keeper().SetLiquidityProvider(ctx, lp)
 

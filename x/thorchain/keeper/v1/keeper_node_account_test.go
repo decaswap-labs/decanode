@@ -304,7 +304,7 @@ func (s *KeeperNodeAccountSuite) TestRemoveLowBondValidatorAccounts(c *C) {
 
 	na2 := GetRandomValidatorNode(NodeStandby)
 	na2.Bond = cosmos.NewUint(common.One)
-	na2Coin := common.NewCoin(common.RuneAsset(), na2.Bond)
+	na2Coin := common.NewCoin(common.DecaAsset(), na2.Bond)
 
 	// sending tokens to bond
 	c.Assert(k.MintToModule(ctx, ModuleName, na2Coin), IsNil)
@@ -387,7 +387,7 @@ func (s *KeeperNodeAccountSuite) TestRemoveLowBondValidatorAccounts_PartialSendF
 
 	// Only fund the bond module with enough for ONE provider (half the total bond).
 	// The second SendFromModuleToAccount should fail due to insufficient funds.
-	fundCoin := common.NewCoin(common.RuneAsset(), halfBond)
+	fundCoin := common.NewCoin(common.DecaAsset(), halfBond)
 	c.Assert(k.MintToModule(ctx, ModuleName, fundCoin), IsNil)
 	c.Assert(k.SendFromModuleToModule(ctx, ModuleName, BondName, common.NewCoins(fundCoin)), IsNil)
 

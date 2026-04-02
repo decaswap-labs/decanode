@@ -156,7 +156,7 @@ func TestEip712Signing(t *testing.T) {
 	msg := banktypes.NewMsgSend(
 		sdk.AccAddress(cosmosKey.PubKey().Address()),
 		sdk.AccAddress(cosmosKey.PubKey().Address()),
-		cosmos.NewCoins(cosmos.NewCoin("rune", math.NewInt(1000))),
+		cosmos.NewCoins(cosmos.NewCoin("deca", math.NewInt(1000))),
 	)
 	builder := tx.NewAuxTxBuilder()
 	builder.SetAddress(cosmosKey.PubKey().Address().String())

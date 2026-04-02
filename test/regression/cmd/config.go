@@ -73,7 +73,7 @@ func init() {
 	ModuleAddrLending = authtypes.NewModuleAddress("lending").String()                        // "tthor1x0kgm82cnj0vtmzdvz4avk3e7sj427t0al8wky"
 	ModuleAddrAffiliateCollector = authtypes.NewModuleAddress("affiliate_collector").String() // "tthor1dl7un46w7l7f3ewrnrm6nq58nerjtp0d82uzjg"
 	ModuleAddrTreasury = authtypes.NewModuleAddress("treasury").String()                      // "tthor1vmafl8f3s6uuzwnxkqz0eza47v6ecn0ttstnny"
-	ModuleAddrRUNEPool = authtypes.NewModuleAddress("rune_pool").String()                     // "tthor1rzqfv62dzu585607s5awqtgnvvwz5rzhfuaw80"
+	ModuleAddrDECAPool = authtypes.NewModuleAddress("deca_pool").String()                     // "tthor1rzqfv62dzu585607s5awqtgnvvwz5rzhfuaw80"
 	ModuleAddrClaiming = authtypes.NewModuleAddress("tcy_claim").String()                     // "tthor1ss8rrf3twa20kf9frdyru05dmu2kg9llwwcgag"
 	ModuleAddrTCYStake = authtypes.NewModuleAddress("tcy_stake").String()                     // "tthor128a8hqnkaxyqv7qwajpggmfyudh64jl3uxmuaf"
 }
@@ -173,7 +173,7 @@ var (
 	ModuleAddrLending            string
 	ModuleAddrAffiliateCollector string
 	ModuleAddrTreasury           string
-	ModuleAddrRUNEPool           string
+	ModuleAddrDECAPool           string
 	ModuleAddrClaiming           string
 	ModuleAddrTCYStake           string
 )

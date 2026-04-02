@@ -773,9 +773,9 @@ var file_types_query_proto_goTypes = []interface{}{
 	(*QueryStreamingSwapsRequest)(nil),          // 24: types.QueryStreamingSwapsRequest
 	(*QueryBanRequest)(nil),                     // 25: types.QueryBanRequest
 	(*QueryRagnarokRequest)(nil),                // 26: types.QueryRagnarokRequest
-	(*QueryRunePoolRequest)(nil),                // 27: types.QueryRunePoolRequest
-	(*QueryRuneProviderRequest)(nil),            // 28: types.QueryRuneProviderRequest
-	(*QueryRuneProvidersRequest)(nil),           // 29: types.QueryRuneProvidersRequest
+	(*QueryDecaPoolRequest)(nil),                // 27: types.QueryDecaPoolRequest
+	(*QueryDecaProviderRequest)(nil),            // 28: types.QueryDecaProviderRequest
+	(*QueryDecaProvidersRequest)(nil),           // 29: types.QueryDecaProvidersRequest
 	(*QueryMimirValuesRequest)(nil),             // 30: types.QueryMimirValuesRequest
 	(*QueryMimirWithKeyRequest)(nil),            // 31: types.QueryMimirWithKeyRequest
 	(*QueryMimirAdminValuesRequest)(nil),        // 32: types.QueryMimirAdminValuesRequest
@@ -854,9 +854,9 @@ var file_types_query_proto_goTypes = []interface{}{
 	(*QueryStreamingSwapsResponse)(nil),         // 105: types.QueryStreamingSwapsResponse
 	(*BanVoter)(nil),                            // 106: types.BanVoter
 	(*QueryRagnarokResponse)(nil),               // 107: types.QueryRagnarokResponse
-	(*QueryRunePoolResponse)(nil),               // 108: types.QueryRunePoolResponse
-	(*QueryRuneProviderResponse)(nil),           // 109: types.QueryRuneProviderResponse
-	(*QueryRuneProvidersResponse)(nil),          // 110: types.QueryRuneProvidersResponse
+	(*QueryDecaPoolResponse)(nil),               // 108: types.QueryDecaPoolResponse
+	(*QueryDecaProviderResponse)(nil),           // 109: types.QueryDecaProviderResponse
+	(*QueryDecaProvidersResponse)(nil),          // 110: types.QueryDecaProvidersResponse
 	(*QueryMimirValuesResponse)(nil),            // 111: types.QueryMimirValuesResponse
 	(*QueryMimirWithKeyResponse)(nil),           // 112: types.QueryMimirWithKeyResponse
 	(*QueryMimirAdminValuesResponse)(nil),       // 113: types.QueryMimirAdminValuesResponse
@@ -937,9 +937,9 @@ var file_types_query_proto_depIdxs = []int32{
 	24,  // 24: types.Query.StreamingSwaps:input_type -> types.QueryStreamingSwapsRequest
 	25,  // 25: types.Query.Ban:input_type -> types.QueryBanRequest
 	26,  // 26: types.Query.Ragnarok:input_type -> types.QueryRagnarokRequest
-	27,  // 27: types.Query.RunePool:input_type -> types.QueryRunePoolRequest
-	28,  // 28: types.Query.RuneProvider:input_type -> types.QueryRuneProviderRequest
-	29,  // 29: types.Query.RuneProviders:input_type -> types.QueryRuneProvidersRequest
+	27,  // 27: types.Query.DecaPool:input_type -> types.QueryDecaPoolRequest
+	28,  // 28: types.Query.DecaProvider:input_type -> types.QueryDecaProviderRequest
+	29,  // 29: types.Query.DecaProviders:input_type -> types.QueryDecaProvidersRequest
 	30,  // 30: types.Query.MimirValues:input_type -> types.QueryMimirValuesRequest
 	31,  // 31: types.Query.MimirWithKey:input_type -> types.QueryMimirWithKeyRequest
 	32,  // 32: types.Query.MimirAdminValues:input_type -> types.QueryMimirAdminValuesRequest
@@ -1022,9 +1022,9 @@ var file_types_query_proto_depIdxs = []int32{
 	105, // 109: types.Query.StreamingSwaps:output_type -> types.QueryStreamingSwapsResponse
 	106, // 110: types.Query.Ban:output_type -> types.BanVoter
 	107, // 111: types.Query.Ragnarok:output_type -> types.QueryRagnarokResponse
-	108, // 112: types.Query.RunePool:output_type -> types.QueryRunePoolResponse
-	109, // 113: types.Query.RuneProvider:output_type -> types.QueryRuneProviderResponse
-	110, // 114: types.Query.RuneProviders:output_type -> types.QueryRuneProvidersResponse
+	108, // 112: types.Query.DecaPool:output_type -> types.QueryDecaPoolResponse
+	109, // 113: types.Query.DecaProvider:output_type -> types.QueryDecaProviderResponse
+	110, // 114: types.Query.DecaProviders:output_type -> types.QueryDecaProvidersResponse
 	111, // 115: types.Query.MimirValues:output_type -> types.QueryMimirValuesResponse
 	112, // 116: types.Query.MimirWithKey:output_type -> types.QueryMimirWithKeyResponse
 	113, // 117: types.Query.MimirAdminValues:output_type -> types.QueryMimirAdminValuesResponse
@@ -1105,8 +1105,8 @@ func file_types_query_proto_init() {
 	file_types_query_ban_proto_init()
 	file_types_type_ban_voter_proto_init()
 	file_types_query_ragnarok_proto_init()
-	file_types_query_rune_pool_proto_init()
-	file_types_query_rune_provider_proto_init()
+	file_types_query_deca_pool_proto_init()
+	file_types_query_deca_provider_proto_init()
 	file_types_query_mimir_proto_init()
 	file_types_query_inbound_address_proto_init()
 	file_types_query_version_proto_init()

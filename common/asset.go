@@ -47,8 +47,7 @@ var (
 	SUIAsset = Asset{Chain: SUIChain, Symbol: "SUI", Ticker: "SUI", Synth: false}
 	// ADAAsset ADA
 	ADAAsset = Asset{Chain: ADAChain, Symbol: "ADA", Ticker: "ADA", Synth: false}
-	// RuneNative RUNE on thorchain
-	RuneNative = Asset{Chain: THORChain, Symbol: "RUNE", Ticker: "RUNE", Synth: false}
+	DecaNative = Asset{Chain: THORChain, Symbol: "DECA", Ticker: "DECA", Synth: false}
 	TCY        = Asset{Chain: THORChain, Symbol: "TCY", Ticker: "TCY", Synth: false}
 	TOR        = Asset{Chain: THORChain, Symbol: "TOR", Ticker: "TOR", Synth: false}
 	THORBTC    = Asset{Chain: THORChain, Symbol: "BTC", Ticker: "BTC", Synth: false}
@@ -129,7 +128,7 @@ func NewAssetWithShortCodesV3_1_0(input string) (Asset, error) {
 	shorts[ETHAsset.ShortCode()] = ETHAsset.String()
 	shorts[LTCAsset.ShortCode()] = LTCAsset.String()
 	shorts[SOLAsset.ShortCode()] = SOLAsset.String()
-	shorts[RuneNative.ShortCode()] = RuneNative.String()
+	shorts[DecaNative.ShortCode()] = DecaNative.String()
 	shorts[BaseETHAsset.ShortCode()] = BaseETHAsset.String()
 	shorts[TRXAsset.ShortCode()] = TRXAsset.String()
 	shorts[XRPAsset.ShortCode()] = XRPAsset.String()
@@ -263,14 +262,14 @@ func (a Asset) IsVaultAsset() bool {
 
 // Check if asset is a derived asset
 func (a Asset) IsDerivedAsset() bool {
-	return !a.Synth && !a.Trade && !a.Secured && a.GetChain().IsTHORChain() && !a.IsRune() && !a.IsTCY() && !a.IsWhitelisted()
+	return !a.Synth && !a.Trade && !a.Secured && a.GetChain().IsTHORChain() && !a.IsDeca() && !a.IsTCY() && !a.IsWhitelisted()
 }
 
 // Native return native asset, only relevant on THORChain
 func (a Asset) Native() string {
 	switch {
-	case a.IsRune():
-		return "rune"
+	case a.IsDeca():
+		return "deca"
 	case a.Equals(TOR):
 		return "tor"
 	case a.Equals(TCY):
@@ -313,7 +312,7 @@ func (a Asset) String() string {
 // ShortCode returns the short code for the asset.
 func (a Asset) ShortCode() string {
 	switch a.String() {
-	case "THOR.RUNE":
+	case "THOR.DECA":
 		return "r"
 	case "BTC.BTC":
 		return "b"
@@ -362,9 +361,8 @@ func (a Asset) IsGasAsset() bool {
 	return a.Equals(gasAsset)
 }
 
-// IsRune is a helper function ,return true only when the asset represent RUNE
-func (a Asset) IsRune() bool {
-	return RuneAsset().Equals(a)
+func (a Asset) IsDeca() bool {
+	return DecaAsset().Equals(a)
 }
 
 // IsTCY is a helper function, return true only when the asset represents TCY
@@ -420,9 +418,8 @@ func (a *Asset) UnmarshalJSONPB(unmarshal *jsonpb.Unmarshaler, content []byte) e
 	return a.UnmarshalJSON(content)
 }
 
-// RuneAsset return RUNE Asset depends on different environment
-func RuneAsset() Asset {
-	return RuneNative
+func DecaAsset() Asset {
+	return DecaNative
 }
 
 // Replace pool name "." with a "-" for Mimir key checking.

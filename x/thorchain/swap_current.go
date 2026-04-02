@@ -31,10 +31,10 @@ func (s *SwapperImpl) validateMessage(tx common.Tx, target common.Asset, destina
 	if destination.IsEmpty() {
 		return errors.New("destination is empty")
 	}
-	if tx.Coins[0].Asset.IsTradeAsset() && !target.IsTradeAsset() && !target.IsRune() {
+	if tx.Coins[0].Asset.IsTradeAsset() && !target.IsTradeAsset() && !target.IsDeca() {
 		return errors.New("swaps from trade asset to L1 incur slip, use trade-")
 	}
-	if target.IsTradeAsset() && !tx.Coins[0].Asset.IsTradeAsset() && !tx.Coins[0].IsRune() {
+	if target.IsTradeAsset() && !tx.Coins[0].Asset.IsTradeAsset() && !tx.Coins[0].IsDeca() {
 		return errors.New("swaps from L1 to trade asset incur slip, use trade+")
 	}
 
@@ -80,18 +80,18 @@ func (s *SwapperImpl) Swap(ctx cosmos.Context,
 		return cosmos.ZeroUint(), swapEvents, fmt.Errorf("cannot swap from %s --> %s, assets match", source, target)
 	}
 
-	isDoubleSwap := !source.IsRune() && !target.IsRune()
+	isDoubleSwap := !source.IsDeca() && !target.IsDeca()
 	stableSwap := isDoubleSwap && isStableToStable(ctx, keeper, source, target)
 	if isDoubleSwap {
 		var swapErr error
 		var swapEvt *EventSwap
 		var amt cosmos.Uint
 		// Here we use a swapTarget of 0 because the target is for the next swap asset in a double swap
-		amt, swapEvt, swapErr = s.swapOne(ctx, mgr, tx, common.RuneAsset(), destination, cosmos.ZeroUint(), synthVirtualDepthMult, stableSwap)
+		amt, swapEvt, swapErr = s.swapOne(ctx, mgr, tx, common.DecaAsset(), destination, cosmos.ZeroUint(), synthVirtualDepthMult, stableSwap)
 		if swapErr != nil {
 			return cosmos.ZeroUint(), swapEvents, swapErr
 		}
-		tx.Coins = common.Coins{common.NewCoin(common.RuneAsset(), amt)}
+		tx.Coins = common.Coins{common.NewCoin(common.DecaAsset(), amt)}
 		tx.Gas = nil
 		swapEvents = append(swapEvents, swapEvt)
 	}
@@ -227,7 +227,7 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 
 	// Set asset to our pool asset
 	var minSlipAsset common.Asset
-	if source.IsRune() {
+	if source.IsDeca() {
 		minSlipAsset = target
 	} else {
 		minSlipAsset = source
@@ -282,11 +282,11 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 
 	// Get our X, x, Y values
 	var X, Y cosmos.Uint
-	if source.IsRune() {
-		X = pool.BalanceRune
+	if source.IsDeca() {
+		X = pool.BalanceDeca
 		Y = pool.BalanceAsset
 	} else {
-		Y = pool.BalanceRune
+		Y = pool.BalanceDeca
 		X = pool.BalanceAsset
 	}
 	x := amount
@@ -325,7 +325,7 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 		return cosmos.ZeroUint(), evt, errSwapFailNotEnoughBalance
 	}
 
-	ctx.Logger().Info("pre swap", "pool", pool.Asset, "rune", pool.BalanceRune, "asset", pool.BalanceAsset, "lp units", pool.LPUnits, "synth units", pool.SynthUnits)
+	ctx.Logger().Info("pre swap", "pool", pool.Asset, "rune", pool.BalanceDeca, "asset", pool.BalanceAsset, "lp units", pool.LPUnits, "synth units", pool.SynthUnits)
 
 	// Burning of input synth or derived pool input (Asset or RUNE).
 	if source.IsSyntheticAsset() || pool.Asset.IsDerivedAsset() {
@@ -366,14 +366,14 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 
 	// Use pool fields here rather than X and Y as synthVirtualDepthMult could affect X and Y.
 	// Only alter BalanceAsset when the non-RUNE asset isn't a synth.
-	if source.IsRune() {
-		pool.BalanceRune = pool.BalanceRune.Add(x)
+	if source.IsDeca() {
+		pool.BalanceDeca = pool.BalanceDeca.Add(x)
 		if !target.IsSyntheticAsset() {
 			pool.BalanceAsset = common.SafeSub(pool.BalanceAsset, emitAssets)
 		}
 	} else {
 		// The target should be RUNE.
-		pool.BalanceRune = common.SafeSub(pool.BalanceRune, emitAssets)
+		pool.BalanceDeca = common.SafeSub(pool.BalanceDeca, emitAssets)
 		if !source.IsSyntheticAsset() {
 			pool.BalanceAsset = pool.BalanceAsset.Add(x)
 		}
@@ -384,7 +384,7 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 	}
 
 	// Now that pool depths have been adjusted to post-swap, determine LiquidityFeeInRune.
-	if target.IsRune() {
+	if target.IsDeca() {
 		// Because the output asset is RUNE, liquidity Fee is already in RUNE.
 		swapEvt.LiquidityFeeInRune = swapEvt.LiquidityFee
 	} else {
@@ -399,8 +399,8 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 		// Deduct LiquidityFeeInRune from the pool's RUNE depth and send it to the Reserve Module to be system income.
 		// (So that the liquidity fee isn't used for later swaps in the same block.)
 		if !swapEvt.LiquidityFeeInRune.IsZero() {
-			pool.BalanceRune = common.SafeSub(pool.BalanceRune, swapEvt.LiquidityFeeInRune)
-			liqFeeCoin := common.NewCoin(common.RuneAsset(), swapEvt.LiquidityFeeInRune)
+			pool.BalanceDeca = common.SafeSub(pool.BalanceDeca, swapEvt.LiquidityFeeInRune)
+			liqFeeCoin := common.NewCoin(common.DecaAsset(), swapEvt.LiquidityFeeInRune)
 
 			targetModule := ReserveName
 			if pool.Asset.IsTCY() {
@@ -426,7 +426,7 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 		}
 	}
 
-	ctx.Logger().Info("post swap", "pool", pool.Asset, "rune", pool.BalanceRune, "asset", pool.BalanceAsset, "lp units", pool.LPUnits, "synth units", pool.SynthUnits, "emit asset", emitAssets)
+	ctx.Logger().Info("post swap", "pool", pool.Asset, "rune", pool.BalanceDeca, "asset", pool.BalanceAsset, "lp units", pool.LPUnits, "synth units", pool.SynthUnits, "emit asset", emitAssets)
 
 	// Even for a Derived Asset pool, set the pool so the txout manager's GetFee for toi.Coin.Asset uses updated balances.
 	if err := keeper.SetPool(ctx, pool); err != nil {

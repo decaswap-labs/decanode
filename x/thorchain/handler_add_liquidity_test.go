@@ -122,7 +122,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	err = mgr.K.SetPool(ctx, pool)
 	c.Assert(err, IsNil)
 
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	ethAddr := GetRandomETHAddress()
 
 	addHandler := NewAddLiquidityHandler(mgr)
@@ -133,7 +133,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 		common.ETHAsset,
 		cosmos.NewUint(100*common.One),
 		cosmos.ZeroUint(),
-		runeAddr,
+		decaAddr,
 		ethAddr,
 		common.NoAddress,
 		cosmos.ZeroUint(),
@@ -143,7 +143,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 
 	midLiquidityPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Assert(midLiquidityPool.PendingInboundRune.String(), Equals, "10000000000")
+	c.Assert(midLiquidityPool.PendingInboundDeca.String(), Equals, "10000000000")
 
 	// add ETH
 	_, err = addHandler.Run(ctx, NewMsgAddLiquidity(
@@ -151,7 +151,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 		common.ETHAsset,
 		cosmos.ZeroUint(),
 		cosmos.NewUint(100*common.One),
-		runeAddr,
+		decaAddr,
 		ethAddr,
 		common.NoAddress,
 		cosmos.ZeroUint(),
@@ -162,9 +162,9 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	postLiquidityPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	c.Assert(postLiquidityPool.BalanceAsset.String(), Equals, "10000000000")
-	c.Assert(postLiquidityPool.BalanceRune.String(), Equals, "10000000000")
+	c.Assert(postLiquidityPool.BalanceDeca.String(), Equals, "10000000000")
 	c.Assert(postLiquidityPool.PendingInboundAsset.String(), Equals, "0")
-	c.Assert(postLiquidityPool.PendingInboundRune.String(), Equals, "0")
+	c.Assert(postLiquidityPool.PendingInboundDeca.String(), Equals, "0")
 
 	pol, err := mgr.Keeper().GetPOL(ctx)
 	c.Assert(err, IsNil)
@@ -189,10 +189,10 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	c.Assert(balance.String(), Equals, "10000000000")
 
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000)))
 
 	// add RUNE
-	// For secured assets, signer must match runeAddr to prevent unauthorized withdrawals
+	// For secured assets, signer must match decaAddr to prevent unauthorized withdrawals
 	_, err = addHandler.Run(ctx, NewMsgAddLiquidity(
 		tx,
 		common.ETHAsset.GetSecuredAsset(),
@@ -209,7 +209,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	pool, err = mgr.K.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 
-	c.Assert(pool.PendingInboundRune.String(), Equals, "5000000000")
+	c.Assert(pool.PendingInboundDeca.String(), Equals, "5000000000")
 
 	// add secured ETH (ETH-ETH)
 	_, err = addHandler.Run(ctx, NewMsgAddLiquidity(
@@ -231,9 +231,9 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	pool, err = mgr.K.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	c.Assert(pool.BalanceAsset.String(), Equals, "15000000000")
-	c.Assert(pool.BalanceRune.String(), Equals, "15000000000")
+	c.Assert(pool.BalanceDeca.String(), Equals, "15000000000")
 	c.Assert(pool.PendingInboundAsset.String(), Equals, "0")
-	c.Assert(pool.PendingInboundRune.String(), Equals, "0")
+	c.Assert(pool.PendingInboundDeca.String(), Equals, "0")
 
 	// add secured ETH + RUNE
 	_, err = addHandler.Run(ctx, NewMsgAddLiquidity(
@@ -255,9 +255,9 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	pool, err = mgr.K.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	c.Assert(pool.BalanceAsset.String(), Equals, "16000000000")
-	c.Assert(pool.BalanceRune.String(), Equals, "16000000000")
+	c.Assert(pool.BalanceDeca.String(), Equals, "16000000000")
 	c.Assert(pool.PendingInboundAsset.String(), Equals, "0")
-	c.Assert(pool.PendingInboundRune.String(), Equals, "0")
+	c.Assert(pool.PendingInboundDeca.String(), Equals, "0")
 
 	// add nothing (AssetAmount is zero so authorization check is skipped)
 	_, err = addHandler.Run(ctx, NewMsgAddLiquidity(
@@ -279,9 +279,9 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 	pool, err = mgr.K.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	c.Assert(pool.BalanceAsset.String(), Equals, "16000000000")
-	c.Assert(pool.BalanceRune.String(), Equals, "16000000000")
+	c.Assert(pool.BalanceDeca.String(), Equals, "16000000000")
 	c.Assert(pool.PendingInboundAsset.String(), Equals, "0")
-	c.Assert(pool.PendingInboundRune.String(), Equals, "0")
+	c.Assert(pool.PendingInboundDeca.String(), Equals, "0")
 
 	// provide wrong params
 
@@ -317,7 +317,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler(c *C) {
 func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNewPool(c *C) {
 	activeNodeAccount := GetRandomValidatorNode(NodeActive)
 	activeNodeAccount.Bond = cosmos.NewUint(1000000 * common.One)
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	ethAddr := GetRandomETHAddress()
 	pool := NewPool()
 	pool.Status = PoolAvailable
@@ -326,12 +326,12 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 		currentPool:       pool,
 		lp: LiquidityProvider{
 			Asset:             common.ETHAsset,
-			RuneAddress:       runeAddr,
+			DecaAddress:       decaAddr,
 			AssetAddress:      ethAddr,
 			Units:             cosmos.ZeroUint(),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
 		},
 	}
@@ -345,7 +345,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 	addTxHash := GetRandomTxHash()
 	tx := common.NewTx(
 		addTxHash,
-		runeAddr,
+		decaAddr,
 		GetRandomETHAddress(),
 		common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(common.One*5))},
 		common.Gas{
@@ -354,7 +354,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 		"add:ETH",
 	)
 	mgr.constAccessor = constants.NewDummyConstants(map[constants.ConstantName]int64{
-		constants.MaximumLiquidityRune: 600_000_00000000,
+		constants.MaximumLiquidityDeca: 600_000_00000000,
 	}, map[constants.ConstantName]bool{
 		constants.StrictBondLiquidityRatio: true,
 	}, map[constants.ConstantName]string{})
@@ -364,7 +364,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 		common.ETHAsset,
 		cosmos.NewUint(100*common.One),
 		cosmos.NewUint(100*common.One),
-		runeAddr,
+		decaAddr,
 		ethAddr,
 		common.NoAddress, cosmos.ZeroUint(),
 		activeNodeAccount.NodeAddress)
@@ -373,7 +373,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 	postLiquidityPool, err := k.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	c.Assert(postLiquidityPool.BalanceAsset.String(), Equals, preLiquidityPool.BalanceAsset.Add(msg.AssetAmount).String())
-	c.Assert(postLiquidityPool.BalanceRune.String(), Equals, preLiquidityPool.BalanceRune.Add(msg.RuneAmount).String())
+	c.Assert(postLiquidityPool.BalanceDeca.String(), Equals, preLiquidityPool.BalanceDeca.Add(msg.RuneAmount).String())
 }
 
 func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNewPoolSecured(c *C) {
@@ -395,7 +395,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 	err = mgr.K.SetPool(ctx, pool)
 	c.Assert(err, IsNil)
 
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 
 	addHandler := NewAddLiquidityHandler(mgr)
 	secHandler := NewSecuredAssetDepositHandler(mgr)
@@ -404,12 +404,12 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 	c.Assert(err, IsNil)
 	c.Assert(preLiquidityPool.Asset, Equals, common.BTCAsset)
 	c.Assert(preLiquidityPool.BalanceAsset.String(), Equals, "0")
-	c.Assert(preLiquidityPool.BalanceRune.String(), Equals, "0")
+	c.Assert(preLiquidityPool.BalanceDeca.String(), Equals, "0")
 
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000)))
 
-	accAddr, err := runeAddr.AccAddress()
+	accAddr, err := decaAddr.AccAddress()
 	c.Assert(err, IsNil)
 
 	_, err = secHandler.Run(ctx, NewMsgSecuredAssetDeposit(
@@ -422,19 +422,19 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 	c.Assert(err, IsNil)
 
 	mgr.constAccessor = constants.NewDummyConstants(map[constants.ConstantName]int64{
-		constants.MaximumLiquidityRune: 600_000_00000000,
+		constants.MaximumLiquidityDeca: 600_000_00000000,
 	}, map[constants.ConstantName]bool{
 		constants.StrictBondLiquidityRatio: true,
 	}, map[constants.ConstantName]string{})
 
-	// For secured assets, signer must match runeAddr to prevent unauthorized withdrawals
+	// For secured assets, signer must match decaAddr to prevent unauthorized withdrawals
 	msg := NewMsgAddLiquidity(
 		tx,
 		common.BTCAsset.GetSecuredAsset(),
 		cosmos.NewUint(1000*common.One),
 		cosmos.NewUint(1*common.One),
-		runeAddr,
-		runeAddr,
+		decaAddr,
+		decaAddr,
 		common.NoAddress,
 		cosmos.ZeroUint(),
 		accAddr,
@@ -445,7 +445,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 	postLiquidityPool, err := mgr.K.GetPool(ctx, common.BTCAsset)
 	c.Assert(err, IsNil)
 	c.Assert(postLiquidityPool.BalanceAsset.String(), Equals, preLiquidityPool.BalanceAsset.Add(msg.AssetAmount).String())
-	c.Assert(postLiquidityPool.BalanceRune.String(), Equals, preLiquidityPool.BalanceRune.Add(msg.RuneAmount).String())
+	c.Assert(postLiquidityPool.BalanceDeca.String(), Equals, preLiquidityPool.BalanceDeca.Add(msg.RuneAmount).String())
 
 	balance := mgr.SecuredAssetManager().BalanceOf(ctx, common.BTCAsset, accAddr)
 	c.Assert(balance.String(), Equals, "100000000")
@@ -454,7 +454,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandler_NoPool_ShouldCreateNe
 func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandlerValidation(c *C) {
 	ctx, _ := setupKeeperForTest(c)
 	activeNodeAccount := GetRandomValidatorNode(NodeActive)
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	ethAddr := GetRandomETHAddress()
 	ethSynthAsset, _ := common.NewAsset("ETH/ETH")
 	mainnetBTCAddr, err := common.NewAddress("bc1qy0tj9fh0u6fgz0mejjp6776z6kugych0zwrkwr")
@@ -465,7 +465,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandlerValidation(c *C) {
 		GetRandomRUNEAddress(),
 		common.Coins{common.NewCoin(ethSynthAsset, cosmos.NewUint(common.One*5))},
 		common.Gas{
-			{Asset: common.RuneNative, Amount: cosmos.NewUint(1 * common.One)},
+			{Asset: common.DecaNative, Amount: cosmos.NewUint(1 * common.One)},
 		},
 		"add:ETH.ETH",
 	)
@@ -473,7 +473,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandlerValidation(c *C) {
 	k := &MockAddLiquidityKeeper{
 		activeNodeAccount: activeNodeAccount,
 		currentPool: Pool{
-			BalanceRune:  cosmos.ZeroUint(),
+			BalanceDeca:  cosmos.ZeroUint(),
 			BalanceAsset: cosmos.ZeroUint(),
 			Asset:        common.ETHAsset,
 			LPUnits:      cosmos.ZeroUint(),
@@ -481,12 +481,12 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandlerValidation(c *C) {
 		},
 		lp: LiquidityProvider{
 			Asset:             common.ETHAsset,
-			RuneAddress:       runeAddr,
+			DecaAddress:       decaAddr,
 			AssetAddress:      ethAddr,
 			Units:             cosmos.ZeroUint(),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
 		},
 	}
@@ -532,7 +532,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandlerValidation(c *C) {
 		},
 	}
 	constAccessor := constants.NewDummyConstants(map[constants.ConstantName]int64{
-		constants.MaximumLiquidityRune: 600_000_00000000,
+		constants.MaximumLiquidityDeca: 600_000_00000000,
 	}, map[constants.ConstantName]bool{
 		constants.StrictBondLiquidityRatio: true,
 	}, map[constants.ConstantName]string{})
@@ -549,7 +549,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityHandlerValidation(c *C) {
 func (s *HandlerAddLiquiditySuite) TestHandlerAddLiquidityFailScenario(c *C) {
 	activeNodeAccount := GetRandomValidatorNode(NodeActive)
 	emptyPool := Pool{
-		BalanceRune:  cosmos.ZeroUint(),
+		BalanceDeca:  cosmos.ZeroUint(),
 		BalanceAsset: cosmos.ZeroUint(),
 		Asset:        common.ETHAsset,
 		LPUnits:      cosmos.ZeroUint(),
@@ -575,7 +575,7 @@ func (s *HandlerAddLiquiditySuite) TestHandlerAddLiquidityFailScenario(c *C) {
 			k: &MockAddLiquidityKeeper{
 				activeNodeAccount: activeNodeAccount,
 				currentPool: Pool{
-					BalanceRune:  cosmos.ZeroUint(),
+					BalanceDeca:  cosmos.ZeroUint(),
 					BalanceAsset: cosmos.ZeroUint(),
 					Asset:        common.ETHAsset,
 					LPUnits:      cosmos.ZeroUint(),
@@ -586,12 +586,12 @@ func (s *HandlerAddLiquiditySuite) TestHandlerAddLiquidityFailScenario(c *C) {
 		},
 	}
 	for _, tc := range testCases {
-		runeAddr := GetRandomRUNEAddress()
+		decaAddr := GetRandomRUNEAddress()
 		ethAddr := GetRandomETHAddress()
 		addTxHash := GetRandomTxHash()
 		tx := common.NewTx(
 			addTxHash,
-			runeAddr,
+			decaAddr,
 			GetRandomETHAddress(),
 			common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(common.One*5))},
 			common.Gas{
@@ -604,7 +604,7 @@ func (s *HandlerAddLiquiditySuite) TestHandlerAddLiquidityFailScenario(c *C) {
 			common.ETHAsset,
 			cosmos.NewUint(100*common.One),
 			cosmos.NewUint(100*common.One),
-			runeAddr,
+			decaAddr,
 			ethAddr,
 			common.NoAddress, cosmos.ZeroUint(),
 			activeNodeAccount.NodeAddress)
@@ -671,11 +671,11 @@ func (p *AddLiquidityTestKeeper) GetLiquidityProvider(ctx cosmos.Context, asset 
 	}
 	lp := LiquidityProvider{
 		Asset:             asset,
-		RuneAddress:       addr,
+		DecaAddress:       addr,
 		Units:             cosmos.ZeroUint(),
-		PendingRune:       cosmos.ZeroUint(),
+		PendingDeca:       cosmos.ZeroUint(),
 		PendingAsset:      cosmos.ZeroUint(),
-		RuneDepositValue:  cosmos.ZeroUint(),
+		DecaDepositValue:  cosmos.ZeroUint(),
 		AssetDepositValue: cosmos.ZeroUint(),
 	}
 	key := p.GetKey("lp/", lp.Key())
@@ -800,7 +800,7 @@ func (s *HandlerAddLiquiditySuite) TestValidateAddLiquidityMessage(c *C) {
 	c.Assert(h.validateAddLiquidityMessage(ctx, ps, common.ETHAsset, txID, common.NoAddress, assetAddress), NotNil)
 	c.Assert(h.validateAddLiquidityMessage(ctx, ps, common.BTCAsset, txID, ethAddress, common.NoAddress), NotNil)
 	c.Assert(ps.SetPool(ctx, Pool{
-		BalanceRune:  cosmos.NewUint(100 * common.One),
+		BalanceDeca:  cosmos.NewUint(100 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 		Asset:        common.ETHAsset,
 		LPUnits:      cosmos.NewUint(100 * common.One),
@@ -826,56 +826,56 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityV1(c *C) {
 	ctx, _ := setupKeeperForTest(c)
 	txID := GetRandomTxHash()
 
-	runeAddress := GetRandomRUNEAddress()
+	decaAddress := GetRandomRUNEAddress()
 	assetAddress := GetRandomETHAddress()
 	btcAddress, err := common.NewAddress("bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej")
 	c.Assert(err, IsNil)
 	constAccessor := constants.GetConstantValues(GetCurrentVersion())
 	h := NewAddLiquidityHandler(NewDummyMgrWithKeeper(ps))
-	err = h.addLiquidity(ctx, common.Asset{}, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.Asset{}, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, NotNil)
 	c.Assert(ps.SetPool(ctx, Pool{
-		BalanceRune:         cosmos.ZeroUint(),
+		BalanceDeca:         cosmos.ZeroUint(),
 		BalanceAsset:        cosmos.NewUint(100 * common.One),
 		Asset:               common.ETHAsset,
 		LPUnits:             cosmos.NewUint(100 * common.One),
 		SynthUnits:          cosmos.ZeroUint(),
 		PendingInboundAsset: cosmos.ZeroUint(),
-		PendingInboundRune:  cosmos.ZeroUint(),
+		PendingInboundDeca:  cosmos.ZeroUint(),
 		Status:              PoolAvailable,
 	}), IsNil)
-	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
-	su, err := ps.GetLiquidityProvider(ctx, common.ETHAsset, runeAddress)
+	su, err := ps.GetLiquidityProvider(ctx, common.ETHAsset, decaAddress)
 	c.Assert(err, IsNil)
 	// c.Assert(su.Units.Equal(cosmos.NewUint(11250000000)), Equals, true, Commentf("%d", su.Units.Uint64()))
 
 	c.Assert(ps.SetPool(ctx, Pool{
-		BalanceRune:         cosmos.NewUint(100 * common.One),
+		BalanceDeca:         cosmos.NewUint(100 * common.One),
 		BalanceAsset:        cosmos.NewUint(100 * common.One),
 		Asset:               notExistLiquidityProviderAsset,
 		LPUnits:             cosmos.NewUint(100 * common.One),
 		SynthUnits:          cosmos.ZeroUint(),
 		PendingInboundAsset: cosmos.ZeroUint(),
-		PendingInboundRune:  cosmos.ZeroUint(),
+		PendingInboundDeca:  cosmos.ZeroUint(),
 		Status:              PoolAvailable,
 	}), IsNil)
 	// add asymmetically
-	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(100*common.One), cosmos.ZeroUint(), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(100*common.One), cosmos.ZeroUint(), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
-	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.ZeroUint(), cosmos.NewUint(100*common.One), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.ZeroUint(), cosmos.NewUint(100*common.One), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
 
-	err = h.addLiquidity(ctx, notExistLiquidityProviderAsset, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, notExistLiquidityProviderAsset, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, NotNil)
 	c.Assert(ps.SetPool(ctx, Pool{
-		BalanceRune:         cosmos.NewUint(100 * common.One),
+		BalanceDeca:         cosmos.NewUint(100 * common.One),
 		BalanceAsset:        cosmos.NewUint(100 * common.One),
 		Asset:               common.ETHAsset,
 		LPUnits:             cosmos.NewUint(100 * common.One),
 		SynthUnits:          cosmos.ZeroUint(),
 		PendingInboundAsset: cosmos.ZeroUint(),
-		PendingInboundRune:  cosmos.ZeroUint(),
+		PendingInboundDeca:  cosmos.ZeroUint(),
 		Status:              PoolAvailable,
 	}), IsNil)
 
@@ -883,10 +883,10 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityV1(c *C) {
 		lp := LiquidityProvider{Units: cosmos.NewUint(common.One / 5000)}
 		ps.SetLiquidityProvider(ctx, lp)
 	}
-	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(common.One), cosmos.NewUint(common.One), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(common.One), cosmos.NewUint(common.One), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
 
-	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), runeAddress, assetAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.ETHAsset, cosmos.NewUint(100*common.One), cosmos.NewUint(100*common.One), decaAddress, assetAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
 	p, err := ps.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
@@ -895,32 +895,32 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityV1(c *C) {
 	// Test atomic cross chain liquidity provision
 	// create BTC pool
 	c.Assert(ps.SetPool(ctx, Pool{
-		BalanceRune:         cosmos.ZeroUint(),
+		BalanceDeca:         cosmos.ZeroUint(),
 		BalanceAsset:        cosmos.ZeroUint(),
 		Asset:               common.BTCAsset,
 		LPUnits:             cosmos.ZeroUint(),
 		SynthUnits:          cosmos.ZeroUint(),
 		PendingInboundAsset: cosmos.ZeroUint(),
-		PendingInboundRune:  cosmos.ZeroUint(),
+		PendingInboundDeca:  cosmos.ZeroUint(),
 		Status:              PoolAvailable,
 	}), IsNil)
 
 	// add rune
-	err = h.addLiquidity(ctx, common.BTCAsset, cosmos.NewUint(100*common.One), cosmos.ZeroUint(), runeAddress, btcAddress, txID, true, constAccessor)
+	err = h.addLiquidity(ctx, common.BTCAsset, cosmos.NewUint(100*common.One), cosmos.ZeroUint(), decaAddress, btcAddress, txID, true, constAccessor)
 	c.Assert(err, IsNil)
-	_, err = ps.GetLiquidityProvider(ctx, common.BTCAsset, runeAddress)
+	_, err = ps.GetLiquidityProvider(ctx, common.BTCAsset, decaAddress)
 	c.Assert(err, IsNil)
 	// c.Check(su.Units.IsZero(), Equals, true)
 	// add btc
-	err = h.addLiquidity(ctx, common.BTCAsset, cosmos.ZeroUint(), cosmos.NewUint(100*common.One), runeAddress, btcAddress, txID, false, constAccessor)
+	err = h.addLiquidity(ctx, common.BTCAsset, cosmos.ZeroUint(), cosmos.NewUint(100*common.One), decaAddress, btcAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
-	su, err = ps.GetLiquidityProvider(ctx, common.BTCAsset, runeAddress)
+	su, err = ps.GetLiquidityProvider(ctx, common.BTCAsset, decaAddress)
 	c.Assert(err, IsNil)
 	c.Check(su.Units.IsZero(), Equals, false)
 	p, err = ps.GetPool(ctx, common.BTCAsset)
 	c.Assert(err, IsNil)
 	c.Check(p.BalanceAsset.Equal(cosmos.NewUint(100*common.One)), Equals, true, Commentf("%d", p.BalanceAsset.Uint64()))
-	c.Check(p.BalanceRune.Equal(cosmos.NewUint(100*common.One)), Equals, true, Commentf("%d", p.BalanceRune.Uint64()))
+	c.Check(p.BalanceDeca.Equal(cosmos.NewUint(100*common.One)), Equals, true, Commentf("%d", p.BalanceDeca.Uint64()))
 	c.Check(p.LPUnits.Equal(cosmos.NewUint(100*common.One)), Equals, true, Commentf("%d", p.LPUnits.Uint64()))
 }
 
@@ -929,7 +929,7 @@ func (HandlerAddLiquiditySuite) TestRuneOnlyFairMergeProvidedLiquidity(c *C) {
 	txID := GetRandomTxHash()
 
 	c.Assert(k.SetPool(ctx, Pool{
-		BalanceRune:  cosmos.NewUint(100 * common.One),
+		BalanceDeca:  cosmos.NewUint(100 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 		Asset:        common.BTCAsset,
 		LPUnits:      cosmos.NewUint(100 * common.One),
@@ -937,13 +937,13 @@ func (HandlerAddLiquiditySuite) TestRuneOnlyFairMergeProvidedLiquidity(c *C) {
 		Status:       PoolAvailable,
 	}), IsNil)
 
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	constAccessor := constants.GetConstantValues(GetCurrentVersion())
 	h := NewAddLiquidityHandler(NewDummyMgrWithKeeper(k))
-	err := h.addLiquidity(ctx, common.BTCAsset, cosmos.NewUint(100*common.One), cosmos.ZeroUint(), runeAddr, common.NoAddress, txID, false, constAccessor)
+	err := h.addLiquidity(ctx, common.BTCAsset, cosmos.NewUint(100*common.One), cosmos.ZeroUint(), decaAddr, common.NoAddress, txID, false, constAccessor)
 	c.Assert(err, IsNil)
 
-	su, err := k.GetLiquidityProvider(ctx, common.BTCAsset, runeAddr)
+	su, err := k.GetLiquidityProvider(ctx, common.BTCAsset, decaAddr)
 	c.Assert(err, IsNil)
 	c.Assert(su.Units.Uint64(), Equals, uint64(3333333333), Commentf("%d", su.Units.Uint64()))
 
@@ -957,7 +957,7 @@ func (HandlerAddLiquiditySuite) TestAssetOnlyFairMergeProvidedLiquidity(c *C) {
 	txID := GetRandomTxHash()
 
 	c.Assert(k.SetPool(ctx, Pool{
-		BalanceRune:  cosmos.NewUint(100 * common.One),
+		BalanceDeca:  cosmos.NewUint(100 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 		Asset:        common.BTCAsset,
 		LPUnits:      cosmos.NewUint(100 * common.One),
@@ -986,7 +986,7 @@ func (HandlerAddLiquiditySuite) TestSynthValidate(c *C) {
 	asset := common.BTCAsset.GetSyntheticAsset()
 
 	c.Assert(mgr.Keeper().SetPool(ctx, Pool{
-		BalanceRune:  cosmos.NewUint(100 * common.One),
+		BalanceDeca:  cosmos.NewUint(100 * common.One),
 		BalanceAsset: cosmos.NewUint(10 * common.One),
 		Asset:        asset,
 		LPUnits:      cosmos.ZeroUint(),
@@ -1075,7 +1075,7 @@ func (HandlerAddLiquiditySuite) TestAddSynthNoLPs(c *C) {
 	pool := NewPool()
 	pool.Asset = asset
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(0)
+	pool.BalanceDeca = cosmos.NewUint(0)
 	pool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -1098,7 +1098,7 @@ func (HandlerAddLiquiditySuite) TestAddSynthNoLPs(c *C) {
 
 	pool, err = k.GetPool(ctx, asset)
 	c.Assert(err, IsNil)
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(0), Commentf("%d", pool.BalanceRune.Uint64()))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(0), Commentf("%d", pool.BalanceDeca.Uint64()))
 	c.Check(pool.BalanceAsset.Uint64(), Equals, uint64(20*common.One), Commentf("%d", pool.BalanceAsset.Uint64()))
 	c.Check(pool.LPUnits.Uint64(), Equals, uint64(10*common.One), Commentf("%d", pool.LPUnits.Uint64()))
 }
@@ -1112,7 +1112,7 @@ func (HandlerAddLiquiditySuite) TestAddSynth(c *C) {
 	pool := NewPool()
 	pool.Asset = asset
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(0)
+	pool.BalanceDeca = cosmos.NewUint(0)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.LPUnits = cosmos.NewUint(100)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -1136,7 +1136,7 @@ func (HandlerAddLiquiditySuite) TestAddSynth(c *C) {
 
 	pool, err = k.GetPool(ctx, asset)
 	c.Assert(err, IsNil)
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(0), Commentf("%d", pool.BalanceRune.Uint64()))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(0), Commentf("%d", pool.BalanceDeca.Uint64()))
 	c.Check(pool.BalanceAsset.Uint64(), Equals, uint64(200*common.One), Commentf("%d", pool.BalanceAsset.Uint64()))
 	c.Check(pool.LPUnits.Uint64(), Equals, uint64(200), Commentf("%d", pool.LPUnits.Uint64()))
 }
@@ -1150,18 +1150,18 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityPOL(c *C) {
 	pool.Asset = common.ETHAsset
 	pool.Status = PoolAvailable
 	pool.BalanceAsset = cosmos.NewUint(1)
-	pool.BalanceRune = cosmos.NewUint(1)
+	pool.BalanceDeca = cosmos.NewUint(1)
 	k := &MockAddLiquidityKeeper{
 		activeNodeAccount: activeNodeAccount,
 		currentPool:       pool,
 		lp: LiquidityProvider{
 			Asset:             common.ETHAsset,
-			RuneAddress:       polAddr,
+			DecaAddress:       polAddr,
 			AssetAddress:      common.NoAddress,
 			Units:             cosmos.ZeroUint(),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
 		},
 		pol:        NewProtocolOwnedLiquidity(),
@@ -1174,7 +1174,7 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityPOL(c *C) {
 		addTxHash,
 		polAddr,
 		polAddr,
-		common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(common.One*100))},
+		common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(common.One*100))},
 		common.Gas{},
 		"add:ETH",
 	)
@@ -1199,9 +1199,9 @@ func (s *HandlerAddLiquiditySuite) TestAddLiquidityPOL(c *C) {
 	postLiquidityPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	c.Assert(postLiquidityPool.BalanceAsset.String(), Equals, "1")
-	c.Assert(postLiquidityPool.BalanceRune.String(), Equals, "10000000001")
+	c.Assert(postLiquidityPool.BalanceDeca.String(), Equals, "10000000001")
 	c.Assert(postLiquidityPool.PendingInboundAsset.String(), Equals, "0")
-	c.Assert(postLiquidityPool.PendingInboundRune.String(), Equals, "0")
+	c.Assert(postLiquidityPool.PendingInboundDeca.String(), Equals, "0")
 
 	pol, err := mgr.Keeper().GetPOL(ctx)
 	c.Assert(err, IsNil)

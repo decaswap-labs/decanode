@@ -41,7 +41,7 @@ func (m *MsgWithdrawLiquidity) ValidateBasic() error {
 	if m.Asset.IsEmpty() {
 		return cosmos.ErrUnknownRequest("pool asset cannot be empty")
 	}
-	if m.Asset.IsRune() {
+	if m.Asset.IsDeca() {
 		return cosmos.ErrUnknownRequest("asset cannot be rune")
 	}
 	if m.WithdrawAddress.IsEmpty() {
@@ -53,7 +53,7 @@ func (m *MsgWithdrawLiquidity) ValidateBasic() error {
 	if m.BasisPoints.GT(cosmos.NewUint(MaxWithdrawBasisPoints)) {
 		return cosmos.ErrUnknownRequest("basis points is larger than maximum withdraw basis points")
 	}
-	if !m.WithdrawalAsset.IsEmpty() && !m.WithdrawalAsset.IsRune() && !m.WithdrawalAsset.Equals(m.Asset) {
+	if !m.WithdrawalAsset.IsEmpty() && !m.WithdrawalAsset.IsDeca() && !m.WithdrawalAsset.Equals(m.Asset) {
 		return cosmos.ErrUnknownRequest("withdrawal asset must be empty, rune, or pool asset")
 	}
 	return nil

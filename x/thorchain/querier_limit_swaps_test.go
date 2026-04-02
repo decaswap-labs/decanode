@@ -26,7 +26,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRuneSourceAsset(c *C)
 	k.SetMimir(ctx, "TorAnchor-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48", 1)
 	torPool := NewPool()
 	torPool.Asset = torAsset
-	torPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	torPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	torPool.BalanceAsset = cosmos.NewUint(500 * common.One) // 1 RUNE = $2 USD
 	torPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, torPool), IsNil)
@@ -34,7 +34,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRuneSourceAsset(c *C)
 	// Setup BTC pool for target
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -45,7 +45,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRuneSourceAsset(c *C)
 		Tx: common.Tx{
 			ID:          txID,
 			FromAddress: GetRandomTHORAddress(),
-			Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))},
+			Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))},
 		},
 		TargetAsset:        common.BTCAsset,
 		TradeTarget:        cosmos.NewUint(50000000), // 0.5 BTC
@@ -77,7 +77,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRuneSourceAsset(c *C)
 
 	// Verify asset pair
 	c.Assert(len(resp.AssetPairs), Equals, 1)
-	c.Assert(resp.AssetPairs[0].SourceAsset, Equals, common.RuneAsset().String())
+	c.Assert(resp.AssetPairs[0].SourceAsset, Equals, common.DecaAsset().String())
 	c.Assert(resp.AssetPairs[0].TargetAsset, Equals, common.BTCAsset.String())
 	c.Assert(resp.AssetPairs[0].Count, Equals, uint64(1))
 	c.Assert(resp.AssetPairs[0].TotalValueUsd, Equals, expectedUSD.String())
@@ -96,7 +96,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryNonRuneSourceAsset(c 
 	k.SetMimir(ctx, "TorAnchor-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48", 1)
 	torPool := NewPool()
 	torPool.Asset = torAsset
-	torPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	torPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	torPool.BalanceAsset = cosmos.NewUint(500 * common.One) // 1 RUNE = $2 USD
 	torPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, torPool), IsNil)
@@ -104,7 +104,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryNonRuneSourceAsset(c 
 	// Setup ETH pool for source
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One) // 1 ETH = 10 RUNE
 	ethPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
@@ -112,7 +112,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryNonRuneSourceAsset(c 
 	// Setup BTC pool for target
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -175,7 +175,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRemainingAmountCalcul
 	k.SetMimir(ctx, "TorAnchor-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48", 1)
 	torPool := NewPool()
 	torPool.Asset = torAsset
-	torPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	torPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	torPool.BalanceAsset = cosmos.NewUint(1000 * common.One) // 1 RUNE = $1 USD
 	torPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, torPool), IsNil)
@@ -183,7 +183,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRemainingAmountCalcul
 	// Setup ETH pool
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One) // 1 ETH = 10 RUNE
 	ethPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
@@ -191,7 +191,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryRemainingAmountCalcul
 	// Setup BTC pool
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -267,7 +267,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryMultipleAssetPairs(c 
 	k.SetMimir(ctx, "TorAnchor-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48", 1)
 	torPool := NewPool()
 	torPool.Asset = torAsset
-	torPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	torPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	torPool.BalanceAsset = cosmos.NewUint(1000 * common.One) // 1 RUNE = $1 USD
 	torPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, torPool), IsNil)
@@ -275,14 +275,14 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryMultipleAssetPairs(c 
 	// Setup pools
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One) // 1 ETH = 10 RUNE
 	ethPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -405,7 +405,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryWithUnavailablePool(c
 	k.SetMimir(ctx, "TorAnchor-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48", 1)
 	torPool := NewPool()
 	torPool.Asset = torAsset
-	torPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	torPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	torPool.BalanceAsset = cosmos.NewUint(1000 * common.One) // 1 RUNE = $1 USD
 	torPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, torPool), IsNil)
@@ -413,7 +413,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryWithUnavailablePool(c
 	// Setup ETH pool but mark it as staged (unavailable)
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	ethPool.Status = PoolStaged // Unavailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
@@ -421,7 +421,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryWithUnavailablePool(c
 	// Setup BTC pool
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -472,7 +472,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryWithZeroRemainingAmou
 	k.SetMimir(ctx, "TorAnchor-ETH-USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48", 1)
 	torPool := NewPool()
 	torPool.Asset = torAsset
-	torPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	torPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	torPool.BalanceAsset = cosmos.NewUint(1000 * common.One) // 1 RUNE = $1 USD
 	torPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, torPool), IsNil)
@@ -480,7 +480,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryWithZeroRemainingAmou
 	// Setup ETH pool
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One) // 1 ETH = 10 RUNE
 	ethPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
@@ -488,7 +488,7 @@ func (s *QuerierLimitSwapsSuite) TestQueryLimitSwapsSummaryWithZeroRemainingAmou
 	// Setup BTC pool
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)

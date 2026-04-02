@@ -40,12 +40,12 @@ func getSwapDirections(msg MsgSwap) []swapDirEntry {
 	source := msg.Tx.Coins[0].Asset.GetLayer1Asset()
 	target := msg.TargetAsset.GetLayer1Asset()
 	switch {
-	case source.IsRune():
+	case source.IsDeca():
 		// RUNE -> Asset: single swap, rune-to-asset
 		return []swapDirEntry{
 			{target.String(), RuneToAsset},
 		}
-	case target.IsRune():
+	case target.IsDeca():
 		// Asset -> RUNE: single swap, asset-to-rune
 		return []swapDirEntry{
 			{source.String(), AssetToRune},
@@ -298,21 +298,21 @@ func (vm *SwapQueueAdv) checkFeelessSwap(pools Pools, pair tradePair, indexRatio
 			return false
 		}
 		one := cosmos.NewUint(common.One)
-		runeAmt := common.GetSafeShare(one, sourcePool.BalanceAsset, sourcePool.BalanceRune)
-		emit := common.GetSafeShare(runeAmt, targetPool.BalanceRune, targetPool.BalanceAsset)
+		runeAmt := common.GetSafeShare(one, sourcePool.BalanceAsset, sourcePool.BalanceDeca)
+		emit := common.GetSafeShare(runeAmt, targetPool.BalanceDeca, targetPool.BalanceAsset)
 		ratio = vm.getRatio(one, emit)
-	case pair.source.IsRune():
+	case pair.source.IsDeca():
 		pool, ok := pools.Get(pair.target.GetLayer1Asset())
 		if !ok {
 			return false
 		}
-		ratio = vm.getRatio(pool.BalanceRune, pool.BalanceAsset)
-	case pair.target.IsRune():
+		ratio = vm.getRatio(pool.BalanceDeca, pool.BalanceAsset)
+	case pair.target.IsDeca():
 		pool, ok := pools.Get(pair.source.GetLayer1Asset())
 		if !ok {
 			return false
 		}
-		ratio = vm.getRatio(pool.BalanceAsset, pool.BalanceRune)
+		ratio = vm.getRatio(pool.BalanceAsset, pool.BalanceDeca)
 	}
 	return cosmos.NewUint(indexRatio).GT(ratio)
 }
@@ -336,7 +336,7 @@ func (vm *SwapQueueAdv) checkWithFeeSwap(ctx cosmos.Context, mgr Manager, pools 
 	target := common.NewCoin(msg.TargetAsset, proportionalTarget)
 	var emit cosmos.Uint
 	switch {
-	case !source.IsRune() && !target.IsRune():
+	case !source.IsDeca() && !target.IsDeca():
 		sourcePool, ok := pools.Get(source.Asset.GetLayer1Asset())
 		if !ok {
 			return false
@@ -345,20 +345,20 @@ func (vm *SwapQueueAdv) checkWithFeeSwap(ctx cosmos.Context, mgr Manager, pools 
 		if !ok {
 			return false
 		}
-		emit = swapper.CalcAssetEmission(sourcePool.BalanceAsset, source.Amount, sourcePool.BalanceRune)
-		emit = swapper.CalcAssetEmission(targetPool.BalanceRune, emit, targetPool.BalanceAsset)
-	case source.IsRune():
+		emit = swapper.CalcAssetEmission(sourcePool.BalanceAsset, source.Amount, sourcePool.BalanceDeca)
+		emit = swapper.CalcAssetEmission(targetPool.BalanceDeca, emit, targetPool.BalanceAsset)
+	case source.IsDeca():
 		pool, ok := pools.Get(target.Asset.GetLayer1Asset())
 		if !ok {
 			return false
 		}
-		emit = swapper.CalcAssetEmission(pool.BalanceRune, source.Amount, pool.BalanceAsset)
-	case target.IsRune():
+		emit = swapper.CalcAssetEmission(pool.BalanceDeca, source.Amount, pool.BalanceAsset)
+	case target.IsDeca():
 		pool, ok := pools.Get(source.Asset.GetLayer1Asset())
 		if !ok {
 			return false
 		}
-		emit = swapper.CalcAssetEmission(pool.BalanceAsset, source.Amount, pool.BalanceRune)
+		emit = swapper.CalcAssetEmission(pool.BalanceAsset, source.Amount, pool.BalanceDeca)
 	}
 
 	// Check if this would be the last swap by temporarily simulating the state after this swap
@@ -374,7 +374,7 @@ func (vm *SwapQueueAdv) checkWithFeeSwap(ctx cosmos.Context, mgr Manager, pools 
 	}
 
 	// If this would be the last swap and target is not RUNE, account for outbound fee
-	if wouldBeLastSwap && !target.IsRune() {
+	if wouldBeLastSwap && !target.IsDeca() {
 		// Get the outbound fee from the gas manager
 		outboundFee, err := mgr.GasMgr().GetAssetOutboundFee(ctx, target.Asset, false)
 		if err == nil && !outboundFee.IsZero() {
@@ -398,7 +398,7 @@ func (vm *SwapQueueAdv) getAssetPairs(ctx cosmos.Context) (tradePairs, Pools) {
 	result := make(tradePairs, 0)
 	var pools Pools
 
-	assets := []common.Asset{common.RuneAsset()}
+	assets := []common.Asset{common.DecaAsset()}
 	iterator := vm.k.GetPoolIterator(ctx)
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
@@ -436,7 +436,7 @@ func (vm *SwapQueueAdv) getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sour
 	stableSwap := isStableToStable(ctx, vm.k, sourceAsset, targetAsset)
 	var sourceAssetPool types.Pool
 	for i, asset := range []common.Asset{sourceAsset, targetAsset} {
-		if asset.IsRune() {
+		if asset.IsDeca() {
 			continue
 		}
 
@@ -459,7 +459,7 @@ func (vm *SwapQueueAdv) getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sour
 		}
 
 		// compute the minimum rune swap size for this leg of the swap
-		minRuneSwapSize := common.GetSafeShare(minSlip, cosmos.NewUint(constants.MaxBasisPts), pool.BalanceRune)
+		minRuneSwapSize := common.GetSafeShare(minSlip, cosmos.NewUint(constants.MaxBasisPts), pool.BalanceDeca)
 		if minSwapSize.IsZero() || minRuneSwapSize.LT(minSwapSize) {
 			minSwapSize = minRuneSwapSize
 		}
@@ -468,7 +468,7 @@ func (vm *SwapQueueAdv) getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sour
 	var maxSwapQuantity cosmos.Uint
 
 	// calculate the max swap quantity
-	if !sourceAsset.IsRune() {
+	if !sourceAsset.IsDeca() {
 		minSwapSize = sourceAssetPool.RuneValueInAsset(minSwapSize)
 	}
 	if minSwapSize.IsZero() {
@@ -513,7 +513,7 @@ func (vm *SwapQueueAdv) getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sour
 		// get the rune depth of the anchor pool(s)
 		runeDepth, _, _ := mgr.NetworkMgr().CalcAnchor(ctx, mgr, asset)
 		dpool, _ := vm.k.GetPool(ctx, asset) // get the derived asset pool
-		newDbps := common.GetUncappedShare(dpool.BalanceRune, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
+		newDbps := common.GetUncappedShare(dpool.BalanceDeca, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
 		if dbps.IsZero() || newDbps.LT(dbps) {
 			dbps = newDbps
 		}
@@ -831,7 +831,7 @@ func (vm *SwapQueueAdv) scoreMsgs(ctx cosmos.Context, items swapItems, synthVirt
 		targetAsset := item.msg.TargetAsset
 
 		for _, a := range []common.Asset{sourceAsset, targetAsset} {
-			if a.IsRune() {
+			if a.IsDeca() {
 				continue
 			}
 
@@ -846,11 +846,11 @@ func (vm *SwapQueueAdv) scoreMsgs(ctx cosmos.Context, items swapItems, synthVirt
 		}
 
 		poolAsset := sourceAsset
-		if poolAsset.IsRune() {
+		if poolAsset.IsDeca() {
 			poolAsset = targetAsset
 		}
 		pool := pools[poolAsset]
-		if pool.IsEmpty() || !pool.IsAvailable() || pool.BalanceRune.IsZero() || pool.BalanceAsset.IsZero() {
+		if pool.IsEmpty() || !pool.IsAvailable() || pool.BalanceDeca.IsZero() || pool.BalanceAsset.IsZero() {
 			continue
 		}
 		virtualDepthMult := int64(10_000)
@@ -867,15 +867,15 @@ func (vm *SwapQueueAdv) scoreMsgs(ctx cosmos.Context, items swapItems, synthVirt
 		sourceCoin := common.NewCoin(item.msg.Tx.Coins[0].Asset, subSwapSize)
 		vm.getLiquidityFeeAndSlip(ctx, pool, sourceCoin, &items[i], virtualDepthMult)
 
-		if sourceAsset.IsRune() || targetAsset.IsRune() {
+		if sourceAsset.IsDeca() || targetAsset.IsDeca() {
 			// single swap , stop here
 			continue
 		}
 		// double swap , thus need to convert source coin to RUNE and calculate fee and slip again
-		runeCoin := common.NewCoin(common.RuneAsset(), pool.AssetValueInRune(subSwapSize))
+		runeCoin := common.NewCoin(common.DecaAsset(), pool.AssetValueInRune(subSwapSize))
 		poolAsset = targetAsset
 		pool = pools[poolAsset]
-		if pool.IsEmpty() || !pool.IsAvailable() || pool.BalanceRune.IsZero() || pool.BalanceAsset.IsZero() {
+		if pool.IsEmpty() || !pool.IsAvailable() || pool.BalanceDeca.IsZero() || pool.BalanceAsset.IsZero() {
 			// Reset first-leg scoring to prevent inflated priority from partial scoring
 			items[i].fee = cosmos.ZeroUint()
 			items[i].slip = cosmos.ZeroUint()
@@ -896,11 +896,11 @@ func (vm *SwapQueueAdv) getLiquidityFeeAndSlip(ctx cosmos.Context, pool Pool, so
 	// Get our X, x, Y values
 	var X, x, Y cosmos.Uint
 	x = sourceCoin.Amount
-	if sourceCoin.IsRune() {
-		X = pool.BalanceRune
+	if sourceCoin.IsDeca() {
+		X = pool.BalanceDeca
 		Y = pool.BalanceAsset
 	} else {
-		Y = pool.BalanceRune
+		Y = pool.BalanceDeca
 		X = pool.BalanceAsset
 	}
 
@@ -912,7 +912,7 @@ func (vm *SwapQueueAdv) getLiquidityFeeAndSlip(ctx cosmos.Context, pool Pool, so
 		panic(err)
 	}
 	fee := swapper.CalcLiquidityFee(X, x, Y)
-	if sourceCoin.IsRune() {
+	if sourceCoin.IsDeca() {
 		fee = pool.AssetValueInRune(fee)
 	}
 	slip := swapper.CalcSwapSlip(X, x)
@@ -1079,7 +1079,7 @@ func (vm *SwapQueueAdv) emitQueueDepthTelemetry(ctx cosmos.Context, mgr Manager)
 
 							// Convert to RUNE value if source asset is not RUNE
 							runeValue := remainingValue
-							if !msg.Tx.Coins[0].Asset.IsRune() {
+							if !msg.Tx.Coins[0].Asset.IsDeca() {
 								// Get the pool to convert asset value to RUNE
 								if pool, err := vm.k.GetPool(ctx, msg.Tx.Coins[0].Asset.GetLayer1Asset()); err == nil {
 									runeValue = pool.AssetValueInRune(remainingValue)

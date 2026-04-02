@@ -829,7 +829,7 @@ func LargeTransfers(block *thorscan.BlockResponse) {
 			switch m := msg.(type) {
 			case *thorchain.MsgSend:
 				for _, coin := range m.Amount {
-					if coin.Denom == "rune" {
+					if coin.Denom == "deca" {
 						amount = coin.Amount.Uint64()
 					}
 				}
@@ -837,7 +837,7 @@ func LargeTransfers(block *thorscan.BlockResponse) {
 				toAddr = m.ToAddress.String()
 			case *bank.MsgSend:
 				for _, coin := range m.Amount {
-					if coin.Denom == "rune" {
+					if coin.Denom == "deca" {
 						amount = coin.Amount.Uint64()
 					}
 				}
@@ -877,7 +877,7 @@ func LargeTransfers(block *thorscan.BlockResponse) {
 			title := fmt.Sprintf(
 				"Large Transfer >> %s RUNE (%s)",
 				util.FormatLocale(amount/common.One),
-				util.USDValueString(block.Header.Height, common.NewCoin(common.RuneAsset(), cosmos.NewUint(amount))),
+				util.USDValueString(block.Header.Height, common.NewCoin(common.DecaAsset(), cosmos.NewUint(amount))),
 			)
 
 			// use known address labels in alert
@@ -1052,7 +1052,7 @@ func NewNode(block *thorscan.BlockResponse) {
 				switch msg := msg.(type) {
 				case *thorchain.MsgDeposit:
 					for _, coin := range msg.Coins {
-						if coin.Asset.Equals(common.RuneAsset()) {
+						if coin.Asset.Equals(common.DecaAsset()) {
 							amount = coin.Amount.Uint64()
 						}
 					}
@@ -1063,7 +1063,7 @@ func NewNode(block *thorscan.BlockResponse) {
 					}
 
 					for _, coin := range msg.Amount {
-						if coin.Denom == "rune" {
+						if coin.Denom == "deca" {
 							amount = coin.Amount.Uint64()
 						}
 					}
@@ -1075,7 +1075,7 @@ func NewNode(block *thorscan.BlockResponse) {
 					}
 
 					for _, coin := range msg.Amount {
-						if coin.Denom == "rune" {
+						if coin.Denom == "deca" {
 							amount = coin.Amount.Uint64()
 						}
 					}
@@ -1121,7 +1121,7 @@ txs:
 				switch msg := msg.(type) {
 				case *thorchain.MsgDeposit:
 					for _, coin := range msg.Coins {
-						if coin.Asset.Equals(common.RuneAsset()) {
+						if coin.Asset.Equals(common.DecaAsset()) {
 							amount = coin.Amount.Uint64()
 						}
 					}
@@ -1133,7 +1133,7 @@ txs:
 					}
 
 					for _, coin := range msg.Amount {
-						if coin.Denom == "rune" {
+						if coin.Denom == "deca" {
 							amount = coin.Amount.Uint64()
 						}
 					}
@@ -1149,7 +1149,7 @@ txs:
 					}
 
 					for _, coin := range msg.Amount {
-						if coin.Denom == "rune" {
+						if coin.Denom == "deca" {
 							amount = coin.Amount.Uint64()
 						}
 					}

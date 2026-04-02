@@ -203,7 +203,7 @@ func (s *NodeGaterTestSuite) SetUpTest(c *C) {
 	s.mockBridge = NewMockThorchainBridge()
 	// Set default minimum bond for tests
 	s.mockBridge.SetConstants(map[string]int64{
-		constants.MinimumBondInRune.String(): 100_000_000, // 1 RUNE
+		constants.MinimumBondInDeca.String(): 100_000_000, // 1 RUNE
 	})
 }
 
@@ -396,7 +396,7 @@ func (s *NodeGaterTestSuite) TestRefreshAllowlistMimirBondOverride(c *C) {
 	gater := NewNodeGater(s.mockBridge, time.Minute)
 
 	// Set mimir override for minimum bond (lower than constants)
-	s.mockBridge.SetMimir(constants.MinimumBondInRune.String(), 50_000_000)
+	s.mockBridge.SetMimir(constants.MinimumBondInDeca.String(), 50_000_000)
 
 	s.mockBridge.SetNodeAccounts([]*types.QueryNodeResponse{
 		{

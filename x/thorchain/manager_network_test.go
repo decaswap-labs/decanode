@@ -111,7 +111,7 @@ func (k *TestRagnarokChainKeeper) GetLiquidityProviderIterator(ctx cosmos.Contex
 func (k *TestRagnarokChainKeeper) AddOwnership(ctx cosmos.Context, coin common.Coin, addr cosmos.AccAddress) error {
 	lp, _ := common.NewAddress(addr.String())
 	for i, skr := range k.lps {
-		if lp.Equals(skr.RuneAddress) {
+		if lp.Equals(skr.DecaAddress) {
 			k.lps[i].Units = k.lps[i].Units.Add(coin.Amount)
 		}
 	}
@@ -121,7 +121,7 @@ func (k *TestRagnarokChainKeeper) AddOwnership(ctx cosmos.Context, coin common.C
 func (k *TestRagnarokChainKeeper) RemoveOwnership(ctx cosmos.Context, coin common.Coin, addr cosmos.AccAddress) error {
 	lp, _ := common.NewAddress(addr.String())
 	for i, skr := range k.lps {
-		if lp.Equals(skr.RuneAddress) {
+		if lp.Equals(skr.DecaAddress) {
 			k.lps[i].Units = k.lps[i].Units.Sub(coin.Amount)
 		}
 	}
@@ -131,7 +131,7 @@ func (k *TestRagnarokChainKeeper) RemoveOwnership(ctx cosmos.Context, coin commo
 func (k *TestRagnarokChainKeeper) GetLiquidityProvider(_ cosmos.Context, asset common.Asset, addr common.Address) (LiquidityProvider, error) {
 	if asset.Equals(common.BTCAsset) {
 		for i, lp := range k.lps {
-			if addr.Equals(lp.RuneAddress) {
+			if addr.Equals(lp.DecaAddress) {
 				return k.lps[i], k.err
 			}
 		}
@@ -141,7 +141,7 @@ func (k *TestRagnarokChainKeeper) GetLiquidityProvider(_ cosmos.Context, asset c
 
 func (k *TestRagnarokChainKeeper) SetLiquidityProvider(_ cosmos.Context, lp LiquidityProvider) {
 	for i, skr := range k.lps {
-		if lp.RuneAddress.Equals(skr.RuneAddress) {
+		if lp.DecaAddress.Equals(skr.DecaAddress) {
 			lp.Units = k.lps[i].Units
 			k.lps[i] = lp
 		}
@@ -150,7 +150,7 @@ func (k *TestRagnarokChainKeeper) SetLiquidityProvider(_ cosmos.Context, lp Liqu
 
 func (k *TestRagnarokChainKeeper) RemoveLiquidityProvider(_ cosmos.Context, lp LiquidityProvider) {
 	for i, skr := range k.lps {
-		if lp.RuneAddress.Equals(skr.RuneAddress) {
+		if lp.DecaAddress.Equals(skr.DecaAddress) {
 			k.lps[i] = lp
 		}
 	}

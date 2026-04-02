@@ -149,7 +149,7 @@ func (h HandlerReserveContributorSuite) TestReserveContributorHandler(c *C) {
 			name: "normal reserve contribute message should return success",
 			messageCreator: func(helper reserveContributorHandlerHelper) cosmos.Msg {
 				tx := GetRandomTx()
-				tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+				tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 				return NewMsgReserveContributor(tx, helper.reserveContributor, helper.nodeAccount.NodeAddress)
 			},
 			runner: func(handler ReserveContributorHandler, helper reserveContributorHandlerHelper, msg cosmos.Msg) (*cosmos.Result, error) {

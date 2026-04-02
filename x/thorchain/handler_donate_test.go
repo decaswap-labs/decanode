@@ -57,7 +57,7 @@ func (HandlerDonateSuite) TestDonate(c *C) {
 		GetRandomDOGEAddress(),
 		GetRandomDOGEAddress(),
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), runeAmount),
+			common.NewCoin(common.DecaAsset(), runeAmount),
 			common.NewCoin(common.DOGEAsset, assetAmount),
 		},
 		common.Gas{
@@ -70,7 +70,7 @@ func (HandlerDonateSuite) TestDonate(c *C) {
 	c.Assert(err, IsNil)
 	afterPool, err := w.keeper.GetPool(w.ctx, common.DOGEAsset)
 	c.Assert(err, IsNil)
-	c.Assert(afterPool.BalanceRune.String(), Equals, prePool.BalanceRune.Add(msg.RuneAmount).String())
+	c.Assert(afterPool.BalanceDeca.String(), Equals, prePool.BalanceDeca.Add(msg.RuneAmount).String())
 	c.Assert(afterPool.BalanceAsset.String(), Equals, prePool.BalanceAsset.Add(msg.AssetAmount).String())
 
 	msgBan := NewMsgBan(GetRandomBech32Addr(), w.activeNodeAccount.NodeAddress)
@@ -160,7 +160,7 @@ func (HandlerDonateSuite) TestDonateAmountMismatch(c *C) {
 		GetRandomDOGEAddress(),
 		GetRandomDOGEAddress(),
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), txRune),
+			common.NewCoin(common.DecaAsset(), txRune),
 			common.NewCoin(common.DOGEAsset, txAsset),
 		},
 		common.Gas{

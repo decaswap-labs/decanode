@@ -20,7 +20,7 @@ func (s *MsgRebondSuite) TestMsgRebondFromMemo(c *C) {
 	signerAddr := GetRandomBech32Addr()
 
 	tx := GetRandomTx()
-	tx.Coins[0] = common.NewCoin(common.RuneAsset(), cosmos.NewUint(200000))
+	tx.Coins[0] = common.NewCoin(common.DecaAsset(), cosmos.NewUint(200000))
 
 	txNoId := tx
 	txNoId.ID = ""

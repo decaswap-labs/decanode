@@ -175,6 +175,6 @@ func (m Migrator) Migrate13to14(ctx sdk.Context) error {
 		return err
 	}
 
-	// ADR-023: Burn ~87% of Reserve and reduce MaxRuneSupply to 360M.
+	// ADR-023: Burn ~87% of Reserve and reduce MaxDecaSupply to 360M.
 	return m.BurnReserveAndReduceMaxSupply(ctx)
 }

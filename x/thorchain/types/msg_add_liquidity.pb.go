@@ -32,7 +32,7 @@ type MsgAddLiquidity struct {
 	Asset                gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,2,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
 	AssetAmount          cosmossdk_io_math.Uint                          `protobuf:"bytes,3,opt,name=asset_amount,json=assetAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"asset_amount"`
 	RuneAmount           cosmossdk_io_math.Uint                          `protobuf:"bytes,4,opt,name=rune_amount,json=runeAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amount"`
-	RuneAddress          gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,5,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress          gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,5,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	AssetAddress         gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,6,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
 	AffiliateAddress     gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,7,opt,name=affiliate_address,json=affiliateAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"affiliate_address,omitempty"`
 	AffiliateBasisPoints cosmossdk_io_math.Uint                          `protobuf:"bytes,8,opt,name=affiliate_basis_points,json=affiliateBasisPoints,proto3,customtype=cosmossdk.io/math.Uint" json:"affiliate_basis_points"`
@@ -79,9 +79,9 @@ func (m *MsgAddLiquidity) GetTx() common.Tx {
 	return common.Tx{}
 }
 
-func (m *MsgAddLiquidity) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *MsgAddLiquidity) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -195,10 +195,10 @@ func (m *MsgAddLiquidity) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x32
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintMsgAddLiquidity(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintMsgAddLiquidity(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -270,7 +270,7 @@ func (m *MsgAddLiquidity) Size() (n int) {
 	n += 1 + l + sovMsgAddLiquidity(uint64(l))
 	l = m.RuneAmount.Size()
 	n += 1 + l + sovMsgAddLiquidity(uint64(l))
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovMsgAddLiquidity(uint64(l))
 	}
@@ -462,7 +462,7 @@ func (m *MsgAddLiquidity) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -490,7 +490,7 @@ func (m *MsgAddLiquidity) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {

@@ -408,7 +408,7 @@ func (s *SignSuite) TestProcess(c *C) {
 			account: common.Account{
 				Coins: common.Coins{
 					common.NewCoin(common.ETHAsset, cosmos.NewUint(1000000)),
-					common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000000)),
+					common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000000)),
 				},
 			},
 		},

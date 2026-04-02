@@ -284,7 +284,7 @@ func (s *HandlerSetNodeKeysSuite) TestHandle(c *C) {
 		},
 	}
 	for _, tc := range testCases {
-		if common.RuneAsset().Native() != "" && tc.skipForNativeRune {
+		if common.DecaAsset().Native() != "" && tc.skipForNativeRune {
 			continue
 		}
 		ctx, mgr = setupManagerForTest(c)

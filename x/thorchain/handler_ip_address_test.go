@@ -178,7 +178,7 @@ func (s *HandlerIPAddressSuite) TestHandlerSetIPAddress_validation(c *C) {
 				nodeAccount := GetRandomValidatorNode(NodeWhiteListed)
 				FundModule(c, ctx, helper, BondName, common.One*100)
 				c.Assert(helper.SendFromModuleToAccount(ctx, ModuleName, nodeAccount.NodeAddress, common.Coins{
-					common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000*common.One)),
+					common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000*common.One)),
 				}), IsNil)
 				c.Assert(helper.Keeper.SetNodeAccount(ctx, nodeAccount), IsNil)
 				return NewMsgSetIPAddress("192.168.0.1", nodeAccount.NodeAddress)

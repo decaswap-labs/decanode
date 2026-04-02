@@ -257,9 +257,9 @@ type QueryClient interface {
 	StreamingSwaps(ctx context.Context, in *QueryStreamingSwapsRequest, opts ...grpc.CallOption) (*QueryStreamingSwapsResponse, error)
 	Ban(ctx context.Context, in *QueryBanRequest, opts ...grpc.CallOption) (*BanVoter, error)
 	Ragnarok(ctx context.Context, in *QueryRagnarokRequest, opts ...grpc.CallOption) (*QueryRagnarokResponse, error)
-	RunePool(ctx context.Context, in *QueryRunePoolRequest, opts ...grpc.CallOption) (*QueryRunePoolResponse, error)
-	RuneProvider(ctx context.Context, in *QueryRuneProviderRequest, opts ...grpc.CallOption) (*QueryRuneProviderResponse, error)
-	RuneProviders(ctx context.Context, in *QueryRuneProvidersRequest, opts ...grpc.CallOption) (*QueryRuneProvidersResponse, error)
+	DecaPool(ctx context.Context, in *QueryDecaPoolRequest, opts ...grpc.CallOption) (*QueryDecaPoolResponse, error)
+	DecaProvider(ctx context.Context, in *QueryDecaProviderRequest, opts ...grpc.CallOption) (*QueryDecaProviderResponse, error)
+	DecaProviders(ctx context.Context, in *QueryDecaProvidersRequest, opts ...grpc.CallOption) (*QueryDecaProvidersResponse, error)
 	MimirValues(ctx context.Context, in *QueryMimirValuesRequest, opts ...grpc.CallOption) (*QueryMimirValuesResponse, error)
 	MimirWithKey(ctx context.Context, in *QueryMimirWithKeyRequest, opts ...grpc.CallOption) (*QueryMimirWithKeyResponse, error)
 	MimirAdminValues(ctx context.Context, in *QueryMimirAdminValuesRequest, opts ...grpc.CallOption) (*QueryMimirAdminValuesResponse, error)
@@ -568,27 +568,27 @@ func (c *queryClient) Ragnarok(ctx context.Context, in *QueryRagnarokRequest, op
 	return out, nil
 }
 
-func (c *queryClient) RunePool(ctx context.Context, in *QueryRunePoolRequest, opts ...grpc.CallOption) (*QueryRunePoolResponse, error) {
-	out := new(QueryRunePoolResponse)
-	err := c.cc.Invoke(ctx, "/types.Query/RunePool", in, out, opts...)
+func (c *queryClient) DecaPool(ctx context.Context, in *QueryDecaPoolRequest, opts ...grpc.CallOption) (*QueryDecaPoolResponse, error) {
+	out := new(QueryDecaPoolResponse)
+	err := c.cc.Invoke(ctx, "/types.Query/DecaPool", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) RuneProvider(ctx context.Context, in *QueryRuneProviderRequest, opts ...grpc.CallOption) (*QueryRuneProviderResponse, error) {
-	out := new(QueryRuneProviderResponse)
-	err := c.cc.Invoke(ctx, "/types.Query/RuneProvider", in, out, opts...)
+func (c *queryClient) DecaProvider(ctx context.Context, in *QueryDecaProviderRequest, opts ...grpc.CallOption) (*QueryDecaProviderResponse, error) {
+	out := new(QueryDecaProviderResponse)
+	err := c.cc.Invoke(ctx, "/types.Query/DecaProvider", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) RuneProviders(ctx context.Context, in *QueryRuneProvidersRequest, opts ...grpc.CallOption) (*QueryRuneProvidersResponse, error) {
-	out := new(QueryRuneProvidersResponse)
-	err := c.cc.Invoke(ctx, "/types.Query/RuneProviders", in, out, opts...)
+func (c *queryClient) DecaProviders(ctx context.Context, in *QueryDecaProvidersRequest, opts ...grpc.CallOption) (*QueryDecaProvidersResponse, error) {
+	out := new(QueryDecaProvidersResponse)
+	err := c.cc.Invoke(ctx, "/types.Query/DecaProviders", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1128,9 +1128,9 @@ type QueryServer interface {
 	StreamingSwaps(context.Context, *QueryStreamingSwapsRequest) (*QueryStreamingSwapsResponse, error)
 	Ban(context.Context, *QueryBanRequest) (*BanVoter, error)
 	Ragnarok(context.Context, *QueryRagnarokRequest) (*QueryRagnarokResponse, error)
-	RunePool(context.Context, *QueryRunePoolRequest) (*QueryRunePoolResponse, error)
-	RuneProvider(context.Context, *QueryRuneProviderRequest) (*QueryRuneProviderResponse, error)
-	RuneProviders(context.Context, *QueryRuneProvidersRequest) (*QueryRuneProvidersResponse, error)
+	DecaPool(context.Context, *QueryDecaPoolRequest) (*QueryDecaPoolResponse, error)
+	DecaProvider(context.Context, *QueryDecaProviderRequest) (*QueryDecaProviderResponse, error)
+	DecaProviders(context.Context, *QueryDecaProvidersRequest) (*QueryDecaProvidersResponse, error)
 	MimirValues(context.Context, *QueryMimirValuesRequest) (*QueryMimirValuesResponse, error)
 	MimirWithKey(context.Context, *QueryMimirWithKeyRequest) (*QueryMimirWithKeyResponse, error)
 	MimirAdminValues(context.Context, *QueryMimirAdminValuesRequest) (*QueryMimirAdminValuesResponse, error)
@@ -1273,14 +1273,14 @@ func (*UnimplementedQueryServer) Ban(ctx context.Context, req *QueryBanRequest) 
 func (*UnimplementedQueryServer) Ragnarok(ctx context.Context, req *QueryRagnarokRequest) (*QueryRagnarokResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ragnarok not implemented")
 }
-func (*UnimplementedQueryServer) RunePool(ctx context.Context, req *QueryRunePoolRequest) (*QueryRunePoolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RunePool not implemented")
+func (*UnimplementedQueryServer) DecaPool(ctx context.Context, req *QueryDecaPoolRequest) (*QueryDecaPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecaPool not implemented")
 }
-func (*UnimplementedQueryServer) RuneProvider(ctx context.Context, req *QueryRuneProviderRequest) (*QueryRuneProviderResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RuneProvider not implemented")
+func (*UnimplementedQueryServer) DecaProvider(ctx context.Context, req *QueryDecaProviderRequest) (*QueryDecaProviderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecaProvider not implemented")
 }
-func (*UnimplementedQueryServer) RuneProviders(ctx context.Context, req *QueryRuneProvidersRequest) (*QueryRuneProvidersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RuneProviders not implemented")
+func (*UnimplementedQueryServer) DecaProviders(ctx context.Context, req *QueryDecaProvidersRequest) (*QueryDecaProvidersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecaProviders not implemented")
 }
 func (*UnimplementedQueryServer) MimirValues(ctx context.Context, req *QueryMimirValuesRequest) (*QueryMimirValuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MimirValues not implemented")
@@ -1938,56 +1938,56 @@ func _Query_Ragnarok_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_RunePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryRunePoolRequest)
+func _Query_DecaPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDecaPoolRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).RunePool(ctx, in)
+		return srv.(QueryServer).DecaPool(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/types.Query/RunePool",
+		FullMethod: "/types.Query/DecaPool",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).RunePool(ctx, req.(*QueryRunePoolRequest))
+		return srv.(QueryServer).DecaPool(ctx, req.(*QueryDecaPoolRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_RuneProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryRuneProviderRequest)
+func _Query_DecaProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDecaProviderRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).RuneProvider(ctx, in)
+		return srv.(QueryServer).DecaProvider(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/types.Query/RuneProvider",
+		FullMethod: "/types.Query/DecaProvider",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).RuneProvider(ctx, req.(*QueryRuneProviderRequest))
+		return srv.(QueryServer).DecaProvider(ctx, req.(*QueryDecaProviderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_RuneProviders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryRuneProvidersRequest)
+func _Query_DecaProviders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDecaProvidersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).RuneProviders(ctx, in)
+		return srv.(QueryServer).DecaProviders(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/types.Query/RuneProviders",
+		FullMethod: "/types.Query/DecaProviders",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).RuneProviders(ctx, req.(*QueryRuneProvidersRequest))
+		return srv.(QueryServer).DecaProviders(ctx, req.(*QueryDecaProvidersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -3095,16 +3095,16 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Ragnarok_Handler,
 		},
 		{
-			MethodName: "RunePool",
-			Handler:    _Query_RunePool_Handler,
+			MethodName: "DecaPool",
+			Handler:    _Query_DecaPool_Handler,
 		},
 		{
-			MethodName: "RuneProvider",
-			Handler:    _Query_RuneProvider_Handler,
+			MethodName: "DecaProvider",
+			Handler:    _Query_DecaProvider_Handler,
 		},
 		{
-			MethodName: "RuneProviders",
-			Handler:    _Query_RuneProviders_Handler,
+			MethodName: "DecaProviders",
+			Handler:    _Query_DecaProviders_Handler,
 		},
 		{
 			MethodName: "MimirValues",

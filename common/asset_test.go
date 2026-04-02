@@ -15,8 +15,8 @@ func (s AssetSuite) TestAsset(c *C) {
 	asset, err := NewAsset("thor.rune")
 	c.Assert(err, IsNil)
 	c.Check(asset.Valid(), IsNil)
-	c.Check(asset.Equals(RuneNative), Equals, true)
-	c.Check(asset.IsRune(), Equals, true)
+	c.Check(asset.Equals(DecaNative), Equals, true)
+	c.Check(asset.IsDeca(), Equals, true)
 	c.Check(asset.IsEmpty(), Equals, false)
 	c.Check(asset.Synth, Equals, false)
 	c.Check(asset.String(), Equals, "THOR.RUNE")
@@ -36,10 +36,10 @@ func (s AssetSuite) TestAsset(c *C) {
 	c.Check(asset.Ticker.Equals(Ticker("SWIPE.B")), Equals, true)
 
 	// parse without chain
-	asset, err = NewAsset("rune")
+	asset, err = NewAsset("deca")
 	c.Assert(err, IsNil)
 	c.Check(asset.Valid(), IsNil)
-	c.Check(asset.Equals(RuneNative), Equals, true)
+	c.Check(asset.Equals(DecaNative), Equals, true)
 
 	// ETH test
 	asset, err = NewAsset("eth.knc")
@@ -57,7 +57,7 @@ func (s AssetSuite) TestAsset(c *C) {
 	c.Check(asset.Valid(), IsNil)
 	c.Check(asset.Chain.Equals(DOGEChain), Equals, true)
 	c.Check(asset.Equals(DOGEAsset), Equals, true)
-	c.Check(asset.IsRune(), Equals, false)
+	c.Check(asset.IsDeca(), Equals, false)
 	c.Check(asset.IsEmpty(), Equals, false)
 	c.Check(asset.String(), Equals, "DOGE.DOGE")
 
@@ -67,7 +67,7 @@ func (s AssetSuite) TestAsset(c *C) {
 	c.Check(asset.Valid(), IsNil)
 	c.Check(asset.Chain.Equals(BCHChain), Equals, true)
 	c.Check(asset.Equals(BCHAsset), Equals, true)
-	c.Check(asset.IsRune(), Equals, false)
+	c.Check(asset.IsDeca(), Equals, false)
 	c.Check(asset.IsEmpty(), Equals, false)
 	c.Check(asset.String(), Equals, "BCH.BCH")
 
@@ -77,7 +77,7 @@ func (s AssetSuite) TestAsset(c *C) {
 	c.Check(asset.Valid(), IsNil)
 	c.Check(asset.Chain.Equals(LTCChain), Equals, true)
 	c.Check(asset.Equals(LTCAsset), Equals, true)
-	c.Check(asset.IsRune(), Equals, false)
+	c.Check(asset.IsDeca(), Equals, false)
 	c.Check(asset.IsEmpty(), Equals, false)
 	c.Check(asset.String(), Equals, "LTC.LTC")
 
@@ -87,7 +87,7 @@ func (s AssetSuite) TestAsset(c *C) {
 	c.Check(asset.Valid(), IsNil)
 	c.Check(asset.Chain.Equals(GAIAChain), Equals, true)
 	c.Check(asset.Equals(ATOMAsset), Equals, true)
-	c.Check(asset.IsRune(), Equals, false)
+	c.Check(asset.IsDeca(), Equals, false)
 	c.Check(asset.IsEmpty(), Equals, false)
 	c.Check(asset.String(), Equals, "GAIA.ATOM")
 
@@ -97,7 +97,7 @@ func (s AssetSuite) TestAsset(c *C) {
 	c.Check(asset.Valid(), IsNil)
 	c.Check(asset.Chain.Equals(NOBLEChain), Equals, true)
 	c.Check(asset.Equals(USDCAsset), Equals, true)
-	c.Check(asset.IsRune(), Equals, false)
+	c.Check(asset.IsDeca(), Equals, false)
 	c.Check(asset.IsEmpty(), Equals, false)
 	c.Check(asset.String(), Equals, "NOBLE.USDC")
 	c.Check(asset.IsGasAsset(), Equals, true) // USDC is gas asset for Noble

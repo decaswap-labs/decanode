@@ -22,7 +22,7 @@ func (MsgTradeAccountSuite) TestDeposit(c *C) {
 	m = NewMsgTradeAccountDeposit(common.EmptyAsset, amt, signer, signer, dummyTx)
 	c.Check(m.ValidateBasic(), NotNil)
 
-	m = NewMsgTradeAccountDeposit(common.RuneAsset(), amt, signer, signer, dummyTx)
+	m = NewMsgTradeAccountDeposit(common.DecaAsset(), amt, signer, signer, dummyTx)
 	c.Check(m.ValidateBasic(), NotNil)
 
 	m = NewMsgTradeAccountDeposit(asset, cosmos.ZeroUint(), signer, signer, dummyTx)
@@ -42,7 +42,7 @@ func (MsgTradeAccountSuite) TestWithdrawal(c *C) {
 	m = NewMsgTradeAccountWithdrawal(common.EmptyAsset, amt, ethAddr, signer, dummyTx)
 	c.Check(m.ValidateBasic(), NotNil)
 
-	m = NewMsgTradeAccountWithdrawal(common.RuneAsset(), amt, ethAddr, signer, dummyTx)
+	m = NewMsgTradeAccountWithdrawal(common.DecaAsset(), amt, ethAddr, signer, dummyTx)
 	c.Check(m.ValidateBasic(), NotNil)
 
 	m = NewMsgTradeAccountWithdrawal(asset, cosmos.ZeroUint(), ethAddr, signer, dummyTx)

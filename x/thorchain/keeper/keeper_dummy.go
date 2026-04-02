@@ -94,7 +94,7 @@ func (k KVStoreDummy) GetKey(prefix kvTypes.DbPrefix, key string, other ...strin
 	return []byte(s)
 }
 
-func (k KVStoreDummy) GetRuneBalanceOfModule(ctx cosmos.Context, moduleName string) cosmos.Uint {
+func (k KVStoreDummy) GetDecaBalanceOfModule(ctx cosmos.Context, moduleName string) cosmos.Uint {
 	return cosmos.ZeroUint()
 }
 
@@ -201,11 +201,11 @@ func (k KVStoreDummy) GetSecuredAsset(ctx cosmos.Context, asset common.Asset) (S
 func (k KVStoreDummy) SetSecuredAsset(ctx cosmos.Context, unit SecuredAsset)      {}
 func (k KVStoreDummy) GetSecuredAssetIterator(ctx cosmos.Context) cosmos.Iterator { return nil }
 
-func (k KVStoreDummy) GetRUNEPool(ctx cosmos.Context) (RUNEPool, error) {
-	return RUNEPool{}, kaboom
+func (k KVStoreDummy) GetDECAPool(ctx cosmos.Context) (DECAPool, error) {
+	return DECAPool{}, kaboom
 }
 
-func (k KVStoreDummy) SetRUNEPool(ctx cosmos.Context, rp RUNEPool) {}
+func (k KVStoreDummy) SetDECAPool(ctx cosmos.Context, rp DECAPool) {}
 
 func (k KVStoreDummy) GetRUNEProvider(ctx cosmos.Context, addr cosmos.AccAddress) (RUNEProvider, error) {
 	return RUNEProvider{}, kaboom

@@ -192,7 +192,7 @@ func (HandlerRagnarokSuite) TestSlash(c *C) {
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	na := GetRandomValidatorNode(NodeActive)
 	na.Bond = cosmos.NewUint(100 * common.One)
 	retireVault.Membership = []string{

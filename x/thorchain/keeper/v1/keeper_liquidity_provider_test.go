@@ -21,17 +21,17 @@ func (s *KeeperLiquidityProviderSuite) TestLiquidityProvider(c *C) {
 
 	lp, err := k.GetLiquidityProvider(ctx, asset, GetRandomRUNEAddress())
 	c.Assert(err, IsNil)
-	c.Check(lp.PendingRune, NotNil)
+	c.Check(lp.PendingDeca, NotNil)
 	c.Check(lp.Units, NotNil)
 
 	lp = LiquidityProvider{
 		Asset:        asset,
 		Units:        cosmos.NewUint(12),
-		RuneAddress:  GetRandomRUNEAddress(),
+		DecaAddress:  GetRandomRUNEAddress(),
 		AssetAddress: GetRandomBTCAddress(),
 	}
 	k.SetLiquidityProvider(ctx, lp)
-	lp, err = k.GetLiquidityProvider(ctx, asset, lp.RuneAddress)
+	lp, err = k.GetLiquidityProvider(ctx, asset, lp.DecaAddress)
 	c.Assert(err, IsNil)
 	c.Check(lp.Asset.Equals(asset), Equals, true)
 	c.Check(lp.Units.Equal(cosmos.NewUint(12)), Equals, true)

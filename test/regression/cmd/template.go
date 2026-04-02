@@ -60,8 +60,8 @@ var funcMap = template.FuncMap{
 	"addr_module_treasury": func() string {
 		return ModuleAddrTreasury
 	},
-	"addr_module_rune_pool": func() string {
-		return ModuleAddrRUNEPool
+	"addr_module_deca_pool": func() string {
+		return ModuleAddrDECAPool
 	},
 	"addr_module_tcy_claim": func() string {
 		return ModuleAddrClaiming

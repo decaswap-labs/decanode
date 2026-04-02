@@ -132,7 +132,7 @@ func (pair tradePair) String() string {
 }
 
 func (pair tradePair) HasRune() bool {
-	return pair.source.IsRune() || pair.target.IsRune()
+	return pair.source.IsDeca() || pair.target.IsDeca()
 }
 
 func (pair tradePair) Equals(p tradePair) bool {
@@ -157,9 +157,9 @@ func (p tradePairs) Append(pair tradePair) tradePairs {
 func (p tradePairs) findMatchingTrades(trade tradePair, pairs tradePairs) tradePairs {
 	var comp func(pair tradePair) bool
 	switch {
-	case trade.source.IsRune():
+	case trade.source.IsDeca():
 		comp = func(pair tradePair) bool { return pair.source.Equals(trade.target) }
-	case trade.target.IsRune():
+	case trade.target.IsDeca():
 		comp = func(pair tradePair) bool { return pair.target.Equals(trade.source) }
 	default:
 		comp = func(pair tradePair) bool { return pair.source.Equals(trade.target) || pair.target.Equals(trade.source) }

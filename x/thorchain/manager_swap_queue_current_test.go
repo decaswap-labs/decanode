@@ -45,17 +45,17 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ATOMAsset
-	pool.BalanceRune = cosmos.NewUint(143166 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(143166 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 	pool = NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(73708333 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(73708333 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 	pool = NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolStaged
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -66,7 +66,7 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 	msgs := []*MsgSwap{
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("5E1DF027321F1FE37CA19B9ECB11C2B4ABEC0D8322199D335D9CE4C39F85F115"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One))},
 		}, common.ATOMAsset, GetRandomGAIAAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
@@ -74,27 +74,27 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("53C1A22436B385133BDD9157BB365DB7AAC885910D2FA7C9DC3578A04FFD4ADC"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(50*common.One))},
-		}, common.RuneAsset(), GetRandomGAIAAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomGAIAAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("6A470EB9AFE82981979A5EEEED3296E1E325597794BD5BFB3543A372CAF435E5"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One))},
 		}, common.ATOMAsset, GetRandomGAIAAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("5EE9A7CCC55A3EBAFA0E542388CA1B909B1E3CE96929ED34427B96B7CCE9F8E8"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))},
 		}, common.ATOMAsset, GetRandomGAIAAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0FF2A521FB11FFEA4DFE3B7AD4066FF0A33202E652D846F8397EFC447C97A91B"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One))},
 		}, common.ATOMAsset, GetRandomGAIAAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
@@ -103,7 +103,7 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("1100000000000000000000000000000000000000000000000000000000000001"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(150*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -111,7 +111,7 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("1100000000000000000000000000000000000000000000000000000000000002"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(151*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -120,7 +120,7 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("1100000000000000000000000000000000000000000000000000000000000003"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset.GetSyntheticAsset(), cosmos.NewUint(3*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -156,70 +156,70 @@ func (s SwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("AA00000000000000000000000000000000000000000000000000000000000001"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(2*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("AA00000000000000000000000000000000000000000000000000000000000002"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(50*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("AA00000000000000000000000000000000000000000000000000000000000003"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(1*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("AA00000000000000000000000000000000000000000000000000000000000004"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(100*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("AA00000000000000000000000000000000000000000000000000000000000005"),
 			Coins: common.Coins{common.NewCoin(common.ATOMAsset, cosmos.NewUint(10*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("BB00000000000000000000000000000000000000000000000000000000000001"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(2*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("BB00000000000000000000000000000000000000000000000000000000000002"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(50*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("BB00000000000000000000000000000000000000000000000000000000000003"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(1*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("BB00000000000000000000000000000000000000000000000000000000000004"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(100*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("BB00000000000000000000000000000000000000000000000000000000000005"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -294,7 +294,7 @@ func (s SwapQueueSuite) TestStreamingSwapSelection(c *C) {
 		txID,
 		ethAddr,
 		ethAddr,
-		common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(common.One*100))),
+		common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(common.One*100))),
 		common.Gas{common.NewCoin(common.ETHAsset, cosmos.NewUint(common.One))},
 		"",
 	)
@@ -341,7 +341,7 @@ func (s SwapQueueSuite) TestStreamingSwapOutbounds(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(143166 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(143166 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 	pool.Asset = common.ETHAsset
@@ -470,7 +470,7 @@ func (s SwapQueueSuite) TestStreamingLimitSwapNoDivisionByZero(c *C) {
 	// Setup pool
 	pool := NewPool()
 	pool.Asset = common.AVAXAsset
-	pool.BalanceRune = cosmos.NewUint(143166 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(143166 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -484,7 +484,7 @@ func (s SwapQueueSuite) TestStreamingLimitSwapNoDivisionByZero(c *C) {
 		txID,
 		GetRandomTHORAddress(),
 		GetRandomTHORAddress(),
-		common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(40000000000))),
+		common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(40000000000))),
 		common.Gas{},
 		"=<:AVAX-USDT-0X9702230A8EA53601F5CD2DC00FDBC13D4DF4A8C7:thor1dvvr4kdeurs8fdwgrql6je7l2v9ma73dp50n7m:40000000000/2/2",
 	)

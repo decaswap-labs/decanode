@@ -18,7 +18,7 @@ func (PoolTestSuite) TestPool(c *C) {
 	c.Check(p.IsEmpty(), Equals, true)
 	p.Asset = common.ETHAsset
 	c.Check(p.IsEmpty(), Equals, false)
-	p.BalanceRune = cosmos.NewUint(100 * common.One)
+	p.BalanceDeca = cosmos.NewUint(100 * common.One)
 	p.BalanceAsset = cosmos.NewUint(50 * common.One)
 	c.Check(p.AssetValueInRune(cosmos.NewUint(25*common.One)).Equal(cosmos.NewUint(50*common.One)), Equals, true)
 	c.Check(p.RuneValueInAsset(cosmos.NewUint(50*common.One)).Equal(cosmos.NewUint(25*common.One)), Equals, true)
@@ -54,7 +54,7 @@ func (PoolTestSuite) TestPool(c *C) {
 	p1.Asset = common.ETHAsset
 	c.Check(p1.AssetValueInRune(cosmos.NewUint(100)).Uint64(), Equals, cosmos.ZeroUint().Uint64())
 	c.Check(p1.RuneValueInAsset(cosmos.NewUint(100)).Uint64(), Equals, cosmos.ZeroUint().Uint64())
-	p1.BalanceRune = cosmos.NewUint(100 * common.One)
+	p1.BalanceDeca = cosmos.NewUint(100 * common.One)
 	p1.BalanceAsset = cosmos.NewUint(50 * common.One)
 	c.Check(p1.Valid(), IsNil)
 
@@ -94,7 +94,7 @@ func (PoolTestSuite) TestPools(c *C) {
 	eth.Asset = common.ETHAsset
 	btc := NewPool()
 	btc.Asset = common.BTCAsset
-	btc.BalanceRune = cosmos.NewUint(10)
+	btc.BalanceDeca = cosmos.NewUint(10)
 
 	pools = pools.Set(eth)
 	pools = pools.Set(btc)
@@ -107,14 +107,14 @@ func (PoolTestSuite) TestPools(c *C) {
 	pool, ok = pools.Get(common.BTCAsset)
 	c.Check(ok, Equals, true)
 	c.Check(pool.Asset.Equals(common.BTCAsset), Equals, true)
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(10))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(10))
 
-	pool.BalanceRune = cosmos.NewUint(20)
+	pool.BalanceDeca = cosmos.NewUint(20)
 	pools = pools.Set(pool)
 	pool, ok = pools.Get(common.BTCAsset)
 	c.Check(ok, Equals, true)
 	c.Check(pool.Asset.Equals(common.BTCAsset), Equals, true)
-	c.Check(pool.BalanceRune.Uint64(), Equals, uint64(20))
+	c.Check(pool.BalanceDeca.Uint64(), Equals, uint64(20))
 }
 
 func (PoolTestSuite) TestCalcUnits(c *C) {
@@ -132,7 +132,7 @@ func (PoolTestSuite) TestCalcUnits(c *C) {
 
 	// asset balance <= synthSupply / 2
 	pool.BalanceAsset = cosmos.NewUint(100)
-	pool.BalanceRune = cosmos.NewUint(100)
+	pool.BalanceDeca = cosmos.NewUint(100)
 	pool.LPUnits = cosmos.NewUint(100)
 	synthSupply = cosmos.NewUint(200)
 	units = pool.CalcUnits(synthSupply)
@@ -141,7 +141,7 @@ func (PoolTestSuite) TestCalcUnits(c *C) {
 
 	// normal case
 	pool.BalanceAsset = cosmos.NewUint(1_000)
-	pool.BalanceRune = cosmos.NewUint(1_000)
+	pool.BalanceDeca = cosmos.NewUint(1_000)
 	synthSupply = cosmos.NewUint(100)
 	units = pool.CalcUnits(synthSupply)
 	c.Assert(pool.SynthUnits.Uint64(), Equals, uint64(5))
@@ -153,24 +153,24 @@ func (PoolTestSuite) TestReimbursementAndDisbursement(c *C) {
 	c.Check(p.IsEmpty(), Equals, true)
 	p.Asset = common.ETHAsset
 	c.Check(p.IsEmpty(), Equals, false)
-	p.BalanceRune = cosmos.NewUint(100 * common.One)
+	p.BalanceDeca = cosmos.NewUint(100 * common.One)
 	p.BalanceAsset = cosmos.NewUint(50 * common.One)
 	c.Check(p.RuneDisbursementForAssetAdd(cosmos.NewUint(150*common.One)).Equal(cosmos.NewUint(75*common.One)), Equals, true)
-	c.Check(p.AssetDisbursementForRuneAdd(cosmos.NewUint(900*common.One)).Equal(cosmos.NewUint(45*common.One)), Equals, true)
+	c.Check(p.AssetDisbursementForDecaAdd(cosmos.NewUint(900*common.One)).Equal(cosmos.NewUint(45*common.One)), Equals, true)
 
-	p.BalanceRune = cosmos.NewUint(0)
+	p.BalanceDeca = cosmos.NewUint(0)
 	c.Check(p.RuneDisbursementForAssetAdd(cosmos.NewUint(1*common.One)).Equal(cosmos.NewUint(0*common.One)), Equals, true)
-	c.Check(p.AssetDisbursementForRuneAdd(cosmos.NewUint(1*common.One)).Equal(cosmos.NewUint(0*common.One)), Equals, true)
+	c.Check(p.AssetDisbursementForDecaAdd(cosmos.NewUint(1*common.One)).Equal(cosmos.NewUint(0*common.One)), Equals, true)
 
-	p.BalanceRune = cosmos.NewUint(100 * common.One)
+	p.BalanceDeca = cosmos.NewUint(100 * common.One)
 	p.BalanceAsset = cosmos.NewUint(0)
 	c.Check(p.RuneDisbursementForAssetAdd(cosmos.NewUint(1*common.One)).Equal(cosmos.NewUint(0*common.One)), Equals, true)
-	c.Check(p.AssetDisbursementForRuneAdd(cosmos.NewUint(1*common.One)).Equal(cosmos.NewUint(0*common.One)), Equals, true)
+	c.Check(p.AssetDisbursementForDecaAdd(cosmos.NewUint(1*common.One)).Equal(cosmos.NewUint(0*common.One)), Equals, true)
 }
 
 func (PoolTestSuite) TestLUVI(c *C) {
 	p := NewPool()
-	p.BalanceRune = cosmos.NewUint(100)
+	p.BalanceDeca = cosmos.NewUint(100)
 	p.BalanceAsset = cosmos.NewUint(50)
 	p.LPUnits = cosmos.NewUint(75)
 	p.SynthUnits = cosmos.NewUint(12)

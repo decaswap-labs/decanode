@@ -152,7 +152,7 @@ func validateTssAuth(ctx cosmos.Context, k keeper.Keeper, signer cosmos.AccAddre
 		return fmt.Errorf("invalid signer status(%s)", nodeSigner.Status)
 	}
 	// ensure we have enough rune
-	minBond := k.GetConfigInt64(ctx, constants.MinimumBondInRune)
+	minBond := k.GetConfigInt64(ctx, constants.MinimumBondInDeca)
 	if nodeSigner.Bond.LT(cosmos.NewUint(uint64(minBond))) {
 		return fmt.Errorf("signer doesn't have enough rune")
 	}
@@ -363,7 +363,7 @@ func (h TssHandler) handle(ctx cosmos.Context, msg *MsgTssPool) error {
 						// take out bond from the node account and add it to the Reserve
 						// thus good behaviour nodes and liquidity providers will get reward
 						na.Bond = common.SafeSub(na.Bond, slashBond)
-						coin := common.NewCoin(common.RuneNative, slashBond)
+						coin := common.NewCoin(common.DecaNative, slashBond)
 						if !coin.Amount.IsZero() {
 							if err := h.mgr.Keeper().SendFromModuleToModule(ctx, BondName, ReserveName, common.NewCoins(coin)); err != nil {
 								return fmt.Errorf("fail to transfer funds from bond to reserve: %w", err)

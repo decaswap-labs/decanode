@@ -32,23 +32,23 @@ func withdraw(ctx cosmos.Context, msg MsgWithdrawLiquidity, mgr Manager) (cosmos
 		return cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), err
 	}
 
-	withdrawToSecuredAsset := !msg.Asset.IsNative() && !lp.AssetAddress.IsEmpty() && lp.AssetAddress.Equals(lp.RuneAddress)
+	withdrawToSecuredAsset := !msg.Asset.IsNative() && !lp.AssetAddress.IsEmpty() && lp.AssetAddress.Equals(lp.DecaAddress)
 
-	poolRune := pool.BalanceRune
+	poolRune := pool.BalanceDeca
 	poolAsset := pool.BalanceAsset
 	originalLiquidityProviderUnits := lp.Units
 	fLiquidityProviderUnit := lp.Units
 	if lp.Units.IsZero() {
-		if !lp.PendingRune.IsZero() || !lp.PendingAsset.IsZero() {
+		if !lp.PendingDeca.IsZero() || !lp.PendingAsset.IsZero() {
 			mgr.Keeper().RemoveLiquidityProvider(ctx, lp)
-			pool.PendingInboundRune = common.SafeSub(pool.PendingInboundRune, lp.PendingRune)
+			pool.PendingInboundDeca = common.SafeSub(pool.PendingInboundDeca, lp.PendingDeca)
 			pool.PendingInboundAsset = common.SafeSub(pool.PendingInboundAsset, lp.PendingAsset)
 			if err = mgr.Keeper().SetPool(ctx, pool); err != nil {
 				ctx.Logger().Error("failed to save pool pending inbound funds", "error", err)
 			}
 			// remove lp
 
-			return lp.PendingRune, cosmos.RoundToDecimal(lp.PendingAsset, pool.Decimals), lp.Units, cosmos.ZeroUint(), nil
+			return lp.PendingDeca, cosmos.RoundToDecimal(lp.PendingAsset, pool.Decimals), lp.Units, cosmos.ZeroUint(), nil
 		}
 		return cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), cosmos.ZeroUint(), errNoLiquidityUnitLeft
 	}
@@ -66,8 +66,8 @@ func withdraw(ctx cosmos.Context, msg MsgWithdrawLiquidity, mgr Manager) (cosmos
 	pauseAsym, _ := mgr.Keeper().GetMimir(ctx, fmt.Sprintf("PauseAsymWithdrawal-%s", pool.Asset.GetChain()))
 	assetToWithdraw := assetToWithdraw(msg, lp, pauseAsym)
 
-	if pool.Status == PoolAvailable && lp.RuneDepositValue.IsZero() && lp.AssetDepositValue.IsZero() {
-		lp.RuneDepositValue = lp.RuneDepositValue.Add(common.GetSafeShare(lp.Units, pool.GetPoolUnits(), pool.BalanceRune))
+	if pool.Status == PoolAvailable && lp.DecaDepositValue.IsZero() && lp.AssetDepositValue.IsZero() {
+		lp.DecaDepositValue = lp.DecaDepositValue.Add(common.GetSafeShare(lp.Units, pool.GetPoolUnits(), pool.BalanceDeca))
 		lp.AssetDepositValue = lp.AssetDepositValue.Add(common.GetSafeShare(lp.Units, pool.GetPoolUnits(), pool.BalanceAsset))
 	}
 
@@ -116,14 +116,14 @@ func withdraw(ctx cosmos.Context, msg MsgWithdrawLiquidity, mgr Manager) (cosmos
 	ctx.Logger().Info("client withdraw", "RUNE", withdrawRune, "asset", withDrawAsset, "units left", unitAfter)
 	// update pool
 	pool.LPUnits = common.SafeSub(pool.LPUnits, common.SafeSub(fLiquidityProviderUnit, unitAfter))
-	pool.BalanceRune = common.SafeSub(poolRune, withdrawRune)
+	pool.BalanceDeca = common.SafeSub(poolRune, withdrawRune)
 	pool.BalanceAsset = common.SafeSub(poolAsset, withDrawAsset)
 
-	ctx.Logger().Info("pool after withdraw", "pool unit", pool.GetPoolUnits(), "balance RUNE", pool.BalanceRune, "balance asset", pool.BalanceAsset)
+	ctx.Logger().Info("pool after withdraw", "pool unit", pool.GetPoolUnits(), "balance RUNE", pool.BalanceDeca, "balance asset", pool.BalanceAsset)
 
 	lp.LastWithdrawHeight = ctx.BlockHeight()
 	maxPts := cosmos.NewUint(uint64(MaxWithdrawBasisPoints))
-	lp.RuneDepositValue = common.SafeSub(lp.RuneDepositValue, common.GetSafeShare(msg.BasisPoints, maxPts, lp.RuneDepositValue))
+	lp.DecaDepositValue = common.SafeSub(lp.DecaDepositValue, common.GetSafeShare(msg.BasisPoints, maxPts, lp.DecaDepositValue))
 	lp.AssetDepositValue = common.SafeSub(lp.AssetDepositValue, common.GetSafeShare(msg.BasisPoints, maxPts, lp.AssetDepositValue))
 	lp.Units = unitAfter
 
@@ -133,7 +133,7 @@ func withdraw(ctx cosmos.Context, msg MsgWithdrawLiquidity, mgr Manager) (cosmos
 	}
 
 	// Create a pool event if THORNode have no rune or assets
-	if (pool.BalanceAsset.IsZero() || pool.BalanceRune.IsZero()) && !pool.Asset.IsSyntheticAsset() {
+	if (pool.BalanceAsset.IsZero() || pool.BalanceDeca.IsZero()) && !pool.Asset.IsSyntheticAsset() {
 		poolEvt := NewEventPool(pool.Asset, PoolStaged)
 		if err := mgr.EventMgr().EmitEvent(ctx, poolEvt); nil != err {
 			ctx.Logger().Error("fail to emit pool event", "error", err)
@@ -147,7 +147,7 @@ func withdraw(ctx cosmos.Context, msg MsgWithdrawLiquidity, mgr Manager) (cosmos
 	if mgr.Keeper().RagnarokInProgress(ctx) {
 		mgr.Keeper().SetLiquidityProvider(ctx, lp)
 	} else {
-		if !lp.Units.Add(lp.PendingAsset).Add(lp.PendingRune).IsZero() {
+		if !lp.Units.Add(lp.PendingAsset).Add(lp.PendingDeca).IsZero() {
 			mgr.Keeper().SetLiquidityProvider(ctx, lp)
 		} else {
 			mgr.Keeper().RemoveLiquidityProvider(ctx, lp)
@@ -158,11 +158,11 @@ func withdraw(ctx cosmos.Context, msg MsgWithdrawLiquidity, mgr Manager) (cosmos
 }
 
 func assetToWithdraw(msg MsgWithdrawLiquidity, lp LiquidityProvider, pauseAsym int64) common.Asset {
-	if lp.RuneAddress.IsEmpty() {
+	if lp.DecaAddress.IsEmpty() {
 		return msg.Asset
 	}
 	if lp.AssetAddress.IsEmpty() {
-		return common.RuneAsset()
+		return common.DecaAsset()
 	}
 	if pauseAsym > 0 {
 		return common.EmptyAsset
@@ -209,7 +209,7 @@ func calculateWithdraw(ctx cosmos.Context, keeper keeper.Keeper, poolAsset commo
 	remainingRune := common.SafeSub(poolRuneDepth, withdrawRune)
 	var x, X, Y, yAdd cosmos.Uint
 	var isPOL bool
-	if withdrawalAsset.IsRune() {
+	if withdrawalAsset.IsDeca() {
 		// POL withdraws are RUNE-only, so only needing to check for RUNE asymmetric withdraws.
 		polAddress, err := keeper.GetModuleAddress(ReserveName)
 		if err != nil {
@@ -239,7 +239,7 @@ func calculateWithdraw(ctx cosmos.Context, keeper keeper.Keeper, poolAsset commo
 		outputAmount = outputAmount.Add(liqFee)
 	}
 
-	if withdrawalAsset.IsRune() {
+	if withdrawalAsset.IsDeca() {
 		return outputAmount, cosmos.ZeroUint(), unitAfter, nil
 	}
 	return cosmos.ZeroUint(), outputAmount, unitAfter, nil

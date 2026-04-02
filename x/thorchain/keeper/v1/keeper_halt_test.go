@@ -73,7 +73,7 @@ func (s *KeeperHaltSuite) TestIsTradingHalt(c *C) {
 	// TCY trading halt
 	k.SetMimir(ctx, "HaltTCYTrading", 1)
 
-	txTCY := common.Tx{Coins: common.Coins{common.Coin{Asset: common.RuneNative}}}
+	txTCY := common.Tx{Coins: common.Coins{common.Coin{Asset: common.DecaNative}}}
 	swapTCYMsg := &MsgSwap{Tx: txTCY, TargetAsset: common.TCY}
 	addTCYMsg := &MsgAddLiquidity{Asset: common.TCY}
 	withdrawTCYMsg := &MsgWithdrawLiquidity{Asset: common.TCY}
@@ -83,7 +83,7 @@ func (s *KeeperHaltSuite) TestIsTradingHalt(c *C) {
 	c.Check(k.IsTradingHalt(ctx, withdrawTCYMsg), Equals, false)
 
 	txTCY = common.Tx{Coins: common.Coins{common.Coin{Asset: common.TCY}}}
-	swapTCYMsg = &MsgSwap{Tx: txTCY, TargetAsset: common.RuneNative}
+	swapTCYMsg = &MsgSwap{Tx: txTCY, TargetAsset: common.DecaNative}
 	c.Check(k.IsTradingHalt(ctx, swapTCYMsg), Equals, true)
 
 	_ = k.DeleteMimir(ctx, "HaltTCYTrading")

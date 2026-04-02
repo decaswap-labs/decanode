@@ -116,7 +116,7 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 		evt := NewEventPendingLiquidity(
 			msg.Asset,
 			WithdrawPendingLiquidity,
-			lp.RuneAddress,
+			lp.DecaAddress,
 			runeAmt,
 			lp.AssetAddress,
 			assetAmt,
@@ -173,7 +173,7 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 	if !assetAmt.IsZero() && !withdrawToSecuredAsset {
 		coin := common.NewCoin(msg.Asset, assetAmt)
 
-		if !msg.Asset.IsRune() && !lp.AssetAddress.IsChain(msg.Asset.GetChain()) {
+		if !msg.Asset.IsDeca() && !lp.AssetAddress.IsChain(msg.Asset.GetChain()) {
 			// TODO: this might be an issue for single sided/AVAX->ETH, ETH -> AVAX
 			if err := h.swap(ctx, msg, coin, lp.AssetAddress); err != nil {
 				return nil, err
@@ -186,8 +186,8 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 	}
 
 	if !runeAmt.IsZero() {
-		coin := common.NewCoin(common.RuneAsset(), runeAmt)
-		if err := transfer(coin, lp.RuneAddress); err != nil {
+		coin := common.NewCoin(common.DecaAsset(), runeAmt)
+		if err := transfer(coin, lp.DecaAddress); err != nil {
 			return nil, err
 		}
 
@@ -197,7 +197,7 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 			return nil, err
 		}
 
-		if polAddress.Equals(lp.RuneAddress) {
+		if polAddress.Equals(lp.DecaAddress) {
 			pol, err := h.mgr.Keeper().GetPOL(ctx)
 			if err != nil {
 				return nil, err
@@ -218,7 +218,7 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 	}
 
 	// any extra rune in the transaction will be donated to reserve
-	reserveCoin := msg.Tx.Coins.GetCoin(common.RuneAsset())
+	reserveCoin := msg.Tx.Coins.GetCoin(common.DecaAsset())
 	if !reserveCoin.IsEmpty() {
 		if err := h.mgr.Keeper().AddPoolFeeToReserve(ctx, reserveCoin.Amount); err != nil {
 			ctx.Logger().Error("fail to add fee to reserve", "error", err)
@@ -228,7 +228,7 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 
 	// any extra non-rune in the transaction will be donated to its pool, if existing
 	for _, withdrawalCoin := range msg.Tx.Coins {
-		if withdrawalCoin.IsEmpty() || withdrawalCoin.Asset == common.RuneAsset() {
+		if withdrawalCoin.IsEmpty() || withdrawalCoin.Asset == common.DecaAsset() {
 			continue
 		}
 

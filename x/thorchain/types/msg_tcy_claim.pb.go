@@ -28,7 +28,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgTCYClaim struct {
-	RuneAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	L1Address   gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,2,opt,name=l1_address,json=l1Address,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"l1_address,omitempty"`
 	Signer      github_com_cosmos_cosmos_sdk_types.AccAddress   `protobuf:"bytes,3,opt,name=signer,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"signer,omitempty"`
 }
@@ -66,9 +66,9 @@ func (m *MsgTCYClaim) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgTCYClaim proto.InternalMessageInfo
 
-func (m *MsgTCYClaim) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *MsgTCYClaim) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -150,10 +150,10 @@ func (m *MsgTCYClaim) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintMsgTcyClaim(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintMsgTcyClaim(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -177,7 +177,7 @@ func (m *MsgTCYClaim) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovMsgTcyClaim(uint64(l))
 	}
@@ -229,7 +229,7 @@ func (m *MsgTCYClaim) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -257,7 +257,7 @@ func (m *MsgTCYClaim) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {

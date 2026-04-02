@@ -41,8 +41,8 @@ import (
 // QueryQuoteSaverDepositResponse
 // QueryQuoteSaverWithdrawResponse
 // QueryQuoteSwapResponse
-// QueryRuneProviderResponse
-// QueryRuneProvidersResponse
+// QueryDecaProviderResponse
+// QueryDecaProvidersResponse
 // QuerySaverResponse
 // QueryStreamingSwapResponse
 // QueryStreamingSwapsResponse
@@ -55,7 +55,7 @@ import (
 // QueryTssMetricResponse
 // QueryInvariantResponse
 // QueryInvariantsResponse
-// QueryRunePoolResponse
+// QueryDecaPoolResponse
 // QueryTradeUnitResponse
 
 type QuerierSuite struct {
@@ -329,7 +329,7 @@ func (s *QuerierSuite) TestQueryNodeAccounts(c *C) {
 	network, _ := keeper.GetNetwork(ctx)
 	network.BondRewardRune = cosmos.NewUint(common.One * 1000)
 	c.Assert(keeper.SetNetwork(ctx, network), IsNil)
-	keeper.SetMimir(ctx, "MinimumBondInRune", common.One*1000)
+	keeper.SetMimir(ctx, "MinimumBondInDeca", common.One*1000)
 
 	queryNodesResp, err = queryServer.Nodes(ctx, &types.QueryNodesRequest{})
 	c.Assert(err, IsNil)
@@ -542,7 +542,7 @@ func (s *QuerierSuite) TestQueryLiquidityProviders(c *C) {
 	c.Assert(err, IsNil)
 	s.k.SetLiquidityProvider(s.ctx, LiquidityProvider{
 		Asset:              common.ETHAsset,
-		RuneAddress:        GetRandomETHAddress(),
+		DecaAddress:        GetRandomETHAddress(),
 		AssetAddress:       GetRandomETHAddress(),
 		LastAddHeight:      1024,
 		LastWithdrawHeight: 0,
@@ -563,7 +563,7 @@ func (s *QuerierSuite) TestQueryLiquidityProviders(c *C) {
 
 	s.k.SetLiquidityProvider(s.ctx, LiquidityProvider{
 		Asset:              common.ETHAsset.GetSyntheticAsset(),
-		RuneAddress:        GetRandomETHAddress(),
+		DecaAddress:        GetRandomETHAddress(),
 		AssetAddress:       GetRandomRUNEAddress(),
 		LastAddHeight:      1024,
 		LastWithdrawHeight: 0,
@@ -921,7 +921,7 @@ func (s *QuerierSuite) TestQueryNodeAccount(c *C) {
 	network, _ := s.k.GetNetwork(s.ctx)
 	network.BondRewardRune = cosmos.NewUint(common.One * 1000)
 	c.Assert(s.k.SetNetwork(s.ctx, network), IsNil)
-	s.k.SetMimir(s.ctx, "MinimumBondInRune", common.One*1000)
+	s.k.SetMimir(s.ctx, "MinimumBondInDeca", common.One*1000)
 
 	// Get first node
 	queryNodeAccount, err = s.queryServer.Node(s.ctx, &types.QueryNodeRequest{
@@ -1276,7 +1276,7 @@ func (s *QuerierSuite) TestQuerySwap(c *C) {
 	poolBTC := NewPool()
 	poolBTC.Asset = common.BTCAsset
 	poolBTC.BalanceAsset = cosmos.NewUint(1_000_000_000)
-	poolBTC.BalanceRune = cosmos.NewUint(10_000_000_000_000)
+	poolBTC.BalanceDeca = cosmos.NewUint(10_000_000_000_000)
 	poolBTC.LPUnits = cosmos.NewUint(100)
 
 	err := s.mgr.Keeper().SetPool(s.ctx, poolBTC)
@@ -1285,7 +1285,7 @@ func (s *QuerierSuite) TestQuerySwap(c *C) {
 	poolETH := NewPool()
 	poolETH.Asset = common.ETHAsset
 	poolETH.BalanceAsset = cosmos.NewUint(100_000_000_000)
-	poolETH.BalanceRune = cosmos.NewUint(10_000_000_000_000)
+	poolETH.BalanceDeca = cosmos.NewUint(10_000_000_000_000)
 	poolETH.LPUnits = cosmos.NewUint(100)
 
 	err = s.mgr.Keeper().SetPool(s.ctx, poolETH)
@@ -1304,7 +1304,7 @@ func (s *QuerierSuite) TestQuerySwap(c *C) {
 	affiliateAddr := GetRandomTHORAddress().String()
 	request := types.QueryQuoteSwapRequest{
 		FromAsset:         common.BTCAsset.String(),
-		ToAsset:           common.RuneNative.String(),
+		ToAsset:           common.DecaNative.String(),
 		Amount:            "10000000",
 		StreamingInterval: "1",
 		StreamingQuantity: "5",
@@ -1389,7 +1389,7 @@ func (s *QuerierSuite) TestNetwork(c *C) {
 	pool := NewPool()
 	pool.Asset = ethBusd
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(500_000_00000000)
+	pool.BalanceDeca = cosmos.NewUint(500_000_00000000)
 	pool.BalanceAsset = cosmos.NewUint(4_556_123_00000000)
 	pool.Decimals = 8
 	err = s.k.SetPool(s.ctx, pool)

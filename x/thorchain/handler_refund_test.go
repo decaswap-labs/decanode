@@ -124,8 +124,8 @@ func newRefundTxHandlerTestHelper(c *C, txIds ...common.TxID) refundTxHandlerTes
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
-	pool.LPUnits = pool.BalanceRune
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
+	pool.LPUnits = pool.BalanceDeca
 
 	version := GetCurrentVersion()
 	asgardVault := GetRandomVault()
@@ -337,7 +337,7 @@ func (s *HandlerRefundSuite) TestRefundTxHandlerSendExtraFundShouldBeSlashed(c *
 		ID:    GetRandomTxHash(),
 		Chain: common.ETHChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)),
 		},
 		Memo:        NewRefundMemo(helper.inboundTx.Tx.ID).String(),
 		FromAddress: fromAddr,
@@ -356,7 +356,7 @@ func (s *HandlerRefundSuite) TestRefundTxHandlerSendExtraFundShouldBeSlashed(c *
 	na, err := helper.keeper.GetNodeAccount(helper.ctx, helper.nodeAccount.NodeAddress)
 	c.Assert(err, IsNil)
 	c.Assert(na.Bond, DeepEquals, expectedBond)
-	newReserve := helper.keeper.GetRuneBalanceOfModule(helper.ctx, ReserveName)
+	newReserve := helper.keeper.GetDecaBalanceOfModule(helper.ctx, ReserveName)
 	c.Log(newReserve.String())
 	c.Assert(newReserve, DeepEquals, expectedVaultTotalReserve)
 }
@@ -370,7 +370,7 @@ func (s *HandlerRefundSuite) TestOutboundTxHandlerSendAdditionalCoinsShouldBeSla
 		ID:    GetRandomTxHash(),
 		Chain: common.ETHChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)),
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)),
 		},
 		Memo:        NewRefundMemo(helper.inboundTx.Tx.ID).String(),
@@ -399,7 +399,7 @@ func (s *HandlerRefundSuite) TestOutboundTxHandlerInvalidObservedTxVoterShouldSl
 		ID:    GetRandomTxHash(),
 		Chain: common.ETHChain,
 		Coins: common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)),
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)),
 		},
 		Memo:        NewRefundMemo(helper.inboundTx.Tx.ID).String(),
@@ -425,12 +425,12 @@ func (s *HandlerRefundSuite) TestOutboundTxHandlerInvalidObservedTxVoterShouldSl
 	c.Assert(err, IsNil)
 	c.Assert(na.Bond, DeepEquals, expectedBond)
 
-	newReserve := helper.keeper.GetRuneBalanceOfModule(helper.ctx, ReserveName)
+	newReserve := helper.keeper.GetDecaBalanceOfModule(helper.ctx, ReserveName)
 	c.Assert(newReserve, DeepEquals, expectedVaultTotalReserve)
 	pool, err = helper.keeper.GetPool(helper.ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	newBalance := cosmos.NewUint(10099971750)
-	c.Assert(pool.BalanceRune, DeepEquals, newBalance)
+	c.Assert(pool.BalanceDeca, DeepEquals, newBalance)
 	c.Assert(pool.BalanceAsset, DeepEquals, poolETH)
 }
 

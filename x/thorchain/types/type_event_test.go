@@ -99,14 +99,14 @@ func (s EventSuite) TestReward(c *C) {
 func (s EventSuite) TestSlash(c *C) {
 	evt := NewEventSlash(common.ETHAsset, []PoolAmt{
 		{common.ETHAsset, -20},
-		{common.RuneAsset(), 30},
+		{common.DecaAsset(), 30},
 	})
 	c.Check(evt.Type(), Equals, "slash")
 	c.Check(evt.Pool, Equals, common.ETHAsset)
 	c.Assert(evt.SlashAmount, HasLen, 2)
 	c.Check(evt.SlashAmount[0].Asset, Equals, common.ETHAsset)
 	c.Check(evt.SlashAmount[0].Amount, Equals, int64(-20))
-	c.Check(evt.SlashAmount[1].Asset, Equals, common.RuneAsset())
+	c.Check(evt.SlashAmount[1].Asset, Equals, common.DecaAsset())
 	c.Check(evt.SlashAmount[1].Amount, Equals, int64(30))
 	events, err := evt.Events()
 	c.Check(err, IsNil)

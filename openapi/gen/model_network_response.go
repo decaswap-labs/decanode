@@ -47,7 +47,7 @@ type NetworkResponse struct {
 	// the rune price in tor
 	RunePriceInTor string `json:"rune_price_in_tor"`
 	// the tor price in rune
-	TorPriceInRune string `json:"tor_price_in_rune"`
+	TorPriceInDeca string `json:"tor_price_in_deca"`
 	// indicates if all anchor chains are halted (true), or at least one anchor chain is available (false)
 	TorPriceHalted bool `json:"tor_price_halted"`
 }
@@ -72,7 +72,7 @@ func NewNetworkResponse(bondRewardRune string, totalBondUnits string, availableP
 	this.TnsRegisterFeeRune = tnsRegisterFeeRune
 	this.TnsFeePerBlockRune = tnsFeePerBlockRune
 	this.RunePriceInTor = runePriceInTor
-	this.TorPriceInRune = torPriceInRune
+	this.TorPriceInDeca = torPriceInRune
 	this.TorPriceHalted = torPriceHalted
 	return &this
 }
@@ -453,28 +453,28 @@ func (o *NetworkResponse) SetRunePriceInTor(v string) {
 	o.RunePriceInTor = v
 }
 
-// GetTorPriceInRune returns the TorPriceInRune field value
-func (o *NetworkResponse) GetTorPriceInRune() string {
+// GetTorPriceInDeca returns the TorPriceInDeca field value
+func (o *NetworkResponse) GetTorPriceInDeca() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.TorPriceInRune
+	return o.TorPriceInDeca
 }
 
-// GetTorPriceInRuneOk returns a tuple with the TorPriceInRune field value
+// GetTorPriceInDecaOk returns a tuple with the TorPriceInDeca field value
 // and a boolean to check if the value has been set.
-func (o *NetworkResponse) GetTorPriceInRuneOk() (*string, bool) {
+func (o *NetworkResponse) GetTorPriceInDecaOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.TorPriceInRune, true
+	return &o.TorPriceInDeca, true
 }
 
-// SetTorPriceInRune sets field value
-func (o *NetworkResponse) SetTorPriceInRune(v string) {
-	o.TorPriceInRune = v
+// SetTorPriceInDeca sets field value
+func (o *NetworkResponse) SetTorPriceInDeca(v string) {
+	o.TorPriceInDeca = v
 }
 
 // GetTorPriceHalted returns the TorPriceHalted field value
@@ -549,7 +549,7 @@ func (o NetworkResponse) MarshalJSON_deprecated() ([]byte, error) {
 		toSerialize["rune_price_in_tor"] = o.RunePriceInTor
 	}
 	if true {
-		toSerialize["tor_price_in_rune"] = o.TorPriceInRune
+		toSerialize["tor_price_in_deca"] = o.TorPriceInDeca
 	}
 	if true {
 		toSerialize["tor_price_halted"] = o.TorPriceHalted

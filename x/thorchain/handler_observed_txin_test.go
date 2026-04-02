@@ -102,7 +102,7 @@ func (s *HandlerObservedTxInSuite) TestFailure(c *C) {
 	keeper := &TestObservedTxInFailureKeeper{
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200),
+			BalanceDeca:  cosmos.NewUint(200),
 			BalanceAsset: cosmos.NewUint(300),
 		},
 	}
@@ -294,7 +294,7 @@ func (s *HandlerObservedTxInSuite) testHandleWithConfirmation(c *C) {
 		vault: vault,
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200),
+			BalanceDeca:  cosmos.NewUint(200),
 			BalanceAsset: cosmos.NewUint(300),
 		},
 		vaultExists: true,
@@ -433,7 +433,7 @@ func (s *HandlerObservedTxInSuite) testHandleWithVersion(c *C) {
 		vault: vault,
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200),
+			BalanceDeca:  cosmos.NewUint(200),
 			BalanceAsset: cosmos.NewUint(300),
 		},
 		vaultExists: true,
@@ -495,7 +495,7 @@ func (s *HandlerObservedTxInSuite) TestMigrateMemo(c *C) {
 		vault: vault,
 		pool: Pool{
 			Asset:        common.ETHAsset,
-			BalanceRune:  cosmos.NewUint(200),
+			BalanceDeca:  cosmos.NewUint(200),
 			BalanceAsset: cosmos.NewUint(300),
 		},
 		vaultExists: true,
@@ -581,7 +581,7 @@ func setupAnLegitObservedTx(ctx cosmos.Context, helper *ObservedTxInHandlerTestH
 	c.Assert(helper.SetVault(ctx, vault), IsNil)
 	p := NewPool()
 	p.Asset = common.ETHAsset
-	p.BalanceRune = cosmos.NewUint(100 * common.One)
+	p.BalanceDeca = cosmos.NewUint(100 * common.One)
 	p.BalanceAsset = cosmos.NewUint(100 * common.One)
 	p.Status = PoolAvailable
 	c.Assert(helper.Keeper.SetPool(ctx, p), IsNil)
@@ -801,7 +801,7 @@ func (s HandlerObservedTxInSuite) TestSwapWithAffiliate(c *C) {
 		Chain: common.ETHChain,
 		Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(2*common.One))},
 		Memo:  "=:THOR.RUNE:" + GetRandomTHORAddress().String() + "::" + affAddr.String() + ":1000",
-	}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), affAddr, cosmos.NewUint(1000),
+	}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), affAddr, cosmos.NewUint(1000),
 		"",
 		"", nil,
 		types.SwapType_market,
@@ -833,7 +833,7 @@ func (s HandlerObservedTxInSuite) TestAddSwapEmitsLimitEventOnlyForLimitSwaps(c 
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -856,7 +856,7 @@ func (s HandlerObservedTxInSuite) TestAddSwapEmitsLimitEventOnlyForLimitSwaps(c 
 		ToAddress:   GetRandomTHORAddress(),
 		Gas:         common.Gas{},
 		Chain:       common.THORChain,
-		Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One))},
+		Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One))},
 		Memo:        "=:BTC.BTC:" + GetRandomBTCAddress().String(),
 	}, common.BTCAsset, GetRandomBTCAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 		"",
@@ -874,7 +874,7 @@ func (s HandlerObservedTxInSuite) TestAddSwapEmitsLimitEventOnlyForLimitSwaps(c 
 		ToAddress:   GetRandomTHORAddress(),
 		Gas:         common.Gas{},
 		Chain:       common.THORChain,
-		Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One))},
+		Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One))},
 		Memo:        "=<:BTC.BTC:" + GetRandomBTCAddress().String() + ":1",
 	}, common.BTCAsset, GetRandomBTCAddress(), cosmos.NewUint(1), common.NoAddress, cosmos.ZeroUint(),
 		"",
@@ -896,7 +896,7 @@ func (s HandlerObservedTxInSuite) TestAddSwapDoesNotEmitLimitEventWhenQueueInser
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -918,7 +918,7 @@ func (s HandlerObservedTxInSuite) TestAddSwapDoesNotEmitLimitEventWhenQueueInser
 		ToAddress:   GetRandomTHORAddress(),
 		Gas:         common.Gas{},
 		Chain:       common.THORChain,
-		Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One))},
+		Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One))},
 		Memo:        "=<:BTC.BTC:" + GetRandomBTCAddress().String() + ":1",
 	}, common.BTCAsset, GetRandomBTCAddress(), cosmos.NewUint(1), common.NoAddress, cosmos.ZeroUint(),
 		"",
@@ -1111,7 +1111,7 @@ func (s *HandlerObservedTxInSuite) TestMemolessTransactionReferenceGeneration(c 
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Create observed tx with empty memo and specific amount for predictable reference
@@ -1160,7 +1160,7 @@ func (s *HandlerObservedTxInSuite) TestMemolessTransactionWithDifferentAssetDeci
 	gaiaPool.Asset = gaiaAsset
 	gaiaPool.Decimals = 6 // GAIA has 6 decimals
 	gaiaPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	gaiaPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	gaiaPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, gaiaPool), IsNil)
 
 	// Create observed tx with empty memo
@@ -1205,7 +1205,7 @@ func (s *HandlerObservedTxInSuite) TestMemolessTransactionErrorCases(c *C) {
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Test case 1: Transaction with no coins
@@ -1261,7 +1261,7 @@ func (s *HandlerObservedTxInSuite) TestMemolessTransactionWithExistingMemo(c *C)
 	btcPool.Asset = common.BTCAsset
 	btcPool.Decimals = 8
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	// Create observed tx with existing memo

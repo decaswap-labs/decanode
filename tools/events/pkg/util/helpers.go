@@ -138,7 +138,7 @@ func Moneybags(usdValue uint64) string {
 ////////////////////////////////////////////////////////////////////////////////////////
 
 func RuneValue(height int64, coin common.Coin) float64 {
-	if coin.IsRune() {
+	if coin.IsDeca() {
 		amt, _ := new(big.Float).Quo(
 			new(big.Float).SetInt(coin.Amount.BigInt()),
 			big.NewFloat(common.One),
@@ -154,7 +154,7 @@ func RuneValue(height int64, coin common.Coin) float64 {
 			log.Panic().Err(err).Msg("failed to get network")
 		}
 
-		price, err := strconv.ParseFloat(network.TorPriceInRune, 64)
+		price, err := strconv.ParseFloat(network.TorPriceInDeca, 64)
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to parse network rune price")
 		}
@@ -186,19 +186,19 @@ func RuneValue(height int64, coin common.Coin) float64 {
 		if pool.Asset != asset.GetLayer1Asset().String() {
 			continue
 		}
-		runeBalance := cosmos.NewUintFromString(pool.BalanceRune)
+		decaBalance := cosmos.NewUintFromString(pool.BalanceDeca)
 		assetBalance := cosmos.NewUintFromString(pool.BalanceAsset)
 
-		runePerAsset := new(big.Float).Quo(
-			new(big.Float).SetInt(runeBalance.BigInt()),
+		decaPerAsset := new(big.Float).Quo(
+			new(big.Float).SetInt(decaBalance.BigInt()),
 			new(big.Float).SetInt(assetBalance.BigInt()),
 		)
 		amountFloat := new(big.Float).Mul(
 			new(big.Float).SetInt(coin.Amount.BigInt()),
-			runePerAsset,
+			decaPerAsset,
 		)
-		amountRuneFloat, _ := amountFloat.Quo(amountFloat, big.NewFloat(common.One)).Float64()
-		return amountRuneFloat
+		amountDecaFloat, _ := amountFloat.Quo(amountFloat, big.NewFloat(common.One)).Float64()
+		return amountDecaFloat
 	}
 
 	log.Error().Str("asset", asset.String()).Msg("failed to find pool")
@@ -214,7 +214,7 @@ func USDValue(height int64, coin common.Coin) float64 {
 		return float64(coin.Amount.Uint64()) / common.One
 	}
 
-	if coin.IsRune() {
+	if coin.IsDeca() {
 		network := openapi.NetworkResponse{}
 		err := ThornodeCachedRetryGet("thorchain/network", height, &network)
 		if err != nil {
@@ -306,7 +306,7 @@ func Clout(height int64, address string) common.Coin {
 		cloutScore = cosmos.NewUintFromString(*clout.Score)
 	}
 
-	return common.NewCoin(common.RuneNative, cloutScore)
+	return common.NewCoin(common.DecaNative, cloutScore)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

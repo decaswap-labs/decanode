@@ -150,7 +150,7 @@ func (g *NodeGater) refreshAllowlist() {
 // It first checks for a mimir override, then falls back to the constants.
 func (g *NodeGater) getMinimumBond() (int64, error) {
 	// Check for mimir override first
-	mimirBond, err := g.bridge.GetMimir(constants.MinimumBondInRune.String())
+	mimirBond, err := g.bridge.GetMimir(constants.MinimumBondInDeca.String())
 	if err == nil && mimirBond > 0 {
 		return mimirBond, nil
 	}
@@ -161,9 +161,9 @@ func (g *NodeGater) getMinimumBond() (int64, error) {
 		return 0, fmt.Errorf("failed to get constants: %w", err)
 	}
 
-	minBond, ok := consts[constants.MinimumBondInRune.String()]
+	minBond, ok := consts[constants.MinimumBondInDeca.String()]
 	if !ok {
-		return 0, fmt.Errorf("MinimumBondInRune not found in constants")
+		return 0, fmt.Errorf("MinimumBondInDeca not found in constants")
 	}
 
 	return minBond, nil

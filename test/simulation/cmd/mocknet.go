@@ -424,7 +424,7 @@ func fundUserThorAccount(master, user *User) bool {
 	tx := &ttypes.MsgSend{
 		FromAddress: masterThorAddress,
 		ToAddress:   userThorAccAddress,
-		Amount:      sdk.NewCoins(sdk.NewCoin("rune", seedAmount)),
+		Amount:      sdk.NewCoins(sdk.NewCoin("deca", seedAmount)),
 	}
 	thorTxid, err := master.Thorchain.Broadcast(tx)
 	if err != nil {

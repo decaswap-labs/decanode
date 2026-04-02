@@ -130,14 +130,14 @@ func (m Migrator) CommonMigrate8to9(ctx sdk.Context) error {
 	// 4. If the multiplier is greater than 100%, increase the withheld amount so that the multiplier is equal to 100%
 
 	// Adjust the target surplus to 10k RUNE
-	m.mgr.Keeper().SetMimir(ctx, constants.TargetOutboundFeeSurplusRune.String(), 10000_00000000) // 10k x 10^8
+	m.mgr.Keeper().SetMimir(ctx, constants.TargetOutboundFeeSurplusDeca.String(), 10000_00000000) // 10k x 10^8
 
 	// Adjust minimum DOFM multiplier to 1%
 	// https://gitlab.com/thorchain/thornode/-/issues/2239#note_2690577110
 	m.mgr.Keeper().SetMimir(ctx, constants.MinOutboundFeeMultiplierBasisPoints.String(), 100)
 
 	// Gather all the parameters for the multiplier calculation
-	targetSurplus := cosmos.NewUint(uint64(m.mgr.Keeper().GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusRune)))
+	targetSurplus := cosmos.NewUint(uint64(m.mgr.Keeper().GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusDeca)))
 	maxMultiplier := cosmos.NewUint(uint64(m.mgr.Keeper().GetConfigInt64(ctx, constants.MaxOutboundFeeMultiplierBasisPoints)))
 	minMultiplier := cosmos.NewUint(uint64(m.mgr.Keeper().GetConfigInt64(ctx, constants.MinOutboundFeeMultiplierBasisPoints)))
 
@@ -156,7 +156,7 @@ func (m Migrator) CommonMigrate8to9(ctx sdk.Context) error {
 			// of THORChain Assets other than RUNE.
 			continue
 		}
-		if pool.BalanceAsset.IsZero() || pool.BalanceRune.IsZero() {
+		if pool.BalanceAsset.IsZero() || pool.BalanceDeca.IsZero() {
 			// A Layer 1 Asset's pool must have both depths be non-zero
 			// for any outbound fee withholding or gas reimbursement to take place.
 			// (This can take place even if the PoolUnits are zero and all liquidity is synths.)
@@ -258,16 +258,16 @@ func (m Migrator) CommonMigrate8to9(ctx sdk.Context) error {
 }
 
 // BurnReserveAndReduceMaxSupply implements ADR-023: burns reserve down to 9.3M RUNE
-// and sets MaxRuneSupply to the post-burn total supply (derived from live state).
+// and sets MaxDecaSupply to the post-burn total supply (derived from live state).
 func (m Migrator) BurnReserveAndReduceMaxSupply(ctx sdk.Context) error {
 	const reserveRetain uint64 = 9_300_000_00000000 // 9.3M RUNE to keep in reserve
 
-	reserveBalance := m.mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
+	reserveBalance := m.mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
 	retainAmount := cosmos.NewUint(reserveRetain)
 
 	if reserveBalance.GT(retainAmount) {
 		burnAmount := common.SafeSub(reserveBalance, retainAmount)
-		burnCoin := common.NewCoin(common.RuneNative, burnAmount)
+		burnCoin := common.NewCoin(common.DecaNative, burnAmount)
 
 		if err := m.mgr.Keeper().SendFromModuleToModule(ctx, ReserveName, ModuleName, common.NewCoins(burnCoin)); err != nil {
 			return fmt.Errorf("fail to transfer reserve RUNE for burn: %w", err)
@@ -290,12 +290,12 @@ func (m Migrator) BurnReserveAndReduceMaxSupply(ctx sdk.Context) error {
 			"retain_target", retainAmount.String())
 	}
 
-	// Derive MaxRuneSupply from post-burn total supply to avoid state drift.
-	postBurnSupply := m.mgr.Keeper().GetTotalSupply(ctx, common.RuneAsset())
+	// Derive MaxDecaSupply from post-burn total supply to avoid state drift.
+	postBurnSupply := m.mgr.Keeper().GetTotalSupply(ctx, common.DecaAsset())
 	newMaxSupply := int64(postBurnSupply.Uint64())
 
-	m.mgr.Keeper().SetMimir(ctx, constants.MaxRuneSupply.String(), newMaxSupply)
-	ctx.Logger().Info("ADR-023: set MaxRuneSupply to post-burn total supply", "new_max_supply", newMaxSupply)
+	m.mgr.Keeper().SetMimir(ctx, constants.MaxDecaSupply.String(), newMaxSupply)
+	ctx.Logger().Info("ADR-023: set MaxDecaSupply to post-burn total supply", "new_max_supply", newMaxSupply)
 
 	return nil
 }

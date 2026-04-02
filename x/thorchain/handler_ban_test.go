@@ -112,7 +112,7 @@ func (s *HandlerBanSuite) TestValidate(c *C) {
 func (s *HandlerBanSuite) TestHandle(c *C) {
 	ctx, _ := setupKeeperForTest(c)
 	constAccessor := constants.GetConstantValues(GetCurrentVersion())
-	minBond := constAccessor.GetInt64Value(constants.MinimumBondInRune)
+	minBond := constAccessor.GetInt64Value(constants.MinimumBondInDeca)
 
 	toBan := GetRandomValidatorNode(NodeActive)
 	toBan.Bond = cosmos.NewUint(uint64(minBond))

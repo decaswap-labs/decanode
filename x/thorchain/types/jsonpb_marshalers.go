@@ -48,8 +48,8 @@ var (
 	_ jsonpb.JSONPBMarshaler = &QueryQueueResponse{}
 	_ jsonpb.JSONPBMarshaler = &QueryQuoteSwapResponse{}
 	_ jsonpb.JSONPBMarshaler = &QueryRagnarokResponse{}
-	_ jsonpb.JSONPBMarshaler = &QueryRuneProviderResponse{}
-	_ jsonpb.JSONPBMarshaler = &QueryRuneProvidersResponse{}
+	_ jsonpb.JSONPBMarshaler = &QueryDecaProviderResponse{}
+	_ jsonpb.JSONPBMarshaler = &QueryDecaProvidersResponse{}
 	_ jsonpb.JSONPBMarshaler = &QuerySaverResponse{}
 	_ jsonpb.JSONPBMarshaler = &QuerySaversResponse{}
 	_ jsonpb.JSONPBMarshaler = &QueryStreamingSwapResponse{}
@@ -78,7 +78,7 @@ var (
 	// _ jsonpb.JSONPBMarshaler = &QueryInvariantResponse{}
 	// _ jsonpb.JSONPBMarshaler = &QueryInvariantsResponse{}
 	// _ jsonpb.JSONPBMarshaler = &QueryNetworkResponse{}
-	// _ jsonpb.JSONPBMarshaler = &QueryRunePoolResponse{}
+	// _ jsonpb.JSONPBMarshaler = &QueryDecaPoolResponse{}
 	// _ jsonpb.JSONPBMarshaler = &QueryTradeUnitResponse{}
 	// _ jsonpb.JSONPBMarshaler = &QueryVaultsPubkeysResponse{}
 
@@ -291,18 +291,18 @@ func (m *QueryRagnarokResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, erro
 	return jsonify(m.InProgress)
 }
 
-// QueryRunePoolResponse
+// QueryDecaPoolResponse
 // No override needed (contains no int64 parameters)
-// func (m *QueryRunePoolResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
+// func (m *QueryDecaPoolResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 // 	return jsonify(m)
 // }
 
-// QueryRuneProviderResponse
-func (m *QueryRuneProviderResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
+// QueryDecaProviderResponse
+func (m *QueryDecaProviderResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return jsonify(m)
 }
 
-func (m *QueryRuneProvidersResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
+func (m *QueryDecaProvidersResponse) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, error) {
 	return jsonify(m.Providers)
 }
 

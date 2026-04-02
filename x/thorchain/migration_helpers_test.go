@@ -20,7 +20,7 @@ func (MigrationHelpersTestSuite) TestUnsafeAddRefundOutbound(c *C) {
 	// add a vault
 	vault := GetRandomVault()
 	vault.Coins = common.Coins{
-		// common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		// common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(10000*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, vault), IsNil)

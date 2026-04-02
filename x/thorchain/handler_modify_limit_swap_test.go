@@ -23,7 +23,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapHandler(c *C) {
 	// Create a valid MsgModifytypes.SwapType_limit
 	fromAddr := GetRandomBTCAddress()
 	sourceAsset := common.BTCAsset
-	targetAsset := common.RuneAsset()
+	targetAsset := common.DecaAsset()
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 	modifiedTargetAmount := cosmos.NewUint(600 * common.One)
@@ -100,7 +100,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapValidation(c *C) {
 	// Test with invalid message (empty signer)
 	fromAddr := GetRandomTHORAddress()
 	sourceAsset := common.BTCAsset
-	targetAsset := common.RuneAsset()
+	targetAsset := common.DecaAsset()
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 	modifiedTargetAmount := cosmos.NewUint(600 * common.One)
@@ -119,7 +119,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapAddressCheck(c *C) {
 	// Create addresses
 	fromAddr := GetRandomTHORAddress()
 	differentAddr := GetRandomTHORAddress()
-	sourceAsset := common.RuneAsset()
+	sourceAsset := common.DecaAsset()
 	targetAsset := common.BTCAsset
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
@@ -168,7 +168,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyMultipleLimitSwaps(c *C) {
 	// Create addresses and assets
 	fromAddr := GetRandomBTCAddress()
 	sourceAsset := common.BTCAsset
-	targetAsset := common.RuneAsset()
+	targetAsset := common.DecaAsset()
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 	modifiedTargetAmount := cosmos.NewUint(600 * common.One)
@@ -226,7 +226,7 @@ func (s *HandlerModifyLimitSwapSuite) TestCancelMultipleLimitSwaps(c *C) {
 
 	// Create addresses and assets
 	fromAddr := GetRandomTHORAddress()
-	sourceAsset := common.RuneAsset()
+	sourceAsset := common.DecaAsset()
 	targetAsset := common.BTCAsset
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
@@ -296,7 +296,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapErrorHandling(c *C) {
 	// Test with mismatched from address and source asset chain
 	thorAddr := GetRandomTHORAddress()
 	btcCoin := common.NewCoin(common.BTCAsset, cosmos.NewUint(100*common.One))
-	runeCoin := common.NewCoin(common.RuneAsset(), cosmos.NewUint(500*common.One))
+	runeCoin := common.NewCoin(common.DecaAsset(), cosmos.NewUint(500*common.One))
 
 	invalidChainMsg := types.NewMsgModifyLimitSwap(thorAddr, btcCoin, runeCoin, cosmos.NewUint(600*common.One), signer, common.EmptyAsset, cosmos.ZeroUint())
 	result, err = handler.Run(ctx, invalidChainMsg)
@@ -312,7 +312,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapCancellationLogic(c *C)
 	// Create a limit swap with a very large target amount
 	fromAddr := GetRandomBTCAddress()
 	sourceAsset := common.BTCAsset
-	targetAsset := common.RuneAsset()
+	targetAsset := common.DecaAsset()
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	largeAmount := cosmos.NewUint(1 << 62) // Very large amount
 	targetCoin := common.NewCoin(targetAsset, largeAmount)
@@ -357,7 +357,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapSecurityFromFieldSpoofi
 		// Legitimate user creates a limit swap
 		legitimateUser := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 		signer := GetRandomBech32Addr()
@@ -407,7 +407,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapSecurityFromFieldSpoofi
 		// Create a new limit swap for a different user
 		legitimateUser2 := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(200*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(1000*common.One))
 		signer2 := GetRandomBech32Addr()
@@ -457,7 +457,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapSecurityFromFieldSpoofi
 		// For RUNE swaps, the From address must match the Signer
 		legitimateUser := GetRandomTHORAddress()
 		maliciousUser := GetRandomTHORAddress()
-		sourceAsset := common.RuneAsset()
+		sourceAsset := common.DecaAsset()
 		targetAsset := common.BTCAsset
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(0.1*common.One))
@@ -503,7 +503,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapSecurityFromFieldSpoofi
 		userBAddr := GetRandomBTCAddress()
 
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 		signerA := GetRandomBech32Addr()
@@ -586,7 +586,7 @@ func (s *HandlerModifyLimitSwapSuite) TestCancelLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 		signer := GetRandomBech32Addr()
@@ -624,7 +624,7 @@ func (s *HandlerModifyLimitSwapSuite) TestCancelLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 		signer := GetRandomBech32Addr()
@@ -663,7 +663,7 @@ func (s *HandlerModifyLimitSwapSuite) TestCancelLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 		signer := GetRandomBech32Addr()
@@ -709,7 +709,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		originalTarget := cosmos.NewUint(500 * common.One)
 		newTarget := cosmos.NewUint(600 * common.One)
@@ -760,7 +760,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(50*common.One))
 		targetAmount := cosmos.NewUint(250 * common.One)
 		signer := GetRandomBech32Addr()
@@ -794,7 +794,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(1000*common.One))
 		originalTarget := cosmos.NewUint(5000 * common.One)
 		largeTarget := cosmos.NewUint(1 << 62) // Very large amount
@@ -829,7 +829,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwap(c *C) {
 	{
 		fromAddr := GetRandomBTCAddress()
 		sourceAsset := common.BTCAsset
-		targetAsset := common.RuneAsset()
+		targetAsset := common.DecaAsset()
 		sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 		originalTarget := cosmos.NewUint(500 * common.One)
 		newTarget := cosmos.NewUint(800 * common.One)
@@ -878,7 +878,7 @@ func (s *HandlerModifyLimitSwapSuite) TestDonateToPool(c *C) {
 		// Create BTC pool
 		btcPool := NewPool()
 		btcPool.Asset = common.BTCAsset
-		btcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+		btcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 		btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 		btcPool.Status = PoolAvailable
 		c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
@@ -893,7 +893,7 @@ func (s *HandlerModifyLimitSwapSuite) TestDonateToPool(c *C) {
 		// Verify pool balance increased
 		updatedPool, err := mgr.Keeper().GetPool(ctx, common.BTCAsset)
 		c.Assert(err, IsNil)
-		c.Assert(updatedPool.BalanceRune.Equal(cosmos.NewUint(1000*common.One)), Equals, true)
+		c.Assert(updatedPool.BalanceDeca.Equal(cosmos.NewUint(1000*common.One)), Equals, true)
 		c.Assert(updatedPool.BalanceAsset.Equal(cosmos.NewUint(11*common.One)), Equals, true)
 	}
 
@@ -902,7 +902,7 @@ func (s *HandlerModifyLimitSwapSuite) TestDonateToPool(c *C) {
 		// Create ETH pool
 		ethPool := NewPool()
 		ethPool.Asset = common.ETHAsset
-		ethPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+		ethPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 		ethPool.BalanceAsset = cosmos.NewUint(20 * common.One)
 		ethPool.Status = PoolAvailable
 		c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
@@ -917,7 +917,7 @@ func (s *HandlerModifyLimitSwapSuite) TestDonateToPool(c *C) {
 		// Verify pool balance increased
 		updatedPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 		c.Assert(err, IsNil)
-		c.Assert(updatedPool.BalanceRune.Equal(cosmos.NewUint(2000*common.One)), Equals, true)
+		c.Assert(updatedPool.BalanceDeca.Equal(cosmos.NewUint(2000*common.One)), Equals, true)
 		c.Assert(updatedPool.BalanceAsset.Equal(cosmos.NewUint(25*common.One)), Equals, true)
 	}
 
@@ -937,7 +937,7 @@ func (s *HandlerModifyLimitSwapSuite) TestDonateToPool(c *C) {
 		// Create suspended DOGE pool
 		dogePool := NewPool()
 		dogePool.Asset = common.DOGEAsset
-		dogePool.BalanceRune = cosmos.NewUint(500 * common.One)
+		dogePool.BalanceDeca = cosmos.NewUint(500 * common.One)
 		dogePool.BalanceAsset = cosmos.NewUint(50000 * common.One)
 		dogePool.Status = PoolSuspended
 		c.Assert(mgr.Keeper().SetPool(ctx, dogePool), IsNil)
@@ -1019,7 +1019,7 @@ func (s *HandlerModifyLimitSwapSuite) TestDonateToPool(c *C) {
 		fromAddr := GetRandomTHORAddress()
 
 		// RUNE donation should succeed (it just does nothing)
-		err := handler.donateToPool(ctx, common.RuneAsset(), donationAmount, fromAddr)
+		err := handler.donateToPool(ctx, common.DecaAsset(), donationAmount, fromAddr)
 		c.Assert(err, IsNil)
 	}
 }
@@ -1036,7 +1036,7 @@ func (s *HandlerModifyLimitSwapSuite) TestModifyLimitSwapIterationLimit(c *C) {
 	fromAddr := GetRandomBTCAddress()
 	victimAddr := GetRandomBTCAddress()
 	sourceAsset := common.BTCAsset
-	targetAsset := common.RuneAsset()
+	targetAsset := common.DecaAsset()
 	sourceCoin := common.NewCoin(sourceAsset, cosmos.NewUint(100*common.One))
 	targetCoin := common.NewCoin(targetAsset, cosmos.NewUint(500*common.One))
 	signer := GetRandomBech32Addr()

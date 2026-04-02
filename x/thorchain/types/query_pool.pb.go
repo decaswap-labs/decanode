@@ -81,9 +81,9 @@ type QueryPoolResponse struct {
 	Status              string `protobuf:"bytes,3,opt,name=status,proto3" json:"status"`
 	Decimals            int64  `protobuf:"varint,4,opt,name=decimals,proto3" json:"decimals,omitempty"`
 	PendingInboundAsset string `protobuf:"bytes,5,opt,name=pending_inbound_asset,json=pendingInboundAsset,proto3" json:"pending_inbound_asset"`
-	PendingInboundRune  string `protobuf:"bytes,6,opt,name=pending_inbound_rune,json=pendingInboundRune,proto3" json:"pending_inbound_rune"`
+	PendingInboundDeca  string `protobuf:"bytes,6,opt,name=pending_inbound_deca,json=pendingInboundDeca,proto3" json:"pending_inbound_deca"`
 	BalanceAsset        string `protobuf:"bytes,7,opt,name=balance_asset,json=balanceAsset,proto3" json:"balance_asset"`
-	BalanceRune         string `protobuf:"bytes,8,opt,name=balance_rune,json=balanceRune,proto3" json:"balance_rune"`
+	BalanceDeca         string `protobuf:"bytes,8,opt,name=balance_deca,json=balanceDeca,proto3" json:"balance_deca"`
 	// the USD (TOR) price of the asset in 1e8
 	AssetTorPrice string `protobuf:"bytes,9,opt,name=asset_tor_price,json=assetTorPrice,proto3" json:"asset_tor_price"`
 	// the total pool units, this is the sum of LP and synth units
@@ -112,7 +112,7 @@ type QueryPoolResponse struct {
 	// whether trading is halted
 	TradingHalted bool `protobuf:"varint,24,opt,name=trading_halted,json=tradingHalted,proto3" json:"trading_halted"`
 	// 24h trading volume rune
-	VolumeRune string `protobuf:"bytes,25,opt,name=volume_rune,json=volumeRune,proto3" json:"volume_rune"`
+	VolumeDeca string `protobuf:"bytes,25,opt,name=volume_deca,json=volumeDeca,proto3" json:"volume_deca"`
 	// 24h trading volume asset
 	VolumeAsset string `protobuf:"bytes,26,opt,name=volume_asset,json=volumeAsset,proto3" json:"volume_asset"`
 }
@@ -185,9 +185,9 @@ func (m *QueryPoolResponse) GetPendingInboundAsset() string {
 	return ""
 }
 
-func (m *QueryPoolResponse) GetPendingInboundRune() string {
+func (m *QueryPoolResponse) GetPendingInboundDeca() string {
 	if m != nil {
-		return m.PendingInboundRune
+		return m.PendingInboundDeca
 	}
 	return ""
 }
@@ -199,9 +199,9 @@ func (m *QueryPoolResponse) GetBalanceAsset() string {
 	return ""
 }
 
-func (m *QueryPoolResponse) GetBalanceRune() string {
+func (m *QueryPoolResponse) GetBalanceDeca() string {
 	if m != nil {
-		return m.BalanceRune
+		return m.BalanceDeca
 	}
 	return ""
 }
@@ -297,9 +297,9 @@ func (m *QueryPoolResponse) GetTradingHalted() bool {
 	return false
 }
 
-func (m *QueryPoolResponse) GetVolumeRune() string {
+func (m *QueryPoolResponse) GetVolumeDeca() string {
 	if m != nil {
-		return m.VolumeRune
+		return m.VolumeDeca
 	}
 	return ""
 }
@@ -527,10 +527,10 @@ func (m *QueryPoolResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xd2
 	}
-	if len(m.VolumeRune) > 0 {
-		i -= len(m.VolumeRune)
-		copy(dAtA[i:], m.VolumeRune)
-		i = encodeVarintQueryPool(dAtA, i, uint64(len(m.VolumeRune)))
+	if len(m.VolumeDeca) > 0 {
+		i -= len(m.VolumeDeca)
+		copy(dAtA[i:], m.VolumeDeca)
+		i = encodeVarintQueryPool(dAtA, i, uint64(len(m.VolumeDeca)))
 		i--
 		dAtA[i] = 0x1
 		i--
@@ -645,10 +645,10 @@ func (m *QueryPoolResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x4a
 	}
-	if len(m.BalanceRune) > 0 {
-		i -= len(m.BalanceRune)
-		copy(dAtA[i:], m.BalanceRune)
-		i = encodeVarintQueryPool(dAtA, i, uint64(len(m.BalanceRune)))
+	if len(m.BalanceDeca) > 0 {
+		i -= len(m.BalanceDeca)
+		copy(dAtA[i:], m.BalanceDeca)
+		i = encodeVarintQueryPool(dAtA, i, uint64(len(m.BalanceDeca)))
 		i--
 		dAtA[i] = 0x42
 	}
@@ -659,10 +659,10 @@ func (m *QueryPoolResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x3a
 	}
-	if len(m.PendingInboundRune) > 0 {
-		i -= len(m.PendingInboundRune)
-		copy(dAtA[i:], m.PendingInboundRune)
-		i = encodeVarintQueryPool(dAtA, i, uint64(len(m.PendingInboundRune)))
+	if len(m.PendingInboundDeca) > 0 {
+		i -= len(m.PendingInboundDeca)
+		copy(dAtA[i:], m.PendingInboundDeca)
+		i = encodeVarintQueryPool(dAtA, i, uint64(len(m.PendingInboundDeca)))
 		i--
 		dAtA[i] = 0x32
 	}
@@ -822,7 +822,7 @@ func (m *QueryPoolResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQueryPool(uint64(l))
 	}
-	l = len(m.PendingInboundRune)
+	l = len(m.PendingInboundDeca)
 	if l > 0 {
 		n += 1 + l + sovQueryPool(uint64(l))
 	}
@@ -830,7 +830,7 @@ func (m *QueryPoolResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQueryPool(uint64(l))
 	}
-	l = len(m.BalanceRune)
+	l = len(m.BalanceDeca)
 	if l > 0 {
 		n += 1 + l + sovQueryPool(uint64(l))
 	}
@@ -884,7 +884,7 @@ func (m *QueryPoolResponse) Size() (n int) {
 	if m.TradingHalted {
 		n += 3
 	}
-	l = len(m.VolumeRune)
+	l = len(m.VolumeDeca)
 	if l > 0 {
 		n += 2 + l + sovQueryPool(uint64(l))
 	}
@@ -1221,7 +1221,7 @@ func (m *QueryPoolResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PendingInboundRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingInboundDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1249,7 +1249,7 @@ func (m *QueryPoolResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PendingInboundRune = string(dAtA[iNdEx:postIndex])
+			m.PendingInboundDeca = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -1285,7 +1285,7 @@ func (m *QueryPoolResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 8:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BalanceRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BalanceDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1313,7 +1313,7 @@ func (m *QueryPoolResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BalanceRune = string(dAtA[iNdEx:postIndex])
+			m.BalanceDeca = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 9:
 			if wireType != 2 {
@@ -1709,7 +1709,7 @@ func (m *QueryPoolResponse) Unmarshal(dAtA []byte) error {
 			m.TradingHalted = bool(v != 0)
 		case 25:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VolumeRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1737,7 +1737,7 @@ func (m *QueryPoolResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VolumeRune = string(dAtA[iNdEx:postIndex])
+			m.VolumeDeca = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 26:
 			if wireType != 2 {

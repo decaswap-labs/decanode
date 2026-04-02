@@ -17,15 +17,15 @@ import (
 var (
 	md_LiquidityProvider                      protoreflect.MessageDescriptor
 	fd_LiquidityProvider_asset                protoreflect.FieldDescriptor
-	fd_LiquidityProvider_rune_address         protoreflect.FieldDescriptor
+	fd_LiquidityProvider_deca_address         protoreflect.FieldDescriptor
 	fd_LiquidityProvider_asset_address        protoreflect.FieldDescriptor
 	fd_LiquidityProvider_last_add_height      protoreflect.FieldDescriptor
 	fd_LiquidityProvider_last_withdraw_height protoreflect.FieldDescriptor
 	fd_LiquidityProvider_units                protoreflect.FieldDescriptor
-	fd_LiquidityProvider_pending_rune         protoreflect.FieldDescriptor
+	fd_LiquidityProvider_pending_deca         protoreflect.FieldDescriptor
 	fd_LiquidityProvider_pending_asset        protoreflect.FieldDescriptor
 	fd_LiquidityProvider_pending_tx_Id        protoreflect.FieldDescriptor
-	fd_LiquidityProvider_rune_deposit_value   protoreflect.FieldDescriptor
+	fd_LiquidityProvider_deca_deposit_value   protoreflect.FieldDescriptor
 	fd_LiquidityProvider_asset_deposit_value  protoreflect.FieldDescriptor
 )
 
@@ -33,15 +33,15 @@ func init() {
 	file_types_type_liquidity_provider_proto_init()
 	md_LiquidityProvider = File_types_type_liquidity_provider_proto.Messages().ByName("LiquidityProvider")
 	fd_LiquidityProvider_asset = md_LiquidityProvider.Fields().ByName("asset")
-	fd_LiquidityProvider_rune_address = md_LiquidityProvider.Fields().ByName("rune_address")
+	fd_LiquidityProvider_deca_address = md_LiquidityProvider.Fields().ByName("deca_address")
 	fd_LiquidityProvider_asset_address = md_LiquidityProvider.Fields().ByName("asset_address")
 	fd_LiquidityProvider_last_add_height = md_LiquidityProvider.Fields().ByName("last_add_height")
 	fd_LiquidityProvider_last_withdraw_height = md_LiquidityProvider.Fields().ByName("last_withdraw_height")
 	fd_LiquidityProvider_units = md_LiquidityProvider.Fields().ByName("units")
-	fd_LiquidityProvider_pending_rune = md_LiquidityProvider.Fields().ByName("pending_rune")
+	fd_LiquidityProvider_pending_deca = md_LiquidityProvider.Fields().ByName("pending_deca")
 	fd_LiquidityProvider_pending_asset = md_LiquidityProvider.Fields().ByName("pending_asset")
 	fd_LiquidityProvider_pending_tx_Id = md_LiquidityProvider.Fields().ByName("pending_tx_Id")
-	fd_LiquidityProvider_rune_deposit_value = md_LiquidityProvider.Fields().ByName("rune_deposit_value")
+	fd_LiquidityProvider_deca_deposit_value = md_LiquidityProvider.Fields().ByName("deca_deposit_value")
 	fd_LiquidityProvider_asset_deposit_value = md_LiquidityProvider.Fields().ByName("asset_deposit_value")
 }
 
@@ -116,9 +116,9 @@ func (x *fastReflection_LiquidityProvider) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_LiquidityProvider_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_LiquidityProvider_deca_address, value) {
 			return
 		}
 	}
@@ -146,9 +146,9 @@ func (x *fastReflection_LiquidityProvider) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.PendingRune != "" {
-		value := protoreflect.ValueOfString(x.PendingRune)
-		if !f(fd_LiquidityProvider_pending_rune, value) {
+	if x.PendingDeca != "" {
+		value := protoreflect.ValueOfString(x.PendingDeca)
+		if !f(fd_LiquidityProvider_pending_deca, value) {
 			return
 		}
 	}
@@ -164,9 +164,9 @@ func (x *fastReflection_LiquidityProvider) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.RuneDepositValue != "" {
-		value := protoreflect.ValueOfString(x.RuneDepositValue)
-		if !f(fd_LiquidityProvider_rune_deposit_value, value) {
+	if x.DecaDepositValue != "" {
+		value := protoreflect.ValueOfString(x.DecaDepositValue)
+		if !f(fd_LiquidityProvider_deca_deposit_value, value) {
 			return
 		}
 	}
@@ -193,8 +193,8 @@ func (x *fastReflection_LiquidityProvider) Has(fd protoreflect.FieldDescriptor) 
 	switch fd.FullName() {
 	case "types.LiquidityProvider.asset":
 		return x.Asset != nil
-	case "types.LiquidityProvider.rune_address":
-		return x.RuneAddress != ""
+	case "types.LiquidityProvider.deca_address":
+		return x.DecaAddress != ""
 	case "types.LiquidityProvider.asset_address":
 		return x.AssetAddress != ""
 	case "types.LiquidityProvider.last_add_height":
@@ -203,14 +203,14 @@ func (x *fastReflection_LiquidityProvider) Has(fd protoreflect.FieldDescriptor) 
 		return x.LastWithdrawHeight != int64(0)
 	case "types.LiquidityProvider.units":
 		return x.Units != ""
-	case "types.LiquidityProvider.pending_rune":
-		return x.PendingRune != ""
+	case "types.LiquidityProvider.pending_deca":
+		return x.PendingDeca != ""
 	case "types.LiquidityProvider.pending_asset":
 		return x.PendingAsset != ""
 	case "types.LiquidityProvider.pending_tx_Id":
 		return x.PendingTx_Id != ""
-	case "types.LiquidityProvider.rune_deposit_value":
-		return x.RuneDepositValue != ""
+	case "types.LiquidityProvider.deca_deposit_value":
+		return x.DecaDepositValue != ""
 	case "types.LiquidityProvider.asset_deposit_value":
 		return x.AssetDepositValue != ""
 	default:
@@ -231,8 +231,8 @@ func (x *fastReflection_LiquidityProvider) Clear(fd protoreflect.FieldDescriptor
 	switch fd.FullName() {
 	case "types.LiquidityProvider.asset":
 		x.Asset = nil
-	case "types.LiquidityProvider.rune_address":
-		x.RuneAddress = ""
+	case "types.LiquidityProvider.deca_address":
+		x.DecaAddress = ""
 	case "types.LiquidityProvider.asset_address":
 		x.AssetAddress = ""
 	case "types.LiquidityProvider.last_add_height":
@@ -241,14 +241,14 @@ func (x *fastReflection_LiquidityProvider) Clear(fd protoreflect.FieldDescriptor
 		x.LastWithdrawHeight = int64(0)
 	case "types.LiquidityProvider.units":
 		x.Units = ""
-	case "types.LiquidityProvider.pending_rune":
-		x.PendingRune = ""
+	case "types.LiquidityProvider.pending_deca":
+		x.PendingDeca = ""
 	case "types.LiquidityProvider.pending_asset":
 		x.PendingAsset = ""
 	case "types.LiquidityProvider.pending_tx_Id":
 		x.PendingTx_Id = ""
-	case "types.LiquidityProvider.rune_deposit_value":
-		x.RuneDepositValue = ""
+	case "types.LiquidityProvider.deca_deposit_value":
+		x.DecaDepositValue = ""
 	case "types.LiquidityProvider.asset_deposit_value":
 		x.AssetDepositValue = ""
 	default:
@@ -270,8 +270,8 @@ func (x *fastReflection_LiquidityProvider) Get(descriptor protoreflect.FieldDesc
 	case "types.LiquidityProvider.asset":
 		value := x.Asset
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "types.LiquidityProvider.rune_address":
-		value := x.RuneAddress
+	case "types.LiquidityProvider.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.LiquidityProvider.asset_address":
 		value := x.AssetAddress
@@ -285,8 +285,8 @@ func (x *fastReflection_LiquidityProvider) Get(descriptor protoreflect.FieldDesc
 	case "types.LiquidityProvider.units":
 		value := x.Units
 		return protoreflect.ValueOfString(value)
-	case "types.LiquidityProvider.pending_rune":
-		value := x.PendingRune
+	case "types.LiquidityProvider.pending_deca":
+		value := x.PendingDeca
 		return protoreflect.ValueOfString(value)
 	case "types.LiquidityProvider.pending_asset":
 		value := x.PendingAsset
@@ -294,8 +294,8 @@ func (x *fastReflection_LiquidityProvider) Get(descriptor protoreflect.FieldDesc
 	case "types.LiquidityProvider.pending_tx_Id":
 		value := x.PendingTx_Id
 		return protoreflect.ValueOfString(value)
-	case "types.LiquidityProvider.rune_deposit_value":
-		value := x.RuneDepositValue
+	case "types.LiquidityProvider.deca_deposit_value":
+		value := x.DecaDepositValue
 		return protoreflect.ValueOfString(value)
 	case "types.LiquidityProvider.asset_deposit_value":
 		value := x.AssetDepositValue
@@ -322,8 +322,8 @@ func (x *fastReflection_LiquidityProvider) Set(fd protoreflect.FieldDescriptor, 
 	switch fd.FullName() {
 	case "types.LiquidityProvider.asset":
 		x.Asset = value.Message().Interface().(*common.Asset)
-	case "types.LiquidityProvider.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.LiquidityProvider.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.LiquidityProvider.asset_address":
 		x.AssetAddress = value.Interface().(string)
 	case "types.LiquidityProvider.last_add_height":
@@ -332,14 +332,14 @@ func (x *fastReflection_LiquidityProvider) Set(fd protoreflect.FieldDescriptor, 
 		x.LastWithdrawHeight = value.Int()
 	case "types.LiquidityProvider.units":
 		x.Units = value.Interface().(string)
-	case "types.LiquidityProvider.pending_rune":
-		x.PendingRune = value.Interface().(string)
+	case "types.LiquidityProvider.pending_deca":
+		x.PendingDeca = value.Interface().(string)
 	case "types.LiquidityProvider.pending_asset":
 		x.PendingAsset = value.Interface().(string)
 	case "types.LiquidityProvider.pending_tx_Id":
 		x.PendingTx_Id = value.Interface().(string)
-	case "types.LiquidityProvider.rune_deposit_value":
-		x.RuneDepositValue = value.Interface().(string)
+	case "types.LiquidityProvider.deca_deposit_value":
+		x.DecaDepositValue = value.Interface().(string)
 	case "types.LiquidityProvider.asset_deposit_value":
 		x.AssetDepositValue = value.Interface().(string)
 	default:
@@ -367,8 +367,8 @@ func (x *fastReflection_LiquidityProvider) Mutable(fd protoreflect.FieldDescript
 			x.Asset = new(common.Asset)
 		}
 		return protoreflect.ValueOfMessage(x.Asset.ProtoReflect())
-	case "types.LiquidityProvider.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.LiquidityProvider is not mutable"))
+	case "types.LiquidityProvider.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.LiquidityProvider is not mutable"))
 	case "types.LiquidityProvider.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.LiquidityProvider is not mutable"))
 	case "types.LiquidityProvider.last_add_height":
@@ -377,14 +377,14 @@ func (x *fastReflection_LiquidityProvider) Mutable(fd protoreflect.FieldDescript
 		panic(fmt.Errorf("field last_withdraw_height of message types.LiquidityProvider is not mutable"))
 	case "types.LiquidityProvider.units":
 		panic(fmt.Errorf("field units of message types.LiquidityProvider is not mutable"))
-	case "types.LiquidityProvider.pending_rune":
-		panic(fmt.Errorf("field pending_rune of message types.LiquidityProvider is not mutable"))
+	case "types.LiquidityProvider.pending_deca":
+		panic(fmt.Errorf("field pending_deca of message types.LiquidityProvider is not mutable"))
 	case "types.LiquidityProvider.pending_asset":
 		panic(fmt.Errorf("field pending_asset of message types.LiquidityProvider is not mutable"))
 	case "types.LiquidityProvider.pending_tx_Id":
 		panic(fmt.Errorf("field pending_tx_Id of message types.LiquidityProvider is not mutable"))
-	case "types.LiquidityProvider.rune_deposit_value":
-		panic(fmt.Errorf("field rune_deposit_value of message types.LiquidityProvider is not mutable"))
+	case "types.LiquidityProvider.deca_deposit_value":
+		panic(fmt.Errorf("field deca_deposit_value of message types.LiquidityProvider is not mutable"))
 	case "types.LiquidityProvider.asset_deposit_value":
 		panic(fmt.Errorf("field asset_deposit_value of message types.LiquidityProvider is not mutable"))
 	default:
@@ -403,7 +403,7 @@ func (x *fastReflection_LiquidityProvider) NewField(fd protoreflect.FieldDescrip
 	case "types.LiquidityProvider.asset":
 		m := new(common.Asset)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "types.LiquidityProvider.rune_address":
+	case "types.LiquidityProvider.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.LiquidityProvider.asset_address":
 		return protoreflect.ValueOfString("")
@@ -413,13 +413,13 @@ func (x *fastReflection_LiquidityProvider) NewField(fd protoreflect.FieldDescrip
 		return protoreflect.ValueOfInt64(int64(0))
 	case "types.LiquidityProvider.units":
 		return protoreflect.ValueOfString("")
-	case "types.LiquidityProvider.pending_rune":
+	case "types.LiquidityProvider.pending_deca":
 		return protoreflect.ValueOfString("")
 	case "types.LiquidityProvider.pending_asset":
 		return protoreflect.ValueOfString("")
 	case "types.LiquidityProvider.pending_tx_Id":
 		return protoreflect.ValueOfString("")
-	case "types.LiquidityProvider.rune_deposit_value":
+	case "types.LiquidityProvider.deca_deposit_value":
 		return protoreflect.ValueOfString("")
 	case "types.LiquidityProvider.asset_deposit_value":
 		return protoreflect.ValueOfString("")
@@ -496,7 +496,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Asset)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -514,7 +514,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.PendingRune)
+		l = len(x.PendingDeca)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -526,7 +526,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneDepositValue)
+		l = len(x.DecaDepositValue)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -570,10 +570,10 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x5a
 		}
-		if len(x.RuneDepositValue) > 0 {
-			i -= len(x.RuneDepositValue)
-			copy(dAtA[i:], x.RuneDepositValue)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneDepositValue)))
+		if len(x.DecaDepositValue) > 0 {
+			i -= len(x.DecaDepositValue)
+			copy(dAtA[i:], x.DecaDepositValue)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaDepositValue)))
 			i--
 			dAtA[i] = 0x52
 		}
@@ -591,10 +591,10 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x42
 		}
-		if len(x.PendingRune) > 0 {
-			i -= len(x.PendingRune)
-			copy(dAtA[i:], x.PendingRune)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PendingRune)))
+		if len(x.PendingDeca) > 0 {
+			i -= len(x.PendingDeca)
+			copy(dAtA[i:], x.PendingDeca)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PendingDeca)))
 			i--
 			dAtA[i] = 0x3a
 		}
@@ -622,10 +622,10 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x1a
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -730,7 +730,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -758,7 +758,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
@@ -864,7 +864,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 7:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingRune", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingDeca", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -892,7 +892,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PendingRune = string(dAtA[iNdEx:postIndex])
+				x.PendingDeca = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 8:
 				if wireType != 2 {
@@ -960,7 +960,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 10:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneDepositValue", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaDepositValue", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -988,7 +988,7 @@ func (x *fastReflection_LiquidityProvider) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneDepositValue = string(dAtA[iNdEx:postIndex])
+				x.DecaDepositValue = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 11:
 				if wireType != 2 {
@@ -1076,15 +1076,15 @@ type LiquidityProvider struct {
 	unknownFields protoimpl.UnknownFields
 
 	Asset              *common.Asset `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
-	RuneAddress        string        `protobuf:"bytes,2,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress        string        `protobuf:"bytes,2,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	AssetAddress       string        `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
 	LastAddHeight      int64         `protobuf:"varint,4,opt,name=last_add_height,json=lastAddHeight,proto3" json:"last_add_height,omitempty"`
 	LastWithdrawHeight int64         `protobuf:"varint,5,opt,name=last_withdraw_height,json=lastWithdrawHeight,proto3" json:"last_withdraw_height,omitempty"`
 	Units              string        `protobuf:"bytes,6,opt,name=units,proto3" json:"units,omitempty"`
-	PendingRune        string        `protobuf:"bytes,7,opt,name=pending_rune,json=pendingRune,proto3" json:"pending_rune,omitempty"`
+	PendingDeca        string        `protobuf:"bytes,7,opt,name=pending_deca,json=pendingDeca,proto3" json:"pending_deca,omitempty"`
 	PendingAsset       string        `protobuf:"bytes,8,opt,name=pending_asset,json=pendingAsset,proto3" json:"pending_asset,omitempty"`
 	PendingTx_Id       string        `protobuf:"bytes,9,opt,name=pending_tx_Id,json=pendingTxId,proto3" json:"pending_tx_Id,omitempty"`
-	RuneDepositValue   string        `protobuf:"bytes,10,opt,name=rune_deposit_value,json=runeDepositValue,proto3" json:"rune_deposit_value,omitempty"`
+	DecaDepositValue   string        `protobuf:"bytes,10,opt,name=deca_deposit_value,json=decaDepositValue,proto3" json:"deca_deposit_value,omitempty"`
 	AssetDepositValue  string        `protobuf:"bytes,11,opt,name=asset_deposit_value,json=assetDepositValue,proto3" json:"asset_deposit_value,omitempty"`
 }
 
@@ -1115,9 +1115,9 @@ func (x *LiquidityProvider) GetAsset() *common.Asset {
 	return nil
 }
 
-func (x *LiquidityProvider) GetRuneAddress() string {
+func (x *LiquidityProvider) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }
@@ -1150,9 +1150,9 @@ func (x *LiquidityProvider) GetUnits() string {
 	return ""
 }
 
-func (x *LiquidityProvider) GetPendingRune() string {
+func (x *LiquidityProvider) GetPendingDeca() string {
 	if x != nil {
-		return x.PendingRune
+		return x.PendingDeca
 	}
 	return ""
 }
@@ -1171,9 +1171,9 @@ func (x *LiquidityProvider) GetPendingTx_Id() string {
 	return ""
 }
 
-func (x *LiquidityProvider) GetRuneDepositValue() string {
+func (x *LiquidityProvider) GetDecaDepositValue() string {
 	if x != nil {
-		return x.RuneDepositValue
+		return x.DecaDepositValue
 	}
 	return ""
 }

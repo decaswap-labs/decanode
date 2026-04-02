@@ -84,7 +84,7 @@ func (s *SlashingSuite) TestNodeSignSlashErrors(c *C) {
 			GetRandomETHAddress(),
 			common.Coins{
 				common.NewCoin(common.ETHAsset, cosmos.NewUint(320000000)),
-				common.NewCoin(common.RuneAsset(), cosmos.NewUint(420000000)),
+				common.NewCoin(common.DecaAsset(), cosmos.NewUint(420000000)),
 			},
 			nil,
 			"SWAP:ETH.ETH",
@@ -138,7 +138,7 @@ func (s *SlashingSuite) TestNotSigningSlash(c *C) {
 		GetRandomETHAddress(),
 		common.Coins{
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(320000000)),
-			common.NewCoin(common.RuneAsset(), cosmos.NewUint(420000000)),
+			common.NewCoin(common.DecaAsset(), cosmos.NewUint(420000000)),
 		},
 		nil,
 		"SWAP:ETH.ETH",
@@ -521,16 +521,16 @@ func (s *SlashingSuite) TestSlashVault(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
-	asgardBeforeSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, AsgardName)
-	bondBeforeSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, BondName)
-	reserveBeforeSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
-	poolBeforeSlash := pool.BalanceRune
+	asgardBeforeSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, AsgardName)
+	bondBeforeSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, BondName)
+	reserveBeforeSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
+	poolBeforeSlash := pool.BalanceDeca
 
 	err = slasher.SlashVault(ctx, vault.PubKey, common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(common.One))), mgr)
 	c.Assert(err, IsNil)
@@ -539,13 +539,13 @@ func (s *SlashingSuite) TestSlashVault(c *C) {
 	expectedBond := cosmos.NewUint(99850000000)
 	c.Assert(nodeTemp.Bond.Equal(expectedBond), Equals, true, Commentf("%d", nodeTemp.Bond.Uint64()))
 
-	asgardAfterSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, AsgardName)
-	bondAfterSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, BondName)
-	reserveAfterSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
+	asgardAfterSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, AsgardName)
+	bondAfterSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, BondName)
+	reserveAfterSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
 
 	pool, err = mgr.Keeper().GetPool(ctx, pool.Asset)
 	c.Assert(err, IsNil)
-	poolAfterSlash := pool.BalanceRune
+	poolAfterSlash := pool.BalanceDeca
 
 	// ensure pool's change is in sync with asgard's change
 	c.Assert(asgardAfterSlash.Sub(asgardBeforeSlash).Uint64(), Equals, poolAfterSlash.Sub(poolBeforeSlash).Uint64(), Commentf("%d", "pool/asgard rune mismatch"))
@@ -607,7 +607,7 @@ func (s *SlashingSuite) TestUpdatePoolFromSlash(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -620,7 +620,7 @@ func (s *SlashingSuite) TestUpdatePoolFromSlash(c *C) {
 	pool, err := mgr.Keeper().GetPool(ctx, common.BTCAsset)
 	c.Assert(err, IsNil)
 	c.Assert(pool.BalanceAsset.Uint64(), Equals, uint64(750*common.One))
-	c.Assert(pool.BalanceRune.Uint64(), Equals, uint64(1500*common.One))
+	c.Assert(pool.BalanceDeca.Uint64(), Equals, uint64(1500*common.One))
 }
 
 func (s *SlashingSuite) TestNetworkShouldNotSlashMorethanVaultAmount(c *C) {
@@ -645,16 +645,16 @@ func (s *SlashingSuite) TestNetworkShouldNotSlashMorethanVaultAmount(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
-	asgardBeforeSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, AsgardName)
-	bondBeforeSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, BondName)
-	reserveBeforeSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
-	poolBeforeSlash := pool.BalanceRune
+	asgardBeforeSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, AsgardName)
+	bondBeforeSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, BondName)
+	reserveBeforeSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
+	poolBeforeSlash := pool.BalanceDeca
 
 	// vault only has 0.5 BTC , however the outbound is 1 BTC , make sure we don't over slash the vault
 	err := slasher.SlashVault(ctx, vault.PubKey, common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(common.One))), mgr)
@@ -664,13 +664,13 @@ func (s *SlashingSuite) TestNetworkShouldNotSlashMorethanVaultAmount(c *C) {
 	expectedBond := cosmos.NewUint(99925000000)
 	c.Assert(nodeTemp.Bond.Equal(expectedBond), Equals, true, Commentf("%d", nodeTemp.Bond.Uint64()))
 
-	asgardAfterSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, AsgardName)
-	bondAfterSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, BondName)
-	reserveAfterSlash := mgr.Keeper().GetRuneBalanceOfModule(ctx, ReserveName)
+	asgardAfterSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, AsgardName)
+	bondAfterSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, BondName)
+	reserveAfterSlash := mgr.Keeper().GetDecaBalanceOfModule(ctx, ReserveName)
 
 	pool, err = mgr.Keeper().GetPool(ctx, pool.Asset)
 	c.Assert(err, IsNil)
-	poolAfterSlash := pool.BalanceRune
+	poolAfterSlash := pool.BalanceDeca
 
 	// ensure pool's change is in sync with asgard's change
 	c.Assert(asgardAfterSlash.Sub(asgardBeforeSlash).Uint64(), Equals, poolAfterSlash.Sub(poolBeforeSlash).Uint64(), Commentf("%d", "pool/asgard rune mismatch"))
@@ -725,7 +725,7 @@ func (s *SlashingSuite) TestNetworkShouldNotSlashMorethanVaultAmount(c *C) {
 	c.Assert(val2, Equals, int64(18), Commentf("%d", val2))
 
 	// Attempt to slash more than node has, pool should only be deducted what was successfully slashed
-	pool.BalanceRune = cosmos.NewUint(4000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(4000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(4000 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -750,7 +750,7 @@ func (s *SlashingSuite) TestNetworkShouldNotSlashMorethanVaultAmount(c *C) {
 	c.Assert(err, IsNil)
 
 	// Even though the total rune value to slash is 3000, the node only has 1000 RUNE bonded, so only slash and credit that much to the pool's rune side
-	c.Assert(updatedPool.BalanceRune.Uint64(), Equals, cosmos.NewUint(5000*common.One).Uint64())
+	c.Assert(updatedPool.BalanceDeca.Uint64(), Equals, cosmos.NewUint(5000*common.One).Uint64())
 	// But deduct full stolen amount from asset side
 	c.Assert(updatedPool.BalanceAsset.Uint64(), Equals, cosmos.NewUint(2000*common.One).Uint64())
 }
@@ -874,7 +874,7 @@ func (s *SlashingSuite) TestTreasuryRecoveryForMaxAttempts(c *C) {
 	// Setup pool
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -974,7 +974,7 @@ func (s *SlashingSuite) TestTreasuryRecoveryWithDifferentMemoTypes(c *C) {
 		// Setup pool for non-RUNE assets
 		pool := NewPool()
 		pool.Asset = common.BTCAsset
-		pool.BalanceRune = cosmos.NewUint(1000 * common.One)
+		pool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 		pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 		pool.Status = PoolAvailable
 		c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -1050,14 +1050,14 @@ func (s *SlashingSuite) TestReverseSwapForFailedSwapOutbound(c *C) {
 	// Setup pools for both assets
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
@@ -1178,14 +1178,14 @@ func (s *SlashingSuite) TestReverseSwapWithCustomRefundAddress(c *C) {
 	// Setup pools
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
@@ -1294,7 +1294,7 @@ func (s *SlashingSuite) TestReverseSwapFallbackToTreasury(c *C) {
 	// Setup only BTC pool (no ETH pool for reverse swap)
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
@@ -1348,7 +1348,7 @@ func (s *SlashingSuite) TestReverseSwapFallbackToTreasury(c *C) {
 	}
 
 	c.Assert(hasSwap, Equals, true, Commentf("Expected treasury recovery swap to be queued"))
-	c.Assert(queuedSwap.TargetAsset.Equals(common.RuneAsset()), Equals, true,
+	c.Assert(queuedSwap.TargetAsset.Equals(common.DecaAsset()), Equals, true,
 		Commentf("Treasury recovery should swap to RUNE"))
 	c.Assert(queuedSwap.Destination.Equals(common.TreasuryAddress), Equals, true,
 		Commentf("Treasury recovery should send to treasury address"))

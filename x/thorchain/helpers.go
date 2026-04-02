@@ -38,7 +38,7 @@ func refundTx(ctx cosmos.Context, tx ObservedTx, mgr Manager, refundCode uint32,
 			continue
 		}
 
-		if coin.IsRune() && coin.Asset.GetChain().Equals(common.ETHChain) {
+		if coin.IsDeca() && coin.Asset.GetChain().Equals(common.ETHChain) {
 			continue
 		}
 		pool, err := mgr.Keeper().GetPool(ctx, coin.Asset.GetLayer1Asset())
@@ -47,7 +47,7 @@ func refundTx(ctx cosmos.Context, tx ObservedTx, mgr Manager, refundCode uint32,
 		}
 
 		// Only attempt an outbound if a fee can be taken from the coin.
-		if coin.IsRune() || !pool.BalanceRune.IsZero() {
+		if coin.IsDeca() || !pool.BalanceDeca.IsZero() {
 			toAddr := tx.Tx.FromAddress
 			memo, err := ParseMemoWithTHORNames(ctx, mgr.Keeper(), tx.Tx.Memo)
 			if err == nil && memo.IsType(TxSwap) && !memo.GetRefundAddress().IsEmpty() && !coin.Asset.GetChain().IsTHORChain() {
@@ -151,7 +151,7 @@ func unrefundableCoinCleanup(ctx cosmos.Context, mgr Manager, toi TxOutItem, bur
 	case !coin.Asset.IsNative():
 		// If unable to refund external-chain coins, add them to their pools
 		// (so they aren't left in the vaults with no reflection in the pools).
-		// Failed-refund external coins have earlier been established to have existing pools with non-zero BalanceRune.
+		// Failed-refund external coins have earlier been established to have existing pools with non-zero BalanceDeca.
 
 		ctx.Logger().Error("fail to refund non-native tx, leaving coins in vault", "toi.InHash", toi.InHash, "toi.Coin", toi.Coin)
 		return
@@ -187,7 +187,7 @@ func getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sourceAsset, targetAsse
 	stableSwap := isStableToStable(ctx, mgr.Keeper(), sourceAsset, targetAsset)
 	var sourceAssetPool types.Pool
 	for i, asset := range []common.Asset{sourceAsset, targetAsset} {
-		if asset.IsRune() {
+		if asset.IsDeca() {
 			continue
 		}
 
@@ -210,14 +210,14 @@ func getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sourceAsset, targetAsse
 		}
 
 		// compute the minimum rune swap size for this leg of the swap
-		minRuneSwapSize := common.GetSafeShare(minSlip, cosmos.NewUint(constants.MaxBasisPts), pool.BalanceRune)
+		minRuneSwapSize := common.GetSafeShare(minSlip, cosmos.NewUint(constants.MaxBasisPts), pool.BalanceDeca)
 		if minSwapSize.IsZero() || minRuneSwapSize.LT(minSwapSize) {
 			minSwapSize = minRuneSwapSize
 		}
 	}
 
 	// calculate the max swap quantity
-	if !sourceAsset.IsRune() {
+	if !sourceAsset.IsDeca() {
 		minSwapSize = sourceAssetPool.RuneValueInAsset(minSwapSize)
 	}
 	if minSwapSize.IsZero() {
@@ -254,7 +254,7 @@ func getMaxSwapQuantity(ctx cosmos.Context, mgr Manager, sourceAsset, targetAsse
 		// get the rune depth of the anchor pool(s)
 		runeDepth, _, _ := mgr.NetworkMgr().CalcAnchor(ctx, mgr, asset)
 		dpool, _ := mgr.Keeper().GetPool(ctx, asset) // get the derived asset pool
-		newDbps := common.GetUncappedShare(dpool.BalanceRune, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
+		newDbps := common.GetUncappedShare(dpool.BalanceDeca, runeDepth, cosmos.NewUint(constants.MaxBasisPts))
 		if dbps.IsZero() || newDbps.LT(dbps) {
 			dbps = newDbps
 		}
@@ -367,7 +367,7 @@ func refundBond(ctx cosmos.Context, tx common.Tx, acc cosmos.AccAddress, amt cos
 		// this is always RUNE, and the MsgDeposit handler should have already deducted a network fee,
 		// so this can be done with SendFromModuleToAccount even if under 0.02 RUNE
 		// (which would cause TryAddTxOutItem to fail from no output after fee deduction)
-		unbondCoin := common.NewCoin(common.RuneAsset(), amt)
+		unbondCoin := common.NewCoin(common.DecaAsset(), amt)
 		err = mgr.Keeper().SendFromModuleToAccount(ctx, BondName, provider.BondAddress, common.NewCoins(unbondCoin))
 		if err != nil {
 			return ErrInternal(err, "fail to send unbonded RUNE to bond address")
@@ -678,9 +678,9 @@ func emitEndBlockTelemetry(ctx cosmos.Context, mgr Manager) error {
 		synthSupply := mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
 		labels := []metrics.Label{telemetry.NewLabel("pool", pool.Asset.String()), telemetry.NewLabel("status", pool.Status.String())}
 		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "balance", "synth"}, telem(synthSupply), labels)
-		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "balance", "rune"}, telem(pool.BalanceRune), labels)
+		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "balance", "rune"}, telem(pool.BalanceDeca), labels)
 		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "balance", "asset"}, telem(pool.BalanceAsset), labels)
-		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "pending", "rune"}, telem(pool.PendingInboundRune), labels)
+		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "pending", "rune"}, telem(pool.PendingInboundDeca), labels)
 		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "pending", "asset"}, telem(pool.PendingInboundAsset), labels)
 
 		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "units", "pool"}, telem(pool.CalcUnits(synthSupply)), labels)
@@ -690,7 +690,7 @@ func emitEndBlockTelemetry(ctx cosmos.Context, mgr Manager) error {
 		// pricing
 		price := float32(0)
 		if !pool.BalanceAsset.IsZero() {
-			price = runeUSDPrice * telem(pool.BalanceRune) / telem(pool.BalanceAsset)
+			price = runeUSDPrice * telem(pool.BalanceDeca) / telem(pool.BalanceAsset)
 		}
 		telemetry.SetGaugeWithLabels([]string{"thornode", "pool", "price", "usd"}, price, labels)
 
@@ -706,7 +706,7 @@ func emitEndBlockTelemetry(ctx cosmos.Context, mgr Manager) error {
 		// calculate the total value of this vault
 		totalValue := cosmos.ZeroUint()
 		for _, coin := range vault.Coins {
-			if coin.IsRune() {
+			if coin.IsDeca() {
 				totalValue = totalValue.Add(coin.Amount)
 			} else {
 				var pool Pool
@@ -811,10 +811,10 @@ func getAvailablePoolsRune(ctx cosmos.Context, keeper keeper.Keeper) (Pools, cos
 		if pool.Asset.IsNative() {
 			continue
 		}
-		if pool.BalanceRune.IsZero() {
+		if pool.BalanceDeca.IsZero() {
 			continue
 		}
-		availablePoolsRune = availablePoolsRune.Add(pool.BalanceRune)
+		availablePoolsRune = availablePoolsRune.Add(pool.BalanceDeca)
 		availablePools = append(availablePools, pool)
 	}
 	return availablePools, availablePoolsRune, nil
@@ -841,7 +841,7 @@ func getVaultsLiquidityRune(ctx cosmos.Context, keeper keeper.Keeper) (cosmos.Ui
 		}
 
 		for _, coin := range vaults[i].Coins {
-			if coin.IsRune() {
+			if coin.IsDeca() {
 				vaultsLiquidityRune = vaultsLiquidityRune.Add(coin.Amount)
 				continue
 			}
@@ -1036,7 +1036,7 @@ func atTVLCap(ctx cosmos.Context, coins common.Coins, mgr Manager) bool {
 		}
 	}
 
-	runeCoin := coins.GetCoin(common.RuneAsset())
+	runeCoin := coins.GetCoin(common.DecaAsset())
 	totalRuneValue := runeCoin.Amount
 	for _, coin := range coins {
 		if coin.IsEmpty() {
@@ -1057,7 +1057,7 @@ func atTVLCap(ctx cosmos.Context, coins common.Coins, mgr Manager) bool {
 		if !pool.IsAvailable() && !pool.IsStaged() {
 			continue
 		}
-		if pool.BalanceRune.IsZero() || pool.BalanceAsset.IsZero() {
+		if pool.BalanceDeca.IsZero() || pool.BalanceAsset.IsZero() {
 			continue
 		}
 		if pool.Asset.IsNative() {
@@ -1153,7 +1153,7 @@ func willSwapOutputExceedLimitAndFees(ctx cosmos.Context, mgr Manager, msg MsgSw
 
 	var emit cosmos.Uint
 	switch {
-	case !source.IsRune() && !target.IsRune():
+	case !source.IsDeca() && !target.IsDeca():
 		var sourcePool Pool
 		sourcePool, err = mgr.Keeper().GetPool(ctx, source.Asset.GetLayer1Asset())
 		if err != nil {
@@ -1164,22 +1164,22 @@ func willSwapOutputExceedLimitAndFees(ctx cosmos.Context, mgr Manager, msg MsgSw
 		if err != nil {
 			return false
 		}
-		emit = swapper.CalcAssetEmission(sourcePool.BalanceAsset, source.Amount, sourcePool.BalanceRune)
-		emit = swapper.CalcAssetEmission(targetPool.BalanceRune, emit, targetPool.BalanceAsset)
-	case source.IsRune():
+		emit = swapper.CalcAssetEmission(sourcePool.BalanceAsset, source.Amount, sourcePool.BalanceDeca)
+		emit = swapper.CalcAssetEmission(targetPool.BalanceDeca, emit, targetPool.BalanceAsset)
+	case source.IsDeca():
 		var pool Pool
 		pool, err = mgr.Keeper().GetPool(ctx, target.Asset.GetLayer1Asset())
 		if err != nil {
 			return false
 		}
-		emit = swapper.CalcAssetEmission(pool.BalanceRune, source.Amount, pool.BalanceAsset)
-	case target.IsRune():
+		emit = swapper.CalcAssetEmission(pool.BalanceDeca, source.Amount, pool.BalanceAsset)
+	case target.IsDeca():
 		var pool Pool
 		pool, err = mgr.Keeper().GetPool(ctx, source.Asset.GetLayer1Asset())
 		if err != nil {
 			return false
 		}
-		emit = swapper.CalcAssetEmission(pool.BalanceAsset, source.Amount, pool.BalanceRune)
+		emit = swapper.CalcAssetEmission(pool.BalanceAsset, source.Amount, pool.BalanceDeca)
 	}
 
 	// Check that the swap will emit more than the limit amount + outbound fee
@@ -1345,10 +1345,10 @@ func settleSwapCached(ctx cosmos.Context, mgr Manager, msg MsgSwap, settleReason
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// RUNEPool and POL
+// DECAPool and POL
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// reserveExitRUNEPool will release as much reserve ownership of the runepool as
+// reserveExitDECAPool will release as much reserve ownership of the runepool as
 // possible to providers. The amount is limited by the reserve units and pending rune -
 // whichever is less. The ownership units are adjusted and a corresponding amount of
 // rune is transferred from the runepool module to the reserve.
@@ -1370,7 +1370,7 @@ func polPoolValue(ctx cosmos.Context, mgr Manager) (cosmos.Uint, error) {
 		if pool.Asset.IsNative() {
 			continue
 		}
-		if pool.BalanceRune.IsZero() {
+		if pool.BalanceDeca.IsZero() {
 			continue
 		}
 		synthSupply := mgr.Keeper().GetTotalSupply(ctx, pool.Asset.GetSyntheticAsset())
@@ -1379,7 +1379,7 @@ func polPoolValue(ctx cosmos.Context, mgr Manager) (cosmos.Uint, error) {
 		if err != nil {
 			return total, err
 		}
-		share := common.GetSafeShare(lp.Units, pool.GetPoolUnits(), pool.BalanceRune)
+		share := common.GetSafeShare(lp.Units, pool.GetPoolUnits(), pool.BalanceDeca)
 		total = total.Add(share.MulUint64(2))
 	}
 

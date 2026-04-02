@@ -17,10 +17,10 @@ type ModuleBalances struct {
 
 func getModuleBalances(c *C, ctx cosmos.Context, k keeper.Keeper) ModuleBalances {
 	return ModuleBalances{
-		Asgard:  int64(k.GetRuneBalanceOfModule(ctx, AsgardName).Uint64()),
-		Bond:    int64(k.GetRuneBalanceOfModule(ctx, BondName).Uint64()),
-		Reserve: int64(k.GetRuneBalanceOfModule(ctx, ReserveName).Uint64()),
-		Module:  int64(k.GetRuneBalanceOfModule(ctx, ModuleName).Uint64()),
+		Asgard:  int64(k.GetDecaBalanceOfModule(ctx, AsgardName).Uint64()),
+		Bond:    int64(k.GetDecaBalanceOfModule(ctx, BondName).Uint64()),
+		Reserve: int64(k.GetDecaBalanceOfModule(ctx, ReserveName).Uint64()),
+		Module:  int64(k.GetDecaBalanceOfModule(ctx, ModuleName).Uint64()),
 	}
 }
 

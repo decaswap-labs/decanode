@@ -89,14 +89,14 @@ func (s *KeeperVaultSuite) TestVaultSorBySecurity(c *C) {
 	// Create Pools
 	pool1 := NewPool()
 	pool1.Asset = common.ETHAsset
-	pool1.BalanceRune = cosmos.NewUint(common.One * 100)
+	pool1.BalanceDeca = cosmos.NewUint(common.One * 100)
 	pool1.BalanceAsset = cosmos.NewUint(common.One * 100)
 	c.Assert(k.SetPool(ctx, pool1), IsNil)
 
 	// Create three vaults
 	vault1 := NewVault(1024, ActiveVault, AsgardVault, GetRandomPubKey(), common.Chains{common.ETHChain}.Strings(), []ChainContract{})
 	vault1.AddFunds(common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(common.One*200)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(common.One*200)),
 	})
 	vault1.Membership = []string{
 		na1.PubKeySet.Secp256k1.String(),
@@ -160,7 +160,7 @@ func (s *KeeperVaultSuite) TestGetMostSecureStrict(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(common.One * 100)
+	pool.BalanceDeca = cosmos.NewUint(common.One * 100)
 	pool.BalanceAsset = cosmos.NewUint(common.One * 100)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 

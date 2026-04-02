@@ -13,7 +13,7 @@ var _ = Suite(&LiquidityProviderSuite{})
 func (LiquidityProviderSuite) TestLiquidityProvider(c *C) {
 	lp := LiquidityProvider{
 		Asset:         common.ETHAsset,
-		RuneAddress:   GetRandomETHAddress(),
+		DecaAddress:   GetRandomETHAddress(),
 		AssetAddress:  GetRandomBTCAddress(),
 		LastAddHeight: 12,
 	}
@@ -21,7 +21,7 @@ func (LiquidityProviderSuite) TestLiquidityProvider(c *C) {
 	c.Check(len(lp.Key()) > 0, Equals, true)
 	lp1 := LiquidityProvider{
 		Asset:         common.ETHAsset,
-		RuneAddress:   GetRandomETHAddress(),
+		DecaAddress:   GetRandomETHAddress(),
 		AssetAddress:  GetRandomBTCAddress(),
 		LastAddHeight: 0,
 	}
@@ -29,7 +29,7 @@ func (LiquidityProviderSuite) TestLiquidityProvider(c *C) {
 
 	lp2 := LiquidityProvider{
 		Asset:         common.ETHAsset,
-		RuneAddress:   common.NoAddress,
+		DecaAddress:   common.NoAddress,
 		AssetAddress:  common.NoAddress,
 		LastAddHeight: 100,
 	}

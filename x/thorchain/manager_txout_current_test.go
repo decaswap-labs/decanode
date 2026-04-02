@@ -192,7 +192,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem(c *C) {
 	w := getHandlerTestWrapper(c, 1, true, true)
 	vault := GetRandomVault()
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.BCHAsset, cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000*common.One)),
@@ -325,7 +325,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem(c *C) {
 				Chain:     common.THORChain,
 				ToAddress: GetRandomRUNEAddress(),
 				InHash:    inTxID,
-				Coin:      common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000*common.One)),
+				Coin:      common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000*common.One)),
 			}
 			txOutStore.ClearOutboundItems(w.ctx)
 			success, err = txOutStore.TryAddTxOutItem(w.ctx, w.mgr, item, cosmos.ZeroUint())
@@ -350,7 +350,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem(c *C) {
 				Chain:      common.THORChain,
 				ToAddress:  GetRandomRUNEAddress(),
 				InHash:     inTxID,
-				Coin:       common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000*common.One)),
+				Coin:       common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000*common.One)),
 			}
 			txOutStore.ClearOutboundItems(w.ctx)
 			success, err = txOutStore.TryAddTxOutItem(w.ctx, w.mgr, item, cosmos.ZeroUint())
@@ -377,7 +377,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_OutboundHeightDoesNotGetOverride(c *C)
 	w := getHandlerTestWrapper(c, 1, true, true)
 	vault := GetRandomVault()
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, vault), IsNil)
@@ -435,7 +435,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_OutboundHeightDoesNotGetOverride(c *C)
 	c.Assert(afterVoter.OutboundHeight, Equals, int64(4))
 
 	item.Chain = common.THORChain
-	item.Coin = common.NewCoin(common.RuneNative, cosmos.NewUint(100*common.One))
+	item.Coin = common.NewCoin(common.DecaNative, cosmos.NewUint(100*common.One))
 	item.ToAddress = GetRandomTHORAddress()
 	ok, err = txOutStore.TryAddTxOutItem(w.ctx, w.mgr, item, cosmos.ZeroUint())
 	c.Assert(err, IsNil)
@@ -451,7 +451,7 @@ func (s TxOutStoreSuite) TestAddOutTxItemNotEnoughForFee(c *C) {
 	w := getHandlerTestWrapper(c, 1, true, true)
 	vault := GetRandomVault()
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, vault), IsNil)
@@ -524,7 +524,7 @@ func (s TxOutStoreSuite) TestCalcTxOutHeight(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(90527581399649)
+	pool.BalanceDeca = cosmos.NewUint(90527581399649)
 	pool.BalanceAsset = cosmos.NewUint(1402011488988)
 	c.Assert(keeper.SetPool(ctx, pool), IsNil)
 
@@ -611,7 +611,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_MultipleOutboundWillNotBeScheduledAtTh
 	w := getHandlerTestWrapper(c, 1, true, true)
 	vault := GetRandomVault()
 	vault.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.DOGEAsset, cosmos.NewUint(10000*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, vault), IsNil)
@@ -688,7 +688,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_MultipleOutboundWillNotBeScheduledAtTh
 	c.Assert(afterVoter.OutboundHeight, Equals, int64(4))
 
 	item.Chain = common.THORChain
-	item.Coin = common.NewCoin(common.RuneNative, cosmos.NewUint(100*common.One))
+	item.Coin = common.NewCoin(common.DecaNative, cosmos.NewUint(100*common.One))
 	item.ToAddress = GetRandomTHORAddress()
 	ok, err = txOutStore.TryAddTxOutItem(w.ctx, w.mgr, item, cosmos.ZeroUint())
 	c.Assert(err, IsNil)
@@ -706,7 +706,7 @@ func (s TxOutStoreSuite) TestAddOutTxItemInteractionWithPool(c *C) {
 	c.Assert(err, IsNil)
 	// Set unequal values for the pool balances for this test.
 	pool.BalanceAsset = cosmos.NewUint(50 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Asset = common.DOGEAsset
 	err = w.keeper.SetPool(w.ctx, pool)
 	c.Assert(err, IsNil)
@@ -743,7 +743,7 @@ func (s TxOutStoreSuite) TestAddOutTxItemInteractionWithPool(c *C) {
 	//   R_1 = R_0 - R_0 * a / (A_0 + a)  // slip formula
 	//       = 100e8 - 100e8 * (20e8 - 1999925000) / (50e8 + (20e8 - 1999925000)) = 9999850002
 	c.Assert(pool.BalanceAsset.Equal(cosmos.NewUint(5000037500)), Equals, true, Commentf("%d", pool.BalanceAsset.Uint64()))
-	c.Assert(pool.BalanceRune.Equal(cosmos.NewUint(9999925001)), Equals, true, Commentf("%d", pool.BalanceRune.Uint64()))
+	c.Assert(pool.BalanceDeca.Equal(cosmos.NewUint(9999925001)), Equals, true, Commentf("%d", pool.BalanceDeca.Uint64()))
 }
 
 func (s TxOutStoreSuite) TestAddOutTxItemSendingFromRetiredVault(c *C) {
@@ -753,7 +753,7 @@ func (s TxOutStoreSuite) TestAddOutTxItemSendingFromRetiredVault(c *C) {
 	activeVault1.Type = AsgardVault
 	activeVault1.Status = ActiveVault
 	activeVault1.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, activeVault1), IsNil)
@@ -762,7 +762,7 @@ func (s TxOutStoreSuite) TestAddOutTxItemSendingFromRetiredVault(c *C) {
 	activeVault2.Type = AsgardVault
 	activeVault2.Status = ActiveVault
 	activeVault2.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, activeVault2), IsNil)
@@ -771,7 +771,7 @@ func (s TxOutStoreSuite) TestAddOutTxItemSendingFromRetiredVault(c *C) {
 	retiringVault1.Type = AsgardVault
 	retiringVault1.Status = RetiringVault
 	retiringVault1.Coins = common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(10000*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(10000*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(1000*common.One)),
 	}
 	c.Assert(w.keeper.SetVault(w.ctx, retiringVault1), IsNil)
@@ -886,7 +886,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_SecurityVersusOutboundNumber(c *C) {
 	pool, err := w.keeper.GetPool(w.ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	pool.BalanceAsset = cosmos.NewUint(1653258402395)
-	pool.BalanceRune = cosmos.NewUint(248680012786574)
+	pool.BalanceDeca = cosmos.NewUint(248680012786574)
 	pool.Asset = common.ETHAsset
 	err = w.keeper.SetPool(w.ctx, pool)
 	c.Assert(err, IsNil)
@@ -894,7 +894,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_SecurityVersusOutboundNumber(c *C) {
 	pool, err = w.keeper.GetPool(w.ctx, assetEthTwt)
 	c.Assert(err, IsNil)
 	pool.BalanceAsset = cosmos.NewUint(89359597473914)
-	pool.BalanceRune = cosmos.NewUint(46962864904253)
+	pool.BalanceDeca = cosmos.NewUint(46962864904253)
 	err = w.keeper.SetPool(w.ctx, pool)
 	c.Assert(err, NotNil)
 	pool.Asset = assetEthTwt
@@ -904,7 +904,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_SecurityVersusOutboundNumber(c *C) {
 	pool, err = w.keeper.GetPool(w.ctx, common.BTCAsset)
 	c.Assert(err, IsNil)
 	pool.BalanceAsset = cosmos.NewUint(80362018825)
-	pool.BalanceRune = cosmos.NewUint(837898672769246)
+	pool.BalanceDeca = cosmos.NewUint(837898672769246)
 	err = w.keeper.SetPool(w.ctx, pool)
 	c.Assert(err, NotNil)
 	pool.Asset = common.BTCAsset
@@ -914,7 +914,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_SecurityVersusOutboundNumber(c *C) {
 	pool, err = w.keeper.GetPool(w.ctx, common.ATOMAsset)
 	c.Assert(err, IsNil)
 	pool.BalanceAsset = cosmos.NewUint(694112527552)
-	pool.BalanceRune = cosmos.NewUint(612691971161372)
+	pool.BalanceDeca = cosmos.NewUint(612691971161372)
 	err = w.keeper.SetPool(w.ctx, pool)
 	c.Assert(err, NotNil)
 	pool.Asset = common.ATOMAsset
@@ -1039,7 +1039,7 @@ func (s TxOutStoreSuite) TestAddOutTxItem_VaultStatusVersusOutboundNumber(c *C) 
 	pool, err := w.keeper.GetPool(w.ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
 	pool.BalanceAsset = cosmos.NewUint(500 * common.One)
-	pool.BalanceRune = cosmos.NewUint(75_000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(75_000 * common.One)
 	pool.Asset = common.ETHAsset
 	err = w.keeper.SetPool(w.ctx, pool)
 	c.Assert(err, IsNil)

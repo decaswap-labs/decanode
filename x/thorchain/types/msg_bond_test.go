@@ -21,7 +21,7 @@ func (MsgApplySuite) TestMsgApply(c *C) {
 	signerAddr := GetRandomBech32Addr()
 	bondAddr := GetRandomETHAddress()
 	txin := GetRandomTx()
-	txin.Coins[0] = common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One))
+	txin.Coins[0] = common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One))
 	txinNoID := txin
 	txinNoID.ID = ""
 	msgApply := NewMsgBond(txin, nodeAddr, cosmos.NewUint(common.One), bondAddr, nil, signerAddr, 5000)

@@ -47,7 +47,7 @@ func (MsgSwapSuite) TestMsgSwap(c *C) {
 	}{
 		{
 			requestTxHash: common.TxID(""),
-			source:        common.RuneAsset(),
+			source:        common.DecaAsset(),
 			target:        common.ETHAsset,
 			amount:        cosmos.NewUint(100000000),
 			requester:     ethAddress,
@@ -77,7 +77,7 @@ func (MsgSwapSuite) TestMsgSwap(c *C) {
 		},
 		{
 			requestTxHash: txID,
-			source:        common.RuneAsset(),
+			source:        common.DecaAsset(),
 			target:        common.Asset{},
 			amount:        cosmos.NewUint(100000000),
 			requester:     ethAddress,
@@ -87,7 +87,7 @@ func (MsgSwapSuite) TestMsgSwap(c *C) {
 		},
 		{
 			requestTxHash: txID,
-			source:        common.RuneAsset(),
+			source:        common.DecaAsset(),
 			target:        common.ETHAsset,
 			amount:        cosmos.ZeroUint(),
 			requester:     ethAddress,
@@ -97,7 +97,7 @@ func (MsgSwapSuite) TestMsgSwap(c *C) {
 		},
 		{
 			requestTxHash: txID,
-			source:        common.RuneAsset(),
+			source:        common.DecaAsset(),
 			target:        common.ETHAsset,
 			amount:        cosmos.NewUint(100000000),
 			requester:     common.NoAddress,
@@ -107,7 +107,7 @@ func (MsgSwapSuite) TestMsgSwap(c *C) {
 		},
 		{
 			requestTxHash: txID,
-			source:        common.RuneAsset(),
+			source:        common.DecaAsset(),
 			target:        common.ETHAsset,
 			amount:        cosmos.NewUint(100000000),
 			requester:     ethAddress,
@@ -117,7 +117,7 @@ func (MsgSwapSuite) TestMsgSwap(c *C) {
 		},
 		{
 			requestTxHash: txID,
-			source:        common.RuneAsset(),
+			source:        common.DecaAsset(),
 			target:        common.ETHAsset,
 			amount:        cosmos.NewUint(100000000),
 			requester:     ethAddress,
@@ -651,7 +651,7 @@ func (MsgSwapSuite) TestNewMsgSwap(c *C) {
 	// Test with minimal parameters (zero values)
 	msgMinimal := NewMsgSwap(
 		tx,
-		common.RuneAsset(),
+		common.DecaAsset(),
 		GetRandomTHORAddress(),
 		cosmos.ZeroUint(),
 		common.NoAddress,

@@ -111,7 +111,7 @@ func (MintBurnSupplyType) EnumDescriptor() ([]byte, []int) {
 type PoolMod struct {
 	Asset    gitlab_com_thorchain_thornode_v3_common.Asset `protobuf:"bytes,1,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
 	RuneAmt  cosmossdk_io_math.Uint                        `protobuf:"bytes,2,opt,name=rune_amt,json=runeAmt,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amt"`
-	RuneAdd  bool                                          `protobuf:"varint,3,opt,name=rune_add,json=runeAdd,proto3" json:"rune_add,omitempty"`
+	DecaAdd  bool                                          `protobuf:"varint,3,opt,name=deca_add,json=decaAdd,proto3" json:"deca_add,omitempty"`
 	AssetAmt cosmossdk_io_math.Uint                        `protobuf:"bytes,4,opt,name=asset_amt,json=assetAmt,proto3,customtype=cosmossdk.io/math.Uint" json:"asset_amt"`
 	AssetAdd bool                                          `protobuf:"varint,5,opt,name=asset_add,json=assetAdd,proto3" json:"asset_add,omitempty"`
 }
@@ -149,9 +149,9 @@ func (m *PoolMod) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PoolMod proto.InternalMessageInfo
 
-func (m *PoolMod) GetRuneAdd() bool {
+func (m *PoolMod) GetDecaAdd() bool {
 	if m != nil {
-		return m.RuneAdd
+		return m.DecaAdd
 	}
 	return false
 }
@@ -548,7 +548,7 @@ type EventAffiliateFee struct {
 	TxID        gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,1,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 	Memo        string                                          `protobuf:"bytes,2,opt,name=memo,proto3" json:"memo,omitempty"`
 	Thorname    string                                          `protobuf:"bytes,3,opt,name=thorname,proto3" json:"thorname,omitempty"`
-	RuneAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	Asset       gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,5,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
 	GrossAmount cosmossdk_io_math.Uint                          `protobuf:"bytes,6,opt,name=gross_amount,json=grossAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"gross_amount"`
 	FeeBps      uint64                                          `protobuf:"varint,7,opt,name=fee_bps,json=feeBps,proto3" json:"fee_bps,omitempty"`
@@ -609,9 +609,9 @@ func (m *EventAffiliateFee) GetThorname() string {
 	return ""
 }
 
-func (m *EventAffiliateFee) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventAffiliateFee) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -626,7 +626,7 @@ func (m *EventAffiliateFee) GetFeeBps() uint64 {
 type EventAddLiquidity struct {
 	Pool          gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,1,opt,name=pool,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"pool"`
 	ProviderUnits cosmossdk_io_math.Uint                          `protobuf:"bytes,2,opt,name=provider_units,json=providerUnits,proto3,customtype=cosmossdk.io/math.Uint" json:"provider_units"`
-	RuneAddress   gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress   gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	RuneAmount    cosmossdk_io_math.Uint                          `protobuf:"bytes,4,opt,name=rune_amount,json=runeAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amount"`
 	AssetAmount   cosmossdk_io_math.Uint                          `protobuf:"bytes,5,opt,name=asset_amount,json=assetAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"asset_amount"`
 	RuneTxID      gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,6,opt,name=rune_tx_id,json=runeTxId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"rune_tx_id,omitempty"`
@@ -667,9 +667,9 @@ func (m *EventAddLiquidity) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EventAddLiquidity proto.InternalMessageInfo
 
-func (m *EventAddLiquidity) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventAddLiquidity) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -755,7 +755,7 @@ func (m *EventWithdraw) GetInTx() common.Tx {
 type EventPendingLiquidity struct {
 	Pool         gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,1,opt,name=pool,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"pool"`
 	PendingType  PendingLiquidityType                            `protobuf:"varint,2,opt,name=pending_type,json=pendingType,proto3,enum=types.PendingLiquidityType" json:"pending_type,omitempty"`
-	RuneAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	RuneAmount   cosmossdk_io_math.Uint                          `protobuf:"bytes,4,opt,name=rune_amount,json=runeAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amount"`
 	AssetAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,5,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
 	AssetAmount  cosmossdk_io_math.Uint                          `protobuf:"bytes,6,opt,name=asset_amount,json=assetAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"asset_amount"`
@@ -803,9 +803,9 @@ func (m *EventPendingLiquidity) GetPendingType() PendingLiquidityType {
 	return PendingLiquidityType_add
 }
 
-func (m *EventPendingLiquidity) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventPendingLiquidity) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -2079,7 +2079,7 @@ type EventTradeAccountDeposit struct {
 	Amount       cosmossdk_io_math.Uint                          `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Uint" json:"amount"`
 	Asset        gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,2,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
 	AssetAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
-	RuneAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	TxID         gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 }
 
@@ -2123,9 +2123,9 @@ func (m *EventTradeAccountDeposit) GetAssetAddress() gitlab_com_thorchain_thorno
 	return ""
 }
 
-func (m *EventTradeAccountDeposit) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventTradeAccountDeposit) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -2141,7 +2141,7 @@ type EventTradeAccountWithdraw struct {
 	Amount       cosmossdk_io_math.Uint                          `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Uint" json:"amount"`
 	Asset        gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,2,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
 	AssetAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
-	RuneAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	TxID         gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 }
 
@@ -2185,9 +2185,9 @@ func (m *EventTradeAccountWithdraw) GetAssetAddress() gitlab_com_thorchain_thorn
 	return ""
 }
 
-func (m *EventTradeAccountWithdraw) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventTradeAccountWithdraw) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -2203,7 +2203,7 @@ type EventSecuredAssetDeposit struct {
 	Amount       cosmossdk_io_math.Uint                          `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Uint" json:"amount"`
 	Asset        common.Asset                                    `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset"`
 	AssetAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
-	RuneAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	TxID         gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 }
 
@@ -2254,9 +2254,9 @@ func (m *EventSecuredAssetDeposit) GetAssetAddress() gitlab_com_thorchain_thorno
 	return ""
 }
 
-func (m *EventSecuredAssetDeposit) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventSecuredAssetDeposit) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -2272,7 +2272,7 @@ type EventSecuredAssetWithdraw struct {
 	Amount       cosmossdk_io_math.Uint                          `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Uint" json:"amount"`
 	Asset        common.Asset                                    `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset"`
 	AssetAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
-	RuneAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	TxID         gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 }
 
@@ -2323,9 +2323,9 @@ func (m *EventSecuredAssetWithdraw) GetAssetAddress() gitlab_com_thorchain_thorn
 	return ""
 }
 
-func (m *EventSecuredAssetWithdraw) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventSecuredAssetWithdraw) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -2337,25 +2337,25 @@ func (m *EventSecuredAssetWithdraw) GetTxID() gitlab_com_thorchain_thornode_v3_c
 	return ""
 }
 
-type EventRUNEPoolDeposit struct {
-	RuneAddress github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"rune_address,omitempty"`
+type EventDECAPoolDeposit struct {
+	DecaAddress github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"deca_address,omitempty"`
 	RuneAmount  cosmossdk_io_math.Uint                        `protobuf:"bytes,2,opt,name=rune_amount,json=runeAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amount"`
 	Units       cosmossdk_io_math.Uint                        `protobuf:"bytes,3,opt,name=units,proto3,customtype=cosmossdk.io/math.Uint" json:"units"`
 	TxId        gitlab_com_thorchain_thornode_v3_common.TxID  `protobuf:"bytes,4,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 }
 
-func (m *EventRUNEPoolDeposit) Reset()         { *m = EventRUNEPoolDeposit{} }
-func (m *EventRUNEPoolDeposit) String() string { return proto.CompactTextString(m) }
-func (*EventRUNEPoolDeposit) ProtoMessage()    {}
-func (*EventRUNEPoolDeposit) Descriptor() ([]byte, []int) {
+func (m *EventDECAPoolDeposit) Reset()         { *m = EventDECAPoolDeposit{} }
+func (m *EventDECAPoolDeposit) String() string { return proto.CompactTextString(m) }
+func (*EventDECAPoolDeposit) ProtoMessage()    {}
+func (*EventDECAPoolDeposit) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a149b429e0dcd819, []int{37}
 }
-func (m *EventRUNEPoolDeposit) XXX_Unmarshal(b []byte) error {
+func (m *EventDECAPoolDeposit) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *EventRUNEPoolDeposit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *EventDECAPoolDeposit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_EventRUNEPoolDeposit.Marshal(b, m, deterministic)
+		return xxx_messageInfo_EventDECAPoolDeposit.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -2365,34 +2365,34 @@ func (m *EventRUNEPoolDeposit) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *EventRUNEPoolDeposit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EventRUNEPoolDeposit.Merge(m, src)
+func (m *EventDECAPoolDeposit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EventDECAPoolDeposit.Merge(m, src)
 }
-func (m *EventRUNEPoolDeposit) XXX_Size() int {
+func (m *EventDECAPoolDeposit) XXX_Size() int {
 	return m.Size()
 }
-func (m *EventRUNEPoolDeposit) XXX_DiscardUnknown() {
-	xxx_messageInfo_EventRUNEPoolDeposit.DiscardUnknown(m)
+func (m *EventDECAPoolDeposit) XXX_DiscardUnknown() {
+	xxx_messageInfo_EventDECAPoolDeposit.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EventRUNEPoolDeposit proto.InternalMessageInfo
+var xxx_messageInfo_EventDECAPoolDeposit proto.InternalMessageInfo
 
-func (m *EventRUNEPoolDeposit) GetRuneAddress() github_com_cosmos_cosmos_sdk_types.AccAddress {
+func (m *EventDECAPoolDeposit) GetDecaAddress() github_com_cosmos_cosmos_sdk_types.AccAddress {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return nil
 }
 
-func (m *EventRUNEPoolDeposit) GetTxId() gitlab_com_thorchain_thornode_v3_common.TxID {
+func (m *EventDECAPoolDeposit) GetTxId() gitlab_com_thorchain_thornode_v3_common.TxID {
 	if m != nil {
 		return m.TxId
 	}
 	return ""
 }
 
-type EventRUNEPoolWithdraw struct {
-	RuneAddress       github_com_cosmos_cosmos_sdk_types.AccAddress   `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"rune_address,omitempty"`
+type EventDECAPoolWithdraw struct {
+	DecaAddress       github_com_cosmos_cosmos_sdk_types.AccAddress   `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"deca_address,omitempty"`
 	BasisPoints       int64                                           `protobuf:"varint,2,opt,name=basis_points,json=basisPoints,proto3" json:"basis_points,omitempty"`
 	RuneAmount        cosmossdk_io_math.Uint                          `protobuf:"bytes,3,opt,name=rune_amount,json=runeAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amount"`
 	Units             cosmossdk_io_math.Uint                          `protobuf:"bytes,4,opt,name=units,proto3,customtype=cosmossdk.io/math.Uint" json:"units"`
@@ -2402,18 +2402,18 @@ type EventRUNEPoolWithdraw struct {
 	AffiliateAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,8,opt,name=affiliate_address,json=affiliateAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"affiliate_address,omitempty"`
 }
 
-func (m *EventRUNEPoolWithdraw) Reset()         { *m = EventRUNEPoolWithdraw{} }
-func (m *EventRUNEPoolWithdraw) String() string { return proto.CompactTextString(m) }
-func (*EventRUNEPoolWithdraw) ProtoMessage()    {}
-func (*EventRUNEPoolWithdraw) Descriptor() ([]byte, []int) {
+func (m *EventDECAPoolWithdraw) Reset()         { *m = EventDECAPoolWithdraw{} }
+func (m *EventDECAPoolWithdraw) String() string { return proto.CompactTextString(m) }
+func (*EventDECAPoolWithdraw) ProtoMessage()    {}
+func (*EventDECAPoolWithdraw) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a149b429e0dcd819, []int{38}
 }
-func (m *EventRUNEPoolWithdraw) XXX_Unmarshal(b []byte) error {
+func (m *EventDECAPoolWithdraw) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *EventRUNEPoolWithdraw) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *EventDECAPoolWithdraw) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_EventRUNEPoolWithdraw.Marshal(b, m, deterministic)
+		return xxx_messageInfo_EventDECAPoolWithdraw.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -2423,47 +2423,47 @@ func (m *EventRUNEPoolWithdraw) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *EventRUNEPoolWithdraw) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EventRUNEPoolWithdraw.Merge(m, src)
+func (m *EventDECAPoolWithdraw) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EventDECAPoolWithdraw.Merge(m, src)
 }
-func (m *EventRUNEPoolWithdraw) XXX_Size() int {
+func (m *EventDECAPoolWithdraw) XXX_Size() int {
 	return m.Size()
 }
-func (m *EventRUNEPoolWithdraw) XXX_DiscardUnknown() {
-	xxx_messageInfo_EventRUNEPoolWithdraw.DiscardUnknown(m)
+func (m *EventDECAPoolWithdraw) XXX_DiscardUnknown() {
+	xxx_messageInfo_EventDECAPoolWithdraw.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EventRUNEPoolWithdraw proto.InternalMessageInfo
+var xxx_messageInfo_EventDECAPoolWithdraw proto.InternalMessageInfo
 
-func (m *EventRUNEPoolWithdraw) GetRuneAddress() github_com_cosmos_cosmos_sdk_types.AccAddress {
+func (m *EventDECAPoolWithdraw) GetDecaAddress() github_com_cosmos_cosmos_sdk_types.AccAddress {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return nil
 }
 
-func (m *EventRUNEPoolWithdraw) GetBasisPoints() int64 {
+func (m *EventDECAPoolWithdraw) GetBasisPoints() int64 {
 	if m != nil {
 		return m.BasisPoints
 	}
 	return 0
 }
 
-func (m *EventRUNEPoolWithdraw) GetTxId() gitlab_com_thorchain_thornode_v3_common.TxID {
+func (m *EventDECAPoolWithdraw) GetTxId() gitlab_com_thorchain_thornode_v3_common.TxID {
 	if m != nil {
 		return m.TxId
 	}
 	return ""
 }
 
-func (m *EventRUNEPoolWithdraw) GetAffiliateBasisPts() int64 {
+func (m *EventDECAPoolWithdraw) GetAffiliateBasisPts() int64 {
 	if m != nil {
 		return m.AffiliateBasisPts
 	}
 	return 0
 }
 
-func (m *EventRUNEPoolWithdraw) GetAffiliateAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventDECAPoolWithdraw) GetAffiliateAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
 		return m.AffiliateAddress
 	}
@@ -2708,7 +2708,7 @@ type EventSwitch struct {
 	Amount       cosmossdk_io_math.Uint                          `protobuf:"bytes,1,opt,name=amount,proto3,customtype=cosmossdk.io/math.Uint" json:"amount"`
 	Asset        common.Asset                                    `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset"`
 	AssetAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=asset_address,json=assetAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"asset_address,omitempty"`
-	RuneAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress  gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,4,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	TxID         gitlab_com_thorchain_thornode_v3_common.TxID    `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3,casttype=github.com/decaswap-labs/decanode/common.TxID" json:"tx_id,omitempty"`
 }
 
@@ -2759,9 +2759,9 @@ func (m *EventSwitch) GetAssetAddress() gitlab_com_thorchain_thornode_v3_common.
 	return ""
 }
 
-func (m *EventSwitch) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventSwitch) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -2834,7 +2834,7 @@ func (m *EventOperatorRotate) GetOperatorAddress() github_com_cosmos_cosmos_sdk_
 }
 
 type EventTCYDistribution struct {
-	RuneAddress github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"rune_address,omitempty"`
+	DecaAddress github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"deca_address,omitempty"`
 	RuneAmount  cosmossdk_io_math.Uint                        `protobuf:"bytes,2,opt,name=rune_amount,json=runeAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"rune_amount"`
 }
 
@@ -2871,15 +2871,15 @@ func (m *EventTCYDistribution) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EventTCYDistribution proto.InternalMessageInfo
 
-func (m *EventTCYDistribution) GetRuneAddress() github_com_cosmos_cosmos_sdk_types.AccAddress {
+func (m *EventTCYDistribution) GetDecaAddress() github_com_cosmos_cosmos_sdk_types.AccAddress {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return nil
 }
 
 type EventTCYClaim struct {
-	RuneAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"rune_address,omitempty"`
+	DecaAddress gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"deca_address,omitempty"`
 	TcyAmount   cosmossdk_io_math.Uint                          `protobuf:"bytes,2,opt,name=tcy_amount,json=tcyAmount,proto3,customtype=cosmossdk.io/math.Uint" json:"tcy_amount"`
 	L1Address   gitlab_com_thorchain_thornode_v3_common.Address `protobuf:"bytes,3,opt,name=l1_address,json=l1Address,proto3,casttype=github.com/decaswap-labs/decanode/common.Address" json:"l1_address,omitempty"`
 	Asset       gitlab_com_thorchain_thornode_v3_common.Asset   `protobuf:"bytes,4,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
@@ -2918,9 +2918,9 @@ func (m *EventTCYClaim) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EventTCYClaim proto.InternalMessageInfo
 
-func (m *EventTCYClaim) GetRuneAddress() gitlab_com_thorchain_thornode_v3_common.Address {
+func (m *EventTCYClaim) GetDecaAddress() gitlab_com_thorchain_thornode_v3_common.Address {
 	if m != nil {
-		return m.RuneAddress
+		return m.DecaAddress
 	}
 	return ""
 }
@@ -3282,8 +3282,8 @@ func init() {
 	proto.RegisterType((*EventTradeAccountWithdraw)(nil), "types.EventTradeAccountWithdraw")
 	proto.RegisterType((*EventSecuredAssetDeposit)(nil), "types.EventSecuredAssetDeposit")
 	proto.RegisterType((*EventSecuredAssetWithdraw)(nil), "types.EventSecuredAssetWithdraw")
-	proto.RegisterType((*EventRUNEPoolDeposit)(nil), "types.EventRUNEPoolDeposit")
-	proto.RegisterType((*EventRUNEPoolWithdraw)(nil), "types.EventRUNEPoolWithdraw")
+	proto.RegisterType((*EventDECAPoolDeposit)(nil), "types.EventDECAPoolDeposit")
+	proto.RegisterType((*EventDECAPoolWithdraw)(nil), "types.EventDECAPoolWithdraw")
 	proto.RegisterType((*EventTHORName)(nil), "types.EventTHORName")
 	proto.RegisterType((*EventSetMimir)(nil), "types.EventSetMimir")
 	proto.RegisterType((*EventSetNodeMimir)(nil), "types.EventSetNodeMimir")
@@ -3545,9 +3545,9 @@ func (m *PoolMod) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x22
-	if m.RuneAdd {
+	if m.DecaAdd {
 		i--
-		if m.RuneAdd {
+		if m.DecaAdd {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
@@ -4035,10 +4035,10 @@ func (m *EventAffiliateFee) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x2a
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -4127,10 +4127,10 @@ func (m *EventAddLiquidity) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x22
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -4306,10 +4306,10 @@ func (m *EventPendingLiquidity) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x22
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -5446,10 +5446,10 @@ func (m *EventTradeAccountDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -5510,10 +5510,10 @@ func (m *EventTradeAccountWithdraw) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -5574,10 +5574,10 @@ func (m *EventSecuredAssetDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -5638,10 +5638,10 @@ func (m *EventSecuredAssetWithdraw) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -5675,7 +5675,7 @@ func (m *EventSecuredAssetWithdraw) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
-func (m *EventRUNEPoolDeposit) Marshal() (dAtA []byte, err error) {
+func (m *EventDECAPoolDeposit) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -5685,12 +5685,12 @@ func (m *EventRUNEPoolDeposit) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *EventRUNEPoolDeposit) MarshalTo(dAtA []byte) (int, error) {
+func (m *EventDECAPoolDeposit) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *EventRUNEPoolDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *EventDECAPoolDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -5722,17 +5722,17 @@ func (m *EventRUNEPoolDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x12
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *EventRUNEPoolWithdraw) Marshal() (dAtA []byte, err error) {
+func (m *EventDECAPoolWithdraw) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -5742,12 +5742,12 @@ func (m *EventRUNEPoolWithdraw) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *EventRUNEPoolWithdraw) MarshalTo(dAtA []byte) (int, error) {
+func (m *EventDECAPoolWithdraw) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *EventRUNEPoolWithdraw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *EventDECAPoolWithdraw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -5806,10 +5806,10 @@ func (m *EventRUNEPoolWithdraw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x10
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -6030,10 +6030,10 @@ func (m *EventSwitch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -6141,10 +6141,10 @@ func (m *EventTCYDistribution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x12
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -6198,10 +6198,10 @@ func (m *EventTCYClaim) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	i--
 	dAtA[i] = 0x12
-	if len(m.RuneAddress) > 0 {
-		i -= len(m.RuneAddress)
-		copy(dAtA[i:], m.RuneAddress)
-		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.RuneAddress)))
+	if len(m.DecaAddress) > 0 {
+		i -= len(m.DecaAddress)
+		copy(dAtA[i:], m.DecaAddress)
+		i = encodeVarintTypeEvents(dAtA, i, uint64(len(m.DecaAddress)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -6502,7 +6502,7 @@ func (m *PoolMod) Size() (n int) {
 	n += 1 + l + sovTypeEvents(uint64(l))
 	l = m.RuneAmt.Size()
 	n += 1 + l + sovTypeEvents(uint64(l))
-	if m.RuneAdd {
+	if m.DecaAdd {
 		n += 2
 	}
 	l = m.AssetAmt.Size()
@@ -6668,7 +6668,7 @@ func (m *EventAffiliateFee) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -6694,7 +6694,7 @@ func (m *EventAddLiquidity) Size() (n int) {
 	n += 1 + l + sovTypeEvents(uint64(l))
 	l = m.ProviderUnits.Size()
 	n += 1 + l + sovTypeEvents(uint64(l))
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -6752,7 +6752,7 @@ func (m *EventPendingLiquidity) Size() (n int) {
 	if m.PendingType != 0 {
 		n += 1 + sovTypeEvents(uint64(m.PendingType))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7204,7 +7204,7 @@ func (m *EventTradeAccountDeposit) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7229,7 +7229,7 @@ func (m *EventTradeAccountWithdraw) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7254,7 +7254,7 @@ func (m *EventSecuredAssetDeposit) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7279,7 +7279,7 @@ func (m *EventSecuredAssetWithdraw) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7290,13 +7290,13 @@ func (m *EventSecuredAssetWithdraw) Size() (n int) {
 	return n
 }
 
-func (m *EventRUNEPoolDeposit) Size() (n int) {
+func (m *EventDECAPoolDeposit) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7311,13 +7311,13 @@ func (m *EventRUNEPoolDeposit) Size() (n int) {
 	return n
 }
 
-func (m *EventRUNEPoolWithdraw) Size() (n int) {
+func (m *EventDECAPoolWithdraw) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7441,7 +7441,7 @@ func (m *EventSwitch) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7479,7 +7479,7 @@ func (m *EventTCYDistribution) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7494,7 +7494,7 @@ func (m *EventTCYClaim) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.RuneAddress)
+	l = len(m.DecaAddress)
 	if l > 0 {
 		n += 1 + l + sovTypeEvents(uint64(l))
 	}
@@ -7720,7 +7720,7 @@ func (m *PoolMod) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAdd", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAdd", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -7737,7 +7737,7 @@ func (m *PoolMod) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.RuneAdd = bool(v != 0)
+			m.DecaAdd = bool(v != 0)
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AssetAmt", wireType)
@@ -9226,7 +9226,7 @@ func (m *EventAffiliateFee) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -9254,7 +9254,7 @@ func (m *EventAffiliateFee) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -9495,7 +9495,7 @@ func (m *EventAddLiquidity) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -9523,7 +9523,7 @@ func (m *EventAddLiquidity) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
@@ -10063,7 +10063,7 @@ func (m *EventPendingLiquidity) Unmarshal(dAtA []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -10091,7 +10091,7 @@ func (m *EventPendingLiquidity) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
@@ -13574,7 +13574,7 @@ func (m *EventTradeAccountDeposit) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -13602,7 +13602,7 @@ func (m *EventTradeAccountDeposit) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -13787,7 +13787,7 @@ func (m *EventTradeAccountWithdraw) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -13815,7 +13815,7 @@ func (m *EventTradeAccountWithdraw) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -14000,7 +14000,7 @@ func (m *EventSecuredAssetDeposit) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -14028,7 +14028,7 @@ func (m *EventSecuredAssetDeposit) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -14213,7 +14213,7 @@ func (m *EventSecuredAssetWithdraw) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -14241,7 +14241,7 @@ func (m *EventSecuredAssetWithdraw) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -14296,7 +14296,7 @@ func (m *EventSecuredAssetWithdraw) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *EventRUNEPoolDeposit) Unmarshal(dAtA []byte) error {
+func (m *EventDECAPoolDeposit) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -14319,15 +14319,15 @@ func (m *EventRUNEPoolDeposit) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: EventRUNEPoolDeposit: wiretype end group for non-group")
+			return fmt.Errorf("proto: EventDECAPoolDeposit: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EventRUNEPoolDeposit: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: EventDECAPoolDeposit: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
@@ -14354,9 +14354,9 @@ func (m *EventRUNEPoolDeposit) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = append(m.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-			if m.RuneAddress == nil {
-				m.RuneAddress = []byte{}
+			m.DecaAddress = append(m.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+			if m.DecaAddress == nil {
+				m.DecaAddress = []byte{}
 			}
 			iNdEx = postIndex
 		case 2:
@@ -14480,7 +14480,7 @@ func (m *EventRUNEPoolDeposit) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *EventRUNEPoolWithdraw) Unmarshal(dAtA []byte) error {
+func (m *EventDECAPoolWithdraw) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -14503,15 +14503,15 @@ func (m *EventRUNEPoolWithdraw) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: EventRUNEPoolWithdraw: wiretype end group for non-group")
+			return fmt.Errorf("proto: EventDECAPoolWithdraw: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EventRUNEPoolWithdraw: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: EventDECAPoolWithdraw: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
@@ -14538,9 +14538,9 @@ func (m *EventRUNEPoolWithdraw) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = append(m.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-			if m.RuneAddress == nil {
-				m.RuneAddress = []byte{}
+			m.DecaAddress = append(m.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+			if m.DecaAddress == nil {
+				m.DecaAddress = []byte{}
 			}
 			iNdEx = postIndex
 		case 2:
@@ -15507,7 +15507,7 @@ func (m *EventSwitch) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -15535,7 +15535,7 @@ func (m *EventSwitch) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -15773,7 +15773,7 @@ func (m *EventTCYDistribution) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
@@ -15800,9 +15800,9 @@ func (m *EventTCYDistribution) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = append(m.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-			if m.RuneAddress == nil {
-				m.RuneAddress = []byte{}
+			m.DecaAddress = append(m.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+			if m.DecaAddress == nil {
+				m.DecaAddress = []byte{}
 			}
 			iNdEx = postIndex
 		case 2:
@@ -15891,7 +15891,7 @@ func (m *EventTCYClaim) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -15919,7 +15919,7 @@ func (m *EventTCYClaim) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
+			m.DecaAddress = gitlab_com_thorchain_thornode_v3_common.Address(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {

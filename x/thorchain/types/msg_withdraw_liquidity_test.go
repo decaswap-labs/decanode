@@ -23,9 +23,9 @@ func (s *MsgWithdrawSuite) TestMsgWithdrawLiquidity(c *C) {
 		common.Gas{common.NewCoin(common.ETHAsset, cosmos.NewUint(common.One))},
 		"",
 	)
-	runeAddr := GetRandomRUNEAddress()
+	decaAddr := GetRandomRUNEAddress()
 	acc1 := GetRandomBech32Addr()
-	m := NewMsgWithdrawLiquidity(tx, runeAddr, cosmos.NewUint(10000), common.ETHAsset, common.EmptyAsset, acc1)
+	m := NewMsgWithdrawLiquidity(tx, decaAddr, cosmos.NewUint(10000), common.ETHAsset, common.EmptyAsset, acc1)
 	EnsureMsgBasicCorrect(m, c)
 
 	inputs := []struct {
@@ -44,35 +44,35 @@ func (s *MsgWithdrawSuite) TestMsgWithdrawLiquidity(c *C) {
 		},
 		{
 			tx:                  common.Tx{},
-			publicAddress:       runeAddr,
+			publicAddress:       decaAddr,
 			withdrawBasisPoints: cosmos.NewUint(12000),
 			asset:               common.ETHAsset,
 			signer:              acc1,
 		},
 		{
 			tx:                  GetRandomTx(),
-			publicAddress:       runeAddr,
+			publicAddress:       decaAddr,
 			withdrawBasisPoints: cosmos.ZeroUint(),
 			asset:               common.ETHAsset,
 			signer:              acc1,
 		},
 		{
 			tx:                  GetRandomTx(),
-			publicAddress:       runeAddr,
+			publicAddress:       decaAddr,
 			withdrawBasisPoints: cosmos.NewUint(10000),
 			asset:               common.Asset{},
 			signer:              acc1,
 		},
 		{
 			tx:                  GetRandomTx(),
-			publicAddress:       runeAddr,
+			publicAddress:       decaAddr,
 			withdrawBasisPoints: cosmos.NewUint(10000),
 			asset:               common.ETHAsset,
 			signer:              cosmos.AccAddress{},
 		},
 		{
 			tx:                  GetRandomTx(),
-			publicAddress:       runeAddr,
+			publicAddress:       decaAddr,
 			withdrawBasisPoints: cosmos.NewUint(12000),
 			asset:               common.ETHAsset,
 			signer:              acc1,

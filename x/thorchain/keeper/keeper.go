@@ -21,7 +21,7 @@ type Keeper interface {
 	GetMinJoinLast(ctx cosmos.Context) (semver.Version, int64)
 	SetMinJoinLast(ctx cosmos.Context)
 	GetKey(prefix kvTypes.DbPrefix, key string, other ...string) []byte
-	GetRuneBalanceOfModule(ctx cosmos.Context, moduleName string) cosmos.Uint
+	GetDecaBalanceOfModule(ctx cosmos.Context, moduleName string) cosmos.Uint
 	GetBalanceOfModule(ctx cosmos.Context, moduleName, denom string) cosmos.Uint
 	SendFromModuleToModule(ctx cosmos.Context, from, to string, coin common.Coins) error
 	SendFromAccountToModule(ctx cosmos.Context, from cosmos.AccAddress, to string, coin common.Coins) error

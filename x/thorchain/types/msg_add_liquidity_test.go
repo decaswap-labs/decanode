@@ -14,13 +14,13 @@ var _ = Suite(&MsgAddLiquiditySuite{})
 func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 	addr := GetRandomBech32Addr()
 	c.Check(addr.Empty(), Equals, false)
-	runeAddress := GetRandomRUNEAddress()
+	decaAddress := GetRandomRUNEAddress()
 	assetAddress := GetRandomETHAddress()
 	txID := GetRandomTxHash()
 	c.Check(txID.IsEmpty(), Equals, false)
 	tx := common.NewTx(
 		txID,
-		runeAddress,
+		decaAddress,
 		GetRandomRUNEAddress(),
 		common.Coins{
 			common.NewCoin(common.BTCAsset, cosmos.NewUint(100000000)),
@@ -28,14 +28,14 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 		common.Gas{common.NewCoin(common.ETHAsset, cosmos.NewUint(common.One))},
 		"",
 	)
-	m := NewMsgAddLiquidity(tx, common.ETHAsset, cosmos.NewUint(100000000), cosmos.NewUint(100000000), runeAddress, assetAddress, common.NoAddress, cosmos.ZeroUint(), addr)
+	m := NewMsgAddLiquidity(tx, common.ETHAsset, cosmos.NewUint(100000000), cosmos.NewUint(100000000), decaAddress, assetAddress, common.NoAddress, cosmos.ZeroUint(), addr)
 	EnsureMsgBasicCorrect(m, c)
 
 	inputs := []struct {
 		asset     common.Asset
 		r         cosmos.Uint
 		amt       cosmos.Uint
-		runeAddr  common.Address
+		decaAddr  common.Address
 		assetAddr common.Address
 		txHash    common.TxID
 		signer    cosmos.AccAddress
@@ -44,7 +44,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 			asset:     common.Asset{},
 			r:         cosmos.NewUint(100000000),
 			amt:       cosmos.NewUint(100000000),
-			runeAddr:  runeAddress,
+			decaAddr:  decaAddress,
 			assetAddr: assetAddress,
 			txHash:    txID,
 			signer:    addr,
@@ -53,7 +53,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 			asset:     common.ETHAsset,
 			r:         cosmos.NewUint(100000000),
 			amt:       cosmos.NewUint(100000000),
-			runeAddr:  common.NoAddress,
+			decaAddr:  common.NoAddress,
 			assetAddr: common.NoAddress,
 			txHash:    txID,
 			signer:    addr,
@@ -62,7 +62,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 			asset:     common.ETHAsset,
 			r:         cosmos.NewUint(100000000),
 			amt:       cosmos.NewUint(100000000),
-			runeAddr:  runeAddress,
+			decaAddr:  decaAddress,
 			assetAddr: assetAddress,
 			txHash:    common.TxID(""),
 			signer:    addr,
@@ -71,7 +71,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 			asset:     common.ETHAsset,
 			r:         cosmos.NewUint(100000000),
 			amt:       cosmos.NewUint(100000000),
-			runeAddr:  runeAddress,
+			decaAddr:  decaAddress,
 			assetAddr: assetAddress,
 			txHash:    txID,
 			signer:    cosmos.AccAddress{},
@@ -88,7 +88,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity(c *C) {
 			common.Gas{common.NewCoin(common.ETHAsset, cosmos.NewUint(common.One))},
 			"",
 		)
-		m = NewMsgAddLiquidity(tx, item.asset, item.r, item.amt, item.runeAddr, item.assetAddr, common.NoAddress, cosmos.ZeroUint(), item.signer)
+		m = NewMsgAddLiquidity(tx, item.asset, item.r, item.amt, item.decaAddr, item.assetAddr, common.NoAddress, cosmos.ZeroUint(), item.signer)
 		c.Assert(m.ValidateBasic(), NotNil, Commentf("%d) %s\n", i, m))
 	}
 	// If affiliate fee basis point is more than 1000 , the message should be rejected
@@ -106,7 +106,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 		AssetAmount  cosmos.Uint
 		AssetAddress common.Address
 		RuneAmount   cosmos.Uint
-		RuneAddress  common.Address
+		DecaAddress  common.Address
 		TxHash       common.TxID
 		Signer       cosmos.AccAddress
 		Error        string
@@ -117,7 +117,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			AssetAmount:  cosmos.ZeroUint(),
 			AssetAddress: GetRandomTHORAddress(),
 			RuneAmount:   cosmos.ZeroUint(),
-			RuneAddress:  GetRandomTHORAddress(),
+			DecaAddress:  GetRandomTHORAddress(),
 			TxHash:       GetRandomTxHash(),
 			Signer:       GetRandomBech32Addr(),
 			Error:        "",
@@ -128,7 +128,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			AssetAmount:  cosmos.NewUint(common.One),
 			AssetAddress: GetRandomTHORAddress(),
 			RuneAmount:   cosmos.ZeroUint(),
-			RuneAddress:  GetRandomTHORAddress(),
+			DecaAddress:  GetRandomTHORAddress(),
 			TxHash:       GetRandomTxHash(),
 			Signer:       GetRandomBech32Addr(),
 			Error:        "",
@@ -139,7 +139,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			AssetAmount:  cosmos.NewUint(common.One),
 			AssetAddress: GetRandomTHORAddress(),
 			RuneAmount:   cosmos.NewUint(common.One),
-			RuneAddress:  GetRandomTHORAddress(),
+			DecaAddress:  GetRandomTHORAddress(),
 			TxHash:       GetRandomTxHash(),
 			Signer:       GetRandomBech32Addr(),
 			Error:        "",
@@ -150,7 +150,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			AssetAmount:  cosmos.NewUint(common.One),
 			AssetAddress: common.NoAddress,
 			RuneAmount:   cosmos.ZeroUint(),
-			RuneAddress:  GetRandomTHORAddress(),
+			DecaAddress:  GetRandomTHORAddress(),
 			TxHash:       GetRandomTxHash(),
 			Signer:       GetRandomBech32Addr(),
 			Error:        "asset address cannot be empty.*",
@@ -161,7 +161,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			AssetAmount:  cosmos.NewUint(common.One),
 			AssetAddress: GetRandomTHORAddress(),
 			RuneAmount:   cosmos.ZeroUint(),
-			RuneAddress:  common.NoAddress,
+			DecaAddress:  common.NoAddress,
 			TxHash:       GetRandomTxHash(),
 			Signer:       GetRandomBech32Addr(),
 			Error:        "rune address cannot be empty.*",
@@ -172,7 +172,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			AssetAmount:  cosmos.NewUint(common.One),
 			AssetAddress: GetRandomBTCAddress(),
 			RuneAmount:   cosmos.ZeroUint(),
-			RuneAddress:  GetRandomTHORAddress(),
+			DecaAddress:  GetRandomTHORAddress(),
 			TxHash:       GetRandomTxHash(),
 			Signer:       GetRandomBech32Addr(),
 			Error:        "asset address must be thor address.*",
@@ -185,7 +185,7 @@ func (MsgAddLiquiditySuite) TestMsgAddLiquidity_SecuredAssets(c *C) {
 			tc.Asset,
 			tc.RuneAmount,
 			tc.AssetAmount,
-			tc.RuneAddress,
+			tc.DecaAddress,
 			tc.AssetAddress,
 			common.NoAddress,
 			cosmos.ZeroUint(),

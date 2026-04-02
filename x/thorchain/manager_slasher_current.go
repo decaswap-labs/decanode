@@ -470,7 +470,7 @@ func (s *SlasherImpl) LackSigning(ctx cosmos.Context, mgr Manager) error {
 			}
 
 			// if a pool with the asset name doesn't exist, skip rescheduling
-			if !toi.Coin.IsRune() && !s.keeper.PoolExist(ctx, toi.Coin.Asset) {
+			if !toi.Coin.IsDeca() && !s.keeper.PoolExist(ctx, toi.Coin.Asset) {
 				ctx.Logger().Error("fail to add outbound to queue", "error", "coin is not rune and does not have an associated pool")
 				continue
 			}
@@ -728,7 +728,7 @@ func (s *SlasherImpl) sendFailedOutboundToTreasury(ctx cosmos.Context, mgr Manag
 	ctx.Logger().Info("sending to treasury recovery", "hash", inboundHash, "coin", toi.Coin)
 
 	// Queue swap to treasury
-	return s.queueRecoverySwap(ctx, mgr, toi, vault, inboundHash, common.RuneAsset(), common.TreasuryAddress, fmt.Sprintf("=:RUNE:%s", common.TreasuryAddress), "treasury")
+	return s.queueRecoverySwap(ctx, mgr, toi, vault, inboundHash, common.DecaAsset(), common.TreasuryAddress, fmt.Sprintf("=:RUNE:%s", common.TreasuryAddress), "treasury")
 }
 
 // SlashVault thorchain keep monitoring the outbound tx from asgard pool
@@ -784,17 +784,17 @@ func (s *SlasherImpl) SlashVault(ctx cosmos.Context, vaultPK common.PubKey, coin
 			stolenAssetValue = pool.BalanceAsset
 		}
 
-		// stolenRuneValue is the value in RUNE of the missing funds
-		stolenRuneValue := pool.AssetValueInRune(stolenAssetValue)
+		// stolenDecaValue is the value in RUNE of the missing funds
+		stolenDecaValue := pool.AssetValueInRune(stolenAssetValue)
 
-		if stolenRuneValue.IsZero() {
+		if stolenDecaValue.IsZero() {
 			continue
 		}
 
 		penaltyPts := mgr.Keeper().GetConfigInt64(ctx, constants.SlashPenalty)
 		// total slash amount is penaltyPts the RUNE value of the missing funds
-		totalRuneToSlash := common.GetUncappedShare(cosmos.NewUint(uint64(penaltyPts)), cosmos.NewUint(10_000), stolenRuneValue)
-		totalRuneSlashed := cosmos.ZeroUint()
+		totalRuneToSlash := common.GetUncappedShare(cosmos.NewUint(uint64(penaltyPts)), cosmos.NewUint(10_000), stolenDecaValue)
+		totalDecaSlashed := cosmos.ZeroUint()
 		pauseOnSlashThreshold := mgr.Keeper().GetConfigInt64(ctx, constants.PauseOnSlashThreshold)
 		if pauseOnSlashThreshold > 0 && totalRuneToSlash.GTE(cosmos.NewUint(uint64(pauseOnSlashThreshold))) {
 			// set mimirs to pause signing
@@ -823,29 +823,29 @@ func (s *SlasherImpl) SlashVault(ctx cosmos.Context, vaultPK common.PubKey, coin
 				continue
 			}
 			runeSlashed := s.slashAndUpdateNodeAccount(ctx, na, coin, vault, totalBond, totalRuneToSlash)
-			totalRuneSlashed = totalRuneSlashed.Add(runeSlashed)
+			totalDecaSlashed = totalDecaSlashed.Add(runeSlashed)
 		}
 
 		//  2/3 of the total slashed RUNE value to asgard
 		//  1/3 of the total slashed RUNE value to reserve
-		runeToAsgard := stolenRuneValue
+		runeToAsgard := stolenDecaValue
 
-		// stolenRuneValue is the total value in RUNE of stolen coins, but totalRuneSlashed is
-		// the total amount able to be slashed from Nodes, credit the pool only totalRuneSlashed
-		if totalRuneSlashed.LT(stolenRuneValue) {
+		// stolenDecaValue is the total value in RUNE of stolen coins, but totalDecaSlashed is
+		// the total amount able to be slashed from Nodes, credit the pool only totalDecaSlashed
+		if totalDecaSlashed.LT(stolenDecaValue) {
 			// this should theoretically never happen
-			ctx.Logger().Info("total slashed bond amount is less than RUNE value", "slashed_bond", totalRuneSlashed.String(), "rune_value", stolenRuneValue.String())
-			runeToAsgard = totalRuneSlashed
+			ctx.Logger().Info("total slashed bond amount is less than RUNE value", "slashed_bond", totalDecaSlashed.String(), "rune_value", stolenDecaValue.String())
+			runeToAsgard = totalDecaSlashed
 		}
-		runeToReserve := common.SafeSub(totalRuneSlashed, runeToAsgard)
+		runeToReserve := common.SafeSub(totalDecaSlashed, runeToAsgard)
 
 		if !runeToReserve.IsZero() {
-			if err := s.keeper.SendFromModuleToModule(ctx, BondName, ReserveName, common.NewCoins(common.NewCoin(common.RuneAsset(), runeToReserve))); err != nil {
+			if err := s.keeper.SendFromModuleToModule(ctx, BondName, ReserveName, common.NewCoins(common.NewCoin(common.DecaAsset(), runeToReserve))); err != nil {
 				ctx.Logger().Error("fail to send slash funds to reserve module", "pk", vaultPK, "error", err)
 			}
 		}
 		if !runeToAsgard.IsZero() {
-			if err := s.keeper.SendFromModuleToModule(ctx, BondName, AsgardName, common.NewCoins(common.NewCoin(common.RuneAsset(), runeToAsgard))); err != nil {
+			if err := s.keeper.SendFromModuleToModule(ctx, BondName, AsgardName, common.NewCoins(common.NewCoin(common.DecaAsset(), runeToAsgard))); err != nil {
 				ctx.Logger().Error("fail to send slash fund to asgard module", "pk", vaultPK, "error", err)
 			}
 			s.updatePoolFromSlash(ctx, pool, common.NewCoin(coin.Asset, stolenAssetValue), runeToAsgard, mgr)
@@ -915,7 +915,7 @@ func (s *SlasherImpl) DecSlashPoints(ctx cosmos.Context, point int64, addresses 
 // updatePoolFromSlash updates a pool's depths and emits appropriate events after a slash
 func (s *SlasherImpl) updatePoolFromSlash(ctx cosmos.Context, pool types.Pool, stolenAsset common.Coin, runeCreditAmt cosmos.Uint, mgr Manager) {
 	pool.BalanceAsset = common.SafeSub(pool.BalanceAsset, stolenAsset.Amount)
-	pool.BalanceRune = pool.BalanceRune.Add(runeCreditAmt)
+	pool.BalanceDeca = pool.BalanceDeca.Add(runeCreditAmt)
 	if err := s.keeper.SetPool(ctx, pool); err != nil {
 		ctx.Logger().Error("fail to save pool for slash", "asset", pool.Asset, "error", err)
 	}
@@ -925,7 +925,7 @@ func (s *SlasherImpl) updatePoolFromSlash(ctx cosmos.Context, pool types.Pool, s
 			Amount: 0 - int64(stolenAsset.Amount.Uint64()),
 		},
 		{
-			Asset:  common.RuneAsset(),
+			Asset:  common.DecaAsset(),
 			Amount: int64(runeCreditAmt.Uint64()),
 		},
 	}

@@ -16,7 +16,7 @@ import (
 
 var (
 	md_Pool                       protoreflect.MessageDescriptor
-	fd_Pool_balance_rune          protoreflect.FieldDescriptor
+	fd_Pool_balance_deca          protoreflect.FieldDescriptor
 	fd_Pool_balance_asset         protoreflect.FieldDescriptor
 	fd_Pool_asset                 protoreflect.FieldDescriptor
 	fd_Pool_LP_units              protoreflect.FieldDescriptor
@@ -24,14 +24,14 @@ var (
 	fd_Pool_status_since          protoreflect.FieldDescriptor
 	fd_Pool_decimals              protoreflect.FieldDescriptor
 	fd_Pool_synth_units           protoreflect.FieldDescriptor
-	fd_Pool_pending_inbound_rune  protoreflect.FieldDescriptor
+	fd_Pool_pending_inbound_deca  protoreflect.FieldDescriptor
 	fd_Pool_pending_inbound_asset protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_types_type_pool_proto_init()
 	md_Pool = File_types_type_pool_proto.Messages().ByName("Pool")
-	fd_Pool_balance_rune = md_Pool.Fields().ByName("balance_rune")
+	fd_Pool_balance_deca = md_Pool.Fields().ByName("balance_deca")
 	fd_Pool_balance_asset = md_Pool.Fields().ByName("balance_asset")
 	fd_Pool_asset = md_Pool.Fields().ByName("asset")
 	fd_Pool_LP_units = md_Pool.Fields().ByName("LP_units")
@@ -39,7 +39,7 @@ func init() {
 	fd_Pool_status_since = md_Pool.Fields().ByName("status_since")
 	fd_Pool_decimals = md_Pool.Fields().ByName("decimals")
 	fd_Pool_synth_units = md_Pool.Fields().ByName("synth_units")
-	fd_Pool_pending_inbound_rune = md_Pool.Fields().ByName("pending_inbound_rune")
+	fd_Pool_pending_inbound_deca = md_Pool.Fields().ByName("pending_inbound_deca")
 	fd_Pool_pending_inbound_asset = md_Pool.Fields().ByName("pending_inbound_asset")
 }
 
@@ -108,9 +108,9 @@ func (x *fastReflection_Pool) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Pool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.BalanceRune != "" {
-		value := protoreflect.ValueOfString(x.BalanceRune)
-		if !f(fd_Pool_balance_rune, value) {
+	if x.BalanceDeca != "" {
+		value := protoreflect.ValueOfString(x.BalanceDeca)
+		if !f(fd_Pool_balance_deca, value) {
 			return
 		}
 	}
@@ -156,9 +156,9 @@ func (x *fastReflection_Pool) Range(f func(protoreflect.FieldDescriptor, protore
 			return
 		}
 	}
-	if x.PendingInboundRune != "" {
-		value := protoreflect.ValueOfString(x.PendingInboundRune)
-		if !f(fd_Pool_pending_inbound_rune, value) {
+	if x.PendingInboundDeca != "" {
+		value := protoreflect.ValueOfString(x.PendingInboundDeca)
+		if !f(fd_Pool_pending_inbound_deca, value) {
 			return
 		}
 	}
@@ -183,8 +183,8 @@ func (x *fastReflection_Pool) Range(f func(protoreflect.FieldDescriptor, protore
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Pool) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.Pool.balance_rune":
-		return x.BalanceRune != ""
+	case "types.Pool.balance_deca":
+		return x.BalanceDeca != ""
 	case "types.Pool.balance_asset":
 		return x.BalanceAsset != ""
 	case "types.Pool.asset":
@@ -199,8 +199,8 @@ func (x *fastReflection_Pool) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Decimals != int64(0)
 	case "types.Pool.synth_units":
 		return x.SynthUnits != ""
-	case "types.Pool.pending_inbound_rune":
-		return x.PendingInboundRune != ""
+	case "types.Pool.pending_inbound_deca":
+		return x.PendingInboundDeca != ""
 	case "types.Pool.pending_inbound_asset":
 		return x.PendingInboundAsset != ""
 	default:
@@ -219,8 +219,8 @@ func (x *fastReflection_Pool) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Pool) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.Pool.balance_rune":
-		x.BalanceRune = ""
+	case "types.Pool.balance_deca":
+		x.BalanceDeca = ""
 	case "types.Pool.balance_asset":
 		x.BalanceAsset = ""
 	case "types.Pool.asset":
@@ -235,8 +235,8 @@ func (x *fastReflection_Pool) Clear(fd protoreflect.FieldDescriptor) {
 		x.Decimals = int64(0)
 	case "types.Pool.synth_units":
 		x.SynthUnits = ""
-	case "types.Pool.pending_inbound_rune":
-		x.PendingInboundRune = ""
+	case "types.Pool.pending_inbound_deca":
+		x.PendingInboundDeca = ""
 	case "types.Pool.pending_inbound_asset":
 		x.PendingInboundAsset = ""
 	default:
@@ -255,8 +255,8 @@ func (x *fastReflection_Pool) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Pool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.Pool.balance_rune":
-		value := x.BalanceRune
+	case "types.Pool.balance_deca":
+		value := x.BalanceDeca
 		return protoreflect.ValueOfString(value)
 	case "types.Pool.balance_asset":
 		value := x.BalanceAsset
@@ -279,8 +279,8 @@ func (x *fastReflection_Pool) Get(descriptor protoreflect.FieldDescriptor) proto
 	case "types.Pool.synth_units":
 		value := x.SynthUnits
 		return protoreflect.ValueOfString(value)
-	case "types.Pool.pending_inbound_rune":
-		value := x.PendingInboundRune
+	case "types.Pool.pending_inbound_deca":
+		value := x.PendingInboundDeca
 		return protoreflect.ValueOfString(value)
 	case "types.Pool.pending_inbound_asset":
 		value := x.PendingInboundAsset
@@ -305,8 +305,8 @@ func (x *fastReflection_Pool) Get(descriptor protoreflect.FieldDescriptor) proto
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Pool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.Pool.balance_rune":
-		x.BalanceRune = value.Interface().(string)
+	case "types.Pool.balance_deca":
+		x.BalanceDeca = value.Interface().(string)
 	case "types.Pool.balance_asset":
 		x.BalanceAsset = value.Interface().(string)
 	case "types.Pool.asset":
@@ -321,8 +321,8 @@ func (x *fastReflection_Pool) Set(fd protoreflect.FieldDescriptor, value protore
 		x.Decimals = value.Int()
 	case "types.Pool.synth_units":
 		x.SynthUnits = value.Interface().(string)
-	case "types.Pool.pending_inbound_rune":
-		x.PendingInboundRune = value.Interface().(string)
+	case "types.Pool.pending_inbound_deca":
+		x.PendingInboundDeca = value.Interface().(string)
 	case "types.Pool.pending_inbound_asset":
 		x.PendingInboundAsset = value.Interface().(string)
 	default:
@@ -350,8 +350,8 @@ func (x *fastReflection_Pool) Mutable(fd protoreflect.FieldDescriptor) protorefl
 			x.Asset = new(common.Asset)
 		}
 		return protoreflect.ValueOfMessage(x.Asset.ProtoReflect())
-	case "types.Pool.balance_rune":
-		panic(fmt.Errorf("field balance_rune of message types.Pool is not mutable"))
+	case "types.Pool.balance_deca":
+		panic(fmt.Errorf("field balance_deca of message types.Pool is not mutable"))
 	case "types.Pool.balance_asset":
 		panic(fmt.Errorf("field balance_asset of message types.Pool is not mutable"))
 	case "types.Pool.LP_units":
@@ -364,8 +364,8 @@ func (x *fastReflection_Pool) Mutable(fd protoreflect.FieldDescriptor) protorefl
 		panic(fmt.Errorf("field decimals of message types.Pool is not mutable"))
 	case "types.Pool.synth_units":
 		panic(fmt.Errorf("field synth_units of message types.Pool is not mutable"))
-	case "types.Pool.pending_inbound_rune":
-		panic(fmt.Errorf("field pending_inbound_rune of message types.Pool is not mutable"))
+	case "types.Pool.pending_inbound_deca":
+		panic(fmt.Errorf("field pending_inbound_deca of message types.Pool is not mutable"))
 	case "types.Pool.pending_inbound_asset":
 		panic(fmt.Errorf("field pending_inbound_asset of message types.Pool is not mutable"))
 	default:
@@ -381,7 +381,7 @@ func (x *fastReflection_Pool) Mutable(fd protoreflect.FieldDescriptor) protorefl
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Pool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.Pool.balance_rune":
+	case "types.Pool.balance_deca":
 		return protoreflect.ValueOfString("")
 	case "types.Pool.balance_asset":
 		return protoreflect.ValueOfString("")
@@ -398,7 +398,7 @@ func (x *fastReflection_Pool) NewField(fd protoreflect.FieldDescriptor) protoref
 		return protoreflect.ValueOfInt64(int64(0))
 	case "types.Pool.synth_units":
 		return protoreflect.ValueOfString("")
-	case "types.Pool.pending_inbound_rune":
+	case "types.Pool.pending_inbound_deca":
 		return protoreflect.ValueOfString("")
 	case "types.Pool.pending_inbound_asset":
 		return protoreflect.ValueOfString("")
@@ -471,7 +471,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.BalanceRune)
+		l = len(x.BalanceDeca)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -500,7 +500,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.PendingInboundRune)
+		l = len(x.PendingInboundDeca)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -549,10 +549,10 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x4a
 		}
-		if len(x.PendingInboundRune) > 0 {
-			i -= len(x.PendingInboundRune)
-			copy(dAtA[i:], x.PendingInboundRune)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PendingInboundRune)))
+		if len(x.PendingInboundDeca) > 0 {
+			i -= len(x.PendingInboundDeca)
+			copy(dAtA[i:], x.PendingInboundDeca)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PendingInboundDeca)))
 			i--
 			dAtA[i] = 0x42
 		}
@@ -601,10 +601,10 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.BalanceRune) > 0 {
-			i -= len(x.BalanceRune)
-			copy(dAtA[i:], x.BalanceRune)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BalanceRune)))
+		if len(x.BalanceDeca) > 0 {
+			i -= len(x.BalanceDeca)
+			copy(dAtA[i:], x.BalanceDeca)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BalanceDeca)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -659,7 +659,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BalanceRune", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BalanceDeca", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -687,7 +687,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.BalanceRune = string(dAtA[iNdEx:postIndex])
+				x.BalanceDeca = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
@@ -880,7 +880,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 8:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingInboundRune", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingInboundDeca", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -908,7 +908,7 @@ func (x *fastReflection_Pool) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PendingInboundRune = string(dAtA[iNdEx:postIndex])
+				x.PendingInboundDeca = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 9:
 				if wireType != 2 {
@@ -1052,7 +1052,7 @@ type Pool struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BalanceRune         string        `protobuf:"bytes,1,opt,name=balance_rune,json=balanceRune,proto3" json:"balance_rune,omitempty"`
+	BalanceDeca         string        `protobuf:"bytes,1,opt,name=balance_deca,json=balanceDeca,proto3" json:"balance_deca,omitempty"`
 	BalanceAsset        string        `protobuf:"bytes,2,opt,name=balance_asset,json=balanceAsset,proto3" json:"balance_asset,omitempty"`
 	Asset               *common.Asset `protobuf:"bytes,3,opt,name=asset,proto3" json:"asset,omitempty"`
 	LPUnits             string        `protobuf:"bytes,4,opt,name=LP_units,json=LPUnits,proto3" json:"LP_units,omitempty"`
@@ -1060,7 +1060,7 @@ type Pool struct {
 	StatusSince         int64         `protobuf:"varint,10,opt,name=status_since,json=statusSince,proto3" json:"status_since,omitempty"`
 	Decimals            int64         `protobuf:"varint,6,opt,name=decimals,proto3" json:"decimals,omitempty"`
 	SynthUnits          string        `protobuf:"bytes,7,opt,name=synth_units,json=synthUnits,proto3" json:"synth_units,omitempty"`
-	PendingInboundRune  string        `protobuf:"bytes,8,opt,name=pending_inbound_rune,json=pendingInboundRune,proto3" json:"pending_inbound_rune,omitempty"`
+	PendingInboundDeca  string        `protobuf:"bytes,8,opt,name=pending_inbound_deca,json=pendingInboundDeca,proto3" json:"pending_inbound_deca,omitempty"`
 	PendingInboundAsset string        `protobuf:"bytes,9,opt,name=pending_inbound_asset,json=pendingInboundAsset,proto3" json:"pending_inbound_asset,omitempty"`
 }
 
@@ -1084,9 +1084,9 @@ func (*Pool) Descriptor() ([]byte, []int) {
 	return file_types_type_pool_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Pool) GetBalanceRune() string {
+func (x *Pool) GetBalanceDeca() string {
 	if x != nil {
-		return x.BalanceRune
+		return x.BalanceDeca
 	}
 	return ""
 }
@@ -1140,9 +1140,9 @@ func (x *Pool) GetSynthUnits() string {
 	return ""
 }
 
-func (x *Pool) GetPendingInboundRune() string {
+func (x *Pool) GetPendingInboundDeca() string {
 	if x != nil {
-		return x.PendingInboundRune
+		return x.PendingInboundDeca
 	}
 	return ""
 }

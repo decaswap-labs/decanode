@@ -38,13 +38,13 @@ func triggerPreferredAssetSwap(ctx cosmos.Context, mgr Manager, affiliateAddress
 		return fmt.Errorf("can't execute preferred asset swap, accrued RUNE amount is zero")
 	}
 	// Sanity check: ensure the swap amount isn't more than the entire AffiliateCollector module
-	acBalance := mgr.Keeper().GetRuneBalanceOfModule(ctx, AffiliateCollectorName)
+	acBalance := mgr.Keeper().GetDecaBalanceOfModule(ctx, AffiliateCollectorName)
 	if affcol.RuneAmount.GT(acBalance) {
 		return fmt.Errorf("rune amount greater than module balance: (%s/%s)", affcol.RuneAmount.String(), acBalance.String())
 	}
 
 	affRune := affcol.RuneAmount
-	affCoin := common.NewCoin(common.RuneAsset(), affRune)
+	affCoin := common.NewCoin(common.DecaAsset(), affRune)
 
 	networkMemo := fmt.Sprintf("%s-%s", PreferredAssetSwapMemoPrefix, tn.Name)
 	asgardAddress, err := mgr.Keeper().GetModuleAddress(AsgardName)
@@ -178,7 +178,7 @@ func skimAffiliateFees(ctx cosmos.Context, mgr Manager, mainTx common.Tx, signer
 	// Iterate through each affiliate and attempt to distribute the fee
 	for i, affiliate := range affiliates {
 		ctx.Logger().Info("distributing affiliate fee", "txid", mainTx.ID.String(), "index", i, "affiliate", affiliate, "fee", affiliatesBps[i].String(), "asset", coin.Asset, "amount", coin.Amount)
-		var runeAddr cosmos.AccAddress
+		var decaAddr cosmos.AccAddress
 		var thorname *THORName
 
 		addr, errAddr := common.NewAddress(affiliate)
@@ -190,7 +190,7 @@ func skimAffiliateFees(ctx cosmos.Context, mgr Manager, mainTx common.Tx, signer
 			ctx.Logger().Error("affiliate address is not THORChain, skipping fee", "msg", affiliate)
 			continue
 		}
-		runeAddr, err = addr.AccAddress()
+		decaAddr, err = addr.AccAddress()
 		if err != nil {
 			ctx.Logger().Error("fail to convert address into AccAddress, skipping fee", "msg", addr, "error", err)
 			continue
@@ -205,14 +205,14 @@ func skimAffiliateFees(ctx cosmos.Context, mgr Manager, mainTx common.Tx, signer
 			)
 			affCoin := common.NewCoin(coin.Asset, affAmt)
 
-			if coin.Asset.IsRune() {
-				err = mgr.Keeper().SendFromModuleToAccount(ctx, AsgardName, runeAddr, common.NewCoins(affCoin))
+			if coin.Asset.IsDeca() {
+				err = mgr.Keeper().SendFromModuleToAccount(ctx, AsgardName, decaAddr, common.NewCoins(affCoin))
 				if err != nil {
 					ctx.Logger().Error("fail to send rune to affiliate", "affiliate", affiliate, "error", err)
 					continue
 				}
 			} else {
-				err = affiliateSwapToRune(ctx, mgr, mainTx, signer, affAmt, runeAddr, memo, thorname, &swapIndex)
+				err = affiliateSwapToRune(ctx, mgr, mainTx, signer, affAmt, decaAddr, memo, thorname, &swapIndex)
 				if err != nil {
 					ctx.Logger().Error("fail to swap to rune", "affiliate", affiliate, "error", err)
 					continue
@@ -224,7 +224,7 @@ func skimAffiliateFees(ctx cosmos.Context, mgr Manager, mainTx common.Tx, signer
 				mainTx.ID,
 				mainTx.Memo,
 				"",
-				common.Address(runeAddr.String()),
+				common.Address(decaAddr.String()),
 				coin.Asset,
 				feeBps.Uint64(),
 				coin.Amount,
@@ -267,7 +267,7 @@ func affiliateSwapToRune(ctx cosmos.Context, mgr Manager, mainTx common.Tx, sign
 	if tn != nil {
 		tnMemo = tn.Name
 	}
-	memoStr := NewSwapMemo(ctx, mgr, common.RuneAsset(), affAddr, cosmos.ZeroUint(), tnMemo, cosmos.ZeroUint())
+	memoStr := NewSwapMemo(ctx, mgr, common.DecaAsset(), affAddr, cosmos.ZeroUint(), tnMemo, cosmos.ZeroUint())
 	mainTx.Memo = memoStr
 
 	// Determine version based on configuration
@@ -278,7 +278,7 @@ func affiliateSwapToRune(ctx cosmos.Context, mgr Manager, mainTx common.Tx, sign
 
 	affiliateSwap := NewMsgSwap(
 		mainTx,
-		common.RuneAsset(),
+		common.DecaAsset(),
 		affAddr,
 		cosmos.ZeroUint(),
 		common.NoAddress,

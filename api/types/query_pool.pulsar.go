@@ -504,9 +504,9 @@ var (
 	fd_QueryPoolResponse_status                    protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_decimals                  protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_pending_inbound_asset     protoreflect.FieldDescriptor
-	fd_QueryPoolResponse_pending_inbound_rune      protoreflect.FieldDescriptor
+	fd_QueryPoolResponse_pending_inbound_deca      protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_balance_asset             protoreflect.FieldDescriptor
-	fd_QueryPoolResponse_balance_rune              protoreflect.FieldDescriptor
+	fd_QueryPoolResponse_balance_deca              protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_asset_tor_price           protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_pool_units                protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_LP_units                  protoreflect.FieldDescriptor
@@ -520,7 +520,7 @@ var (
 	fd_QueryPoolResponse_synth_supply_remaining    protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_derived_depth_bps         protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_trading_halted            protoreflect.FieldDescriptor
-	fd_QueryPoolResponse_volume_rune               protoreflect.FieldDescriptor
+	fd_QueryPoolResponse_volume_deca               protoreflect.FieldDescriptor
 	fd_QueryPoolResponse_volume_asset              protoreflect.FieldDescriptor
 )
 
@@ -532,9 +532,9 @@ func init() {
 	fd_QueryPoolResponse_status = md_QueryPoolResponse.Fields().ByName("status")
 	fd_QueryPoolResponse_decimals = md_QueryPoolResponse.Fields().ByName("decimals")
 	fd_QueryPoolResponse_pending_inbound_asset = md_QueryPoolResponse.Fields().ByName("pending_inbound_asset")
-	fd_QueryPoolResponse_pending_inbound_rune = md_QueryPoolResponse.Fields().ByName("pending_inbound_rune")
+	fd_QueryPoolResponse_pending_inbound_deca = md_QueryPoolResponse.Fields().ByName("pending_inbound_deca")
 	fd_QueryPoolResponse_balance_asset = md_QueryPoolResponse.Fields().ByName("balance_asset")
-	fd_QueryPoolResponse_balance_rune = md_QueryPoolResponse.Fields().ByName("balance_rune")
+	fd_QueryPoolResponse_balance_deca = md_QueryPoolResponse.Fields().ByName("balance_deca")
 	fd_QueryPoolResponse_asset_tor_price = md_QueryPoolResponse.Fields().ByName("asset_tor_price")
 	fd_QueryPoolResponse_pool_units = md_QueryPoolResponse.Fields().ByName("pool_units")
 	fd_QueryPoolResponse_LP_units = md_QueryPoolResponse.Fields().ByName("LP_units")
@@ -548,7 +548,7 @@ func init() {
 	fd_QueryPoolResponse_synth_supply_remaining = md_QueryPoolResponse.Fields().ByName("synth_supply_remaining")
 	fd_QueryPoolResponse_derived_depth_bps = md_QueryPoolResponse.Fields().ByName("derived_depth_bps")
 	fd_QueryPoolResponse_trading_halted = md_QueryPoolResponse.Fields().ByName("trading_halted")
-	fd_QueryPoolResponse_volume_rune = md_QueryPoolResponse.Fields().ByName("volume_rune")
+	fd_QueryPoolResponse_volume_deca = md_QueryPoolResponse.Fields().ByName("volume_deca")
 	fd_QueryPoolResponse_volume_asset = md_QueryPoolResponse.Fields().ByName("volume_asset")
 }
 
@@ -647,9 +647,9 @@ func (x *fastReflection_QueryPoolResponse) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.PendingInboundRune != "" {
-		value := protoreflect.ValueOfString(x.PendingInboundRune)
-		if !f(fd_QueryPoolResponse_pending_inbound_rune, value) {
+	if x.PendingInboundDeca != "" {
+		value := protoreflect.ValueOfString(x.PendingInboundDeca)
+		if !f(fd_QueryPoolResponse_pending_inbound_deca, value) {
 			return
 		}
 	}
@@ -659,9 +659,9 @@ func (x *fastReflection_QueryPoolResponse) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.BalanceRune != "" {
-		value := protoreflect.ValueOfString(x.BalanceRune)
-		if !f(fd_QueryPoolResponse_balance_rune, value) {
+	if x.BalanceDeca != "" {
+		value := protoreflect.ValueOfString(x.BalanceDeca)
+		if !f(fd_QueryPoolResponse_balance_deca, value) {
 			return
 		}
 	}
@@ -743,9 +743,9 @@ func (x *fastReflection_QueryPoolResponse) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
-	if x.VolumeRune != "" {
-		value := protoreflect.ValueOfString(x.VolumeRune)
-		if !f(fd_QueryPoolResponse_volume_rune, value) {
+	if x.VolumeDeca != "" {
+		value := protoreflect.ValueOfString(x.VolumeDeca)
+		if !f(fd_QueryPoolResponse_volume_deca, value) {
 			return
 		}
 	}
@@ -780,12 +780,12 @@ func (x *fastReflection_QueryPoolResponse) Has(fd protoreflect.FieldDescriptor) 
 		return x.Decimals != int64(0)
 	case "types.QueryPoolResponse.pending_inbound_asset":
 		return x.PendingInboundAsset != ""
-	case "types.QueryPoolResponse.pending_inbound_rune":
-		return x.PendingInboundRune != ""
+	case "types.QueryPoolResponse.pending_inbound_deca":
+		return x.PendingInboundDeca != ""
 	case "types.QueryPoolResponse.balance_asset":
 		return x.BalanceAsset != ""
-	case "types.QueryPoolResponse.balance_rune":
-		return x.BalanceRune != ""
+	case "types.QueryPoolResponse.balance_deca":
+		return x.BalanceDeca != ""
 	case "types.QueryPoolResponse.asset_tor_price":
 		return x.AssetTorPrice != ""
 	case "types.QueryPoolResponse.pool_units":
@@ -812,8 +812,8 @@ func (x *fastReflection_QueryPoolResponse) Has(fd protoreflect.FieldDescriptor) 
 		return x.DerivedDepthBps != ""
 	case "types.QueryPoolResponse.trading_halted":
 		return x.TradingHalted != false
-	case "types.QueryPoolResponse.volume_rune":
-		return x.VolumeRune != ""
+	case "types.QueryPoolResponse.volume_deca":
+		return x.VolumeDeca != ""
 	case "types.QueryPoolResponse.volume_asset":
 		return x.VolumeAsset != ""
 	default:
@@ -842,12 +842,12 @@ func (x *fastReflection_QueryPoolResponse) Clear(fd protoreflect.FieldDescriptor
 		x.Decimals = int64(0)
 	case "types.QueryPoolResponse.pending_inbound_asset":
 		x.PendingInboundAsset = ""
-	case "types.QueryPoolResponse.pending_inbound_rune":
-		x.PendingInboundRune = ""
+	case "types.QueryPoolResponse.pending_inbound_deca":
+		x.PendingInboundDeca = ""
 	case "types.QueryPoolResponse.balance_asset":
 		x.BalanceAsset = ""
-	case "types.QueryPoolResponse.balance_rune":
-		x.BalanceRune = ""
+	case "types.QueryPoolResponse.balance_deca":
+		x.BalanceDeca = ""
 	case "types.QueryPoolResponse.asset_tor_price":
 		x.AssetTorPrice = ""
 	case "types.QueryPoolResponse.pool_units":
@@ -874,8 +874,8 @@ func (x *fastReflection_QueryPoolResponse) Clear(fd protoreflect.FieldDescriptor
 		x.DerivedDepthBps = ""
 	case "types.QueryPoolResponse.trading_halted":
 		x.TradingHalted = false
-	case "types.QueryPoolResponse.volume_rune":
-		x.VolumeRune = ""
+	case "types.QueryPoolResponse.volume_deca":
+		x.VolumeDeca = ""
 	case "types.QueryPoolResponse.volume_asset":
 		x.VolumeAsset = ""
 	default:
@@ -909,14 +909,14 @@ func (x *fastReflection_QueryPoolResponse) Get(descriptor protoreflect.FieldDesc
 	case "types.QueryPoolResponse.pending_inbound_asset":
 		value := x.PendingInboundAsset
 		return protoreflect.ValueOfString(value)
-	case "types.QueryPoolResponse.pending_inbound_rune":
-		value := x.PendingInboundRune
+	case "types.QueryPoolResponse.pending_inbound_deca":
+		value := x.PendingInboundDeca
 		return protoreflect.ValueOfString(value)
 	case "types.QueryPoolResponse.balance_asset":
 		value := x.BalanceAsset
 		return protoreflect.ValueOfString(value)
-	case "types.QueryPoolResponse.balance_rune":
-		value := x.BalanceRune
+	case "types.QueryPoolResponse.balance_deca":
+		value := x.BalanceDeca
 		return protoreflect.ValueOfString(value)
 	case "types.QueryPoolResponse.asset_tor_price":
 		value := x.AssetTorPrice
@@ -957,8 +957,8 @@ func (x *fastReflection_QueryPoolResponse) Get(descriptor protoreflect.FieldDesc
 	case "types.QueryPoolResponse.trading_halted":
 		value := x.TradingHalted
 		return protoreflect.ValueOfBool(value)
-	case "types.QueryPoolResponse.volume_rune":
-		value := x.VolumeRune
+	case "types.QueryPoolResponse.volume_deca":
+		value := x.VolumeDeca
 		return protoreflect.ValueOfString(value)
 	case "types.QueryPoolResponse.volume_asset":
 		value := x.VolumeAsset
@@ -993,12 +993,12 @@ func (x *fastReflection_QueryPoolResponse) Set(fd protoreflect.FieldDescriptor, 
 		x.Decimals = value.Int()
 	case "types.QueryPoolResponse.pending_inbound_asset":
 		x.PendingInboundAsset = value.Interface().(string)
-	case "types.QueryPoolResponse.pending_inbound_rune":
-		x.PendingInboundRune = value.Interface().(string)
+	case "types.QueryPoolResponse.pending_inbound_deca":
+		x.PendingInboundDeca = value.Interface().(string)
 	case "types.QueryPoolResponse.balance_asset":
 		x.BalanceAsset = value.Interface().(string)
-	case "types.QueryPoolResponse.balance_rune":
-		x.BalanceRune = value.Interface().(string)
+	case "types.QueryPoolResponse.balance_deca":
+		x.BalanceDeca = value.Interface().(string)
 	case "types.QueryPoolResponse.asset_tor_price":
 		x.AssetTorPrice = value.Interface().(string)
 	case "types.QueryPoolResponse.pool_units":
@@ -1025,8 +1025,8 @@ func (x *fastReflection_QueryPoolResponse) Set(fd protoreflect.FieldDescriptor, 
 		x.DerivedDepthBps = value.Interface().(string)
 	case "types.QueryPoolResponse.trading_halted":
 		x.TradingHalted = value.Bool()
-	case "types.QueryPoolResponse.volume_rune":
-		x.VolumeRune = value.Interface().(string)
+	case "types.QueryPoolResponse.volume_deca":
+		x.VolumeDeca = value.Interface().(string)
 	case "types.QueryPoolResponse.volume_asset":
 		x.VolumeAsset = value.Interface().(string)
 	default:
@@ -1059,12 +1059,12 @@ func (x *fastReflection_QueryPoolResponse) Mutable(fd protoreflect.FieldDescript
 		panic(fmt.Errorf("field decimals of message types.QueryPoolResponse is not mutable"))
 	case "types.QueryPoolResponse.pending_inbound_asset":
 		panic(fmt.Errorf("field pending_inbound_asset of message types.QueryPoolResponse is not mutable"))
-	case "types.QueryPoolResponse.pending_inbound_rune":
-		panic(fmt.Errorf("field pending_inbound_rune of message types.QueryPoolResponse is not mutable"))
+	case "types.QueryPoolResponse.pending_inbound_deca":
+		panic(fmt.Errorf("field pending_inbound_deca of message types.QueryPoolResponse is not mutable"))
 	case "types.QueryPoolResponse.balance_asset":
 		panic(fmt.Errorf("field balance_asset of message types.QueryPoolResponse is not mutable"))
-	case "types.QueryPoolResponse.balance_rune":
-		panic(fmt.Errorf("field balance_rune of message types.QueryPoolResponse is not mutable"))
+	case "types.QueryPoolResponse.balance_deca":
+		panic(fmt.Errorf("field balance_deca of message types.QueryPoolResponse is not mutable"))
 	case "types.QueryPoolResponse.asset_tor_price":
 		panic(fmt.Errorf("field asset_tor_price of message types.QueryPoolResponse is not mutable"))
 	case "types.QueryPoolResponse.pool_units":
@@ -1091,8 +1091,8 @@ func (x *fastReflection_QueryPoolResponse) Mutable(fd protoreflect.FieldDescript
 		panic(fmt.Errorf("field derived_depth_bps of message types.QueryPoolResponse is not mutable"))
 	case "types.QueryPoolResponse.trading_halted":
 		panic(fmt.Errorf("field trading_halted of message types.QueryPoolResponse is not mutable"))
-	case "types.QueryPoolResponse.volume_rune":
-		panic(fmt.Errorf("field volume_rune of message types.QueryPoolResponse is not mutable"))
+	case "types.QueryPoolResponse.volume_deca":
+		panic(fmt.Errorf("field volume_deca of message types.QueryPoolResponse is not mutable"))
 	case "types.QueryPoolResponse.volume_asset":
 		panic(fmt.Errorf("field volume_asset of message types.QueryPoolResponse is not mutable"))
 	default:
@@ -1118,11 +1118,11 @@ func (x *fastReflection_QueryPoolResponse) NewField(fd protoreflect.FieldDescrip
 		return protoreflect.ValueOfInt64(int64(0))
 	case "types.QueryPoolResponse.pending_inbound_asset":
 		return protoreflect.ValueOfString("")
-	case "types.QueryPoolResponse.pending_inbound_rune":
+	case "types.QueryPoolResponse.pending_inbound_deca":
 		return protoreflect.ValueOfString("")
 	case "types.QueryPoolResponse.balance_asset":
 		return protoreflect.ValueOfString("")
-	case "types.QueryPoolResponse.balance_rune":
+	case "types.QueryPoolResponse.balance_deca":
 		return protoreflect.ValueOfString("")
 	case "types.QueryPoolResponse.asset_tor_price":
 		return protoreflect.ValueOfString("")
@@ -1150,7 +1150,7 @@ func (x *fastReflection_QueryPoolResponse) NewField(fd protoreflect.FieldDescrip
 		return protoreflect.ValueOfString("")
 	case "types.QueryPoolResponse.trading_halted":
 		return protoreflect.ValueOfBool(false)
-	case "types.QueryPoolResponse.volume_rune":
+	case "types.QueryPoolResponse.volume_deca":
 		return protoreflect.ValueOfString("")
 	case "types.QueryPoolResponse.volume_asset":
 		return protoreflect.ValueOfString("")
@@ -1242,7 +1242,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.PendingInboundRune)
+		l = len(x.PendingInboundDeca)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1250,7 +1250,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.BalanceRune)
+		l = len(x.BalanceDeca)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1304,7 +1304,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 		if x.TradingHalted {
 			n += 3
 		}
-		l = len(x.VolumeRune)
+		l = len(x.VolumeDeca)
 		if l > 0 {
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
@@ -1350,10 +1350,10 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0xd2
 		}
-		if len(x.VolumeRune) > 0 {
-			i -= len(x.VolumeRune)
-			copy(dAtA[i:], x.VolumeRune)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.VolumeRune)))
+		if len(x.VolumeDeca) > 0 {
+			i -= len(x.VolumeDeca)
+			copy(dAtA[i:], x.VolumeDeca)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.VolumeDeca)))
 			i--
 			dAtA[i] = 0x1
 			i--
@@ -1468,10 +1468,10 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x4a
 		}
-		if len(x.BalanceRune) > 0 {
-			i -= len(x.BalanceRune)
-			copy(dAtA[i:], x.BalanceRune)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BalanceRune)))
+		if len(x.BalanceDeca) > 0 {
+			i -= len(x.BalanceDeca)
+			copy(dAtA[i:], x.BalanceDeca)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BalanceDeca)))
 			i--
 			dAtA[i] = 0x42
 		}
@@ -1482,10 +1482,10 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x3a
 		}
-		if len(x.PendingInboundRune) > 0 {
-			i -= len(x.PendingInboundRune)
-			copy(dAtA[i:], x.PendingInboundRune)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PendingInboundRune)))
+		if len(x.PendingInboundDeca) > 0 {
+			i -= len(x.PendingInboundDeca)
+			copy(dAtA[i:], x.PendingInboundDeca)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.PendingInboundDeca)))
 			i--
 			dAtA[i] = 0x32
 		}
@@ -1720,7 +1720,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 6:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingInboundRune", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PendingInboundDeca", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1748,7 +1748,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PendingInboundRune = string(dAtA[iNdEx:postIndex])
+				x.PendingInboundDeca = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 7:
 				if wireType != 2 {
@@ -1784,7 +1784,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 8:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BalanceRune", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BalanceDeca", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1812,7 +1812,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.BalanceRune = string(dAtA[iNdEx:postIndex])
+				x.BalanceDeca = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 9:
 				if wireType != 2 {
@@ -2208,7 +2208,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 				x.TradingHalted = bool(v != 0)
 			case 25:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VolumeRune", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VolumeDeca", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -2236,7 +2236,7 @@ func (x *fastReflection_QueryPoolResponse) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.VolumeRune = string(dAtA[iNdEx:postIndex])
+				x.VolumeDeca = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 26:
 				if wireType != 2 {
@@ -3285,9 +3285,9 @@ type QueryPoolResponse struct {
 	Status              string `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
 	Decimals            int64  `protobuf:"varint,4,opt,name=decimals,proto3" json:"decimals,omitempty"`
 	PendingInboundAsset string `protobuf:"bytes,5,opt,name=pending_inbound_asset,json=pendingInboundAsset,proto3" json:"pending_inbound_asset,omitempty"`
-	PendingInboundRune  string `protobuf:"bytes,6,opt,name=pending_inbound_rune,json=pendingInboundRune,proto3" json:"pending_inbound_rune,omitempty"`
+	PendingInboundDeca  string `protobuf:"bytes,6,opt,name=pending_inbound_deca,json=pendingInboundDeca,proto3" json:"pending_inbound_deca,omitempty"`
 	BalanceAsset        string `protobuf:"bytes,7,opt,name=balance_asset,json=balanceAsset,proto3" json:"balance_asset,omitempty"`
-	BalanceRune         string `protobuf:"bytes,8,opt,name=balance_rune,json=balanceRune,proto3" json:"balance_rune,omitempty"`
+	BalanceDeca         string `protobuf:"bytes,8,opt,name=balance_deca,json=balanceDeca,proto3" json:"balance_deca,omitempty"`
 	// the USD (TOR) price of the asset in 1e8
 	AssetTorPrice string `protobuf:"bytes,9,opt,name=asset_tor_price,json=assetTorPrice,proto3" json:"asset_tor_price,omitempty"`
 	// the total pool units, this is the sum of LP and synth units
@@ -3316,7 +3316,7 @@ type QueryPoolResponse struct {
 	// whether trading is halted
 	TradingHalted bool `protobuf:"varint,24,opt,name=trading_halted,json=tradingHalted,proto3" json:"trading_halted,omitempty"`
 	// 24h trading volume rune
-	VolumeRune string `protobuf:"bytes,25,opt,name=volume_rune,json=volumeRune,proto3" json:"volume_rune,omitempty"`
+	VolumeDeca string `protobuf:"bytes,25,opt,name=volume_deca,json=volumeDeca,proto3" json:"volume_deca,omitempty"`
 	// 24h trading volume asset
 	VolumeAsset string `protobuf:"bytes,26,opt,name=volume_asset,json=volumeAsset,proto3" json:"volume_asset,omitempty"`
 }
@@ -3376,9 +3376,9 @@ func (x *QueryPoolResponse) GetPendingInboundAsset() string {
 	return ""
 }
 
-func (x *QueryPoolResponse) GetPendingInboundRune() string {
+func (x *QueryPoolResponse) GetPendingInboundDeca() string {
 	if x != nil {
-		return x.PendingInboundRune
+		return x.PendingInboundDeca
 	}
 	return ""
 }
@@ -3390,9 +3390,9 @@ func (x *QueryPoolResponse) GetBalanceAsset() string {
 	return ""
 }
 
-func (x *QueryPoolResponse) GetBalanceRune() string {
+func (x *QueryPoolResponse) GetBalanceDeca() string {
 	if x != nil {
-		return x.BalanceRune
+		return x.BalanceDeca
 	}
 	return ""
 }
@@ -3488,9 +3488,9 @@ func (x *QueryPoolResponse) GetTradingHalted() bool {
 	return false
 }
 
-func (x *QueryPoolResponse) GetVolumeRune() string {
+func (x *QueryPoolResponse) GetVolumeDeca() string {
 	if x != nil {
-		return x.VolumeRune
+		return x.VolumeDeca
 	}
 	return ""
 }

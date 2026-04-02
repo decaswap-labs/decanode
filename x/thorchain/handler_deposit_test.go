@@ -27,7 +27,7 @@ func (s *HandlerDepositSuite) TestValidate(c *C) {
 	addr := GetRandomBech32Addr()
 
 	coins := common.Coins{
-		common.NewCoin(common.RuneNative, cosmos.NewUint(200*common.One)),
+		common.NewCoin(common.DecaNative, cosmos.NewUint(200*common.One)),
 	}
 	msg := NewMsgDeposit(coins, fmt.Sprintf("ADD:DOGE.DOGE:%s", GetRandomRUNEAddress()), addr)
 
@@ -51,14 +51,14 @@ func (s *HandlerDepositSuite) TestHandle(c *C) {
 	addr := GetRandomBech32Addr()
 
 	coins := common.Coins{
-		common.NewCoin(common.RuneNative, cosmos.NewUint(200*common.One)),
+		common.NewCoin(common.DecaNative, cosmos.NewUint(200*common.One)),
 	}
 
 	FundAccount(c, ctx, k, addr, 300*common.One)
 	pool := NewPool()
 	pool.Asset = common.DOGEAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 	msg := NewMsgDeposit(coins, "ADD:DOGE.DOGE", addr)
@@ -177,7 +177,7 @@ func (s *HandlerDepositSuite) TestDifferentValidation(c *C) {
 			name: "Insufficient funds should result in an error",
 			messageProvider: func(c *C, ctx cosmos.Context, helper *HandlerDepositTestHelper) cosmos.Msg {
 				return NewMsgDeposit(common.Coins{
-					common.NewCoin(common.RuneNative, cosmos.NewUint(100)),
+					common.NewCoin(common.DecaNative, cosmos.NewUint(100)),
 				}, "hello", GetRandomBech32Addr())
 			},
 			validator: func(c *C, ctx cosmos.Context, result *cosmos.Result, err error, helper *HandlerDepositTestHelper, name string) {
@@ -193,7 +193,7 @@ func (s *HandlerDepositSuite) TestDifferentValidation(c *C) {
 				vault := NewVault(ctx.BlockHeight(), ActiveVault, AsgardVault, GetRandomPubKey(), common.Chains{common.DOGEChain, common.THORChain}.Strings(), []ChainContract{})
 				c.Check(helper.Keeper.SetVault(ctx, vault), IsNil)
 				return NewMsgDeposit(common.Coins{
-					common.NewCoin(common.RuneNative, cosmos.NewUint(2*common.One)),
+					common.NewCoin(common.DecaNative, cosmos.NewUint(2*common.One)),
 				}, "hello", acctAddr)
 			},
 			validator: func(c *C, ctx cosmos.Context, result *cosmos.Result, err error, helper *HandlerDepositTestHelper, name string) {
@@ -222,7 +222,7 @@ func (s *HandlerDepositSuite) TestAddSwap(c *C) {
 		GetRandomTxHash(),
 		GetRandomTHORAddress(),
 		GetRandomTHORAddress(),
-		common.Coins{common.NewCoin(common.RuneNative, cosmos.NewUint(common.One))},
+		common.Coins{common.NewCoin(common.DecaNative, cosmos.NewUint(common.One))},
 		common.Gas{
 			{Asset: common.DOGEAsset, Amount: cosmos.NewUint(37500)},
 		},
@@ -248,14 +248,14 @@ func (s *HandlerDepositSuite) TestAddSwap(c *C) {
 	affiliateFeeAddr, err := msg1.GetAffiliateAddress().AccAddress()
 	c.Assert(err, IsNil)
 	acct := mgr.Keeper().GetBalance(ctx, affiliateFeeAddr)
-	c.Assert(acct.AmountOf(common.RuneNative.Native()).String(), Equals, "0")
+	c.Assert(acct.AmountOf(common.DecaNative.Native()).String(), Equals, "0")
 
 	c.Assert(addSwap(ctx, mgr, *msg1), IsNil)
 	swap, err = getSwapQueueItem(ctx, mgr, tx.ID, 0)
 	c.Assert(err, IsNil)
 	c.Assert(swap.Tx.Coins[0].Amount.IsZero(), Equals, false)
 	// Check balance after swap, should be the same
-	c.Assert(acct.AmountOf(common.RuneNative.Native()).String(), Equals, "0")
+	c.Assert(acct.AmountOf(common.DecaNative.Native()).String(), Equals, "0")
 
 	// affiliate fee not taken on deposit
 	tx.Memo = fmt.Sprintf("=:BTC.BTC:%s::%s:1000", GetRandomBTCAddress().String(), affAddr.String())
@@ -270,7 +270,7 @@ func (s *HandlerDepositSuite) TestAddSwap(c *C) {
 	affiliateFeeAddr2, err := msg2.GetAffiliateAddress().AccAddress()
 	c.Assert(err, IsNil)
 	acct2 := mgr.Keeper().GetBalance(ctx, affiliateFeeAddr2)
-	c.Assert(acct2.AmountOf(common.RuneNative.Native()).String(), Equals, strconv.FormatInt(0, 10))
+	c.Assert(acct2.AmountOf(common.DecaNative.Native()).String(), Equals, strconv.FormatInt(0, 10))
 
 	// NONE RUNE , synth asset should be handled correctly
 
@@ -282,7 +282,7 @@ func (s *HandlerDepositSuite) TestAddSwap(c *C) {
 		GetRandomTHORAddress(),
 		common.Coins{common.NewCoin(synthAsset, cosmos.NewUint(common.One))},
 		common.Gas{
-			{Asset: common.RuneNative, Amount: cosmos.NewUint(200000)},
+			{Asset: common.DecaNative, Amount: cosmos.NewUint(200000)},
 		},
 		tx.Memo,
 	)
@@ -300,7 +300,7 @@ func (s *HandlerDepositSuite) TestAddSwap(c *C) {
 	affiliateFeeAddr3, err := msg3.GetAffiliateAddress().AccAddress()
 	c.Assert(err, IsNil)
 	acct3 := mgr.Keeper().GetBalance(ctx, affiliateFeeAddr3)
-	c.Assert(acct3.AmountOf(common.RuneNative.Native()).String(), Equals, strconv.FormatInt(0, 10))
+	c.Assert(acct3.AmountOf(common.DecaNative.Native()).String(), Equals, strconv.FormatInt(0, 10))
 }
 
 func (s *HandlerDepositSuite) TestTargetModule(c *C) {
@@ -316,7 +316,7 @@ func (s *HandlerDepositSuite) TestTargetModule(c *C) {
 			moduleName: ReserveName,
 			messageProvider: func(c *C, ctx cosmos.Context) *MsgDeposit {
 				addr := GetRandomRUNEAddress()
-				coin := common.NewCoin(common.RuneAsset(), cosmos.NewUint(20_00000000))
+				coin := common.NewCoin(common.DecaAsset(), cosmos.NewUint(20_00000000))
 				return NewMsgDeposit(common.Coins{coin}, "name:test:THOR:"+addr.String(), acctAddr)
 			},
 			validator: func(c *C, ctx cosmos.Context, result *cosmos.Result, err error, name string, balDelta cosmos.Uint) {
@@ -332,9 +332,9 @@ func (s *HandlerDepositSuite) TestTargetModule(c *C) {
 		totalCoins := common.NewCoins(msg.Coins[0])
 		c.Assert(mgr.Keeper().MintToModule(ctx, ModuleName, totalCoins[0]), IsNil)
 		c.Assert(mgr.Keeper().SendFromModuleToAccount(ctx, ModuleName, msg.Signer, totalCoins), IsNil)
-		balBefore := mgr.Keeper().GetRuneBalanceOfModule(ctx, tc.moduleName)
+		balBefore := mgr.Keeper().GetDecaBalanceOfModule(ctx, tc.moduleName)
 		result, err := handler.Run(ctx, msg)
-		balAfter := mgr.Keeper().GetRuneBalanceOfModule(ctx, tc.moduleName)
+		balAfter := mgr.Keeper().GetDecaBalanceOfModule(ctx, tc.moduleName)
 		balDelta := balAfter.Sub(balBefore)
 		tc.validator(c, ctx, result, err, tc.name, balDelta)
 	}
@@ -363,7 +363,7 @@ func (s *HandlerDepositSuite) TestMemolessNativeDeposit(c *C) {
 	// Set up pool for BTC
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -373,7 +373,7 @@ func (s *HandlerDepositSuite) TestMemolessNativeDeposit(c *C) {
 
 	// Register a reference memo for RUNE swaps
 	btcAddr := GetRandomBTCAddress()
-	refMemo := NewReferenceMemo(common.RuneNative, fmt.Sprintf("=:BTC.BTC:%s", btcAddr), "00001", 90)
+	refMemo := NewReferenceMemo(common.DecaNative, fmt.Sprintf("=:BTC.BTC:%s", btcAddr), "00001", 90)
 	refMemo.RegisteredBy = addr
 	refMemo.RegistrationHash, _ = common.NewTxID("ABC123")
 	k.SetReferenceMemo(ctx, refMemo)
@@ -381,7 +381,7 @@ func (s *HandlerDepositSuite) TestMemolessNativeDeposit(c *C) {
 	// Test 1: Memoless deposit with amount encoding reference 00001
 	// Amount ends in 00001 (e.g., 100000001) to encode reference
 	amount := cosmos.NewUint(100000001) // Last 5 digits: 00001
-	coins := common.Coins{common.NewCoin(common.RuneNative, amount)}
+	coins := common.Coins{common.NewCoin(common.DecaNative, amount)}
 
 	msg := NewMsgDeposit(coins, "", addr) // Empty memo
 	c.Assert(msg, NotNil)
@@ -431,7 +431,7 @@ func (s *HandlerDepositSuite) TestMemolessNativeDepositReferenceResolution(c *C)
 	// Set up pool for BTC
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -441,14 +441,14 @@ func (s *HandlerDepositSuite) TestMemolessNativeDepositReferenceResolution(c *C)
 
 	// Register a reference memo with explicit reference "r:00123"
 	btcAddr := GetRandomBTCAddress()
-	refMemo := NewReferenceMemo(common.RuneNative, fmt.Sprintf("=:BTC.BTC:%s", btcAddr), "00123", 90)
+	refMemo := NewReferenceMemo(common.DecaNative, fmt.Sprintf("=:BTC.BTC:%s", btcAddr), "00123", 90)
 	refMemo.RegisteredBy = addr
 	refMemo.RegistrationHash, _ = common.NewTxID("DEF456")
 	k.SetReferenceMemo(ctx, refMemo)
 
 	// Test: Deposit with explicit reference memo "r:00123"
 	amount := cosmos.NewUint(50 * common.One)
-	coins := common.Coins{common.NewCoin(common.RuneNative, amount)}
+	coins := common.Coins{common.NewCoin(common.DecaNative, amount)}
 
 	msg := NewMsgDeposit(coins, "r:00123", addr) // Explicit reference memo
 	c.Assert(msg, NotNil)

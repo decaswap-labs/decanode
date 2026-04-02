@@ -252,7 +252,7 @@ func (qs queryServer) queryLimitSwapsSummary(ctx cosmos.Context, req *types.Quer
 
 		// Convert to RUNE value
 		runeValue := remainingAmount
-		if !msg.Tx.Coins[0].Asset.IsRune() {
+		if !msg.Tx.Coins[0].Asset.IsDeca() {
 			// Only get pool if source asset is not RUNE
 			sourcePool, err := qs.mgr.Keeper().GetPool(ctx, msg.Tx.Coins[0].Asset.GetLayer1Asset())
 			if err != nil || !sourcePool.IsAvailable() {
@@ -278,7 +278,7 @@ func (qs queryServer) queryLimitSwapsSummary(ctx cosmos.Context, req *types.Quer
 
 			// Convert to RUNE value
 			pairRuneValue := pairRemainingAmount
-			if !msg.Tx.Coins[0].Asset.IsRune() {
+			if !msg.Tx.Coins[0].Asset.IsDeca() {
 				// Only get pool if source asset is not RUNE
 				if pairSourcePool, err := qs.mgr.Keeper().GetPool(ctx, msg.Tx.Coins[0].Asset.GetLayer1Asset()); err == nil && pairSourcePool.IsAvailable() {
 					pairRuneValue = pairSourcePool.AssetValueInRune(pairRemainingAmount)
@@ -306,7 +306,7 @@ func (qs queryServer) queryLimitSwapsSummary(ctx cosmos.Context, req *types.Quer
 
 			// Convert to RUNE value
 			initRuneValue := initRemainingAmount
-			if !msg.Tx.Coins[0].Asset.IsRune() {
+			if !msg.Tx.Coins[0].Asset.IsDeca() {
 				// Only get pool if source asset is not RUNE
 				if initSourcePool, err := qs.mgr.Keeper().GetPool(ctx, msg.Tx.Coins[0].Asset.GetLayer1Asset()); err == nil && initSourcePool.IsAvailable() {
 					initRuneValue = initSourcePool.AssetValueInRune(initRemainingAmount)

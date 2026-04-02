@@ -41,12 +41,12 @@ func (s AdvSwapQueueSuite) TestScoreMsgs(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(143166 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(143166 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 	pool = NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(73708333 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(73708333 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -56,7 +56,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgs(c *C) {
 	msgs := []*MsgSwap{
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("5E1DF027321F1FE37CA19B9ECB11C2B4ABEC0D8322199D335D9CE4C39F85F115"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One))},
 		}, common.ETHAsset, GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
@@ -64,27 +64,27 @@ func (s AdvSwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("53C1A22436B385133BDD9157BB365DB7AAC885910D2FA7C9DC3578A04FFD4ADC"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(50*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("6A470EB9AFE82981979A5EEEED3296E1E325597794BD5BFB3543A372CAF435E5"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One))},
 		}, common.ETHAsset, GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("5EE9A7CCC55A3EBAFA0E542388CA1B909B1E3CE96929ED34427B96B7CCE9F8E8"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))},
 		}, common.ETHAsset, GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0FF2A521FB11FFEA4DFE3B7AD4066FF0A33202E652D846F8397EFC447C97A91B"),
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One))},
 		}, common.ETHAsset, GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
@@ -93,7 +93,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000001"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(150*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -101,7 +101,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000002"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(151*common.One))},
-		}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -135,70 +135,70 @@ func (s AdvSwapQueueSuite) TestScoreMsgs(c *C) {
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000003"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(2*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000004"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(50*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000005"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000009"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000007"),
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000008"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(2*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000006"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(50*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000010"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(1*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000013"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(100*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
 		NewMsgSwap(common.Tx{
 			ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000012"),
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One))},
-		}, common.RuneAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+		}, common.DecaAsset(), GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
 			0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -319,14 +319,14 @@ func (s AdvSwapQueueSuite) TestNormalModePreservesLimitSwaps(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -390,14 +390,14 @@ func (s AdvSwapQueueSuite) TestFetchQueue(c *C) {
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(2088519094783)
-	pool.BalanceRune = cosmos.NewUint(199019591474591)
+	pool.BalanceDeca = cosmos.NewUint(199019591474591)
 	pool.Status = PoolAvailable
 	c.Check(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(97645470445)
-	pool.BalanceRune = cosmos.NewUint(798072095218642)
+	pool.BalanceDeca = cosmos.NewUint(798072095218642)
 	pool.Status = PoolAvailable
 	c.Check(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -406,7 +406,7 @@ func (s AdvSwapQueueSuite) TestFetchQueue(c *C) {
 		Chain:       common.THORChain,
 		FromAddress: GetRandomTHORAddress(),
 		ToAddress:   GetRandomTHORAddress(),
-		Coins:       common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One))},
+		Coins:       common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One))},
 	}, common.ETHAsset, GetRandomETHAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -520,38 +520,38 @@ func (s AdvSwapQueueSuite) TestgetAssetPairs(c *C) {
 
 func (s AdvSwapQueueSuite) TestTradePairsTodo(c *C) {
 	pairs := tradePairs{
-		{common.RuneAsset(), common.ETHAsset},
-		{common.ETHAsset, common.RuneAsset()},
-		{common.RuneAsset(), common.BTCAsset},
-		{common.BTCAsset, common.RuneAsset()},
+		{common.DecaAsset(), common.ETHAsset},
+		{common.ETHAsset, common.DecaAsset()},
+		{common.DecaAsset(), common.BTCAsset},
+		{common.BTCAsset, common.DecaAsset()},
 		{common.ETHAsset, common.BTCAsset},
 		{common.BTCAsset, common.ETHAsset},
 	}
 
 	// RUNE --> ETH
 	todo := make(tradePairs, 0)
-	todo = todo.findMatchingTrades(genTradePair(common.RuneAsset(), common.ETHAsset), pairs)
+	todo = todo.findMatchingTrades(genTradePair(common.DecaAsset(), common.ETHAsset), pairs)
 	c.Check(todo, HasLen, 2, Commentf("%d", len(todo)))
-	c.Check(todo[0].Equals(genTradePair(common.ETHAsset, common.RuneAsset())), Equals, true, Commentf("%s", todo[0]))
+	c.Check(todo[0].Equals(genTradePair(common.ETHAsset, common.DecaAsset())), Equals, true, Commentf("%s", todo[0]))
 	c.Check(todo[1].Equals(genTradePair(common.ETHAsset, common.BTCAsset)), Equals, true, Commentf("%s", todo[1]))
 
 	// ensure we don't duplicate
-	todo = todo.findMatchingTrades(genTradePair(common.RuneAsset(), common.ETHAsset), pairs)
+	todo = todo.findMatchingTrades(genTradePair(common.DecaAsset(), common.ETHAsset), pairs)
 	c.Check(todo, HasLen, 2, Commentf("%d", len(todo)))
 
 	// BTC --> RUNE
 	todo = make(tradePairs, 0)
-	todo = todo.findMatchingTrades(genTradePair(common.BTCAsset, common.RuneAsset()), pairs)
+	todo = todo.findMatchingTrades(genTradePair(common.BTCAsset, common.DecaAsset()), pairs)
 	c.Check(todo, HasLen, 2, Commentf("%d", len(todo)))
-	c.Check(todo[0].Equals(genTradePair(common.RuneAsset(), common.BTCAsset)), Equals, true, Commentf("%s", todo[0]))
+	c.Check(todo[0].Equals(genTradePair(common.DecaAsset(), common.BTCAsset)), Equals, true, Commentf("%s", todo[0]))
 	c.Check(todo[1].Equals(genTradePair(common.ETHAsset, common.BTCAsset)), Equals, true, Commentf("%s", todo[1]))
 
 	// BTC --> ETH
 	todo = make(tradePairs, 0)
 	todo = todo.findMatchingTrades(genTradePair(common.BTCAsset, common.ETHAsset), pairs)
 	c.Check(todo, HasLen, 3, Commentf("%d", len(todo)))
-	c.Check(todo[0].Equals(genTradePair(common.ETHAsset, common.RuneAsset())), Equals, true, Commentf("%s", todo[0]))
-	c.Check(todo[1].Equals(genTradePair(common.RuneAsset(), common.BTCAsset)), Equals, true, Commentf("%s", todo[1]))
+	c.Check(todo[0].Equals(genTradePair(common.ETHAsset, common.DecaAsset())), Equals, true, Commentf("%s", todo[0]))
+	c.Check(todo[1].Equals(genTradePair(common.DecaAsset(), common.BTCAsset)), Equals, true, Commentf("%s", todo[1]))
 	c.Check(todo[2].Equals(genTradePair(common.ETHAsset, common.BTCAsset)), Equals, true, Commentf("%s", todo[2]))
 }
 
@@ -566,14 +566,14 @@ func (s AdvSwapQueueSuite) TestEndBlock(c *C) {
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(2088519094783)
-	pool.BalanceRune = cosmos.NewUint(199019591474591)
+	pool.BalanceDeca = cosmos.NewUint(199019591474591)
 	pool.Status = PoolAvailable
 	c.Check(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(97645470445)
-	pool.BalanceRune = cosmos.NewUint(798072095218642)
+	pool.BalanceDeca = cosmos.NewUint(798072095218642)
 	pool.Status = PoolAvailable
 	c.Check(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -582,7 +582,7 @@ func (s AdvSwapQueueSuite) TestEndBlock(c *C) {
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
 	tx.Memo = fmt.Sprintf("swap:ETH.ETH:%s", ethAddr)
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)))
 	market := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		affilAddr, cosmos.NewUint(1_000),
@@ -684,14 +684,14 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 	// Setup pools for testing
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -726,14 +726,14 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 
 	// Test 3: Rune to asset swap
 	msg.State.Interval = 100
-	msg.Tx.Coins = common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000*common.One))}
-	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, common.RuneAsset(), common.ETHAsset, msg)
+	msg.Tx.Coins = common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000*common.One))}
+	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, common.DecaAsset(), common.ETHAsset, msg)
 	c.Assert(err, IsNil)
 	c.Assert(quantity > 0, Equals, true)
 
 	// Test 4: Asset to Rune swap
 	msg.Tx.Coins = common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One))}
-	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, common.BTCAsset, common.RuneAsset(), msg)
+	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, common.BTCAsset, common.DecaAsset(), msg)
 	c.Assert(err, IsNil)
 	c.Assert(quantity > 0, Equals, true)
 
@@ -741,7 +741,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 	k.SetMimir(ctx, "StreamingSwapMaxLengthNative", 10000)
 	msg.State.Interval = 1000 // High interval
 	msg.State.Quantity = 100
-	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, common.RuneAsset(), common.RuneAsset(), msg)
+	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, common.DecaAsset(), common.DecaAsset(), msg)
 	c.Assert(err, IsNil)
 	c.Assert(quantity, Equals, uint64(10)) // 10000 / 1000
 
@@ -773,7 +773,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 	tradeAsset = tradeAsset.GetTradeAsset()
 	k.SetMimir(ctx, "TradeAccountsSlipMinBps", 300) // 3% min slip
 	msg.Tx.Coins = common.Coins{common.NewCoin(tradeAsset, cosmos.NewUint(100*common.One))}
-	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, tradeAsset, common.RuneAsset(), msg)
+	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, tradeAsset, common.DecaAsset(), msg)
 	c.Assert(err, IsNil)
 	c.Assert(quantity > 0, Equals, true)
 
@@ -781,7 +781,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 	derivedAsset := common.ETHAsset.GetDerivedAsset()
 	derivedPool := NewPool()
 	derivedPool.Asset = derivedAsset
-	derivedPool.BalanceRune = cosmos.NewUint(500 * common.One)
+	derivedPool.BalanceDeca = cosmos.NewUint(500 * common.One)
 	derivedPool.BalanceAsset = cosmos.NewUint(50 * common.One)
 	derivedPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, derivedPool), IsNil)
@@ -789,7 +789,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 	k.SetMimir(ctx, "DerivedSlipMinBps", 400) // 4% min slip
 	msg.State.Quantity = 50
 	msg.Tx.Coins = common.Coins{common.NewCoin(derivedAsset, cosmos.NewUint(100*common.One))}
-	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, derivedAsset, common.RuneAsset(), msg)
+	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, derivedAsset, common.DecaAsset(), msg)
 	c.Assert(err, IsNil)
 	c.Assert(quantity > 0, Equals, true, Commentf("quantity: %d", quantity))
 	// Derived assets might use StreamingSwapMaxLengthNative (10000 from test 5)
@@ -799,7 +799,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantity(c *C) {
 	// Test 11: Non-existent asset - might return 0 or some default value
 	nonExistentAsset, _ := common.NewAsset("BNB.BNB")
 	msg.Tx.Coins = common.Coins{common.NewCoin(nonExistentAsset, cosmos.NewUint(100*common.One))}
-	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, nonExistentAsset, common.RuneAsset(), msg)
+	quantity, err = vm.getMaxSwapQuantity(ctx, mgr, nonExistentAsset, common.DecaAsset(), msg)
 	// The function might handle missing pools gracefully by returning a default value
 	c.Assert(err, IsNil)
 	c.Assert(quantity, Equals, uint64(50), Commentf("%d", quantity))
@@ -961,12 +961,12 @@ func (s AdvSwapQueueSuite) TestCheckFeelessSwap(c *C) {
 	// Setup test pools
 	ethPool := Pool{
 		Asset:        common.ETHAsset,
-		BalanceRune:  cosmos.NewUint(1000 * common.One),
+		BalanceDeca:  cosmos.NewUint(1000 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 	}
 	btcPool := Pool{
 		Asset:        common.BTCAsset,
-		BalanceRune:  cosmos.NewUint(2000 * common.One),
+		BalanceDeca:  cosmos.NewUint(2000 * common.One),
 		BalanceAsset: cosmos.NewUint(10 * common.One),
 	}
 	pools := Pools{ethPool, btcPool}
@@ -987,7 +987,7 @@ func (s AdvSwapQueueSuite) TestCheckFeelessSwap(c *C) {
 
 	// Test 2: Rune to Asset swap
 	pair = tradePair{
-		source: common.RuneAsset(),
+		source: common.DecaAsset(),
 		target: common.ETHAsset,
 	}
 	// Pool ratio: 1000 RUNE / 100 ETH = 10 RUNE per ETH
@@ -1001,7 +1001,7 @@ func (s AdvSwapQueueSuite) TestCheckFeelessSwap(c *C) {
 	// Test 3: Asset to Rune swap
 	pair = tradePair{
 		source: common.BTCAsset,
-		target: common.RuneAsset(),
+		target: common.DecaAsset(),
 	}
 	// Pool ratio: 10 BTC / 2000 RUNE = 0.005 BTC per RUNE
 	// Current ratio is 0.005 (in 1e8 = 500000)
@@ -1011,7 +1011,7 @@ func (s AdvSwapQueueSuite) TestCheckFeelessSwap(c *C) {
 	// Test 4: Pool not found
 	pair = tradePair{
 		source: common.BNBBEP20Asset,
-		target: common.RuneAsset(),
+		target: common.DecaAsset(),
 	}
 	result = vm.checkFeelessSwap(pools, pair, 100)
 	c.Assert(result, Equals, false)
@@ -1033,12 +1033,12 @@ func (s AdvSwapQueueSuite) TestCheckWithFeeSwap(c *C) {
 	// Setup test pools
 	ethPool := Pool{
 		Asset:        common.ETHAsset,
-		BalanceRune:  cosmos.NewUint(1000 * common.One),
+		BalanceDeca:  cosmos.NewUint(1000 * common.One),
 		BalanceAsset: cosmos.NewUint(100 * common.One),
 	}
 	btcPool := Pool{
 		Asset:        common.BTCAsset,
-		BalanceRune:  cosmos.NewUint(2000 * common.One),
+		BalanceDeca:  cosmos.NewUint(2000 * common.One),
 		BalanceAsset: cosmos.NewUint(10 * common.One),
 	}
 	pools := Pools{ethPool, btcPool}
@@ -1076,7 +1076,7 @@ func (s AdvSwapQueueSuite) TestCheckWithFeeSwap(c *C) {
 	// Test 4: Rune to Asset swap
 	msg = types.MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One))},
 		},
 		TargetAsset:          common.ETHAsset,
 		TradeTarget:          cosmos.NewUint(9000000), // 0.09 ETH
@@ -1098,7 +1098,7 @@ func (s AdvSwapQueueSuite) TestCheckWithFeeSwap(c *C) {
 		Tx: common.Tx{
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(1000000))}, // 0.01 BTC
 		},
-		TargetAsset:          common.RuneAsset(),
+		TargetAsset:          common.DecaAsset(),
 		TradeTarget:          cosmos.NewUint(1 * common.One), // 1 RUNE
 		AffiliateBasisPoints: cosmos.ZeroUint(),
 		SwapType:             types.SwapType_market,
@@ -1118,7 +1118,7 @@ func (s AdvSwapQueueSuite) TestCheckWithFeeSwap(c *C) {
 		Tx: common.Tx{
 			Coins: common.Coins{common.NewCoin(common.BNBBEP20Asset, cosmos.NewUint(1*common.One))},
 		},
-		TargetAsset:          common.RuneAsset(),
+		TargetAsset:          common.DecaAsset(),
 		TradeTarget:          cosmos.NewUint(1 * common.One),
 		AffiliateBasisPoints: cosmos.ZeroUint(),
 		SwapType:             types.SwapType_market,
@@ -1217,14 +1217,14 @@ func (s AdvSwapQueueSuite) TestDiscoverLimitSwaps(c *C) {
 	// Setup pools
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -1293,8 +1293,8 @@ func (s AdvSwapQueueSuite) TestDiscoverLimitSwaps(c *C) {
 	// Debug pool info
 	ethPoolCheck, _ := k.GetPool(ctx, common.ETHAsset)
 	btcPoolCheck, _ := k.GetPool(ctx, common.BTCAsset)
-	c.Logf("ETH Pool: Rune=%s, Asset=%s", ethPoolCheck.BalanceRune, ethPoolCheck.BalanceAsset)
-	c.Logf("BTC Pool: Rune=%s, Asset=%s", btcPoolCheck.BalanceRune, btcPoolCheck.BalanceAsset)
+	c.Logf("ETH Pool: Rune=%s, Asset=%s", ethPoolCheck.BalanceDeca, ethPoolCheck.BalanceAsset)
+	c.Logf("BTC Pool: Rune=%s, Asset=%s", btcPoolCheck.BalanceDeca, btcPoolCheck.BalanceAsset)
 
 	// Calculate market ratio
 	// 1 ETH = (1000 RUNE / 100 ETH) = 10 RUNE
@@ -1486,14 +1486,14 @@ func (s AdvSwapQueueSuite) TestRapidSwapMultipleIterations(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -1513,7 +1513,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapMultipleIterations(c *C) {
 
 	// Create streaming swap that will execute across iterations
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(5*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(5*common.One)))
 	ethAddr := GetRandomETHAddress()
 	streamingSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -1562,7 +1562,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapMultipleIterations(c *C) {
 	// Create multiple market swaps to test iteration behavior
 	for i := 0; i < 3; i++ {
 		marketTx := GetRandomTx()
-		marketTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		marketTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		marketSwap := NewMsgSwap(
 			marketTx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -1614,7 +1614,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEarlyExit(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -1642,7 +1642,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEarlyExit(c *C) {
 
 	// Test 2: Single swap that completes in first iteration
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	ethAddr := GetRandomETHAddress()
 	singleSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -1666,7 +1666,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEarlyExit(c *C) {
 
 	// Test 3: Streaming swap that completes after 2 iterations
 	tx = GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)))
 	streamingSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -1700,7 +1700,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEarlyExit(c *C) {
 	// Create 3 market swaps
 	for i := 0; i < 3; i++ {
 		completeTx := GetRandomTx()
-		completeTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		completeTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		marketSwap := NewMsgSwap(
 			completeTx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -1742,14 +1742,14 @@ func (s AdvSwapQueueSuite) TestRapidSwapTodoListPassing(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -1766,15 +1766,15 @@ func (s AdvSwapQueueSuite) TestRapidSwapTodoListPassing(c *C) {
 	// Test 2: FetchQueue with specific todo - should only check specified pairs
 	// Create a specific todo list with only ETH<->RUNE pairs
 	specificTodo := tradePairs{
-		genTradePair(common.ETHAsset, common.RuneAsset()),
-		genTradePair(common.RuneAsset(), common.ETHAsset),
+		genTradePair(common.ETHAsset, common.DecaAsset()),
+		genTradePair(common.DecaAsset(), common.ETHAsset),
 	}
 	swaps2, err := book.FetchQueue(ctx, mgr, pairs, pools, specificTodo)
 	c.Assert(err, IsNil)
 	c.Assert(len(swaps2), Equals, 0) // Still no swaps, but only specific pairs checked
 
 	// Test 3: Test findMatchingTrades function behavior
-	testPair := genTradePair(common.RuneAsset(), common.ETHAsset)
+	testPair := genTradePair(common.DecaAsset(), common.ETHAsset)
 
 	// Create initial empty todo and test findMatchingTrades
 	emptyTodoTest := make(tradePairs, 0)
@@ -1801,7 +1801,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapTodoListPassing(c *C) {
 
 	// Create a streaming swap that will execute across iterations
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(3*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(3*common.One)))
 	ethAddr := GetRandomETHAddress()
 	streamingSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -1842,7 +1842,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapTodoListPassing(c *C) {
 	todo := make(tradePairs, 0)
 
 	// Simulate building todo list through successful swaps
-	swapPair1 := genTradePair(common.RuneAsset(), common.ETHAsset)
+	swapPair1 := genTradePair(common.DecaAsset(), common.ETHAsset)
 	todo = todo.findMatchingTrades(swapPair1, pairs)
 	initialTodoSize := len(todo)
 
@@ -1871,7 +1871,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapIterationCountLogging(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -1901,7 +1901,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapIterationCountLogging(c *C) {
 
 	// Create a single market swap that will complete in first iteration
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	ethAddr := GetRandomETHAddress()
 	singleSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -1927,7 +1927,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapIterationCountLogging(c *C) {
 
 	// Create a streaming swap with 3 sub-swaps
 	tx = GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(3*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(3*common.One)))
 	streamingSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -1957,7 +1957,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapIterationCountLogging(c *C) {
 	// Create multiple market swaps to ensure we have swaps available for all iterations
 	for i := 0; i < 5; i++ {
 		multiTx := GetRandomTx()
-		multiTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		multiTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		marketSwap := NewMsgSwap(
 			multiTx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2001,7 +2001,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithPoolCycleInteraction(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -2024,7 +2024,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithPoolCycleInteraction(c *C) {
 	ethAddr := GetRandomETHAddress()
 	for i := 0; i < 3; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		marketSwap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2062,7 +2062,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithPoolCycleInteraction(c *C) {
 	// Add more swaps for this test
 	for i := 0; i < 2; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		marketSwap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2153,14 +2153,14 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -2182,7 +2182,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 
 	// Scenario 1: Complete market swap workflow
 	tx1 := GetRandomTx()
-	tx1.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(5*common.One)))
+	tx1.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(5*common.One)))
 	marketSwap := NewMsgSwap(
 		tx1, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2212,7 +2212,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 
 	// Scenario 2: Complete streaming swap workflow (multiple iterations)
 	tx2 := GetRandomTx()
-	tx2.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(6*common.One)))
+	tx2.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(6*common.One)))
 	streamingSwap := NewMsgSwap(
 		tx2, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2253,7 +2253,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 	// Add 2 market swaps
 	for i := 0; i < 2; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2271,7 +2271,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 
 	// Add 1 streaming swap
 	tx3 := GetRandomTx()
-	tx3.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(4*common.One)))
+	tx3.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(4*common.One)))
 	streamingSwap2 := NewMsgSwap(
 		tx3, common.BTCAsset, GetRandomBTCAddress(), cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2337,7 +2337,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 	// Add more swaps
 	for i := 0; i < 3; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2372,7 +2372,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 	// Scenario 6: Complete workflow with todo list propagation
 	// Create swaps that will benefit from todo list optimization
 	tx5 := GetRandomTx()
-	tx5.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)))
+	tx5.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)))
 	todoSwap := NewMsgSwap(
 		tx5, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2402,11 +2402,11 @@ func (s AdvSwapQueueSuite) TestRapidSwapEndToEndScenarios(c *C) {
 		tx := GetRandomTx()
 		var targetAsset common.Asset
 		if i%2 == 0 {
-			tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+			tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 			targetAsset = common.ETHAsset
 		} else {
 			tx.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
-			targetAsset = common.RuneAsset()
+			targetAsset = common.DecaAsset()
 		}
 
 		swap := NewMsgSwap(
@@ -2456,7 +2456,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -2480,7 +2480,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 	// Test 1: Error handling with insufficient pool liquidity
 	// Create a very large swap that should fail due to insufficient liquidity
 	tx1 := GetRandomTx()
-	tx1.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(100000*common.One)))
+	tx1.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(100000*common.One)))
 	largeSwap := NewMsgSwap(
 		tx1, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2505,7 +2505,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Test 2: Error handling with invalid target asset
 	tx2 := GetRandomTx()
-	tx2.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx2.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	invalidAsset := common.Asset{Chain: common.ETHChain, Symbol: "INVALID", Ticker: "INVALID"}
 	invalidSwap := NewMsgSwap(
 		tx2, invalidAsset, ethAddr, cosmos.ZeroUint(),
@@ -2529,7 +2529,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Valid swap
 	tx3 := GetRandomTx()
-	tx3.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx3.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	validSwap := NewMsgSwap(
 		tx3, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2546,7 +2546,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Potentially problematic swap (zero deposit)
 	tx4 := GetRandomTx()
-	tx4.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.ZeroUint()))
+	tx4.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.ZeroUint()))
 	zeroSwap := NewMsgSwap(
 		tx4, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2566,7 +2566,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Test 4: Error handling with streaming swap that fails mid-execution
 	tx5 := GetRandomTx()
-	tx5.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(3*common.One)))
+	tx5.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(3*common.One)))
 	streamingSwap := NewMsgSwap(
 		tx5, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2590,7 +2590,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Test 5: Error handling with corrupted swap state
 	tx6 := GetRandomTx()
-	tx6.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx6.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	corruptedSwap := NewMsgSwap(
 		tx6, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2612,7 +2612,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 	// Test 6: Error handling when pool becomes unavailable during rapid swap iterations
 	// Create swaps and then make the pool unavailable
 	tx7 := GetRandomTx()
-	tx7.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx7.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	poolSwap := NewMsgSwap(
 		tx7, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2647,7 +2647,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Add a valid swap
 	tx8 := GetRandomTx()
-	tx8.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx8.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	mimirTestSwap := NewMsgSwap(
 		tx8, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2679,7 +2679,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Add swap that references the removed pool
 	tx9 := GetRandomTx()
-	tx9.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx9.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	fetchErrorSwap := NewMsgSwap(
 		tx9, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2703,7 +2703,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 
 	// Add a simple valid swap to test recovery
 	tx10 := GetRandomTx()
-	tx10.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx10.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	recoverySwap := NewMsgSwap(
 		tx10, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2733,17 +2733,17 @@ func (s AdvSwapQueueSuite) TestRapidSwapErrorHandling(c *C) {
 		switch i % 3 {
 		case 0:
 			// Valid swap
-			tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+			tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 			targetAsset = common.ETHAsset
 			amount = cosmos.NewUint(1 * common.One)
 		case 1:
 			// Potentially problematic swap (very small amount)
-			tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1)))
+			tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1)))
 			targetAsset = common.ETHAsset
 			amount = cosmos.NewUint(1)
 		default:
 			// Invalid asset swap
-			tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+			tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 			targetAsset = common.Asset{Chain: common.ETHChain, Symbol: "NONEXISTENT", Ticker: "NONE"}
 			amount = cosmos.NewUint(1 * common.One)
 		}
@@ -2778,14 +2778,14 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -2815,7 +2815,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// Create exactly 3 market swaps (less than MinSwapsPerBlock)
 	for i := 0; i < 3; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2847,7 +2847,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// Create many swaps (more than MaxSwapsPerBlock)
 	for i := 0; i < 10; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2885,7 +2885,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// Create 5 swaps (less than MinSwapsPerBlock of 10)
 	for i := 0; i < 5; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.BTCAsset, GetRandomBTCAddress(), cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2911,7 +2911,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// Create 10 swaps (between Min=5 and Max=15)
 	for i := 0; i < 10; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -2935,10 +2935,10 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 
 	// Reset pools and advance block height to ensure clean state after previous tests
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 	// Drain any remaining swaps from previous tests
 	c.Assert(book.EndBlock(ctx, mgr, false), IsNil)
@@ -2950,7 +2950,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 
 	// Create streaming swap with interval = 2 (executes every 2 blocks)
 	tx1 := GetRandomTx()
-	tx1.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(4*common.One)))
+	tx1.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(4*common.One)))
 	intervalSwap := NewMsgSwap(
 		tx1, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -2989,7 +2989,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// but it tests that the system handles the configuration
 
 	tx2 := GetRandomTx()
-	tx2.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx2.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	synthSwap := NewMsgSwap(
 		tx2, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -3017,7 +3017,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// Create swaps to test this configuration
 	for i := 0; i < 15; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -3042,7 +3042,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 
 	// Create a swap
 	tx3 := GetRandomTx()
-	tx3.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx3.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	zeroLimitSwap := NewMsgSwap(
 		tx3, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
@@ -3075,7 +3075,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 	// Create many swaps to test multi-iteration behavior
 	for i := 0; i < 20; i++ {
 		tx := GetRandomTx()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
@@ -3130,14 +3130,14 @@ func (s AdvSwapQueueSuite) TestRapidSwapWithExistingSwapLimits(c *C) {
 		switch i % 3 {
 		case 0:
 			// Market swap
-			tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+			tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 			targetAsset = common.ETHAsset
 			swapType = types.SwapType_market
 			quantity = 1
 			interval = 0
 		case 1:
 			// Streaming swap
-			tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(2*common.One)))
+			tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(2*common.One)))
 			targetAsset = common.BTCAsset
 			swapType = types.SwapType_market
 			quantity = 2
@@ -3567,14 +3567,14 @@ func (s AdvSwapQueueSuite) TestAddSwapQueueItemFailsWhenTTLWriteFails(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -3624,14 +3624,14 @@ func (s AdvSwapQueueSuite) TestAddSwapQueueItemWithCustomTTL(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.ETHAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -3815,13 +3815,13 @@ func (s AdvSwapQueueSuite) TestSwapTypeCountingAccuracy(c *C) {
 	// Set up pools for testing
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -3965,13 +3965,13 @@ func (s AdvSwapQueueSuite) TestQueueDepthTelemetryAccuracy(c *C) {
 	// Set up test pools with known ratios
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(100000 * common.One) // 1 BTC = 100 RUNE
+	btcPool.BalanceDeca = cosmos.NewUint(100000 * common.One) // 1 BTC = 100 RUNE
 	btcPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(50000 * common.One) // 1 ETH = 50 RUNE
+	ethPool.BalanceDeca = cosmos.NewUint(50000 * common.One) // 1 ETH = 50 RUNE
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
 
@@ -4072,13 +4072,13 @@ func (s AdvSwapQueueSuite) TestEmitAdvSwapQueueTelemetryIntegration(c *C) {
 	// Set up basic pools
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	pool = NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(50000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(50000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
@@ -4165,13 +4165,13 @@ func (s AdvSwapQueueSuite) TestTradingPairLabelingAccuracy(c *C) {
 	// Set up pools for different asset types
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(50000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(50000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	c.Assert(k.SetPool(ctx, ethPool), IsNil)
 
@@ -4206,7 +4206,7 @@ func (s AdvSwapQueueSuite) TestTradingPairLabelingAccuracy(c *C) {
 		if pair.source.Equals(common.BTCAsset) && pair.target.Equals(common.ETHAsset) {
 			found_btc_eth = true
 		}
-		if pair.source.Equals(common.RuneAsset()) && pair.target.Equals(common.BTCAsset) {
+		if pair.source.Equals(common.DecaAsset()) && pair.target.Equals(common.BTCAsset) {
 			found_rune_btc = true
 		}
 	}
@@ -4225,7 +4225,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityTradeAsset(c *C) {
 	// Setup BTC pool with 29M RUNE depth (matching real scenario)
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(29_114_008 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(29_114_008 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -4241,7 +4241,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityTradeAsset(c *C) {
 	// Create swap message: RUNE -> BTC~BTC with 1327 RUNE deposit
 	msg := MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1327*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1327*common.One))},
 		},
 		TargetAsset: tradeAsset,
 		State: &types.SwapState{
@@ -4252,7 +4252,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityTradeAsset(c *C) {
 	}
 
 	// Calculate max swap quantity
-	quantity, err := book.getMaxSwapQuantity(ctx, mgr, common.RuneAsset(), tradeAsset, msg)
+	quantity, err := book.getMaxSwapQuantity(ctx, mgr, common.DecaAsset(), tradeAsset, msg)
 	c.Assert(err, IsNil)
 
 	// With the fix in place, trade assets should NOT trigger derived asset logic
@@ -4272,7 +4272,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantitySecuredAsset(c *C) {
 	// Setup BTC pool
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(29_114_008 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(29_114_008 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -4288,7 +4288,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantitySecuredAsset(c *C) {
 	// Create swap message: RUNE -> BTC-BTC
 	msg := MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1327*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1327*common.One))},
 		},
 		TargetAsset: securedAsset,
 		State: &types.SwapState{
@@ -4299,7 +4299,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantitySecuredAsset(c *C) {
 	}
 
 	// Calculate max swap quantity
-	quantity, err := book.getMaxSwapQuantity(ctx, mgr, common.RuneAsset(), securedAsset, msg)
+	quantity, err := book.getMaxSwapQuantity(ctx, mgr, common.DecaAsset(), securedAsset, msg)
 	c.Assert(err, IsNil)
 
 	// Secured assets should also NOT trigger derived asset logic
@@ -4316,7 +4316,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityDerivedAsset(c *C) {
 	// Setup BTC pool as anchor pool
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(29_114_008 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(29_114_008 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
@@ -4327,7 +4327,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityDerivedAsset(c *C) {
 
 	derivedPool := NewPool()
 	derivedPool.Asset = derivedAsset
-	derivedPool.BalanceRune = cosmos.NewUint(28_900_000 * common.One) // 99.24% of 29.1M
+	derivedPool.BalanceDeca = cosmos.NewUint(28_900_000 * common.One) // 99.24% of 29.1M
 	derivedPool.BalanceAsset = cosmos.NewUint(99 * common.One)
 	derivedPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, derivedPool), IsNil)
@@ -4339,7 +4339,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityDerivedAsset(c *C) {
 	// Create swap message: RUNE -> THOR.BTC
 	msg := MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(1327*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(1327*common.One))},
 		},
 		TargetAsset: derivedAsset,
 		State: &types.SwapState{
@@ -4350,7 +4350,7 @@ func (s AdvSwapQueueSuite) TestGetMaxSwapQuantityDerivedAsset(c *C) {
 	}
 
 	// Calculate max swap quantity
-	quantity, err := book.getMaxSwapQuantity(ctx, mgr, common.RuneAsset(), derivedAsset, msg)
+	quantity, err := book.getMaxSwapQuantity(ctx, mgr, common.DecaAsset(), derivedAsset, msg)
 	c.Assert(err, IsNil)
 
 	// For actual derived assets, verify the calculation doesn't crash
@@ -4373,14 +4373,14 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedMarketSwapSkip(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One) // Limited ETH
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One) // Limited RUNE
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One) // Limited RUNE
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -4404,7 +4404,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedMarketSwapSkip(c *C) {
 	// Create a streaming market swap that will fail due to impossible trade target
 	// Using interval=0 so it can be processed multiple times in the same block
 	failingTx := GetRandomTx()
-	failingTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	failingTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	failingSwap := NewMsgSwap(
 		failingTx, common.ETHAsset, ethAddr,
 		cosmos.NewUint(999999*common.One), // Impossibly high trade target - will always fail
@@ -4428,7 +4428,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedMarketSwapSkip(c *C) {
 	partnerTx := GetRandomTx()
 	partnerTx.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
 	partnerSwap := NewMsgSwap(
-		partnerTx, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(),
+		partnerTx, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -4463,7 +4463,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgsUsesSubSwapSize(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -4475,7 +4475,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgsUsesSubSwapSize(c *C) {
 	streamingSwap := NewMsgSwap(common.Tx{
 		ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000001"),
 		Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One))},
-	}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+	}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
 		0, 0, types.SwapVersion_v1, GetRandomBech32Addr())
@@ -4486,7 +4486,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgsUsesSubSwapSize(c *C) {
 	nonStreamingSwap := NewMsgSwap(common.Tx{
 		ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000002"),
 		Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One))},
-	}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+	}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
 		0, 0, types.SwapVersion_v1, GetRandomBech32Addr())
@@ -4518,7 +4518,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgsPartiallyExecutedStreamingSwap(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -4530,7 +4530,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgsPartiallyExecutedStreamingSwap(c *C) {
 	partialSwap := NewMsgSwap(common.Tx{
 		ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000001"),
 		Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One))},
-	}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+	}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
 		0, 0, types.SwapVersion_v1, GetRandomBech32Addr())
@@ -4543,7 +4543,7 @@ func (s AdvSwapQueueSuite) TestScoreMsgsPartiallyExecutedStreamingSwap(c *C) {
 	freshSwap := NewMsgSwap(common.Tx{
 		ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000002"),
 		Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One))},
-	}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+	}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
 		0, 0, types.SwapVersion_v1, GetRandomBech32Addr())
@@ -4573,7 +4573,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsSortedBeforeMarketSwaps(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -4589,7 +4589,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsSortedBeforeMarketSwaps(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000001"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_market,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4601,7 +4601,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsSortedBeforeMarketSwaps(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000002"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.NewUint(1000*common.One), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.NewUint(1000*common.One), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_limit,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4613,7 +4613,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsSortedBeforeMarketSwaps(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000003"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(50*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_market,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4625,7 +4625,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsSortedBeforeMarketSwaps(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000004"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(50*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.NewUint(5000*common.One), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.NewUint(5000*common.One), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_limit,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4671,7 +4671,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsPreserveScoreOrderWithinType(c *C) {
 
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, pool), IsNil)
@@ -4685,7 +4685,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsPreserveScoreOrderWithinType(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000001"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.NewUint(10000*common.One), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.NewUint(10000*common.One), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_limit,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4697,7 +4697,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsPreserveScoreOrderWithinType(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000002"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.NewUint(1000*common.One), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.NewUint(1000*common.One), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_limit,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4709,7 +4709,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsPreserveScoreOrderWithinType(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000003"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_market,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4721,7 +4721,7 @@ func (s AdvSwapQueueSuite) TestLimitSwapsPreserveScoreOrderWithinType(c *C) {
 			msg: *NewMsgSwap(common.Tx{
 				ID:    common.TxID("0000000000000000000000000000000000000000000000000000000000000004"),
 				Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One))},
-			}, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
+			}, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(), common.NoAddress, cosmos.ZeroUint(),
 				"", "", nil,
 				types.SwapType_market,
 				0, 0, types.SwapVersion_v1, GetRandomBech32Addr()),
@@ -4770,7 +4770,7 @@ func (s AdvSwapQueueSuite) TestGetSwapDirections(c *C) {
 	// Test 1: RUNE -> ETH (rune-to-asset)
 	msg := MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100))},
 		},
 		TargetAsset: common.ETHAsset,
 	}
@@ -4784,7 +4784,7 @@ func (s AdvSwapQueueSuite) TestGetSwapDirections(c *C) {
 		Tx: common.Tx{
 			Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100))},
 		},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 	}
 	dirs = getSwapDirections(msg)
 	c.Assert(len(dirs), Equals, 1)
@@ -4813,14 +4813,14 @@ func (s AdvSwapQueueSuite) TestPoolSwapDirTracking(c *C) {
 
 	// RUNE -> ETH market swap (rune-to-asset through ETH pool)
 	runeToEth := MsgSwap{
-		Tx:          common.Tx{Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100))}},
+		Tx:          common.Tx{Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100))}},
 		TargetAsset: common.ETHAsset,
 		SwapType:    types.SwapType_market,
 	}
 	// ETH -> RUNE market swap (asset-to-rune through ETH pool)
 	ethToRune := MsgSwap{
 		Tx:          common.Tx{Coins: common.Coins{common.NewCoin(common.ETHAsset, cosmos.NewUint(100))}},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 		SwapType:    types.SwapType_market,
 	}
 	// ETH -> BTC market swap (double swap: ETH asset-to-rune + BTC rune-to-asset)
@@ -4894,7 +4894,7 @@ func (s AdvSwapQueueSuite) TestSynthTradeAssetPoolKeyEquivalence(c *C) {
 	// Swap from synth BTC -> RUNE (asset-to-rune through BTC pool)
 	synthBtcToRune := MsgSwap{
 		Tx:          common.Tx{Coins: common.Coins{common.NewCoin(synthBTC, cosmos.NewUint(100))}},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 		SwapType:    types.SwapType_market,
 	}
 	dirs := getSwapDirections(synthBtcToRune)
@@ -4904,7 +4904,7 @@ func (s AdvSwapQueueSuite) TestSynthTradeAssetPoolKeyEquivalence(c *C) {
 	// Now a layer1 BTC -> RUNE swap should be skipped (same pool key, same direction)
 	layer1BtcToRune := MsgSwap{
 		Tx:          common.Tx{Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(100))}},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 		SwapType:    types.SwapType_market,
 	}
 	c.Check(shouldSkipRapidSwapDirection(layer1BtcToRune, lastPoolDir, 1), Equals, true)
@@ -4912,7 +4912,7 @@ func (s AdvSwapQueueSuite) TestSynthTradeAssetPoolKeyEquivalence(c *C) {
 	// And a trade BTC -> RUNE swap should also be skipped (same pool key)
 	tradeBtcToRune := MsgSwap{
 		Tx:          common.Tx{Coins: common.Coins{common.NewCoin(tradeBTC, cosmos.NewUint(100))}},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 		SwapType:    types.SwapType_market,
 	}
 	c.Check(shouldSkipRapidSwapDirection(tradeBtcToRune, lastPoolDir, 1), Equals, true)
@@ -4930,7 +4930,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipsMarketOnly(c *C) {
 	// Market swap RUNE -> ETH (rune-to-asset, same direction)
 	marketMsg := MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100))},
 		},
 		TargetAsset: common.ETHAsset,
 		SwapType:    types.SwapType_market,
@@ -4939,7 +4939,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipsMarketOnly(c *C) {
 	// Limit swap RUNE -> ETH (same direction, but should NOT be skipped)
 	limitMsg := MsgSwap{
 		Tx: common.Tx{
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(100))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(100))},
 		},
 		TargetAsset: common.ETHAsset,
 		SwapType:    types.SwapType_limit,
@@ -4975,9 +4975,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "all same direction single pool",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.RuneAsset(), common.ETHAsset, 10},
-				{common.RuneAsset(), common.ETHAsset, 10},
-				{common.RuneAsset(), common.ETHAsset, 10},
+				{common.DecaAsset(), common.ETHAsset, 10},
+				{common.DecaAsset(), common.ETHAsset, 10},
+				{common.DecaAsset(), common.ETHAsset, 10},
 			},
 			// Iter 0: all 3 execute (RuneToAsset on ETH). Iter 1: all skipped (same dir). Early exit.
 			expectedCounts: []uint64{1, 1, 1},
@@ -4986,8 +4986,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "counter-directional single pool",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.ETHAsset, common.RuneAsset(), 10}, // ~10 RUNE/sub, scores higher
-				{common.RuneAsset(), common.ETHAsset, 10}, // ~1 RUNE/sub, scores lower
+				{common.ETHAsset, common.DecaAsset(), 10}, // ~10 RUNE/sub, scores higher
+				{common.DecaAsset(), common.ETHAsset, 10}, // ~1 RUNE/sub, scores lower
 			},
 			// ETH→RUNE and RUNE→ETH alternate direction on ETH pool each iteration.
 			// Both proceed every iteration because within-iteration updates flip the direction.
@@ -4997,8 +4997,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "non-overlapping pools same direction",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.RuneAsset(), common.ETHAsset, 10},
-				{common.RuneAsset(), common.BTCAsset, 10},
+				{common.DecaAsset(), common.ETHAsset, 10},
+				{common.DecaAsset(), common.BTCAsset, 10},
 			},
 			// Both are RuneToAsset but in different pools. Iter 0: both succeed.
 			// Iter 1: both skipped (each pool's last dir is RuneToAsset). Early exit.
@@ -5008,7 +5008,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "double swap plus counter-directional single",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.RuneAsset(), common.ETHAsset, 1000}, // sub=100 RUNE, single-leg fee dominates
+				{common.DecaAsset(), common.ETHAsset, 1000}, // sub=100 RUNE, single-leg fee dominates
 				{common.ETHAsset, common.BTCAsset, 10},      // sub=1 ETH (~10 RUNE), double-swap scores lower
 			},
 			// RUNE→ETH scores highest (sub=100 RUNE, large single-leg fee).
@@ -5047,8 +5047,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "early exit despite high rapidSwapMax",
 			rapidSwapMax: 5,
 			swaps: []swapDef{
-				{common.RuneAsset(), common.ETHAsset, 10},
-				{common.RuneAsset(), common.ETHAsset, 10},
+				{common.DecaAsset(), common.ETHAsset, 10},
+				{common.DecaAsset(), common.ETHAsset, 10},
 			},
 			// Same direction in same pool. Iter 0: both succeed. Iter 1: both skipped. Early exit at 2 despite max=5.
 			expectedCounts: []uint64{1, 1},
@@ -5057,9 +5057,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "mixed some skipped some keep iteration alive",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.ETHAsset, common.RuneAsset(), 100}, // sub=10 ETH (~100 RUNE), scores highest
-				{common.RuneAsset(), common.ETHAsset, 10},  // sub=1 RUNE, scores lower
-				{common.RuneAsset(), common.BTCAsset, 10},  // sub=1 RUNE, scores lower
+				{common.ETHAsset, common.DecaAsset(), 100}, // sub=10 ETH (~100 RUNE), scores highest
+				{common.DecaAsset(), common.ETHAsset, 10},  // sub=1 RUNE, scores lower
+				{common.DecaAsset(), common.BTCAsset, 10},  // sub=1 RUNE, scores lower
 			},
 			// Iter 0: all 3 succeed. ETH→RUNE (AssetToRune) then RUNE→ETH (RuneToAsset) alternate ETH.
 			// BTC=RuneToAsset from RUNE→BTC.
@@ -5073,8 +5073,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "direction updated mid-iteration enables next swap",
 			rapidSwapMax: 2,
 			swaps: []swapDef{
-				{common.BTCAsset, common.RuneAsset(), 10}, // sub=0.1 BTC (~10 RUNE), scores highest
-				{common.RuneAsset(), common.BTCAsset, 10}, // sub=1 RUNE, scores lower
+				{common.BTCAsset, common.DecaAsset(), 10}, // sub=0.1 BTC (~10 RUNE), scores highest
+				{common.DecaAsset(), common.BTCAsset, 10}, // sub=1 RUNE, scores lower
 			},
 			// Iter 0: BTC→RUNE (BTC=AssetToRune), then RUNE→BTC (BTC=RuneToAsset). Both succeed.
 			// Iter 1: BTC→RUNE (AssetToRune vs RuneToAsset: diff) → succeeds, BTC=AssetToRune.
@@ -5085,9 +5085,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "L1 synth and trade targets same direction same pool",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.RuneAsset(), common.ETHAsset, 10},                     // RUNE → L1 ETH
-				{common.RuneAsset(), common.ETHAsset.GetSyntheticAsset(), 10}, // RUNE → Synth ETH
-				{common.RuneAsset(), common.ETHAsset.GetTradeAsset(), 10},     // RUNE → Trade ETH
+				{common.DecaAsset(), common.ETHAsset, 10},                     // RUNE → L1 ETH
+				{common.DecaAsset(), common.ETHAsset.GetSyntheticAsset(), 10}, // RUNE → Synth ETH
+				{common.DecaAsset(), common.ETHAsset.GetTradeAsset(), 10},     // RUNE → Trade ETH
 			},
 			// All three target the ETH pool as RuneToAsset. GetLayer1Asset() normalizes
 			// synth/trade targets to the same pool key.
@@ -5098,8 +5098,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "counter-directional synth source vs L1 target",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.ETHAsset.GetSyntheticAsset(), common.RuneAsset(), 100}, // Synth ETH → RUNE, scores highest
-				{common.RuneAsset(), common.ETHAsset, 10},                      // RUNE → L1 ETH, scores lower
+				{common.ETHAsset.GetSyntheticAsset(), common.DecaAsset(), 100}, // Synth ETH → RUNE, scores highest
+				{common.DecaAsset(), common.ETHAsset, 10},                      // RUNE → L1 ETH, scores lower
 			},
 			// Synth ETH→RUNE is AssetToRune on ETH. RUNE→ETH is RuneToAsset on ETH.
 			// Counter-directional through same pool → both proceed every iteration.
@@ -5109,8 +5109,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			name:         "trade source and L1 same direction same pool",
 			rapidSwapMax: 3,
 			swaps: []swapDef{
-				{common.ETHAsset.GetTradeAsset(), common.RuneAsset(), 100}, // Trade ETH → RUNE, scores highest
-				{common.ETHAsset, common.RuneAsset(), 10},                  // L1 ETH → RUNE, scores lower
+				{common.ETHAsset.GetTradeAsset(), common.DecaAsset(), 100}, // Trade ETH → RUNE, scores highest
+				{common.ETHAsset, common.DecaAsset(), 10},                  // L1 ETH → RUNE, scores lower
 			},
 			// Both are AssetToRune on ETH pool. GetLayer1Asset() normalizes trade source.
 			// Iter 0: both succeed. Iter 1: both same dir → skipped. Early exit.
@@ -5128,7 +5128,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 		ethPool := NewPool()
 		ethPool.Asset = common.ETHAsset
 		ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-		ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+		ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 		ethPool.Status = PoolAvailable
 		c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5136,7 +5136,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 		btcPool := NewPool()
 		btcPool.Asset = common.BTCAsset
 		btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-		btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+		btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 		btcPool.Status = PoolAvailable
 		c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -5145,7 +5145,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionIntegration(c *C) {
 			dogePool := NewPool()
 			dogePool.Asset = common.DOGEAsset
 			dogePool.BalanceAsset = cosmos.NewUint(100000 * common.One)
-			dogePool.BalanceRune = cosmos.NewUint(10000 * common.One)
+			dogePool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 			dogePool.Status = PoolAvailable
 			c.Assert(mgr.Keeper().SetPool(ctx, dogePool), IsNil)
 		}
@@ -5231,7 +5231,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapIntervalBlocksMultiExecution(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5241,7 +5241,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapIntervalBlocksMultiExecution(c *C) {
 	// Create streaming swap with interval=1 and quantity=5
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(5*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(5*common.One)))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -5295,11 +5295,11 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateAccumulation(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
-	initialPoolRune := ethPool.BalanceRune
+	initialPoolRune := ethPool.BalanceDeca
 	initialPoolAsset := ethPool.BalanceAsset
 
 	mgr.Keeper().SetMimir(ctx, "AdvSwapQueueRapidSwapMax", 3)
@@ -5310,9 +5310,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateAccumulation(c *C) {
 	txA := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	txA.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One)))
-	txA.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	txA.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	swapA := NewMsgSwap(
-		txA, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+		txA, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5331,7 +5331,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateAccumulation(c *C) {
 	// Swap B: RUNE -> ETH (counter-directional to A)
 	txB := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	txB.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txB.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txB.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swapB := NewMsgSwap(
 		txB, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -5380,7 +5380,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateAccumulation(c *C) {
 	// Verify pool balances changed (proving iterations modify pool state)
 	finalPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Assert(finalPool.BalanceRune.Equal(initialPoolRune), Equals, false,
+	c.Assert(finalPool.BalanceDeca.Equal(initialPoolRune), Equals, false,
 		Commentf("pool RUNE balance should have changed"))
 	c.Assert(finalPool.BalanceAsset.Equal(initialPoolAsset), Equals, false,
 		Commentf("pool asset balance should have changed"))
@@ -5397,7 +5397,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapMaxZero(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5407,7 +5407,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapMaxZero(c *C) {
 	// Create a simple market swap
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -5448,7 +5448,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotConsumeBudget(c *C) 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5462,7 +5462,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotConsumeBudget(c *C) 
 	for i := 0; i < 3; i++ {
 		tx := GetRandomTx()
 		ethAddr := GetRandomETHAddress()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)))
 		tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -5489,9 +5489,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotConsumeBudget(c *C) 
 		tx := GetRandomTx()
 		thorAddr := GetRandomTHORAddress()
 		tx.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
-		tx.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+		tx.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 		swap := NewMsgSwap(
-			tx, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+			tx, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
@@ -5556,7 +5556,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapLimitSwapBypassesDirectionSkip(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5565,7 +5565,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapLimitSwapBypassesDirectionSkip(c *C) {
 	// Market swap A: RUNE->ETH (streaming, interval=0, quantity=10)
 	txMarket := GetRandomTx()
 	marketEthAddr := GetRandomETHAddress()
-	txMarket.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)))
+	txMarket.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)))
 	txMarket.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, marketEthAddr)
 	marketSwap := NewMsgSwap(
 		txMarket, common.ETHAsset, marketEthAddr, cosmos.ZeroUint(),
@@ -5590,9 +5590,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapLimitSwapBypassesDirectionSkip(c *C) {
 	txPartner := GetRandomTx()
 	partnerThorAddr := GetRandomTHORAddress()
 	txPartner.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
-	txPartner.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), partnerThorAddr)
+	txPartner.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), partnerThorAddr)
 	partnerSwap := NewMsgSwap(
-		txPartner, common.RuneAsset(), partnerThorAddr, cosmos.ZeroUint(),
+		txPartner, common.DecaAsset(), partnerThorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5610,7 +5610,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapLimitSwapBypassesDirectionSkip(c *C) {
 	// very low trade target so it's always discoverable and executable)
 	txLimit := GetRandomTx()
 	limitEthAddr := GetRandomETHAddress()
-	txLimit.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txLimit.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txLimit.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, limitEthAddr)
 	limitSwap := NewMsgSwap(
 		txLimit, common.ETHAsset, limitEthAddr,
@@ -5665,11 +5665,11 @@ func (s AdvSwapQueueSuite) TestRapidSwapPoolBalanceChangesAcrossIterations(c *C)
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
-	initialRune := ethPool.BalanceRune
+	initialRune := ethPool.BalanceDeca
 	initialAsset := ethPool.BalanceAsset
 
 	mgr.Keeper().SetMimir(ctx, "AdvSwapQueueRapidSwapMax", 3)
@@ -5678,9 +5678,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapPoolBalanceChangesAcrossIterations(c *C)
 	txA := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	txA.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One)))
-	txA.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	txA.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	swapA := NewMsgSwap(
-		txA, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+		txA, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5698,7 +5698,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapPoolBalanceChangesAcrossIterations(c *C)
 
 	txB := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	txB.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txB.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txB.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swapB := NewMsgSwap(
 		txB, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -5733,7 +5733,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapPoolBalanceChangesAcrossIterations(c *C)
 	// Pool balances must have changed from the initial state
 	finalPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Assert(finalPool.BalanceRune.Equal(initialRune), Equals, false,
+	c.Assert(finalPool.BalanceDeca.Equal(initialRune), Equals, false,
 		Commentf("pool RUNE balance should differ after 3 iterations of counter-directional swaps"))
 	c.Assert(finalPool.BalanceAsset.Equal(initialAsset), Equals, false,
 		Commentf("pool asset balance should differ after 3 iterations of counter-directional swaps"))
@@ -5750,7 +5750,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidIterationNoInterference(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5759,7 +5759,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidIterationNoInterference(c *C) {
 	// Swap A: RUNE->ETH, quantity=1 (completes in iter 0, settled and removed)
 	txA := GetRandomTx()
 	ethAddrA := GetRandomETHAddress()
-	txA.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	txA.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	txA.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrA)
 	swapA := NewMsgSwap(
 		txA, common.ETHAsset, ethAddrA, cosmos.ZeroUint(),
@@ -5780,9 +5780,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidIterationNoInterference(c *C) {
 	txB := GetRandomTx()
 	thorAddrB := GetRandomTHORAddress()
 	txB.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
-	txB.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrB)
+	txB.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrB)
 	swapB := NewMsgSwap(
-		txB, common.RuneAsset(), thorAddrB, cosmos.ZeroUint(),
+		txB, common.DecaAsset(), thorAddrB, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5799,7 +5799,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidIterationNoInterference(c *C) {
 	// Swap C: RUNE->ETH, quantity=5, interval=0 (streaming, persists across iterations)
 	txC := GetRandomTx()
 	ethAddrC := GetRandomETHAddress()
-	txC.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(5*common.One)))
+	txC.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(5*common.One)))
 	txC.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrC)
 	swapC := NewMsgSwap(
 		txC, common.ETHAsset, ethAddrC, cosmos.ZeroUint(),
@@ -5823,9 +5823,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidIterationNoInterference(c *C) {
 	txD := GetRandomTx()
 	thorAddrD := GetRandomTHORAddress()
 	txD.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(5*common.One)))
-	txD.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrD)
+	txD.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrD)
 	swapD := NewMsgSwap(
-		txD, common.RuneAsset(), thorAddrD, cosmos.ZeroUint(),
+		txD, common.DecaAsset(), thorAddrD, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5877,7 +5877,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedSwapSkipMarketOnlyLogic(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5888,7 +5888,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedSwapSkipMarketOnlyLogic(c *C) {
 	// --- Scenario A: Failing market swap (impossible trade target) ---
 	// This swap always fails because output can never meet the impossibly high target.
 	failingMarketTx := GetRandomTx()
-	failingMarketTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	failingMarketTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	failingMarketTx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	failingMarket := NewMsgSwap(
 		failingMarketTx, common.ETHAsset, ethAddr,
@@ -5911,9 +5911,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedSwapSkipMarketOnlyLogic(c *C) {
 	// Counter-directional partner: ETH -> RUNE (keeps iterations alive)
 	partnerTx := GetRandomTx()
 	partnerTx.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
-	partnerTx.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), GetRandomTHORAddress())
+	partnerTx.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), GetRandomTHORAddress())
 	partner := NewMsgSwap(
-		partnerTx, common.RuneAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(),
+		partnerTx, common.DecaAsset(), GetRandomTHORAddress(), cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5961,7 +5961,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapMixedIntervalZeroAndNonZero(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -5972,9 +5972,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapMixedIntervalZeroAndNonZero(c *C) {
 	txA := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	txA.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One)))
-	txA.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	txA.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	swapA := NewMsgSwap(
-		txA, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+		txA, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -5994,7 +5994,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapMixedIntervalZeroAndNonZero(c *C) {
 	// Counter-directional to A (keeps iterations alive in iter 0).
 	txB := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	txB.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txB.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txB.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swapB := NewMsgSwap(
 		txB, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -6043,7 +6043,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettledSwapDirectionBlocksSameDir(c *C) 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6051,7 +6051,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettledSwapDirectionBlocksSameDir(c *C) 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -6060,7 +6060,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettledSwapDirectionBlocksSameDir(c *C) 
 	// Swap S: RUNE->ETH, quantity=1 (settles in iter 0, records RuneToAsset on ETH)
 	txS := GetRandomTx()
 	ethAddrS := GetRandomETHAddress()
-	txS.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	txS.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	txS.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrS)
 	swapS := NewMsgSwap(
 		txS, common.ETHAsset, ethAddrS, cosmos.ZeroUint(),
@@ -6080,7 +6080,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettledSwapDirectionBlocksSameDir(c *C) 
 	// Swap R: RUNE->ETH, quantity=10, interval=0 (same direction as S, persists)
 	txR := GetRandomTx()
 	ethAddrR := GetRandomETHAddress()
-	txR.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txR.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txR.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrR)
 	swapR := NewMsgSwap(
 		txR, common.ETHAsset, ethAddrR, cosmos.ZeroUint(),
@@ -6102,7 +6102,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettledSwapDirectionBlocksSameDir(c *C) 
 	// Counter-directional pair in BTC pool to keep iterations alive.
 	txC1 := GetRandomTx()
 	btcAddr := GetRandomBTCAddress()
-	txC1.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txC1.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txC1.Memo = fmt.Sprintf("=:%s:%s", common.BTCAsset, btcAddr)
 	counterC1 := NewMsgSwap(
 		txC1, common.BTCAsset, btcAddr, cosmos.ZeroUint(),
@@ -6124,9 +6124,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettledSwapDirectionBlocksSameDir(c *C) 
 	txC2 := GetRandomTx()
 	thorAddrC2 := GetRandomTHORAddress()
 	txC2.Coins = common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One)))
-	txC2.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrC2)
+	txC2.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrC2)
 	counterC2 := NewMsgSwap(
-		txC2, common.RuneAsset(), thorAddrC2, cosmos.ZeroUint(),
+		txC2, common.DecaAsset(), thorAddrC2, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -6179,7 +6179,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionResetsAcrossBlocks(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6188,7 +6188,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionResetsAcrossBlocks(c *C) {
 	// Two same-direction streaming swaps: both RUNE->ETH
 	txA := GetRandomTx()
 	ethAddrA := GetRandomETHAddress()
-	txA.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txA.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txA.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrA)
 	swapA := NewMsgSwap(
 		txA, common.ETHAsset, ethAddrA, cosmos.ZeroUint(),
@@ -6209,7 +6209,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionResetsAcrossBlocks(c *C) {
 
 	txB := GetRandomTx()
 	ethAddrB := GetRandomETHAddress()
-	txB.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txB.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txB.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrB)
 	swapB := NewMsgSwap(
 		txB, common.ETHAsset, ethAddrB, cosmos.ZeroUint(),
@@ -6287,7 +6287,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotBuildTodo(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6295,7 +6295,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotBuildTodo(c *C) {
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -6304,7 +6304,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotBuildTodo(c *C) {
 	// Counter-directional BTC pair to keep iterations alive
 	txC1 := GetRandomTx()
 	btcAddr := GetRandomBTCAddress()
-	txC1.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txC1.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txC1.Memo = fmt.Sprintf("=:%s:%s", common.BTCAsset, btcAddr)
 	counterC1 := NewMsgSwap(
 		txC1, common.BTCAsset, btcAddr, cosmos.ZeroUint(),
@@ -6326,9 +6326,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotBuildTodo(c *C) {
 	txC2 := GetRandomTx()
 	thorAddrC2 := GetRandomTHORAddress()
 	txC2.Coins = common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One)))
-	txC2.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrC2)
+	txC2.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrC2)
 	counterC2 := NewMsgSwap(
-		txC2, common.RuneAsset(), thorAddrC2, cosmos.ZeroUint(),
+		txC2, common.DecaAsset(), thorAddrC2, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -6347,7 +6347,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionSkipDoesNotBuildTodo(c *C) {
 	// Same-direction ETH market swap: RUNE->ETH (gets direction-skipped in iter 1+)
 	txE := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	txE.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txE.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txE.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	ethSwap := NewMsgSwap(
 		txE, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -6404,7 +6404,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapNextSizeProgressionAcrossIterations(c *C
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(10000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6415,9 +6415,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapNextSizeProgressionAcrossIterations(c *C
 	txA := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	txA.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(50*common.One)))
-	txA.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	txA.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	swapA := NewMsgSwap(
-		txA, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+		txA, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -6436,7 +6436,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapNextSizeProgressionAcrossIterations(c *C
 	// Swap B: RUNE->ETH (RuneToAsset), deposit=50 RUNE, quantity=10
 	txB := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	txB.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(50*common.One)))
+	txB.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(50*common.One)))
 	txB.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swapB := NewMsgSwap(
 		txB, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -6512,7 +6512,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapNegativeMaxFallsBackToDefault(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6522,7 +6522,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapNegativeMaxFallsBackToDefault(c *C) {
 	// Create a streaming swap with quantity=5, interval=0
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(5*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(5*common.One)))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -6589,7 +6589,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapTelemetryExcludesDirectionSkips(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6597,7 +6597,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapTelemetryExcludesDirectionSkips(c *C) {
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -6608,7 +6608,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapTelemetryExcludesDirectionSkips(c *C) {
 	for i := 0; i < 3; i++ {
 		tx := GetRandomTx()
 		ethAddr := GetRandomETHAddress()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 		tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -6632,7 +6632,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapTelemetryExcludesDirectionSkips(c *C) {
 	// Counter-directional BTC pair to keep iterations alive
 	txC1 := GetRandomTx()
 	btcAddr := GetRandomBTCAddress()
-	txC1.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txC1.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txC1.Memo = fmt.Sprintf("=:%s:%s", common.BTCAsset, btcAddr)
 	counterC1 := NewMsgSwap(
 		txC1, common.BTCAsset, btcAddr, cosmos.ZeroUint(),
@@ -6654,9 +6654,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapTelemetryExcludesDirectionSkips(c *C) {
 	txC2 := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	txC2.Coins = common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One)))
-	txC2.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	txC2.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	counterC2 := NewMsgSwap(
-		txC2, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+		txC2, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -6714,11 +6714,11 @@ func (s AdvSwapQueueSuite) TestRapidSwapCacheContextRollbackOnFailure(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
-	initialPoolRune := ethPool.BalanceRune
+	initialPoolRune := ethPool.BalanceDeca
 	initialPoolAsset := ethPool.BalanceAsset
 
 	mgr.Keeper().SetMimir(ctx, "AdvSwapQueueRapidSwapMax", 1)
@@ -6726,7 +6726,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapCacheContextRollbackOnFailure(c *C) {
 	// Create a market swap with impossibly high trade target — will always fail
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr,
@@ -6751,8 +6751,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapCacheContextRollbackOnFailure(c *C) {
 	// Pool balances should be unchanged (cacheCtx not committed)
 	finalPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Assert(finalPool.BalanceRune.Equal(initialPoolRune), Equals, true,
-		Commentf("pool RUNE should be unchanged after failed swap, got %s", finalPool.BalanceRune))
+	c.Assert(finalPool.BalanceDeca.Equal(initialPoolRune), Equals, true,
+		Commentf("pool RUNE should be unchanged after failed swap, got %s", finalPool.BalanceDeca))
 	c.Assert(finalPool.BalanceAsset.Equal(initialPoolAsset), Equals, true,
 		Commentf("pool asset should be unchanged after failed swap, got %s", finalPool.BalanceAsset))
 
@@ -6785,11 +6785,11 @@ func (s AdvSwapQueueSuite) TestRapidSwapCacheContextCommitOnSuccess(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
-	initialPoolRune := ethPool.BalanceRune
+	initialPoolRune := ethPool.BalanceDeca
 	initialPoolAsset := ethPool.BalanceAsset
 
 	mgr.Keeper().SetMimir(ctx, "AdvSwapQueueRapidSwapMax", 1)
@@ -6797,7 +6797,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapCacheContextCommitOnSuccess(c *C) {
 	// Create a market swap with zero trade target (will succeed)
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -6821,8 +6821,8 @@ func (s AdvSwapQueueSuite) TestRapidSwapCacheContextCommitOnSuccess(c *C) {
 	// Pool balances should have changed (RUNE in, ETH out for RUNE→ETH)
 	finalPool, err := mgr.Keeper().GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Assert(finalPool.BalanceRune.GT(initialPoolRune), Equals, true,
-		Commentf("pool RUNE should increase for RUNE→ETH swap, got %s vs initial %s", finalPool.BalanceRune, initialPoolRune))
+	c.Assert(finalPool.BalanceDeca.GT(initialPoolRune), Equals, true,
+		Commentf("pool RUNE should increase for RUNE→ETH swap, got %s vs initial %s", finalPool.BalanceDeca, initialPoolRune))
 	c.Assert(finalPool.BalanceAsset.LT(initialPoolAsset), Equals, true,
 		Commentf("pool asset should decrease for RUNE→ETH swap, got %s vs initial %s", finalPool.BalanceAsset, initialPoolAsset))
 
@@ -6866,7 +6866,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedLimitSwapCountsOnAllIterations(c *
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6874,7 +6874,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedLimitSwapCountsOnAllIterations(c *
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -6883,7 +6883,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedLimitSwapCountsOnAllIterations(c *
 	// Failing market swap on ETH: impossibly high trade target ensures failure.
 	failingTx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	failingTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	failingTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	failingTx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	failingSwap := NewMsgSwap(
 		failingTx, common.ETHAsset, ethAddr,
@@ -6907,7 +6907,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedLimitSwapCountsOnAllIterations(c *
 	// RUNE→BTC
 	partnerATx := GetRandomTx()
 	btcAddr := GetRandomBTCAddress()
-	partnerATx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	partnerATx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	partnerATx.Memo = fmt.Sprintf("=:%s:%s", common.BTCAsset, btcAddr)
 	partnerA := NewMsgSwap(
 		partnerATx, common.BTCAsset, btcAddr, cosmos.ZeroUint(),
@@ -6930,9 +6930,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapFailedLimitSwapCountsOnAllIterations(c *
 	partnerBTx := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	partnerBTx.Coins = common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One)))
-	partnerBTx.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	partnerBTx.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	partnerB := NewMsgSwap(
-		partnerBTx, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+		partnerBTx, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -6991,7 +6991,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionTrackingDoubleSwapEndToEnd(c *C
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -6999,7 +6999,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionTrackingDoubleSwapEndToEnd(c *C
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -7033,9 +7033,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionTrackingDoubleSwapEndToEnd(c *C
 	txB := GetRandomTx()
 	thorAddrB := GetRandomTHORAddress()
 	txB.Coins = common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One)))
-	txB.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrB)
+	txB.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrB)
 	swapB := NewMsgSwap(
-		txB, common.RuneAsset(), thorAddrB, cosmos.ZeroUint(),
+		txB, common.DecaAsset(), thorAddrB, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -7054,7 +7054,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionTrackingDoubleSwapEndToEnd(c *C
 	// Swap C: RUNE→BTC (BTC=RuneToAsset — counter to B on BTC)
 	txC := GetRandomTx()
 	btcAddrC := GetRandomBTCAddress()
-	txC.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txC.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txC.Memo = fmt.Sprintf("=:%s:%s", common.BTCAsset, btcAddrC)
 	swapC := NewMsgSwap(
 		txC, common.BTCAsset, btcAddrC, cosmos.ZeroUint(),
@@ -7108,7 +7108,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSimulationModeSkips(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -7118,7 +7118,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSimulationModeSkips(c *C) {
 	// Use quantity=5 so the swap isn't settled (removed) after one execution.
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	marketSwap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -7173,7 +7173,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapOriginalAmountRestoredBeforeSave(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(10000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -7187,7 +7187,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapOriginalAmountRestoredBeforeSave(c *C) {
 
 	tx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), originalDeposit))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), originalDeposit))
 	tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	swap := NewMsgSwap(
 		tx, common.ETHAsset, ethAddr, originalTradeTarget,
@@ -7239,7 +7239,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateCountIncrementOnBothPaths(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -7248,7 +7248,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateCountIncrementOnBothPaths(c *C) {
 	// Successful swap: RUNE→ETH with zero trade target
 	successTx := GetRandomTx()
 	ethAddr := GetRandomETHAddress()
-	successTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	successTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	successTx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 	successSwap := NewMsgSwap(
 		successTx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),
@@ -7271,9 +7271,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapStateCountIncrementOnBothPaths(c *C) {
 	failTx := GetRandomTx()
 	thorAddr := GetRandomTHORAddress()
 	failTx.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(1*common.One)))
-	failTx.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+	failTx.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 	failSwap := NewMsgSwap(
-		failTx, common.RuneAsset(), thorAddr,
+		failTx, common.DecaAsset(), thorAddr,
 		cosmos.NewUint(999999*common.One), // impossibly high
 		"", cosmos.ZeroUint(),
 		"", "", nil,
@@ -7331,7 +7331,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionReversalWithinBlock(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(10000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(100000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(100000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -7342,9 +7342,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionReversalWithinBlock(c *C) {
 	txA := GetRandomTx()
 	thorAddrA := GetRandomTHORAddress()
 	txA.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One)))
-	txA.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrA)
+	txA.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrA)
 	swapA := NewMsgSwap(
-		txA, common.RuneAsset(), thorAddrA, cosmos.ZeroUint(),
+		txA, common.DecaAsset(), thorAddrA, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -7363,7 +7363,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapDirectionReversalWithinBlock(c *C) {
 	// Swap B: RUNE→ETH (RuneToAsset) — scores lower
 	txB := GetRandomTx()
 	ethAddrB := GetRandomETHAddress()
-	txB.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(10*common.One)))
+	txB.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(10*common.One)))
 	txB.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrB)
 	swapB := NewMsgSwap(
 		txB, common.ETHAsset, ethAddrB, cosmos.ZeroUint(),
@@ -7412,7 +7412,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidLoopNotReprocessed(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -7421,7 +7421,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidLoopNotReprocessed(c *C) {
 	// Swap A: quantity=1, completes on first execution
 	txA := GetRandomTx()
 	ethAddrA := GetRandomETHAddress()
-	txA.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1*common.One)))
+	txA.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1*common.One)))
 	txA.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddrA)
 	swapA := NewMsgSwap(
 		txA, common.ETHAsset, ethAddrA, cosmos.ZeroUint(),
@@ -7442,9 +7442,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapSettleMidLoopNotReprocessed(c *C) {
 	txB := GetRandomTx()
 	thorAddrB := GetRandomTHORAddress()
 	txB.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(10*common.One)))
-	txB.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddrB)
+	txB.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddrB)
 	swapB := NewMsgSwap(
-		txB, common.RuneAsset(), thorAddrB, cosmos.ZeroUint(),
+		txB, common.DecaAsset(), thorAddrB, cosmos.ZeroUint(),
 		"", cosmos.ZeroUint(),
 		"", "", nil,
 		types.SwapType_market,
@@ -7499,7 +7499,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapGetTodoNumFreshBudgetPerIteration(c *C) 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(100000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(1000000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -7512,9 +7512,9 @@ func (s AdvSwapQueueSuite) TestRapidSwapGetTodoNumFreshBudgetPerIteration(c *C) 
 		tx := GetRandomTx()
 		thorAddr := GetRandomTHORAddress()
 		tx.Coins = common.NewCoins(common.NewCoin(common.ETHAsset, cosmos.NewUint(100*common.One)))
-		tx.Memo = fmt.Sprintf("=:%s:%s", common.RuneAsset(), thorAddr)
+		tx.Memo = fmt.Sprintf("=:%s:%s", common.DecaAsset(), thorAddr)
 		swap := NewMsgSwap(
-			tx, common.RuneAsset(), thorAddr, cosmos.ZeroUint(),
+			tx, common.DecaAsset(), thorAddr, cosmos.ZeroUint(),
 			"", cosmos.ZeroUint(),
 			"", "", nil,
 			types.SwapType_market,
@@ -7537,7 +7537,7 @@ func (s AdvSwapQueueSuite) TestRapidSwapGetTodoNumFreshBudgetPerIteration(c *C) 
 	for i := 0; i < 3; i++ {
 		tx := GetRandomTx()
 		ethAddr := GetRandomETHAddress()
-		tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)))
+		tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)))
 		tx.Memo = fmt.Sprintf("=:%s:%s", common.ETHAsset, ethAddr)
 		swap := NewMsgSwap(
 			tx, common.ETHAsset, ethAddr, cosmos.ZeroUint(),

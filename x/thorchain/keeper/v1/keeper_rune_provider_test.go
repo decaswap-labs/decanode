@@ -22,7 +22,7 @@ func (s *KeeperRUNEProviderSuite) TestRUNEProvider(c *C) {
 	c.Check(err, IsNil)
 	rp, err := k.GetRUNEProvider(ctx, accAddr)
 	c.Assert(err, IsNil)
-	c.Check(rp.RuneAddress, NotNil)
+	c.Check(rp.DecaAddress, NotNil)
 	c.Check(rp.Units, NotNil)
 
 	addr = GetRandomRUNEAddress()
@@ -31,12 +31,12 @@ func (s *KeeperRUNEProviderSuite) TestRUNEProvider(c *C) {
 	rp = RUNEProvider{
 		Units:         cosmos.NewUint(12),
 		DepositAmount: cosmos.NewUint(12),
-		RuneAddress:   accAddr,
+		DecaAddress:   accAddr,
 	}
 	k.SetRUNEProvider(ctx, rp)
-	rp, err = k.GetRUNEProvider(ctx, rp.RuneAddress)
+	rp, err = k.GetRUNEProvider(ctx, rp.DecaAddress)
 	c.Assert(err, IsNil)
-	c.Check(rp.RuneAddress.Equals(accAddr), Equals, true)
+	c.Check(rp.DecaAddress.Equals(accAddr), Equals, true)
 	c.Check(rp.Units.Equal(cosmos.NewUint(12)), Equals, true)
 	c.Check(rp.DepositAmount.Equal(cosmos.NewUint(12)), Equals, true)
 	c.Check(rp.WithdrawAmount.Equal(cosmos.NewUint(0)), Equals, true)
@@ -46,12 +46,12 @@ func (s *KeeperRUNEProviderSuite) TestRUNEProvider(c *C) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		k.Cdc().MustUnmarshal(iterator.Value(), &rp)
-		if rp.RuneAddress.Empty() {
+		if rp.DecaAddress.Empty() {
 			continue
 		}
 		rps = append(rps, rp)
 	}
-	c.Check(rps[0].RuneAddress.Equals(accAddr), Equals, true)
+	c.Check(rps[0].DecaAddress.Equals(accAddr), Equals, true)
 
 	secondAddr := GetRandomRUNEAddress()
 	secondAccAddr, err := secondAddr.AccAddress()
@@ -59,7 +59,7 @@ func (s *KeeperRUNEProviderSuite) TestRUNEProvider(c *C) {
 	rp2 := RUNEProvider{
 		Units:         cosmos.NewUint(24),
 		DepositAmount: cosmos.NewUint(24),
-		RuneAddress:   secondAccAddr,
+		DecaAddress:   secondAccAddr,
 	}
 	k.SetRUNEProvider(ctx, rp2)
 
@@ -68,7 +68,7 @@ func (s *KeeperRUNEProviderSuite) TestRUNEProvider(c *C) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		k.Cdc().MustUnmarshal(iterator.Value(), &rp)
-		if rp.RuneAddress.Empty() {
+		if rp.DecaAddress.Empty() {
 			continue
 		}
 		rps = append(rps, rp)
@@ -80,7 +80,7 @@ func (s *KeeperRUNEProviderSuite) TestRUNEProvider(c *C) {
 	defer iterator.Close()
 	for ; iterator.Valid(); iterator.Next() {
 		k.Cdc().MustUnmarshal(iterator.Value(), &rp)
-		if rp.RuneAddress.Empty() {
+		if rp.DecaAddress.Empty() {
 			continue
 		}
 		totalUnits = totalUnits.Add(rp.Units)

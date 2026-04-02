@@ -33,8 +33,8 @@ func (s *ManagerSwapQueueSuite) TestTradePairString(c *C) {
 		expected string
 	}{
 		{common.BTCAsset, common.ETHAsset, "BTC.BTC>ETH.ETH"},
-		{common.RuneAsset(), common.BTCAsset, "THOR.RUNE>BTC.BTC"},
-		{common.ETHAsset, common.RuneAsset(), "ETH.ETH>THOR.RUNE"},
+		{common.DecaAsset(), common.BTCAsset, "THOR.RUNE>BTC.BTC"},
+		{common.ETHAsset, common.DecaAsset(), "ETH.ETH>THOR.RUNE"},
 		{common.BTCAsset.GetSyntheticAsset(), common.ETHAsset, "BTC/BTC>ETH.ETH"},
 	}
 
@@ -47,10 +47,10 @@ func (s *ManagerSwapQueueSuite) TestTradePairString(c *C) {
 // TestTradePairHasRune tests the HasRune method of tradePair
 func (s *ManagerSwapQueueSuite) TestTradePairHasRune(c *C) {
 	// Test pairs with RUNE
-	runeToEth := genTradePair(common.RuneAsset(), common.ETHAsset)
+	runeToEth := genTradePair(common.DecaAsset(), common.ETHAsset)
 	c.Assert(runeToEth.HasRune(), Equals, true)
 
-	ethToRune := genTradePair(common.ETHAsset, common.RuneAsset())
+	ethToRune := genTradePair(common.ETHAsset, common.DecaAsset())
 	c.Assert(ethToRune.HasRune(), Equals, true)
 
 	// Test pairs without RUNE
@@ -70,15 +70,15 @@ func (s *ManagerSwapQueueSuite) TestTradePairEquals(c *C) {
 	c.Assert(pair1.Equals(pair2), Equals, true)
 
 	// Test unequal pairs - different source
-	pair3 := genTradePair(common.RuneAsset(), common.ETHAsset)
+	pair3 := genTradePair(common.DecaAsset(), common.ETHAsset)
 	c.Assert(pair1.Equals(pair3), Equals, false)
 
 	// Test unequal pairs - different target
-	pair4 := genTradePair(common.BTCAsset, common.RuneAsset())
+	pair4 := genTradePair(common.BTCAsset, common.DecaAsset())
 	c.Assert(pair1.Equals(pair4), Equals, false)
 
 	// Test unequal pairs - both different
-	pair5 := genTradePair(common.RuneAsset(), common.RuneAsset())
+	pair5 := genTradePair(common.DecaAsset(), common.DecaAsset())
 	c.Assert(pair1.Equals(pair5), Equals, false)
 
 	// Test with synthetic assets
@@ -125,8 +125,8 @@ func (s *ManagerSwapQueueSuite) TestAppendMultiplePairs(c *C) {
 
 	// Define test pairs
 	pair1 := genTradePair(common.BTCAsset, common.ETHAsset)
-	pair2 := genTradePair(common.ETHAsset, common.RuneAsset())
-	pair3 := genTradePair(common.RuneAsset(), common.BTCAsset)
+	pair2 := genTradePair(common.ETHAsset, common.DecaAsset())
+	pair3 := genTradePair(common.DecaAsset(), common.BTCAsset)
 	pair4 := genTradePair(common.BTCAsset.GetSyntheticAsset(), common.ETHAsset)
 
 	// Append all pairs
@@ -147,7 +147,7 @@ func (s *ManagerSwapQueueSuite) TestAppendMultiplePairs(c *C) {
 func (s *ManagerSwapQueueSuite) TestAppendWithExistingPairs(c *C) {
 	// Start with some existing pairs
 	pair1 := genTradePair(common.BTCAsset, common.ETHAsset)
-	pair2 := genTradePair(common.ETHAsset, common.RuneAsset())
+	pair2 := genTradePair(common.ETHAsset, common.DecaAsset())
 	pairs := tradePairs{pair1, pair2}
 	c.Assert(len(pairs), Equals, 2)
 
@@ -156,7 +156,7 @@ func (s *ManagerSwapQueueSuite) TestAppendWithExistingPairs(c *C) {
 	c.Assert(len(pairs), Equals, 2) // Should remain 2
 
 	// Append a new pair
-	pair3 := genTradePair(common.RuneAsset(), common.BTCAsset)
+	pair3 := genTradePair(common.DecaAsset(), common.BTCAsset)
 	pairs = pairs.Append(pair3)
 	c.Assert(len(pairs), Equals, 3)
 
@@ -175,8 +175,8 @@ func (s *ManagerSwapQueueSuite) TestAppendEdgeCases(c *C) {
 	pairs := tradePairs{}
 
 	// Test with RUNE pairs
-	runeToBtc := genTradePair(common.RuneAsset(), common.BTCAsset)
-	btcToRune := genTradePair(common.BTCAsset, common.RuneAsset())
+	runeToBtc := genTradePair(common.DecaAsset(), common.BTCAsset)
+	btcToRune := genTradePair(common.BTCAsset, common.DecaAsset())
 	pairs = pairs.Append(runeToBtc)
 	pairs = pairs.Append(btcToRune)
 	c.Assert(len(pairs), Equals, 2)
@@ -210,8 +210,8 @@ func (s *ManagerSwapQueueSuite) TestAppendPreservesOrder(c *C) {
 	// Append pairs in specific order
 	pair1 := genTradePair(common.BTCAsset, common.ETHAsset)
 	pair2 := genTradePair(common.ETHAsset, common.ATOMAsset)
-	pair3 := genTradePair(common.ATOMAsset, common.RuneAsset())
-	pair4 := genTradePair(common.RuneAsset(), common.BTCAsset)
+	pair3 := genTradePair(common.ATOMAsset, common.DecaAsset())
+	pair4 := genTradePair(common.DecaAsset(), common.BTCAsset)
 
 	pairs = pairs.Append(pair1)
 	pairs = pairs.Append(pair2)
@@ -277,21 +277,21 @@ func (s *ManagerSwapQueueSuite) TestAppendConcurrentScenario(c *C) {
 	// This tests that Append returns a new slice rather than modifying in place
 	originalPairs := tradePairs{
 		genTradePair(common.BTCAsset, common.ETHAsset),
-		genTradePair(common.ETHAsset, common.RuneAsset()),
+		genTradePair(common.ETHAsset, common.DecaAsset()),
 	}
 
 	// Make a copy of the original length
 	originalLen := len(originalPairs)
 
 	// Append to create a new slice
-	newPairs := originalPairs.Append(genTradePair(common.RuneAsset(), common.BTCAsset))
+	newPairs := originalPairs.Append(genTradePair(common.DecaAsset(), common.BTCAsset))
 
 	// Verify original is unchanged
 	c.Assert(len(originalPairs), Equals, originalLen)
 	c.Assert(len(newPairs), Equals, originalLen+1)
 
 	// Verify the new pair is only in newPairs
-	c.Assert(newPairs[2].source.Equals(common.RuneAsset()), Equals, true)
+	c.Assert(newPairs[2].source.Equals(common.DecaAsset()), Equals, true)
 	c.Assert(newPairs[2].target.Equals(common.BTCAsset), Equals, true)
 }
 

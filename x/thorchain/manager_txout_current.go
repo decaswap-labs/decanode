@@ -214,7 +214,7 @@ func (tos *TxOutStorage) takeAffiliateFee(ctx cosmos.Context, mgr Manager, toi T
 	// know this is the affiliate fee outbound. In this case we should skip taking an
 	// additional fee. For swaps to RUNE the affiliate fee will be paid out as a direct
 	// RUNE transfer with no txout manager outbound, so it won't get back to this check.
-	if toi.Coin.Asset.IsRune() && !memo.GetAsset().IsRune() {
+	if toi.Coin.Asset.IsDeca() && !memo.GetAsset().IsDeca() {
 		return toi.Coin.Amount, nil
 	}
 
@@ -763,7 +763,7 @@ func (tos *TxOutStorage) prepareTxOutItem(ctx cosmos.Context, toi TxOutItem) ([]
 		// Deduct OutboundTransactionFee from TOI and add to Reserve.
 		// Migrate transaction coins remain in their pools and their gas costs are covered by the Reserve.
 		if feeDeduction && !memo.IsType(TxMigrate) && !toi.ToAddress.Equals(lendAddr) {
-			if outputs[i].Coin.Asset.IsRune() {
+			if outputs[i].Coin.Asset.IsDeca() {
 				runeFee := transactionFeeAmount // Fee is the prescribed RUNE fee
 				if runeFee.GT(outputs[i].Coin.Amount) {
 					runeFee = outputs[i].Coin.Amount // Fee is the full amount
@@ -843,14 +843,14 @@ func (tos *TxOutStorage) prepareTxOutItem(ctx cosmos.Context, toi TxOutItem) ([]
 				}
 
 				poolDeduct := pool.RuneDisbursementForAssetAdd(assetFee)
-				if poolDeduct.GT(pool.BalanceRune) {
-					poolDeduct = pool.BalanceRune
+				if poolDeduct.GT(pool.BalanceDeca) {
+					poolDeduct = pool.BalanceDeca
 				}
 				finalRuneFee = finalRuneFee.Add(poolDeduct)
 				if !outputs[i].Coin.Asset.IsSyntheticAsset() {
 					pool.BalanceAsset = pool.BalanceAsset.Add(assetFee) // Add Asset fee to Pool
 				}
-				pool.BalanceRune = common.SafeSub(pool.BalanceRune, poolDeduct) // Deduct Rune from Pool
+				pool.BalanceDeca = common.SafeSub(pool.BalanceDeca, poolDeduct) // Deduct Rune from Pool
 				fee := common.NewFee(common.Coins{common.NewCoin(outputs[i].Coin.Asset, assetFee)}, poolDeduct)
 				feeEvents = append(feeEvents, NewEventFee(outputs[i].InHash, fee, cosmos.ZeroUint()))
 			}
@@ -917,11 +917,11 @@ func (tos *TxOutStorage) prepareTxOutItem(ctx cosmos.Context, toi TxOutItem) ([]
 		}
 	}
 	if !finalRuneFee.IsZero() {
-		if toi.Coin.IsRune() {
+		if toi.Coin.IsDeca() {
 			// If the source module is the Reserve, leave the fee in the Reserve without a transfer.
 			if toi.ModuleName != ReserveName {
 				sourceModule := toi.GetModuleName() // Ensure that non-"".
-				coin := common.NewCoin(common.RuneAsset(), finalRuneFee)
+				coin := common.NewCoin(common.DecaAsset(), finalRuneFee)
 				// Finding 3: Return error instead of just logging to prevent fund accounting mismatch
 				// If this transfer fails, the fee has been deducted from the outbound but Reserve never receives it
 				if err := tos.keeper.SendFromModuleToModule(ctx, sourceModule, ReserveName, common.NewCoins(coin)); err != nil {
@@ -943,7 +943,7 @@ func (tos *TxOutStorage) prepareTxOutItem(ctx cosmos.Context, toi TxOutItem) ([]
 			//
 			// If the source module is the Reserve, leave the fee in the Reserve without a transfer.
 			if !toi.Coin.Asset.IsDerivedAsset() && sourceModule != ReserveName {
-				coin := common.NewCoin(common.RuneAsset(), finalRuneFee)
+				coin := common.NewCoin(common.DecaAsset(), finalRuneFee)
 				// Finding 3: Return error instead of just logging to prevent fund accounting mismatch
 				// If this transfer fails, the fee has been deducted from pool balances but Reserve never receives it
 				if err := tos.keeper.SendFromModuleToModule(ctx, sourceModule, ReserveName, common.NewCoins(coin)); err != nil {
@@ -1251,7 +1251,7 @@ func (tos *TxOutStorage) nativeTxOut(ctx cosmos.Context, mgr Manager, toi TxOutI
 		from,
 		toi.ToAddress,
 		common.Coins{toi.Coin},
-		common.Gas{common.NewCoin(common.RuneAsset(), outboundTxFee)},
+		common.Gas{common.NewCoin(common.DecaAsset(), outboundTxFee)},
 		toi.GetMemo(),
 	)
 

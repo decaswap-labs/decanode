@@ -13,12 +13,12 @@ type ConstantName int
 
 const (
 	EmissionCurve ConstantName = iota
-	MaxRuneSupply
+	MaxDecaSupply
 	BlocksPerYear
 	OutboundTransactionFee
 	NativeTransactionFee
 	PoolCycle
-	MinRunePoolDepth
+	MinDecaPoolDepth
 	MaxAvailablePools
 	StagedPoolCost
 	PendingLiquidityAgeLimit
@@ -43,7 +43,7 @@ const (
 	DoubleSignMaxAge
 	PauseBond
 	PauseUnbond
-	MinimumBondInRune
+	MinimumBondInDeca
 	FundMigrationInterval
 	MaxOutboundAttempts
 	SlashPenalty
@@ -103,7 +103,7 @@ const (
 	ChurnMigrateRounds
 	AllowWideBlame
 	MaxAffiliateFeeBasisPoints
-	TargetOutboundFeeSurplusRune
+	TargetOutboundFeeSurplusDeca
 	MaxOutboundFeeMultiplierBasisPoints
 	MinOutboundFeeMultiplierBasisPoints
 	NativeOutboundFeeUSD
@@ -130,9 +130,9 @@ const (
 	StableSlipMinBps
 	EVMDisableContractWhitelist
 	OperationalVotesMin
-	RUNEPoolEnabled
-	RUNEPoolDepositMaturityBlocks
-	RUNEPoolMaxReserveBackstop
+	DECAPoolEnabled
+	DECAPoolDepositMaturityBlocks
+	DECAPoolMaxReserveBackstop
 	SaversEjectInterval
 	SystemIncomeBurnRateBps
 	DevFundSystemIncomeBps
@@ -144,9 +144,9 @@ const (
 	MultipleAffiliatesMaxCount
 	BondSlashBan
 	BankSendEnabled
-	RUNEPoolHaltDeposit
-	RUNEPoolHaltWithdraw
-	MinRuneForTCYStakeDistribution
+	DECAPoolHaltDeposit
+	DECAPoolHaltWithdraw
+	MinDecaForTCYStakeDistribution
 	MinTCYForTCYStakeDistribution
 	TCYStakeSystemIncomeBps
 	TCYClaimingSwapHalt
@@ -177,7 +177,7 @@ const (
 	DefaultPoolStatus
 	EnableMemolessOutbound
 	ManualSwapsToSynthDisabled
-	MaximumLiquidityRune
+	MaximumLiquidityDeca
 	MintSynths
 	NumberOfNewNodesPerChurn
 	SignerConcurrency

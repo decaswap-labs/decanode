@@ -71,10 +71,10 @@ func (p *parser) parse() (mem Memo, err error) {
 		return p.ParseAddLiquidityMemo()
 	case TxWithdraw:
 		return p.ParseWithdrawLiquidityMemo()
-	case TxRunePoolDeposit:
-		return p.ParseRunePoolDepositMemo()
-	case TxRunePoolWithdraw:
-		return p.ParseRunePoolWithdrawMemo()
+	case TxDecaPoolDeposit:
+		return p.ParseDecaPoolDepositMemo()
+	case TxDecaPoolWithdraw:
+		return p.ParseDecaPoolWithdrawMemo()
 	case TxSwap, TxLimitSwap:
 		return p.ParseSwapMemo()
 	case TxModifyLimitSwap:

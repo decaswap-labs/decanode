@@ -14,24 +14,24 @@ import (
 	"encoding/json"
 )
 
-// RUNEPoolResponseReserve struct for RUNEPoolResponseReserve
-type RUNEPoolResponseReserve struct {
-	// the units of RUNEPool owned by the reserve
+// DECAPoolResponseReserve struct for DECAPoolResponseReserve
+type DECAPoolResponseReserve struct {
+	// the units of DECAPool owned by the reserve
 	Units string `json:"units"`
-	// the value of the reserve share of the RUNEPool
+	// the value of the reserve share of the DECAPool
 	Value string `json:"value"`
-	// the profit and loss of the reserve share of the RUNEPool
+	// the profit and loss of the reserve share of the DECAPool
 	Pnl string `json:"pnl"`
 	// the current RUNE deposited by the reserve
 	CurrentDeposit string `json:"current_deposit"`
 }
 
-// NewRUNEPoolResponseReserve instantiates a new RUNEPoolResponseReserve object
+// NewDECAPoolResponseReserve instantiates a new DECAPoolResponseReserve object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRUNEPoolResponseReserve(units string, value string, pnl string, currentDeposit string) *RUNEPoolResponseReserve {
-	this := RUNEPoolResponseReserve{}
+func NewDECAPoolResponseReserve(units string, value string, pnl string, currentDeposit string) *DECAPoolResponseReserve {
+	this := DECAPoolResponseReserve{}
 	this.Units = units
 	this.Value = value
 	this.Pnl = pnl
@@ -39,16 +39,16 @@ func NewRUNEPoolResponseReserve(units string, value string, pnl string, currentD
 	return &this
 }
 
-// NewRUNEPoolResponseReserveWithDefaults instantiates a new RUNEPoolResponseReserve object
+// NewDECAPoolResponseReserveWithDefaults instantiates a new DECAPoolResponseReserve object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRUNEPoolResponseReserveWithDefaults() *RUNEPoolResponseReserve {
-	this := RUNEPoolResponseReserve{}
+func NewDECAPoolResponseReserveWithDefaults() *DECAPoolResponseReserve {
+	this := DECAPoolResponseReserve{}
 	return &this
 }
 
 // GetUnits returns the Units field value
-func (o *RUNEPoolResponseReserve) GetUnits() string {
+func (o *DECAPoolResponseReserve) GetUnits() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -59,7 +59,7 @@ func (o *RUNEPoolResponseReserve) GetUnits() string {
 
 // GetUnitsOk returns a tuple with the Units field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseReserve) GetUnitsOk() (*string, bool) {
+func (o *DECAPoolResponseReserve) GetUnitsOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -67,12 +67,12 @@ func (o *RUNEPoolResponseReserve) GetUnitsOk() (*string, bool) {
 }
 
 // SetUnits sets field value
-func (o *RUNEPoolResponseReserve) SetUnits(v string) {
+func (o *DECAPoolResponseReserve) SetUnits(v string) {
 	o.Units = v
 }
 
 // GetValue returns the Value field value
-func (o *RUNEPoolResponseReserve) GetValue() string {
+func (o *DECAPoolResponseReserve) GetValue() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -83,7 +83,7 @@ func (o *RUNEPoolResponseReserve) GetValue() string {
 
 // GetValueOk returns a tuple with the Value field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseReserve) GetValueOk() (*string, bool) {
+func (o *DECAPoolResponseReserve) GetValueOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -91,12 +91,12 @@ func (o *RUNEPoolResponseReserve) GetValueOk() (*string, bool) {
 }
 
 // SetValue sets field value
-func (o *RUNEPoolResponseReserve) SetValue(v string) {
+func (o *DECAPoolResponseReserve) SetValue(v string) {
 	o.Value = v
 }
 
 // GetPnl returns the Pnl field value
-func (o *RUNEPoolResponseReserve) GetPnl() string {
+func (o *DECAPoolResponseReserve) GetPnl() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -107,7 +107,7 @@ func (o *RUNEPoolResponseReserve) GetPnl() string {
 
 // GetPnlOk returns a tuple with the Pnl field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseReserve) GetPnlOk() (*string, bool) {
+func (o *DECAPoolResponseReserve) GetPnlOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -115,12 +115,12 @@ func (o *RUNEPoolResponseReserve) GetPnlOk() (*string, bool) {
 }
 
 // SetPnl sets field value
-func (o *RUNEPoolResponseReserve) SetPnl(v string) {
+func (o *DECAPoolResponseReserve) SetPnl(v string) {
 	o.Pnl = v
 }
 
 // GetCurrentDeposit returns the CurrentDeposit field value
-func (o *RUNEPoolResponseReserve) GetCurrentDeposit() string {
+func (o *DECAPoolResponseReserve) GetCurrentDeposit() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -131,7 +131,7 @@ func (o *RUNEPoolResponseReserve) GetCurrentDeposit() string {
 
 // GetCurrentDepositOk returns a tuple with the CurrentDeposit field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseReserve) GetCurrentDepositOk() (*string, bool) {
+func (o *DECAPoolResponseReserve) GetCurrentDepositOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -139,11 +139,11 @@ func (o *RUNEPoolResponseReserve) GetCurrentDepositOk() (*string, bool) {
 }
 
 // SetCurrentDeposit sets field value
-func (o *RUNEPoolResponseReserve) SetCurrentDeposit(v string) {
+func (o *DECAPoolResponseReserve) SetCurrentDeposit(v string) {
 	o.CurrentDeposit = v
 }
 
-func (o RUNEPoolResponseReserve) MarshalJSON_deprecated() ([]byte, error) {
+func (o DECAPoolResponseReserve) MarshalJSON_deprecated() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["units"] = o.Units
@@ -160,38 +160,38 @@ func (o RUNEPoolResponseReserve) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableRUNEPoolResponseReserve struct {
-	value *RUNEPoolResponseReserve
+type NullableDECAPoolResponseReserve struct {
+	value *DECAPoolResponseReserve
 	isSet bool
 }
 
-func (v NullableRUNEPoolResponseReserve) Get() *RUNEPoolResponseReserve {
+func (v NullableDECAPoolResponseReserve) Get() *DECAPoolResponseReserve {
 	return v.value
 }
 
-func (v *NullableRUNEPoolResponseReserve) Set(val *RUNEPoolResponseReserve) {
+func (v *NullableDECAPoolResponseReserve) Set(val *DECAPoolResponseReserve) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRUNEPoolResponseReserve) IsSet() bool {
+func (v NullableDECAPoolResponseReserve) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRUNEPoolResponseReserve) Unset() {
+func (v *NullableDECAPoolResponseReserve) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRUNEPoolResponseReserve(val *RUNEPoolResponseReserve) *NullableRUNEPoolResponseReserve {
-	return &NullableRUNEPoolResponseReserve{value: val, isSet: true}
+func NewNullableDECAPoolResponseReserve(val *DECAPoolResponseReserve) *NullableDECAPoolResponseReserve {
+	return &NullableDECAPoolResponseReserve{value: val, isSet: true}
 }
 
-func (v NullableRUNEPoolResponseReserve) MarshalJSON_deprecated() ([]byte, error) {
+func (v NullableDECAPoolResponseReserve) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRUNEPoolResponseReserve) UnmarshalJSON(src []byte) error {
+func (v *NullableDECAPoolResponseReserve) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

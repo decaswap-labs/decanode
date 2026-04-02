@@ -16,7 +16,7 @@ import (
 
 // RUNEProvider struct for RUNEProvider
 type RUNEProvider struct {
-	RuneAddress string `json:"rune_address"`
+	DecaAddress string `json:"deca_address"`
 	Units string `json:"units"`
 	Value string `json:"value"`
 	Pnl string `json:"pnl"`
@@ -30,9 +30,9 @@ type RUNEProvider struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRUNEProvider(runeAddress string, units string, value string, pnl string, depositAmount string, withdrawAmount string, lastDepositHeight int64, lastWithdrawHeight int64) *RUNEProvider {
+func NewRUNEProvider(decaAddress string, units string, value string, pnl string, depositAmount string, withdrawAmount string, lastDepositHeight int64, lastWithdrawHeight int64) *RUNEProvider {
 	this := RUNEProvider{}
-	this.RuneAddress = runeAddress
+	this.DecaAddress = decaAddress
 	this.Units = units
 	this.Value = value
 	this.Pnl = pnl
@@ -51,28 +51,28 @@ func NewRUNEProviderWithDefaults() *RUNEProvider {
 	return &this
 }
 
-// GetRuneAddress returns the RuneAddress field value
-func (o *RUNEProvider) GetRuneAddress() string {
+// GetDecaAddress returns the DecaAddress field value
+func (o *RUNEProvider) GetDecaAddress() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.RuneAddress
+	return o.DecaAddress
 }
 
-// GetRuneAddressOk returns a tuple with the RuneAddress field value
+// GetDecaAddressOk returns a tuple with the DecaAddress field value
 // and a boolean to check if the value has been set.
-func (o *RUNEProvider) GetRuneAddressOk() (*string, bool) {
+func (o *RUNEProvider) GetDecaAddressOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.RuneAddress, true
+	return &o.DecaAddress, true
 }
 
-// SetRuneAddress sets field value
-func (o *RUNEProvider) SetRuneAddress(v string) {
-	o.RuneAddress = v
+// SetDecaAddress sets field value
+func (o *RUNEProvider) SetDecaAddress(v string) {
+	o.DecaAddress = v
 }
 
 // GetUnits returns the Units field value
@@ -246,7 +246,7 @@ func (o *RUNEProvider) SetLastWithdrawHeight(v int64) {
 func (o RUNEProvider) MarshalJSON_deprecated() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["rune_address"] = o.RuneAddress
+		toSerialize["deca_address"] = o.DecaAddress
 	}
 	if true {
 		toSerialize["units"] = o.Units

@@ -160,8 +160,8 @@ type GenesisState struct {
 	TradeUnits              []types.TradeUnit                             `protobuf:"bytes,33,rep,name=trade_units,json=tradeUnits,proto3" json:"trade_units"`
 	OutboundFeeWithheldRune gitlab_com_thorchain_thornode_v3_common.Coins `protobuf:"bytes,34,rep,name=outbound_fee_withheld_rune,json=outboundFeeWithheldRune,proto3,castrepeated=github.com/decaswap-labs/decanode/common.Coins" json:"outbound_fee_withheld_rune"`
 	OutboundFeeSpentRune    gitlab_com_thorchain_thornode_v3_common.Coins `protobuf:"bytes,35,rep,name=outbound_fee_spent_rune,json=outboundFeeSpentRune,proto3,castrepeated=github.com/decaswap-labs/decanode/common.Coins" json:"outbound_fee_spent_rune"`
-	RuneProviders           []types.RUNEProvider                          `protobuf:"bytes,36,rep,name=rune_providers,json=runeProviders,proto3" json:"rune_providers"`
-	RunePool                types.RUNEPool                                `protobuf:"bytes,37,opt,name=rune_pool,json=runePool,proto3" json:"rune_pool"`
+	DecaProviders           []types.RUNEProvider                          `protobuf:"bytes,36,rep,name=deca_providers,json=decaProviders,proto3" json:"deca_providers"`
+	DecaPool                types.DECAPool                                `protobuf:"bytes,37,opt,name=deca_pool,json=decaPool,proto3" json:"deca_pool"`
 	NodeMimirs              []types.NodeMimir                             `protobuf:"bytes,38,rep,name=nodeMimirs,proto3" json:"nodeMimirs"`
 	AffiliateCollectors     []types.AffiliateFeeCollector                 `protobuf:"bytes,39,rep,name=affiliate_collectors,json=affiliateCollectors,proto3" json:"affiliate_collectors"`
 	SecuredAssets           []types.SecuredAsset                          `protobuf:"bytes,41,rep,name=secured_assets,json=securedAssets,proto3" json:"secured_assets"`
@@ -393,18 +393,18 @@ func (m *GenesisState) GetOutboundFeeSpentRune() gitlab_com_thorchain_thornode_v
 	return nil
 }
 
-func (m *GenesisState) GetRuneProviders() []types.RUNEProvider {
+func (m *GenesisState) GetDecaProviders() []types.RUNEProvider {
 	if m != nil {
-		return m.RuneProviders
+		return m.DecaProviders
 	}
 	return nil
 }
 
-func (m *GenesisState) GetRunePool() types.RUNEPool {
+func (m *GenesisState) GetDecaPool() types.DECAPool {
 	if m != nil {
-		return m.RunePool
+		return m.DecaPool
 	}
-	return types.RUNEPool{}
+	return types.DECAPool{}
 }
 
 func (m *GenesisState) GetNodeMimirs() []types.NodeMimir {
@@ -737,7 +737,7 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 	}
 	{
-		size, err := m.RunePool.MarshalToSizedBuffer(dAtA[:i])
+		size, err := m.DecaPool.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -748,10 +748,10 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	dAtA[i] = 0x2
 	i--
 	dAtA[i] = 0xaa
-	if len(m.RuneProviders) > 0 {
-		for iNdEx := len(m.RuneProviders) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.DecaProviders) > 0 {
+		for iNdEx := len(m.DecaProviders) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.RuneProviders[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.DecaProviders[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1334,13 +1334,13 @@ func (m *GenesisState) Size() (n int) {
 			n += 2 + l + sovGenesis(uint64(l))
 		}
 	}
-	if len(m.RuneProviders) > 0 {
-		for _, e := range m.RuneProviders {
+	if len(m.DecaProviders) > 0 {
+		for _, e := range m.DecaProviders {
 			l = e.Size()
 			n += 2 + l + sovGenesis(uint64(l))
 		}
 	}
-	l = m.RunePool.Size()
+	l = m.DecaPool.Size()
 	n += 2 + l + sovGenesis(uint64(l))
 	if len(m.NodeMimirs) > 0 {
 		for _, e := range m.NodeMimirs {
@@ -2491,7 +2491,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 36:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuneProviders", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaProviders", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2518,14 +2518,14 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RuneProviders = append(m.RuneProviders, types.RUNEProvider{})
-			if err := m.RuneProviders[len(m.RuneProviders)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.DecaProviders = append(m.DecaProviders, types.RUNEProvider{})
+			if err := m.DecaProviders[len(m.DecaProviders)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 37:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RunePool", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DecaPool", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2552,7 +2552,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.RunePool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.DecaPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

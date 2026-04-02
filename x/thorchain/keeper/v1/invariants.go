@@ -38,8 +38,8 @@ func AsgardInvariant(k KVStore) common.Invariant {
 				poolCoins = poolCoins.Add(coin)
 			case !pool.Asset.IsDerivedAsset():
 				coin := common.NewCoin(
-					common.RuneAsset(),
-					pool.BalanceRune.Add(pool.PendingInboundRune),
+					common.DecaAsset(),
+					pool.BalanceDeca.Add(pool.PendingInboundDeca),
 				)
 				poolCoins = poolCoins.Add(coin)
 
@@ -172,20 +172,20 @@ func BondInvariant(k KVStore) common.Invariant {
 		bondRewardRune := network.BondRewardRune
 
 		// get rune balance of bond module
-		bondModuleRune := k.GetBalanceOfModule(ctx, BondName, common.RuneAsset().Native())
+		bondModuleRune := k.GetBalanceOfModule(ctx, BondName, common.DecaAsset().Native())
 
 		// bond module is expected to equal bonded rune and pending rewards
 		expectedRune := bondedRune.Add(bondRewardRune)
 		if expectedRune.GT(bondModuleRune) {
 			broken = true
 			diff := expectedRune.Sub(bondModuleRune)
-			coin, _ := common.NewCoin(common.RuneAsset(), diff).Native()
+			coin, _ := common.NewCoin(common.DecaAsset(), diff).Native()
 			msg = append(msg, fmt.Sprintf("insolvent: %s", coin))
 
 		} else if expectedRune.LT(bondModuleRune) {
 			broken = true
 			diff := bondModuleRune.Sub(expectedRune)
-			coin, _ := common.NewCoin(common.RuneAsset(), diff).Native()
+			coin, _ := common.NewCoin(common.DecaAsset(), diff).Native()
 			msg = append(msg, fmt.Sprintf("oversolvent: %s", coin))
 		}
 
@@ -227,7 +227,7 @@ func PoolsInvariant(k KVStore) common.Invariant {
 			}
 
 			lpUnits := cosmos.ZeroUint()
-			lpPendingRune := cosmos.ZeroUint()
+			lpPendingDeca := cosmos.ZeroUint()
 			lpPendingAsset := cosmos.ZeroUint()
 
 			lpIter := k.GetLiquidityProviderIterator(ctx, pool.Asset)
@@ -235,7 +235,7 @@ func PoolsInvariant(k KVStore) common.Invariant {
 				var lp LiquidityProvider
 				k.Cdc().MustUnmarshal(lpIter.Value(), &lp)
 				lpUnits = lpUnits.Add(lp.Units)
-				lpPendingRune = lpPendingRune.Add(lp.PendingRune)
+				lpPendingDeca = lpPendingDeca.Add(lp.PendingDeca)
 				lpPendingAsset = lpPendingAsset.Add(lp.PendingAsset)
 			}
 			_ = lpIter.Close()
@@ -253,7 +253,7 @@ func PoolsInvariant(k KVStore) common.Invariant {
 			}
 
 			check(pool.LPUnits, lpUnits, "units")
-			check(pool.PendingInboundRune, lpPendingRune, "pending rune")
+			check(pool.PendingInboundDeca, lpPendingDeca, "pending rune")
 			check(pool.PendingInboundAsset, lpPendingAsset, "pending asset")
 		}
 
@@ -407,4 +407,4 @@ func StreamingSwapsInvariant(k KVStore) common.Invariant {
 	}
 }
 
-// RUNEPoolInvariant asserts that the RUNEPool units and provider units are consistent.
+// DECAPoolInvariant asserts that the DECAPool units and provider units are consistent.

@@ -14,47 +14,47 @@ import (
 	"encoding/json"
 )
 
-// RUNEPoolResponseProviders struct for RUNEPoolResponseProviders
-type RUNEPoolResponseProviders struct {
-	// the units of RUNEPool owned by providers (including pending)
+// DECAPoolResponseProviders struct for DECAPoolResponseProviders
+type DECAPoolResponseProviders struct {
+	// the units of DECAPool owned by providers (including pending)
 	Units string `json:"units"`
-	// the units of RUNEPool owned by providers that remain pending
+	// the units of DECAPool owned by providers that remain pending
 	PendingUnits string `json:"pending_units"`
 	// the amount of RUNE pending
-	PendingRune string `json:"pending_rune"`
-	// the value of the provider share of the RUNEPool (includes pending RUNE)
+	PendingDeca string `json:"pending_deca"`
+	// the value of the provider share of the DECAPool (includes pending RUNE)
 	Value string `json:"value"`
-	// the profit and loss of the provider share of the RUNEPool
+	// the profit and loss of the provider share of the DECAPool
 	Pnl string `json:"pnl"`
 	// the current RUNE deposited by providers
 	CurrentDeposit string `json:"current_deposit"`
 }
 
-// NewRUNEPoolResponseProviders instantiates a new RUNEPoolResponseProviders object
+// NewDECAPoolResponseProviders instantiates a new DECAPoolResponseProviders object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRUNEPoolResponseProviders(units string, pendingUnits string, pendingRune string, value string, pnl string, currentDeposit string) *RUNEPoolResponseProviders {
-	this := RUNEPoolResponseProviders{}
+func NewDECAPoolResponseProviders(units string, pendingUnits string, pendingDeca string, value string, pnl string, currentDeposit string) *DECAPoolResponseProviders {
+	this := DECAPoolResponseProviders{}
 	this.Units = units
 	this.PendingUnits = pendingUnits
-	this.PendingRune = pendingRune
+	this.PendingDeca = pendingDeca
 	this.Value = value
 	this.Pnl = pnl
 	this.CurrentDeposit = currentDeposit
 	return &this
 }
 
-// NewRUNEPoolResponseProvidersWithDefaults instantiates a new RUNEPoolResponseProviders object
+// NewDECAPoolResponseProvidersWithDefaults instantiates a new DECAPoolResponseProviders object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRUNEPoolResponseProvidersWithDefaults() *RUNEPoolResponseProviders {
-	this := RUNEPoolResponseProviders{}
+func NewDECAPoolResponseProvidersWithDefaults() *DECAPoolResponseProviders {
+	this := DECAPoolResponseProviders{}
 	return &this
 }
 
 // GetUnits returns the Units field value
-func (o *RUNEPoolResponseProviders) GetUnits() string {
+func (o *DECAPoolResponseProviders) GetUnits() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -65,7 +65,7 @@ func (o *RUNEPoolResponseProviders) GetUnits() string {
 
 // GetUnitsOk returns a tuple with the Units field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseProviders) GetUnitsOk() (*string, bool) {
+func (o *DECAPoolResponseProviders) GetUnitsOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -73,12 +73,12 @@ func (o *RUNEPoolResponseProviders) GetUnitsOk() (*string, bool) {
 }
 
 // SetUnits sets field value
-func (o *RUNEPoolResponseProviders) SetUnits(v string) {
+func (o *DECAPoolResponseProviders) SetUnits(v string) {
 	o.Units = v
 }
 
 // GetPendingUnits returns the PendingUnits field value
-func (o *RUNEPoolResponseProviders) GetPendingUnits() string {
+func (o *DECAPoolResponseProviders) GetPendingUnits() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -89,7 +89,7 @@ func (o *RUNEPoolResponseProviders) GetPendingUnits() string {
 
 // GetPendingUnitsOk returns a tuple with the PendingUnits field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseProviders) GetPendingUnitsOk() (*string, bool) {
+func (o *DECAPoolResponseProviders) GetPendingUnitsOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -97,36 +97,36 @@ func (o *RUNEPoolResponseProviders) GetPendingUnitsOk() (*string, bool) {
 }
 
 // SetPendingUnits sets field value
-func (o *RUNEPoolResponseProviders) SetPendingUnits(v string) {
+func (o *DECAPoolResponseProviders) SetPendingUnits(v string) {
 	o.PendingUnits = v
 }
 
-// GetPendingRune returns the PendingRune field value
-func (o *RUNEPoolResponseProviders) GetPendingRune() string {
+// GetPendingDeca returns the PendingDeca field value
+func (o *DECAPoolResponseProviders) GetPendingDeca() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.PendingRune
+	return o.PendingDeca
 }
 
-// GetPendingRuneOk returns a tuple with the PendingRune field value
+// GetPendingDecaOk returns a tuple with the PendingDeca field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseProviders) GetPendingRuneOk() (*string, bool) {
+func (o *DECAPoolResponseProviders) GetPendingDecaOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.PendingRune, true
+	return &o.PendingDeca, true
 }
 
-// SetPendingRune sets field value
-func (o *RUNEPoolResponseProviders) SetPendingRune(v string) {
-	o.PendingRune = v
+// SetPendingDeca sets field value
+func (o *DECAPoolResponseProviders) SetPendingDeca(v string) {
+	o.PendingDeca = v
 }
 
 // GetValue returns the Value field value
-func (o *RUNEPoolResponseProviders) GetValue() string {
+func (o *DECAPoolResponseProviders) GetValue() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -137,7 +137,7 @@ func (o *RUNEPoolResponseProviders) GetValue() string {
 
 // GetValueOk returns a tuple with the Value field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseProviders) GetValueOk() (*string, bool) {
+func (o *DECAPoolResponseProviders) GetValueOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -145,12 +145,12 @@ func (o *RUNEPoolResponseProviders) GetValueOk() (*string, bool) {
 }
 
 // SetValue sets field value
-func (o *RUNEPoolResponseProviders) SetValue(v string) {
+func (o *DECAPoolResponseProviders) SetValue(v string) {
 	o.Value = v
 }
 
 // GetPnl returns the Pnl field value
-func (o *RUNEPoolResponseProviders) GetPnl() string {
+func (o *DECAPoolResponseProviders) GetPnl() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -161,7 +161,7 @@ func (o *RUNEPoolResponseProviders) GetPnl() string {
 
 // GetPnlOk returns a tuple with the Pnl field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseProviders) GetPnlOk() (*string, bool) {
+func (o *DECAPoolResponseProviders) GetPnlOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -169,12 +169,12 @@ func (o *RUNEPoolResponseProviders) GetPnlOk() (*string, bool) {
 }
 
 // SetPnl sets field value
-func (o *RUNEPoolResponseProviders) SetPnl(v string) {
+func (o *DECAPoolResponseProviders) SetPnl(v string) {
 	o.Pnl = v
 }
 
 // GetCurrentDeposit returns the CurrentDeposit field value
-func (o *RUNEPoolResponseProviders) GetCurrentDeposit() string {
+func (o *DECAPoolResponseProviders) GetCurrentDeposit() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -185,7 +185,7 @@ func (o *RUNEPoolResponseProviders) GetCurrentDeposit() string {
 
 // GetCurrentDepositOk returns a tuple with the CurrentDeposit field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponseProviders) GetCurrentDepositOk() (*string, bool) {
+func (o *DECAPoolResponseProviders) GetCurrentDepositOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -193,11 +193,11 @@ func (o *RUNEPoolResponseProviders) GetCurrentDepositOk() (*string, bool) {
 }
 
 // SetCurrentDeposit sets field value
-func (o *RUNEPoolResponseProviders) SetCurrentDeposit(v string) {
+func (o *DECAPoolResponseProviders) SetCurrentDeposit(v string) {
 	o.CurrentDeposit = v
 }
 
-func (o RUNEPoolResponseProviders) MarshalJSON_deprecated() ([]byte, error) {
+func (o DECAPoolResponseProviders) MarshalJSON_deprecated() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["units"] = o.Units
@@ -206,7 +206,7 @@ func (o RUNEPoolResponseProviders) MarshalJSON_deprecated() ([]byte, error) {
 		toSerialize["pending_units"] = o.PendingUnits
 	}
 	if true {
-		toSerialize["pending_rune"] = o.PendingRune
+		toSerialize["pending_deca"] = o.PendingDeca
 	}
 	if true {
 		toSerialize["value"] = o.Value
@@ -220,38 +220,38 @@ func (o RUNEPoolResponseProviders) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableRUNEPoolResponseProviders struct {
-	value *RUNEPoolResponseProviders
+type NullableDECAPoolResponseProviders struct {
+	value *DECAPoolResponseProviders
 	isSet bool
 }
 
-func (v NullableRUNEPoolResponseProviders) Get() *RUNEPoolResponseProviders {
+func (v NullableDECAPoolResponseProviders) Get() *DECAPoolResponseProviders {
 	return v.value
 }
 
-func (v *NullableRUNEPoolResponseProviders) Set(val *RUNEPoolResponseProviders) {
+func (v *NullableDECAPoolResponseProviders) Set(val *DECAPoolResponseProviders) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRUNEPoolResponseProviders) IsSet() bool {
+func (v NullableDECAPoolResponseProviders) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRUNEPoolResponseProviders) Unset() {
+func (v *NullableDECAPoolResponseProviders) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRUNEPoolResponseProviders(val *RUNEPoolResponseProviders) *NullableRUNEPoolResponseProviders {
-	return &NullableRUNEPoolResponseProviders{value: val, isSet: true}
+func NewNullableDECAPoolResponseProviders(val *DECAPoolResponseProviders) *NullableDECAPoolResponseProviders {
+	return &NullableDECAPoolResponseProviders{value: val, isSet: true}
 }
 
-func (v NullableRUNEPoolResponseProviders) MarshalJSON_deprecated() ([]byte, error) {
+func (v NullableDECAPoolResponseProviders) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRUNEPoolResponseProviders) UnmarshalJSON(src []byte) error {
+func (v *NullableDECAPoolResponseProviders) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

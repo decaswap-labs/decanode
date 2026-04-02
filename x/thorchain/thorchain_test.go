@@ -71,7 +71,7 @@ func (s *ThorchainSuite) TestLiquidityProvision(c *C) {
 	// check pool is now empty
 	pool, err = keeper.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Check(pool.BalanceRune.IsZero(), Equals, true)
+	c.Check(pool.BalanceDeca.IsZero(), Equals, true)
 	remainGas := uint64(37500)
 	c.Check(pool.BalanceAsset.Uint64(), Equals, remainGas) // leave a little behind for gas
 	c.Check(pool.LPUnits.IsZero(), Equals, true)
@@ -88,7 +88,7 @@ func (s *ThorchainSuite) TestLiquidityProvision(c *C) {
 	// check pool is NOT empty
 	pool, err = keeper.GetPool(ctx, common.ETHAsset)
 	c.Assert(err, IsNil)
-	c.Check(pool.BalanceRune.Equal(cosmos.NewUint(200*common.One)), Equals, true)
+	c.Check(pool.BalanceDeca.Equal(cosmos.NewUint(200*common.One)), Equals, true)
 	c.Check(pool.BalanceAsset.Equal(cosmos.NewUint(20000000000+remainGas)), Equals, true, Commentf("%d", pool.BalanceAsset.Uint64()))
 	c.Check(pool.LPUnits.IsZero(), Equals, false)
 }
@@ -100,7 +100,7 @@ func (s *ThorchainSuite) TestChurn(c *C) {
 	// create starting point, vault and four node active node accounts
 	vault := GetRandomVault()
 	vault.AddFunds(common.Coins{
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One)),
 		common.NewCoin(common.ETHAsset, cosmos.NewUint(79*common.One)),
 	})
 	c.Assert(mgr.Keeper().SaveNetworkFee(ctx, common.ETHChain, NetworkFee{
@@ -109,7 +109,7 @@ func (s *ThorchainSuite) TestChurn(c *C) {
 		TransactionFeeRate: 25000,
 	}), IsNil)
 	c.Assert(mgr.Keeper().SetPool(ctx, Pool{
-		BalanceRune:  cosmos.NewUint(common.One),
+		BalanceDeca:  cosmos.NewUint(common.One),
 		BalanceAsset: cosmos.NewUint(common.One),
 		Asset:        common.ETHAsset,
 		LPUnits:      cosmos.NewUint(common.One),
@@ -166,7 +166,7 @@ func (s *ThorchainSuite) TestChurn(c *C) {
 	signer, err := common.PubKey(keygen.Members[0]).GetThorAddress()
 	c.Assert(err, IsNil)
 	keygenTime := int64(1024)
-	msg, err := NewMsgTssPoolV2(keygen.Members, newVaultPk, []byte("fakeSignature"), nil, AsgardKeygen, ctx.BlockHeight(), nil, common.Chains{common.RuneAsset().Chain}.Strings(), signer, keygenTime, GetRandomPubKey(), []byte("backup"))
+	msg, err := NewMsgTssPoolV2(keygen.Members, newVaultPk, []byte("fakeSignature"), nil, AsgardKeygen, ctx.BlockHeight(), nil, common.Chains{common.DecaAsset().Chain}.Strings(), signer, keygenTime, GetRandomPubKey(), []byte("backup"))
 	c.Assert(err, IsNil)
 	tssHandler := NewTssHandler(mgr)
 
@@ -326,7 +326,7 @@ func (s *ThorchainSuite) TestRagnarok(c *C) {
 
 		// Add bond to asgard
 		asgard.AddFunds(common.Coins{
-			common.NewCoin(common.RuneAsset(), na.Bond),
+			common.NewCoin(common.DecaAsset(), na.Bond),
 		})
 		c.Assert(mgr.Keeper().SetVault(ctx, asgard), IsNil)
 	}
@@ -410,7 +410,7 @@ func (s *ThorchainSuite) TestRagnarokNoOneLeave(c *C) {
 
 		// Add bond to asgard
 		asgard.AddFunds(common.Coins{
-			common.NewCoin(common.RuneAsset(), na.Bond),
+			common.NewCoin(common.DecaAsset(), na.Bond),
 		})
 		asgard.Membership = append(asgard.Membership, na.PubKeySet.Secp256k1.String())
 		c.Assert(mgr.Keeper().SetVault(ctx, asgard), IsNil)
@@ -426,7 +426,7 @@ func (s *ThorchainSuite) TestRagnarokNoOneLeave(c *C) {
 	resHandler := NewReserveContributorHandler(mgr)
 	for _, res := range reserves {
 		asgard.AddFunds(common.Coins{
-			common.NewCoin(common.RuneAsset(), res.Amount),
+			common.NewCoin(common.DecaAsset(), res.Amount),
 		})
 		msg := NewMsgReserveContributor(GetRandomTx(), res, bonders[0].NodeAddress)
 		handleErr := resHandler.handle(ctx, *msg)

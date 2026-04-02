@@ -258,7 +258,7 @@ func (s *HandlerSolvencyQuorumSuite) TestHandleValidAttestations(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 	mgr.Keeper().SetMimir(ctx, "DollarsPerRune", 5_00000000)
@@ -309,7 +309,7 @@ func (s *HandlerSolvencyQuorumSuite) TestHandleDuplicateAttestations(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 	mgr.Keeper().SetMimir(ctx, "DollarsPerRune", 5_00000000)
@@ -353,7 +353,7 @@ func (s *HandlerSolvencyQuorumSuite) TestHandleMixedValidInvalidAttestations(c *
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 	mgr.Keeper().SetMimir(ctx, "DollarsPerRune", 5_00000000)
@@ -401,7 +401,7 @@ func (s *HandlerSolvencyQuorumSuite) TestRunFullFlow(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 	mgr.Keeper().SetMimir(ctx, "DollarsPerRune", 5_00000000)
@@ -465,7 +465,7 @@ func (s *HandlerSolvencyQuorumSuite) TestHandleEmptyVoterCreatesNew(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 	mgr.Keeper().SetMimir(ctx, "DollarsPerRune", 5_00000000)

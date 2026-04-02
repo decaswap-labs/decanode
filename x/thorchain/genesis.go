@@ -253,7 +253,7 @@ func initGenesis(ctx cosmos.Context, keeper keeper.Keeper, data GenesisState) []
 
 	// Mint coins into the reserve
 	if data.Reserve > 0 {
-		coin := common.NewCoin(common.RuneNative, cosmos.NewUint(data.Reserve))
+		coin := common.NewCoin(common.DecaNative, cosmos.NewUint(data.Reserve))
 		if err := keeper.MintToModule(ctx, ModuleName, coin); err != nil {
 			panic(err)
 		}
@@ -296,7 +296,7 @@ func getLiquidityProviders(ctx cosmos.Context, k keeper.Keeper, asset common.Ass
 	for ; iterator.Valid(); iterator.Next() {
 		var lp LiquidityProvider
 		k.Cdc().MustUnmarshal(iterator.Value(), &lp)
-		if lp.Units.IsZero() && lp.PendingRune.IsZero() && lp.PendingAsset.IsZero() {
+		if lp.Units.IsZero() && lp.PendingDeca.IsZero() && lp.PendingAsset.IsZero() {
 			continue
 		}
 		liquidityProviders = append(liquidityProviders, lp)

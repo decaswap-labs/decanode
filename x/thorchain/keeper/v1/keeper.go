@@ -52,8 +52,8 @@ const (
 	prefixPOL                     types.DbPrefix = "pol/"
 	prefixTradeAccount            types.DbPrefix = "tr_acct/"
 	prefixSecuredAsset            types.DbPrefix = "sa/"
-	prefixRUNEProvider            types.DbPrefix = "rune_provider/"
-	prefixRUNEPool                types.DbPrefix = "rune_pool/"
+	prefixRUNEProvider            types.DbPrefix = "deca_provider/"
+	prefixDECAPool                types.DbPrefix = "deca_pool/"
 	prefixTradeUnit               types.DbPrefix = "tr_unit/"
 	prefixStreamingSwap           types.DbPrefix = "stream/"
 	prefixObservingAddresses      types.DbPrefix = "observing_addresses/"
@@ -346,9 +346,9 @@ func (k KVStore) getUint(ctx cosmos.Context, key []byte, record *cosmos.Uint) (b
 	return true, nil
 }
 
-// GetRuneBalanceOfModule get the RUNE balance
-func (k KVStore) GetRuneBalanceOfModule(ctx cosmos.Context, moduleName string) cosmos.Uint {
-	return k.GetBalanceOfModule(ctx, moduleName, common.RuneNative.Native())
+// GetDecaBalanceOfModule get the RUNE balance
+func (k KVStore) GetDecaBalanceOfModule(ctx cosmos.Context, moduleName string) cosmos.Uint {
+	return k.GetBalanceOfModule(ctx, moduleName, common.DecaNative.Native())
 }
 
 func (k KVStore) GetBalanceOfModule(ctx cosmos.Context, moduleName, denom string) cosmos.Uint {
@@ -407,19 +407,19 @@ func (k KVStore) MintToModule(ctx cosmos.Context, module string, coin common.Coi
 	// mint new rune coins until we hit the cap. Once we do, borrow
 	// from the reserve instead of minting new tokens
 	// from the reserve instead of minting new tokens
-	maxAmt, _ := k.GetMimir(ctx, constants.MaxRuneSupply.String())
-	if coin.IsRune() && maxAmt > 0 {
-		currentSupply := k.GetTotalSupply(ctx, common.RuneAsset())  // current circulating supply of rune
+	maxAmt, _ := k.GetMimir(ctx, constants.MaxDecaSupply.String())
+	if coin.IsDeca() && maxAmt > 0 {
+		currentSupply := k.GetTotalSupply(ctx, common.DecaAsset())  // current circulating supply of rune
 		maxSupply := cosmos.NewUint(uint64(maxAmt))                 // max supply of rune (ie 500m)
 		availableSupply := common.SafeSub(maxSupply, currentSupply) // available supply to be mint
 		// if available supply is less than the coin.Amount, we need to
 		// borrow from the reserve
 		if availableSupply.LT(coin.Amount) {
-			// Never mint an amount that would exceed MaxRuneSupply.
+			// Never mint an amount that would exceed MaxDecaSupply.
 			borrowReserveAmt := common.SafeSub(coin.Amount, availableSupply) // to borrow from reserve
 			coin.Amount = common.SafeSub(coin.Amount, borrowReserveAmt)      // to mint later in this func
 
-			reserveCoin := common.NewCoin(common.RuneAsset(), borrowReserveAmt)
+			reserveCoin := common.NewCoin(common.DecaAsset(), borrowReserveAmt)
 			if err := k.SendFromModuleToModule(ctx, ReserveName, module, common.NewCoins(reserveCoin)); err != nil {
 				// If unable to move the needed surplus coin from the Reserve, error out without any minting.
 				ctx.Logger().Error("fail to move coins during circuit breaker", "error", err)
@@ -446,8 +446,8 @@ func (k KVStore) MintToModule(ctx cosmos.Context, module string, coin common.Coi
 	// be an issue (infinite mint bug/exploit), or maybe runway rune
 	// hyperinflation. In any case, pause everything and allow the
 	// community time to find a solution to the issue.
-	coin2 := k.coinKeeper.GetSupply(ctx, common.RuneAsset().Native())
-	maxAmt, _ = k.GetMimir(ctx, "MaxRuneSupply")
+	coin2 := k.coinKeeper.GetSupply(ctx, common.DecaAsset().Native())
+	maxAmt, _ = k.GetMimir(ctx, "MaxDecaSupply")
 	if maxAmt > 0 && coin2.Amount.GT(cosmos.NewInt(maxAmt)) {
 		k.SetMimir(ctx, "HaltTrading", 1)
 		k.SetMimir(ctx, "HaltChainGlobal", 1)
@@ -539,7 +539,7 @@ func (k KVStore) DeductNativeTxFeeFromAccount(ctx cosmos.Context, acctAddr cosmo
 	if fee.IsZero() {
 		return nil // no fee
 	}
-	coins := common.NewCoins(common.NewCoin(common.RuneNative, fee))
+	coins := common.NewCoins(common.NewCoin(common.DecaNative, fee))
 	return k.SendFromAccountToModule(ctx, acctAddr, ReserveName, coins)
 }
 
@@ -559,7 +559,7 @@ func (k KVStore) RagnarokAccount(ctx cosmos.Context, addr cosmos.AccAddress) {
 			}
 			coin := common.NewCoin(asset, cosmos.NewUintFromBigInt(bal.Amount.BigInt()))
 			coins := common.NewCoins(coin)
-			if asset.IsRune() {
+			if asset.IsDeca() {
 				err = k.SendFromAccountToModule(ctx, addr, ReserveName, coins)
 				if err != nil {
 					ctx.Logger().Error("failed to transfer", "error", err)

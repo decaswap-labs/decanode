@@ -26,7 +26,7 @@ type DualLPActor struct {
 	account     *User
 	thorAddress common.Address
 	l1Address   common.Address
-	runeAmount  cosmos.Uint
+	decaAmount  cosmos.Uint
 	l1Amount    cosmos.Uint
 }
 
@@ -40,7 +40,7 @@ func NewDualLPActor(asset common.Asset, rng *rand.Rand) *Actor {
 	a.Ops = append(a.Ops, a.acquireUser)
 
 	// deposit 10% of the user RUNE balance
-	a.Ops = append(a.Ops, a.depositRune)
+	a.Ops = append(a.Ops, a.depositDeca)
 
 	// deposit 10% of the user L1 balance to match
 	if asset.Chain.IsEVM() && !asset.IsGasAsset() {
@@ -60,7 +60,7 @@ func NewDualLPActor(asset common.Asset, rng *rand.Rand) *Actor {
 ////////////////////////////////////////////////////////////////////////////////////////
 
 func (a *DualLPActor) acquireUser(config *OpConfig) OpResult {
-	userMaxRune := cosmos.NewUint(0)
+	userMaxDeca := cosmos.NewUint(0)
 
 	for _, user := range config.Users {
 		a.SetLogger(a.Log().With().Str("user", user.Name()).Logger())
@@ -83,7 +83,7 @@ func (a *DualLPActor) acquireUser(config *OpConfig) OpResult {
 			user.Release()
 			continue
 		}
-		if thorBalances.GetCoin(common.RuneAsset()).Amount.IsZero() {
+		if thorBalances.GetCoin(common.DecaAsset()).Amount.IsZero() {
 			a.Log().Error().Msg("user has no RUNE balance")
 			user.Release()
 			continue
@@ -113,11 +113,11 @@ func (a *DualLPActor) acquireUser(config *OpConfig) OpResult {
 		}
 
 		// find the user with the most RUNE balance
-		if thorBalances.GetCoin(common.RuneAsset()).Amount.LTE(userMaxRune) {
+		if thorBalances.GetCoin(common.DecaAsset()).Amount.LTE(userMaxDeca) {
 			user.Release()
 			continue
 		}
-		userMaxRune = thorBalances.GetCoin(common.RuneAsset()).Amount
+		userMaxDeca = thorBalances.GetCoin(common.DecaAsset()).Amount
 
 		// release the previous candidate before overwriting
 		if a.account != nil {
@@ -131,7 +131,7 @@ func (a *DualLPActor) acquireUser(config *OpConfig) OpResult {
 			Msg("acquired user")
 		a.thorAddress = thorAddress
 		a.l1Address = l1Address
-		a.runeAmount = thorBalances.GetCoin(common.RuneAsset()).Amount.QuoUint64(4)
+		a.decaAmount = thorBalances.GetCoin(common.DecaAsset()).Amount.QuoUint64(4)
 		a.l1Amount = l1Acct.Coins.GetCoin(a.asset).Amount.QuoUint64(4)
 		a.account = user
 	}
@@ -176,7 +176,7 @@ func (a *DualLPActor) depositL1(config *OpConfig) OpResult {
 	}
 }
 
-func (a *DualLPActor) depositRune(config *OpConfig) OpResult {
+func (a *DualLPActor) depositDeca(config *OpConfig) OpResult {
 	memo := fmt.Sprintf("+:%s:%s", a.asset, a.l1Address)
 	accAddr, err := a.account.PubKey(common.THORChain).GetThorAddress()
 	if err != nil {
@@ -186,7 +186,7 @@ func (a *DualLPActor) depositRune(config *OpConfig) OpResult {
 		}
 	}
 	deposit := types.NewMsgDeposit(
-		common.NewCoins(common.NewCoin(common.RuneAsset(), a.runeAmount)),
+		common.NewCoins(common.NewCoin(common.DecaAsset(), a.decaAmount)),
 		memo,
 		accAddr,
 	)
@@ -215,16 +215,16 @@ func (a *DualLPActor) verifyLP(config *OpConfig) OpResult {
 
 	for _, lp := range lps {
 		// skip pending lps
-		if lp.PendingAsset != "0" || lp.PendingRune != "0" {
+		if lp.PendingAsset != "0" || lp.PendingDeca != "0" {
 			continue
 		}
 
 		// find the matching lp record
-		if lp.RuneAddress == nil || lp.AssetAddress == nil {
+		if lp.DecaAddress == nil || lp.AssetAddress == nil {
 			continue
 		}
 
-		if common.Address(*lp.RuneAddress).Equals(a.thorAddress) &&
+		if common.Address(*lp.DecaAddress).Equals(a.thorAddress) &&
 			common.Address(*lp.AssetAddress).Equals(a.l1Address) {
 
 			// found the matching lp record
@@ -233,8 +233,8 @@ func (a *DualLPActor) verifyLP(config *OpConfig) OpResult {
 			}
 
 			// verify the amounts
-			if lp.RuneDepositValue != a.runeAmount.String() {
-				err = fmt.Errorf("mismatch RUNE amount: %s != %s", lp.RuneDepositValue, a.runeAmount)
+			if lp.DecaDepositValue != a.decaAmount.String() {
+				err = fmt.Errorf("mismatch DECA amount: %s != %s", lp.DecaDepositValue, a.decaAmount)
 				res.Error = multierror.Append(res.Error, err)
 			}
 			if lp.AssetDepositValue != a.l1Amount.String() {

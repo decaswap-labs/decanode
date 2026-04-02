@@ -57,7 +57,7 @@ func (HandlerReBondSuite) TestReBondHandlerValidate(c *C) {
 		GetRandomETHAddress(),
 		GetRandomETHAddress(),
 		common.Coins{
-			common.NewCoin(common.RuneAsset(), cosmos.ZeroUint()),
+			common.NewCoin(common.DecaAsset(), cosmos.ZeroUint()),
 		},
 		common.Gas{
 			common.NewCoin(common.ETHAsset, cosmos.NewUint(10000)),

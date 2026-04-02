@@ -41,7 +41,7 @@ func setupSolvencyHelpersTest(c *C) (cosmos.Context, Manager, NodeAccounts, Vaul
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(10000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(10000 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -306,7 +306,7 @@ func (s *HandlerSolvencyHelpersSuite) TestInsolvencyCheck_NoPoolLiquidity(c *C) 
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.ZeroUint()
-	ethPool.BalanceRune = cosmos.ZeroUint()
+	ethPool.BalanceDeca = cosmos.ZeroUint()
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 

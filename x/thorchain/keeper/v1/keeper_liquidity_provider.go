@@ -54,16 +54,16 @@ func (k KVStore) GetTotalSupply(ctx cosmos.Context, asset common.Asset) cosmos.U
 func (k KVStore) GetLiquidityProvider(ctx cosmos.Context, asset common.Asset, addr common.Address) (LiquidityProvider, error) {
 	record := LiquidityProvider{
 		Asset:             asset,
-		RuneAddress:       addr,
+		DecaAddress:       addr,
 		Units:             cosmos.ZeroUint(),
-		PendingRune:       cosmos.ZeroUint(),
+		PendingDeca:       cosmos.ZeroUint(),
 		PendingAsset:      cosmos.ZeroUint(),
-		RuneDepositValue:  cosmos.ZeroUint(),
+		DecaDepositValue:  cosmos.ZeroUint(),
 		AssetDepositValue: cosmos.ZeroUint(),
 	}
-	if !addr.IsChain(common.RuneAsset().Chain) {
+	if !addr.IsChain(common.DecaAsset().Chain) {
 		record.AssetAddress = addr
-		record.RuneAddress = common.NoAddress
+		record.DecaAddress = common.NoAddress
 	}
 
 	_, err := k.getLiquidityProvider(ctx, k.GetKey(prefixLiquidityProvider, record.Key()), &record)

@@ -77,7 +77,7 @@ func (s *KeeperAdvSwapQueueSuite) TestGetAdvSwapQueueIndexKey(c *C) {
 		Tx: common.Tx{
 			Coins: common.NewCoins(common.NewCoin(common.BTCAsset, cosmos.NewUint(10000))),
 		},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 		TradeTarget: cosmos.NewUint(1239585),
 	}
 	c.Check(string(k.getAdvSwapQueueIndexKey(ctx, msg)), Equals, "aqlim//BTC.BTC>THOR.RUNE/000000000000806721/")

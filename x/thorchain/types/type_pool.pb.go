@@ -63,7 +63,7 @@ func (PoolStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type Pool struct {
-	BalanceRune         cosmossdk_io_math.Uint                        `protobuf:"bytes,1,opt,name=balance_rune,json=balanceRune,proto3,customtype=cosmossdk.io/math.Uint" json:"balance_rune"`
+	BalanceDeca         cosmossdk_io_math.Uint                        `protobuf:"bytes,1,opt,name=balance_deca,json=balanceDeca,proto3,customtype=cosmossdk.io/math.Uint" json:"balance_deca"`
 	BalanceAsset        cosmossdk_io_math.Uint                        `protobuf:"bytes,2,opt,name=balance_asset,json=balanceAsset,proto3,customtype=cosmossdk.io/math.Uint" json:"balance_asset"`
 	Asset               gitlab_com_thorchain_thornode_v3_common.Asset `protobuf:"bytes,3,opt,name=asset,proto3,customtype=github.com/decaswap-labs/decanode/common.Asset" json:"asset"`
 	LPUnits             cosmossdk_io_math.Uint                        `protobuf:"bytes,4,opt,name=LP_units,json=LPUnits,proto3,customtype=cosmossdk.io/math.Uint" json:"LP_units"`
@@ -71,7 +71,7 @@ type Pool struct {
 	StatusSince         int64                                         `protobuf:"varint,10,opt,name=status_since,json=statusSince,proto3" json:"status_since,omitempty"`
 	Decimals            int64                                         `protobuf:"varint,6,opt,name=decimals,proto3" json:"decimals,omitempty"`
 	SynthUnits          cosmossdk_io_math.Uint                        `protobuf:"bytes,7,opt,name=synth_units,json=synthUnits,proto3,customtype=cosmossdk.io/math.Uint" json:"synth_units"`
-	PendingInboundRune  cosmossdk_io_math.Uint                        `protobuf:"bytes,8,opt,name=pending_inbound_rune,json=pendingInboundRune,proto3,customtype=cosmossdk.io/math.Uint" json:"pending_inbound_rune"`
+	PendingInboundDeca  cosmossdk_io_math.Uint                        `protobuf:"bytes,8,opt,name=pending_inbound_deca,json=pendingInboundDeca,proto3,customtype=cosmossdk.io/math.Uint" json:"pending_inbound_deca"`
 	PendingInboundAsset cosmossdk_io_math.Uint                        `protobuf:"bytes,9,opt,name=pending_inbound_asset,json=pendingInboundAsset,proto3,customtype=cosmossdk.io/math.Uint" json:"pending_inbound_asset"`
 }
 
@@ -184,9 +184,9 @@ func (m *Pool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i--
 	dAtA[i] = 0x4a
 	{
-		size := m.PendingInboundRune.Size()
+		size := m.PendingInboundDeca.Size()
 		i -= size
-		if _, err := m.PendingInboundRune.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.PendingInboundDeca.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintTypePool(dAtA, i, uint64(size))
@@ -244,9 +244,9 @@ func (m *Pool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i--
 	dAtA[i] = 0x12
 	{
-		size := m.BalanceRune.Size()
+		size := m.BalanceDeca.Size()
 		i -= size
-		if _, err := m.BalanceRune.MarshalTo(dAtA[i:]); err != nil {
+		if _, err := m.BalanceDeca.MarshalTo(dAtA[i:]); err != nil {
 			return 0, err
 		}
 		i = encodeVarintTypePool(dAtA, i, uint64(size))
@@ -273,7 +273,7 @@ func (m *Pool) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.BalanceRune.Size()
+	l = m.BalanceDeca.Size()
 	n += 1 + l + sovTypePool(uint64(l))
 	l = m.BalanceAsset.Size()
 	n += 1 + l + sovTypePool(uint64(l))
@@ -289,7 +289,7 @@ func (m *Pool) Size() (n int) {
 	}
 	l = m.SynthUnits.Size()
 	n += 1 + l + sovTypePool(uint64(l))
-	l = m.PendingInboundRune.Size()
+	l = m.PendingInboundDeca.Size()
 	n += 1 + l + sovTypePool(uint64(l))
 	l = m.PendingInboundAsset.Size()
 	n += 1 + l + sovTypePool(uint64(l))
@@ -336,7 +336,7 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BalanceRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BalanceDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -364,7 +364,7 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.BalanceRune.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.BalanceDeca.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -543,7 +543,7 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 8:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PendingInboundRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingInboundDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -571,7 +571,7 @@ func (m *Pool) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.PendingInboundRune.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.PendingInboundDeca.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

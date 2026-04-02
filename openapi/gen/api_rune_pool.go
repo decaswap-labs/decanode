@@ -20,51 +20,51 @@ import (
 )
 
 
-// RUNEPoolApiService RUNEPoolApi service
-type RUNEPoolApiService service
+// DECAPoolApiService DECAPoolApi service
+type DECAPoolApiService service
 
-type ApiRunePoolRequest struct {
+type ApiDecaPoolRequest struct {
 	ctx context.Context
-	ApiService *RUNEPoolApiService
+	ApiService *DECAPoolApiService
 	height *int64
 }
 
 // optional block height, defaults to current tip
-func (r ApiRunePoolRequest) Height(height int64) ApiRunePoolRequest {
+func (r ApiDecaPoolRequest) Height(height int64) ApiDecaPoolRequest {
 	r.height = &height
 	return r
 }
 
-func (r ApiRunePoolRequest) Execute() (*RUNEPoolResponse, *http.Response, error) {
-	return r.ApiService.RunePoolExecute(r)
+func (r ApiDecaPoolRequest) Execute() (*DECAPoolResponse, *http.Response, error) {
+	return r.ApiService.DecaPoolExecute(r)
 }
 
 /*
-RunePool Method for RunePool
+DecaPool Method for DecaPool
 
 Returns the pool information for the RUNE pool.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRunePoolRequest
+ @return ApiDecaPoolRequest
 */
-func (a *RUNEPoolApiService) RunePool(ctx context.Context) ApiRunePoolRequest {
-	return ApiRunePoolRequest{
+func (a *DECAPoolApiService) DecaPool(ctx context.Context) ApiDecaPoolRequest {
+	return ApiDecaPoolRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return RUNEPoolResponse
-func (a *RUNEPoolApiService) RunePoolExecute(r ApiRunePoolRequest) (*RUNEPoolResponse, *http.Response, error) {
+//  @return DECAPoolResponse
+func (a *DECAPoolApiService) DecaPoolExecute(r ApiDecaPoolRequest) (*DECAPoolResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *RUNEPoolResponse
+		localVarReturnValue  *DECAPoolResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RUNEPoolApiService.RunePool")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DECAPoolApiService.DecaPool")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -132,34 +132,34 @@ func (a *RUNEPoolApiService) RunePoolExecute(r ApiRunePoolRequest) (*RUNEPoolRes
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRuneProviderRequest struct {
+type ApiDecaProviderRequest struct {
 	ctx context.Context
-	ApiService *RUNEPoolApiService
+	ApiService *DECAPoolApiService
 	address string
 	height *int64
 }
 
 // optional block height, defaults to current tip
-func (r ApiRuneProviderRequest) Height(height int64) ApiRuneProviderRequest {
+func (r ApiDecaProviderRequest) Height(height int64) ApiDecaProviderRequest {
 	r.height = &height
 	return r
 }
 
-func (r ApiRuneProviderRequest) Execute() (*RUNEProvider, *http.Response, error) {
-	return r.ApiService.RuneProviderExecute(r)
+func (r ApiDecaProviderRequest) Execute() (*RUNEProvider, *http.Response, error) {
+	return r.ApiService.DecaProviderExecute(r)
 }
 
 /*
-RuneProvider Method for RuneProvider
+DecaProvider Method for DecaProvider
 
 Returns the RUNE Provider information for an address.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param address
- @return ApiRuneProviderRequest
+ @return ApiDecaProviderRequest
 */
-func (a *RUNEPoolApiService) RuneProvider(ctx context.Context, address string) ApiRuneProviderRequest {
-	return ApiRuneProviderRequest{
+func (a *DECAPoolApiService) DecaProvider(ctx context.Context, address string) ApiDecaProviderRequest {
+	return ApiDecaProviderRequest{
 		ApiService: a,
 		ctx: ctx,
 		address: address,
@@ -168,7 +168,7 @@ func (a *RUNEPoolApiService) RuneProvider(ctx context.Context, address string) A
 
 // Execute executes the request
 //  @return RUNEProvider
-func (a *RUNEPoolApiService) RuneProviderExecute(r ApiRuneProviderRequest) (*RUNEProvider, *http.Response, error) {
+func (a *DECAPoolApiService) DecaProviderExecute(r ApiDecaProviderRequest) (*RUNEProvider, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -176,12 +176,12 @@ func (a *RUNEPoolApiService) RuneProviderExecute(r ApiRuneProviderRequest) (*RUN
 		localVarReturnValue  *RUNEProvider
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RUNEPoolApiService.RuneProvider")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DECAPoolApiService.DecaProvider")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/thorchain/rune_provider/{address}"
+	localVarPath := localBasePath + "/thorchain/deca_provider/{address}"
 	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", url.PathEscape(parameterToString(r.address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -245,32 +245,32 @@ func (a *RUNEPoolApiService) RuneProviderExecute(r ApiRuneProviderRequest) (*RUN
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRuneProvidersRequest struct {
+type ApiDecaProvidersRequest struct {
 	ctx context.Context
-	ApiService *RUNEPoolApiService
+	ApiService *DECAPoolApiService
 	height *int64
 }
 
 // optional block height, defaults to current tip
-func (r ApiRuneProvidersRequest) Height(height int64) ApiRuneProvidersRequest {
+func (r ApiDecaProvidersRequest) Height(height int64) ApiDecaProvidersRequest {
 	r.height = &height
 	return r
 }
 
-func (r ApiRuneProvidersRequest) Execute() ([]RUNEProvider, *http.Response, error) {
-	return r.ApiService.RuneProvidersExecute(r)
+func (r ApiDecaProvidersRequest) Execute() ([]RUNEProvider, *http.Response, error) {
+	return r.ApiService.DecaProvidersExecute(r)
 }
 
 /*
-RuneProviders Method for RuneProviders
+DecaProviders Method for DecaProviders
 
 Returns all RUNE Providers.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRuneProvidersRequest
+ @return ApiDecaProvidersRequest
 */
-func (a *RUNEPoolApiService) RuneProviders(ctx context.Context) ApiRuneProvidersRequest {
-	return ApiRuneProvidersRequest{
+func (a *DECAPoolApiService) DecaProviders(ctx context.Context) ApiDecaProvidersRequest {
+	return ApiDecaProvidersRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -278,7 +278,7 @@ func (a *RUNEPoolApiService) RuneProviders(ctx context.Context) ApiRuneProviders
 
 // Execute executes the request
 //  @return []RUNEProvider
-func (a *RUNEPoolApiService) RuneProvidersExecute(r ApiRuneProvidersRequest) ([]RUNEProvider, *http.Response, error) {
+func (a *DECAPoolApiService) DecaProvidersExecute(r ApiDecaProvidersRequest) ([]RUNEProvider, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -286,12 +286,12 @@ func (a *RUNEPoolApiService) RuneProvidersExecute(r ApiRuneProvidersRequest) ([]
 		localVarReturnValue  []RUNEProvider
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RUNEPoolApiService.RuneProviders")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DECAPoolApiService.DecaProviders")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/thorchain/rune_providers"
+	localVarPath := localBasePath + "/thorchain/deca_providers"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

@@ -21,9 +21,9 @@ type Pool struct {
 	Status string `json:"status"`
 	Decimals *int64 `json:"decimals,omitempty"`
 	PendingInboundAsset string `json:"pending_inbound_asset"`
-	PendingInboundRune string `json:"pending_inbound_rune"`
+	PendingInboundDeca string `json:"pending_inbound_deca"`
 	BalanceAsset string `json:"balance_asset"`
-	BalanceRune string `json:"balance_rune"`
+	BalanceDeca string `json:"balance_deca"`
 	// the USD (TOR) price of the asset in 1e8
 	AssetTorPrice string `json:"asset_tor_price"`
 	// the total pool units, this is the sum of LP and synth units
@@ -53,21 +53,21 @@ type Pool struct {
 	// 24h volume in asset
 	VolumeAsset *string `json:"volume_asset,omitempty"`
 	// 24h volume in rune
-	VolumeRune *string `json:"volume_rune,omitempty"`
+	VolumeDeca *string `json:"volume_deca,omitempty"`
 }
 
 // NewPool instantiates a new Pool object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPool(asset string, status string, pendingInboundAsset string, pendingInboundRune string, balanceAsset string, balanceRune string, assetTorPrice string, poolUnits string, lPUnits string, synthUnits string, synthSupply string, saversDepth string, saversUnits string, saversFillBps string, saversCapacityRemaining string, synthMintPaused bool, synthSupplyRemaining string, derivedDepthBps string) *Pool {
+func NewPool(asset string, status string, pendingInboundAsset string, pendingInboundDeca string, balanceAsset string, balanceDeca string, assetTorPrice string, poolUnits string, lPUnits string, synthUnits string, synthSupply string, saversDepth string, saversUnits string, saversFillBps string, saversCapacityRemaining string, synthMintPaused bool, synthSupplyRemaining string, derivedDepthBps string) *Pool {
 	this := Pool{}
 	this.Asset = asset
 	this.Status = status
 	this.PendingInboundAsset = pendingInboundAsset
-	this.PendingInboundRune = pendingInboundRune
+	this.PendingInboundDeca = pendingInboundDeca
 	this.BalanceAsset = balanceAsset
-	this.BalanceRune = balanceRune
+	this.BalanceDeca = balanceDeca
 	this.AssetTorPrice = assetTorPrice
 	this.PoolUnits = poolUnits
 	this.LPUnits = lPUnits
@@ -227,28 +227,28 @@ func (o *Pool) SetPendingInboundAsset(v string) {
 	o.PendingInboundAsset = v
 }
 
-// GetPendingInboundRune returns the PendingInboundRune field value
-func (o *Pool) GetPendingInboundRune() string {
+// GetPendingInboundDeca returns the PendingInboundDeca field value
+func (o *Pool) GetPendingInboundDeca() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.PendingInboundRune
+	return o.PendingInboundDeca
 }
 
-// GetPendingInboundRuneOk returns a tuple with the PendingInboundRune field value
+// GetPendingInboundDecaOk returns a tuple with the PendingInboundDeca field value
 // and a boolean to check if the value has been set.
-func (o *Pool) GetPendingInboundRuneOk() (*string, bool) {
+func (o *Pool) GetPendingInboundDecaOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.PendingInboundRune, true
+	return &o.PendingInboundDeca, true
 }
 
-// SetPendingInboundRune sets field value
-func (o *Pool) SetPendingInboundRune(v string) {
-	o.PendingInboundRune = v
+// SetPendingInboundDeca sets field value
+func (o *Pool) SetPendingInboundDeca(v string) {
+	o.PendingInboundDeca = v
 }
 
 // GetBalanceAsset returns the BalanceAsset field value
@@ -275,28 +275,28 @@ func (o *Pool) SetBalanceAsset(v string) {
 	o.BalanceAsset = v
 }
 
-// GetBalanceRune returns the BalanceRune field value
-func (o *Pool) GetBalanceRune() string {
+// GetBalanceDeca returns the BalanceDeca field value
+func (o *Pool) GetBalanceDeca() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.BalanceRune
+	return o.BalanceDeca
 }
 
-// GetBalanceRuneOk returns a tuple with the BalanceRune field value
+// GetBalanceDecaOk returns a tuple with the BalanceDeca field value
 // and a boolean to check if the value has been set.
-func (o *Pool) GetBalanceRuneOk() (*string, bool) {
+func (o *Pool) GetBalanceDecaOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.BalanceRune, true
+	return &o.BalanceDeca, true
 }
 
-// SetBalanceRune sets field value
-func (o *Pool) SetBalanceRune(v string) {
-	o.BalanceRune = v
+// SetBalanceDeca sets field value
+func (o *Pool) SetBalanceDeca(v string) {
+	o.BalanceDeca = v
 }
 
 // GetAssetTorPrice returns the AssetTorPrice field value
@@ -651,36 +651,36 @@ func (o *Pool) SetVolumeAsset(v string) {
 	o.VolumeAsset = &v
 }
 
-// GetVolumeRune returns the VolumeRune field value if set, zero value otherwise.
-func (o *Pool) GetVolumeRune() string {
-	if o == nil || o.VolumeRune == nil {
+// GetVolumeDeca returns the VolumeDeca field value if set, zero value otherwise.
+func (o *Pool) GetVolumeDeca() string {
+	if o == nil || o.VolumeDeca == nil {
 		var ret string
 		return ret
 	}
-	return *o.VolumeRune
+	return *o.VolumeDeca
 }
 
-// GetVolumeRuneOk returns a tuple with the VolumeRune field value if set, nil otherwise
+// GetVolumeDecaOk returns a tuple with the VolumeDeca field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Pool) GetVolumeRuneOk() (*string, bool) {
-	if o == nil || o.VolumeRune == nil {
+func (o *Pool) GetVolumeDecaOk() (*string, bool) {
+	if o == nil || o.VolumeDeca == nil {
 		return nil, false
 	}
-	return o.VolumeRune, true
+	return o.VolumeDeca, true
 }
 
-// HasVolumeRune returns a boolean if a field has been set.
-func (o *Pool) HasVolumeRune() bool {
-	if o != nil && o.VolumeRune != nil {
+// HasVolumeDeca returns a boolean if a field has been set.
+func (o *Pool) HasVolumeDeca() bool {
+	if o != nil && o.VolumeDeca != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetVolumeRune gets a reference to the given string and assigns it to the VolumeRune field.
-func (o *Pool) SetVolumeRune(v string) {
-	o.VolumeRune = &v
+// SetVolumeDeca gets a reference to the given string and assigns it to the VolumeDeca field.
+func (o *Pool) SetVolumeDeca(v string) {
+	o.VolumeDeca = &v
 }
 
 func (o Pool) MarshalJSON_deprecated() ([]byte, error) {
@@ -701,13 +701,13 @@ func (o Pool) MarshalJSON_deprecated() ([]byte, error) {
 		toSerialize["pending_inbound_asset"] = o.PendingInboundAsset
 	}
 	if true {
-		toSerialize["pending_inbound_rune"] = o.PendingInboundRune
+		toSerialize["pending_inbound_deca"] = o.PendingInboundDeca
 	}
 	if true {
 		toSerialize["balance_asset"] = o.BalanceAsset
 	}
 	if true {
-		toSerialize["balance_rune"] = o.BalanceRune
+		toSerialize["balance_deca"] = o.BalanceDeca
 	}
 	if true {
 		toSerialize["asset_tor_price"] = o.AssetTorPrice
@@ -751,8 +751,8 @@ func (o Pool) MarshalJSON_deprecated() ([]byte, error) {
 	if o.VolumeAsset != nil {
 		toSerialize["volume_asset"] = o.VolumeAsset
 	}
-	if o.VolumeRune != nil {
-		toSerialize["volume_rune"] = o.VolumeRune
+	if o.VolumeDeca != nil {
+		toSerialize["volume_deca"] = o.VolumeDeca
 	}
 	return json.Marshal(toSerialize)
 }

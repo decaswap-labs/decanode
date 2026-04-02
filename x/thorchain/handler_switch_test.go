@@ -46,7 +46,7 @@ func (s *HandlerSwitchSuite) TestSwitchHandler_ValidateBasicFails(c *C) {
 	c.Assert(err, NotNil)
 
 	// Native asset should fail
-	msg = NewMsgSwitch(common.RuneNative, cosmos.NewUint(100), signer, signer, tx)
+	msg = NewMsgSwitch(common.DecaNative, cosmos.NewUint(100), signer, signer, tx)
 	_, err = h.Run(ctx, msg)
 	c.Assert(err, NotNil)
 

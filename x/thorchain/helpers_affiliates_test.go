@@ -25,15 +25,15 @@ func (HelperAffiliateSuite) TestSkimAffiliateFees(c *C) {
 	affAcctAddr1, err := affAddr1.AccAddress()
 	c.Assert(err, IsNil)
 	acct := mgr.Keeper().GetBalance(ctx, affAcctAddr1)
-	c.Assert(acct.AmountOf(common.RuneNative.Native()).String(), Equals, "0")
+	c.Assert(acct.AmountOf(common.DecaNative.Native()).String(), Equals, "0")
 
 	affAcctAddr2, err := affAddr2.AccAddress()
 	c.Assert(err, IsNil)
 	acct2 := mgr.Keeper().GetBalance(ctx, affAcctAddr2)
-	c.Assert(acct2.AmountOf(common.RuneNative.Native()).String(), Equals, "0")
+	c.Assert(acct2.AmountOf(common.DecaNative.Native()).String(), Equals, "0")
 
 	memo := fmt.Sprintf("=:THOR.RUNE:%s::%s/%s:100/50", GetRandomTHORAddress(), affAddr1, affAddr2)
-	coin := common.NewCoin(common.RuneNative, cosmos.NewUint(10*common.One))
+	coin := common.NewCoin(common.DecaNative, cosmos.NewUint(10*common.One))
 
 	feeSkimmed, err := skimAffiliateFees(ctx, mgr, tx, signer, coin, memo)
 	c.Assert(err, IsNil)
@@ -41,9 +41,9 @@ func (HelperAffiliateSuite) TestSkimAffiliateFees(c *C) {
 
 	// Check affiliate balances after skimming fee
 	acct = mgr.Keeper().GetBalance(ctx, affAcctAddr1)
-	c.Assert(acct.AmountOf(common.RuneNative.Native()).String(), Equals, "10000000")
+	c.Assert(acct.AmountOf(common.DecaNative.Native()).String(), Equals, "10000000")
 	acct2 = mgr.Keeper().GetBalance(ctx, affAcctAddr2)
-	c.Assert(acct2.AmountOf(common.RuneNative.Native()).String(), Equals, "5000000")
+	c.Assert(acct2.AmountOf(common.DecaNative.Native()).String(), Equals, "5000000")
 
 	// Use one thorname and one rune address
 	tn := types.THORName{Name: "t", Owner: affAcctAddr1, ExpireBlockHeight: 10000000, Aliases: []types.THORNameAlias{{Chain: common.THORChain, Address: affAddr1}}}
@@ -56,9 +56,9 @@ func (HelperAffiliateSuite) TestSkimAffiliateFees(c *C) {
 
 	// Check affiliate balances after skimming fee
 	acct = mgr.Keeper().GetBalance(ctx, affAcctAddr1)
-	c.Assert(acct.AmountOf(common.RuneNative.Native()).String(), Equals, "20000000")
+	c.Assert(acct.AmountOf(common.DecaNative.Native()).String(), Equals, "20000000")
 	acct2 = mgr.Keeper().GetBalance(ctx, affAcctAddr2)
-	c.Assert(acct2.AmountOf(common.RuneNative.Native()).String(), Equals, "10000000")
+	c.Assert(acct2.AmountOf(common.DecaNative.Native()).String(), Equals, "10000000")
 
 	// Set a preferred asset, make sure affiliate collector is updated
 	tn.PreferredAsset = common.BTCAsset
@@ -81,7 +81,7 @@ func (HelperAffiliateSuite) TestSkimAffiliateFees(c *C) {
 	// Check affiliate balances after skimming fee, affAcctAddr1's balance should be same
 	// as before + affiliate collector module updated
 	acct = mgr.Keeper().GetBalance(ctx, affAcctAddr1)
-	c.Assert(acct.AmountOf(common.RuneNative.Native()).String(), Equals, "20000000")
+	c.Assert(acct.AmountOf(common.DecaNative.Native()).String(), Equals, "20000000")
 
 	// ac, err := mgr.Keeper().GetAffiliateCollector(ctx, affAcctAddr1)
 	// c.Assert(err, IsNil)
@@ -89,7 +89,7 @@ func (HelperAffiliateSuite) TestSkimAffiliateFees(c *C) {
 
 	// affAcctAddr2's balance should be updated as normal
 	acct2 = mgr.Keeper().GetBalance(ctx, affAcctAddr2)
-	c.Assert(acct2.AmountOf(common.RuneNative.Native()).String(), Equals, "15000000")
+	c.Assert(acct2.AmountOf(common.DecaNative.Native()).String(), Equals, "15000000")
 }
 
 // fixes: https://gitlab.com/thorchain/thornode/-/issues/2238

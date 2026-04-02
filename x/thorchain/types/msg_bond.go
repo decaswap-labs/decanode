@@ -46,7 +46,7 @@ func (m *MsgBond) ValidateBasic() error {
 	if len(m.TxIn.Coins) == 0 {
 		return cosmos.ErrUnknownRequest("must bond with rune")
 	}
-	if !m.TxIn.Coins[0].IsRune() {
+	if !m.TxIn.Coins[0].IsDeca() {
 		return cosmos.ErrUnknownRequest("cannot bond non-native rune asset")
 	}
 	if m.Signer.Empty() {

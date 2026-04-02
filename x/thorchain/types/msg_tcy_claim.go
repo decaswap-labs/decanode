@@ -16,7 +16,7 @@ var (
 // NewMsgTCYClaim create new MsgTCYClaim message
 func NewMsgTCYClaim(address, l1Address common.Address, signer sdk.AccAddress) *MsgTCYClaim {
 	return &MsgTCYClaim{
-		RuneAddress: address,
+		DecaAddress: address,
 		L1Address:   l1Address,
 		Signer:      signer,
 	}
@@ -27,7 +27,7 @@ func (m *MsgTCYClaim) ValidateBasic() error {
 	if m.Signer.Empty() {
 		return cosmos.ErrInvalidAddress(m.Signer.String())
 	}
-	if m.RuneAddress.IsEmpty() {
+	if m.DecaAddress.IsEmpty() {
 		return cosmos.ErrInvalidAddress("rune addresses cannot be empty")
 	}
 	if m.L1Address.IsEmpty() {

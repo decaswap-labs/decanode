@@ -92,7 +92,7 @@ func (s *AnteTestSuite) TestRejectDuplicateTHORNameMsgs(c *C) {
 
 	addr := GetRandomTHORAddress()
 	acc, _ := addr.AccAddress()
-	coin := common.NewCoin(common.RuneAsset(), cosmos.NewUint(100*common.One))
+	coin := common.NewCoin(common.DecaAsset(), cosmos.NewUint(100*common.One))
 
 	msg1 := types.NewMsgManageTHORName("test-name", common.THORChain, addr, coin, 0, common.EmptyAsset, acc, acc, 0)
 	msg2 := types.NewMsgManageTHORName("other-name", common.THORChain, addr, coin, 0, common.EmptyAsset, acc, acc, 0)
@@ -133,7 +133,7 @@ func (s *AnteTestSuite) TestAnteHandleMessage(c *C) {
 
 	// fund an addr so it can pass the fee deduction ante
 	FundAccount(c, ctx, k, fromAddr, 200*common.One)
-	coin, err := common.NewCoin(common.RuneNative, cosmos.NewUint(1*common.One)).Native()
+	coin, err := common.NewCoin(common.DecaNative, cosmos.NewUint(1*common.One)).Native()
 	c.Assert(err, IsNil)
 
 	goodMsg := types.MsgSend{

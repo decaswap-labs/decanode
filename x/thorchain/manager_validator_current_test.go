@@ -823,12 +823,12 @@ func (vts *ValidatorMgrTestSuite) TestWeightedBondReward(c *C) {
 
 	// The bond hard cap in the test environment is 3 * common.One, both na1 and na2 should have the same reward (3/8ths each)
 	// (5% of 37500000 is 1875000)
-	c.Check(nodeOperator1Balance.AmountOf(common.RuneNative.Native()).String(), Equals, strconv.FormatInt(1875000, 10))
-	c.Check(nodeOperator2Balance.AmountOf(common.RuneNative.Native()).String(), Equals, strconv.FormatInt(1875000, 10))
+	c.Check(nodeOperator1Balance.AmountOf(common.DecaNative.Native()).String(), Equals, strconv.FormatInt(1875000, 10))
+	c.Check(nodeOperator2Balance.AmountOf(common.DecaNative.Native()).String(), Equals, strconv.FormatInt(1875000, 10))
 
 	// na3.Bond is below the hard cap, it should have a smaller reward accordingly (2/8ths)
 	// (5% of 25000000 is 1250000)
-	c.Check(nodeOperator3Balance.AmountOf(common.RuneNative.Native()).String(), Equals, strconv.FormatInt(1250000, 10))
+	c.Check(nodeOperator3Balance.AmountOf(common.DecaNative.Native()).String(), Equals, strconv.FormatInt(1250000, 10))
 }
 
 func (vts *ValidatorMgrTestSuite) TestNodeAccountPreflightCheckMaintenance(c *C) {
@@ -850,7 +850,7 @@ func (vts *ValidatorMgrTestSuite) TestNodeAccountPreflightCheckMaintenance(c *C)
 	c.Assert(k.SetNodeAccount(ctx, nodeAccount), IsNil)
 
 	// Set minimum bond
-	k.SetMimir(ctx, constants.MinimumBondInRune.String(), 1000000)
+	k.SetMimir(ctx, constants.MinimumBondInDeca.String(), 1000000)
 
 	// Test normal operation first (should be Ready)
 	status, err := validatorMgr.NodeAccountPreflightCheck(ctx, nodeAccount, k.GetConstants())
@@ -921,7 +921,7 @@ func (vts *ValidatorMgrTestSuite) TestActiveNodeRequestToLeaveShouldBeStandby(c 
 
 		// Add bond to asgard
 		asgard.AddFunds(common.Coins{
-			common.NewCoin(common.RuneAsset(), na.Bond),
+			common.NewCoin(common.DecaAsset(), na.Bond),
 		})
 		asgard.Membership = append(asgard.Membership, na.PubKeySet.Secp256k1.String())
 		c.Assert(mgr.Keeper().SetVault(ctx, asgard), IsNil)

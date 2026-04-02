@@ -42,7 +42,7 @@ func (s *NetworkManagerTestSuite) TestUpdateNetwork(c *C) {
 
 	p := NewPool()
 	p.Asset = common.ETHAsset
-	p.BalanceRune = cosmos.NewUint(common.One * 100)
+	p.BalanceDeca = cosmos.NewUint(common.One * 100)
 	p.BalanceAsset = cosmos.NewUint(common.One * 100)
 	p.Status = PoolAvailable
 	c.Assert(helper.SetPool(ctx, p), IsNil)
@@ -65,7 +65,7 @@ func (s *NetworkManagerTestSuite) TestUpdateNetwork(c *C) {
 
 	// fail to get total liquidity fee should result an error
 	helper.failGetTotalLiquidityFee = true
-	if common.RuneAsset().Equals(common.RuneNative) {
+	if common.DecaAsset().Equals(common.DecaNative) {
 		FundModule(c, ctx, helper, ReserveName, 100*common.One)
 	}
 	c.Assert(networkMgr.UpdateNetwork(ctx, constAccessor, mgr.GasMgr(), mgr.EventMgr()), NotNil)
@@ -506,14 +506,14 @@ func (*NetworkManagerTestSuite) TestGetAvailablePoolsRune(c *C) {
 	networkMgr := newNetworkMgr(helper, mgr.TxOutStore(), mgr.EventMgr())
 	p := NewPool()
 	p.Asset = common.ETHAsset
-	p.BalanceRune = cosmos.NewUint(common.One * 100)
+	p.BalanceDeca = cosmos.NewUint(common.One * 100)
 	p.BalanceAsset = cosmos.NewUint(common.One * 100)
 	p.Status = PoolAvailable
 	c.Assert(helper.SetPool(ctx, p), IsNil)
 	pools, totalLiquidity, err := getAvailablePoolsRune(ctx, networkMgr.k)
 	c.Assert(err, IsNil)
 	c.Assert(pools, HasLen, 1)
-	c.Assert(totalLiquidity.Equal(p.BalanceRune), Equals, true)
+	c.Assert(totalLiquidity.Equal(p.BalanceDeca), Equals, true)
 }
 
 func (*NetworkManagerTestSuite) TestPayPoolRewards(c *C) {
@@ -523,7 +523,7 @@ func (*NetworkManagerTestSuite) TestPayPoolRewards(c *C) {
 	networkMgr := newNetworkMgr(helper, mgr.TxOutStore(), mgr.EventMgr())
 	p := NewPool()
 	p.Asset = common.ETHAsset
-	p.BalanceRune = cosmos.NewUint(common.One * 100)
+	p.BalanceDeca = cosmos.NewUint(common.One * 100)
 	p.BalanceAsset = cosmos.NewUint(common.One * 100)
 	p.Status = PoolAvailable
 	c.Assert(helper.SetPool(ctx, p), IsNil)
@@ -552,7 +552,7 @@ func (s *NetworkManagerTestSuite) TestSaverYieldFunc(c *C) {
 	// first pool
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.LPUnits = cosmos.NewUint(100)
 	pool.CalcUnits(coin.Amount)
@@ -584,7 +584,7 @@ func (s *NetworkManagerTestSuite) TestSaverYieldCall(c *C) {
 	// layer 1 pool
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.LPUnits = cosmos.NewUint(100)
 	pool.CalcUnits(coin.Amount)
@@ -636,14 +636,14 @@ func (s *NetworkManagerTestSuite) TestRagnarokPool(c *C) {
 	retireVault.Chains = common.Chains{common.ETHChain, common.BTCChain}.Strings()
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	btcPool.LPUnits = cosmos.NewUint(1600)
 	btcPool.Status = PoolAvailable
 	c.Assert(k.SetPool(ctx, btcPool), IsNil)
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
-	ethPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	ethPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	ethPool.LPUnits = cosmos.NewUint(1600)
 	ethPool.Status = PoolAvailable
@@ -652,25 +652,25 @@ func (s *NetworkManagerTestSuite) TestRagnarokPool(c *C) {
 	lps := LiquidityProviders{
 		{
 			Asset:             common.BTCAsset,
-			RuneAddress:       addr,
+			DecaAddress:       addr,
 			AssetAddress:      GetRandomBTCAddress(),
 			LastAddHeight:     5,
 			Units:             btcPool.LPUnits.QuoUint64(2),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 		},
 		{
 			Asset:             common.BTCAsset,
-			RuneAddress:       GetRandomRUNEAddress(),
+			DecaAddress:       GetRandomRUNEAddress(),
 			AssetAddress:      GetRandomBTCAddress(),
 			LastAddHeight:     10,
 			Units:             btcPool.LPUnits.QuoUint64(2),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 		},
 	}
 	k.SetLiquidityProvider(ctx, lps[0])
@@ -731,7 +731,7 @@ func (s *NetworkManagerTestSuite) TestRagnarokPool(c *C) {
 	usdcAsset, err := common.NewAsset("ETH.USDC-0X9999999999999999999999999999999999999999")
 	c.Assert(err, IsNil)
 	usdcPool.Asset = usdcAsset
-	usdcPool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	usdcPool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	usdcPool.BalanceAsset = cosmos.NewUint(10 * common.One)
 	usdcPool.LPUnits = cosmos.NewUint(1600)
 	usdcPool.Status = PoolAvailable
@@ -790,7 +790,7 @@ func (*NetworkManagerTestSuite) TestPOLLiquidityAdd(c *C) {
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(20 * common.One)
 	btcPool.LPUnits = cosmos.NewUint(1600)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
@@ -820,7 +820,7 @@ func (*NetworkManagerTestSuite) TestPOLLiquidityAdd(c *C) {
 	// not enough balance in the reserve module
 	max = cosmos.NewUint(1000000)
 	util = cosmos.NewUint(50_000)
-	btcPool.BalanceRune = cosmos.NewUint(90000000000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(90000000000 * common.One)
 	c.Assert(net.addPOLLiquidity(ctx, btcPool, polAddress, asgardAddress, signer, max, util, target, mgr), IsNil)
 	lp, err = mgr.Keeper().GetLiquidityProvider(ctx, btcPool.Asset, polAddress)
 	c.Assert(err, IsNil)
@@ -846,7 +846,7 @@ func (*NetworkManagerTestSuite) TestPOLLiquidityWithdraw(c *C) {
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(2000 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(2000 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(20 * common.One)
 	btcPool.LPUnits = cosmos.NewUint(1600)
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
@@ -854,25 +854,25 @@ func (*NetworkManagerTestSuite) TestPOLLiquidityWithdraw(c *C) {
 	lps := LiquidityProviders{
 		{
 			Asset:             btcPool.Asset,
-			RuneAddress:       GetRandomETHAddress(),
+			DecaAddress:       GetRandomETHAddress(),
 			AssetAddress:      GetRandomBTCAddress(),
 			LastAddHeight:     5,
 			Units:             btcPool.LPUnits.QuoUint64(2),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 		},
 		{
 			Asset:             btcPool.Asset,
-			RuneAddress:       polAddress,
+			DecaAddress:       polAddress,
 			AssetAddress:      common.NoAddress,
 			LastAddHeight:     10,
 			Units:             btcPool.LPUnits.QuoUint64(2),
-			PendingRune:       cosmos.ZeroUint(),
+			PendingDeca:       cosmos.ZeroUint(),
 			PendingAsset:      cosmos.ZeroUint(),
 			AssetDepositValue: cosmos.ZeroUint(),
-			RuneDepositValue:  cosmos.ZeroUint(),
+			DecaDepositValue:  cosmos.ZeroUint(),
 		},
 	}
 	for _, lp := range lps {
@@ -926,7 +926,7 @@ func (*NetworkManagerTestSuite) TestFairMergePOLCycle(c *C) {
 	// create dummy eth pool
 	pool := NewPool()
 	pool.Asset = common.ETHAsset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	pool.LPUnits = cosmos.NewUint(100 * common.One)
@@ -935,7 +935,7 @@ func (*NetworkManagerTestSuite) TestFairMergePOLCycle(c *C) {
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	btcPool.LPUnits = cosmos.NewUint(100 * common.One)
@@ -1127,7 +1127,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssets(c *C) {
 	pool := NewPool()
 	pool.Asset = ethBusd
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(187493559385369)
+	pool.BalanceDeca = cosmos.NewUint(187493559385369)
 	pool.BalanceAsset = cosmos.NewUint(925681680182301)
 	pool.Decimals = 8
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -1138,7 +1138,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssets(c *C) {
 	pool = NewPool()
 	pool.Asset = eth
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(110119961610327)
+	pool.BalanceDeca = cosmos.NewUint(110119961610327)
 	pool.BalanceAsset = cosmos.NewUint(2343330836117)
 	pool.Decimals = 8
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -1150,7 +1150,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssets(c *C) {
 	bscPool := NewPool()
 	bscPool.Asset = bscBnb
 	bscPool.Status = PoolAvailable
-	bscPool.BalanceRune = cosmos.NewUint(510119961610327)
+	bscPool.BalanceDeca = cosmos.NewUint(510119961610327)
 	bscPool.BalanceAsset = cosmos.NewUint(4343330836117)
 	bscPool.Decimals = 8
 	c.Assert(mgr.Keeper().SetPool(ctx, bscPool), IsNil)
@@ -1161,12 +1161,12 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssets(c *C) {
 	usd, err := mgr.Keeper().GetPool(ctx, common.TOR)
 	c.Assert(err, IsNil)
 	c.Check(usd.BalanceAsset.Uint64(), Equals, uint64(925681680182301), Commentf("%d", usd.BalanceAsset.Uint64()))
-	c.Check(usd.BalanceRune.Uint64(), Equals, uint64(187493559385369), Commentf("%d", usd.BalanceRune.Uint64()))
+	c.Check(usd.BalanceDeca.Uint64(), Equals, uint64(187493559385369), Commentf("%d", usd.BalanceDeca.Uint64()))
 	dbnb, _ := common.NewAsset("THOR.BNB")
 	bnbPool, err := mgr.Keeper().GetPool(ctx, dbnb)
 	c.Assert(err, IsNil)
 	c.Check(bnbPool.BalanceAsset.Uint64(), Equals, uint64(4343330836117), Commentf("%d", bnbPool.BalanceAsset.Uint64()))
-	c.Check(bnbPool.BalanceRune.Uint64(), Equals, uint64(510119961610327), Commentf("%d", bnbPool.BalanceRune.Uint64()))
+	c.Check(bnbPool.BalanceDeca.Uint64(), Equals, uint64(510119961610327), Commentf("%d", bnbPool.BalanceDeca.Uint64()))
 
 	// happy path, but some trade volume triggers a lower pool depth
 	newctx := ctx.WithBlockHeight(ctx.BlockHeight() - 1)
@@ -1178,7 +1178,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssets(c *C) {
 	c.Assert(err, IsNil)
 	c.Check(usd.Status.String(), Equals, "Available")
 	c.Check(usd.BalanceAsset.Uint64(), Equals, uint64(694261260136726), Commentf("%d", usd.BalanceAsset.Uint64()))
-	c.Check(usd.BalanceRune.Uint64(), Equals, uint64(140620169539027), Commentf("%d", usd.BalanceRune.Uint64()))
+	c.Check(usd.BalanceDeca.Uint64(), Equals, uint64(140620169539027), Commentf("%d", usd.BalanceDeca.Uint64()))
 
 	// unhappy path, too much liquidity fees collected in the anchor pools, goes to 1% depth
 	err = mgr.Keeper().AddToSwapSlip(newctx, ethBusd, cosmos.NewInt(10_000))
@@ -1189,13 +1189,13 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssets(c *C) {
 	c.Assert(err, IsNil)
 	c.Assert(usd.Status.String(), Equals, "Available")
 	c.Assert(usd.BalanceAsset.Uint64(), Equals, uint64(9256816801824), Commentf("%d", usd.BalanceAsset.Uint64()))
-	c.Assert(usd.BalanceRune.Uint64(), Equals, uint64(1874935593854), Commentf("%d", usd.BalanceRune.Uint64()))
+	c.Assert(usd.BalanceDeca.Uint64(), Equals, uint64(1874935593854), Commentf("%d", usd.BalanceDeca.Uint64()))
 	// ensure layer1 bnb pool is NOT suspended
 	bnbPool, err = mgr.Keeper().GetPool(ctx, ethBusd)
 	c.Assert(err, IsNil)
 	c.Assert(bnbPool.Status.String(), Equals, "Available")
 	c.Assert(bnbPool.BalanceAsset.Uint64(), Equals, uint64(925681680182301), Commentf("%d", bnbPool.BalanceAsset.Uint64()))
-	c.Assert(bnbPool.BalanceRune.Uint64(), Equals, uint64(187493559385369), Commentf("%d", bnbPool.BalanceRune.Uint64()))
+	c.Assert(bnbPool.BalanceDeca.Uint64(), Equals, uint64(187493559385369), Commentf("%d", bnbPool.BalanceDeca.Uint64()))
 }
 
 func (s *NetworkManagerTestSuite) TestSpawnDerivedAssetsBasisPoints(c *C) {
@@ -1213,7 +1213,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssetsBasisPoints(c *C) {
 	pool := NewPool()
 	pool.Asset = ethBusd
 	pool.Status = PoolAvailable
-	pool.BalanceRune = cosmos.NewUint(187493559385369)
+	pool.BalanceDeca = cosmos.NewUint(187493559385369)
 	pool.BalanceAsset = cosmos.NewUint(925681680182301)
 	pool.Decimals = 8
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -1226,7 +1226,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssetsBasisPoints(c *C) {
 	c.Assert(err, IsNil)
 	c.Assert(usd.Status.String(), Equals, "Available")
 	c.Check(usd.BalanceAsset.Uint64(), Equals, uint64(1851363360364602), Commentf("%d", usd.BalanceAsset.Uint64()))
-	c.Check(usd.BalanceRune.Uint64(), Equals, uint64(374987118770738), Commentf("%d", usd.BalanceRune.Uint64()))
+	c.Check(usd.BalanceDeca.Uint64(), Equals, uint64(374987118770738), Commentf("%d", usd.BalanceDeca.Uint64()))
 
 	// test that DerivedDepthBasisPts set to zero will cause the pools to
 	// become suspended
@@ -1237,7 +1237,7 @@ func (s *NetworkManagerTestSuite) TestSpawnDerivedAssetsBasisPoints(c *C) {
 	c.Assert(err, IsNil)
 	c.Assert(usd.Status.String(), Equals, "Suspended")
 	c.Assert(usd.BalanceAsset.Uint64(), Equals, uint64(1851363360364602), Commentf("%d", usd.BalanceAsset.Uint64()))
-	c.Assert(usd.BalanceRune.Uint64(), Equals, uint64(374987118770738), Commentf("%d", usd.BalanceRune.Uint64()))
+	c.Assert(usd.BalanceDeca.Uint64(), Equals, uint64(374987118770738), Commentf("%d", usd.BalanceDeca.Uint64()))
 }
 
 func (s *NetworkManagerTestSuite) TestFetchMeanSlip(c *C) {
@@ -1272,7 +1272,7 @@ func (s *NetworkManagerTestSuite) TestFetchMeanSlip(c *C) {
 	// create corresponding pool
 	pool := NewPool()
 	pool.Asset = asset
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
 	pool.LPUnits = cosmos.NewUint(100)
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -1350,37 +1350,37 @@ func (s *NetworkManagerTestSuite) TestDistributeTCYStake(c *C) {
 	c.Assert(mgr.Keeper().TCYStakerExists(ctx, address3), Equals, true)
 	c.Assert(mgr.Keeper().TCYStakerExists(ctx, address4), Equals, true)
 
-	// Mint less than MinRuneForTCYStakeDistribution on TCYStakeName
-	tcyStakeFeeAmount := constAccessor.GetInt64Value(constants.MinRuneForTCYStakeDistribution) - 1
+	// Mint less than MinDecaForTCYStakeDistribution on TCYStakeName
+	tcyStakeFeeAmount := constAccessor.GetInt64Value(constants.MinDecaForTCYStakeDistribution) - 1
 	FundModule(c, ctx, mgr.Keeper(), TCYStakeName, uint64(tcyStakeFeeAmount))
 
 	nmgr.distributeTCYStake(ctx, mgr)
 
 	// Check balances, accounts should not receive funds from TCYStake since funds
-	// are less than MinRuneForTCYStakeDistribution
-	balanceAcc1 := mgr.Keeper().GetBalanceOf(ctx, acc1, common.RuneNative)
+	// are less than MinDecaForTCYStakeDistribution
+	balanceAcc1 := mgr.Keeper().GetBalanceOf(ctx, acc1, common.DecaNative)
 	c.Assert(balanceAcc1.IsZero(), Equals, true)
-	balanceAcc2 := mgr.Keeper().GetBalanceOf(ctx, acc2, common.RuneNative)
+	balanceAcc2 := mgr.Keeper().GetBalanceOf(ctx, acc2, common.DecaNative)
 	c.Assert(balanceAcc2.IsZero(), Equals, true)
-	balanceAcc3 := mgr.Keeper().GetBalanceOf(ctx, acc3, common.RuneNative)
+	balanceAcc3 := mgr.Keeper().GetBalanceOf(ctx, acc3, common.DecaNative)
 	c.Assert(balanceAcc3.IsZero(), Equals, true)
-	balanceAcc4 := mgr.Keeper().GetBalanceOf(ctx, acc4, common.RuneNative)
+	balanceAcc4 := mgr.Keeper().GetBalanceOf(ctx, acc4, common.DecaNative)
 	c.Assert(balanceAcc4.IsZero(), Equals, true)
 
-	balanceTCY := mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.RuneNative)
+	balanceTCY := mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.DecaNative)
 	c.Assert(balanceTCY.Amount.Equal(math.NewInt(tcyStakeFeeAmount)), Equals, true)
-	c.Assert(balanceTCY.Denom, Equals, common.RuneNative.Native())
+	c.Assert(balanceTCY.Denom, Equals, common.DecaNative.Native())
 
 	c.Assert(mgr.Keeper().TCYStakerExists(ctx, address1), Equals, true)
 	c.Assert(mgr.Keeper().TCYStakerExists(ctx, address2), Equals, true)
 	c.Assert(mgr.Keeper().TCYStakerExists(ctx, address3), Equals, true)
 	c.Assert(mgr.Keeper().TCYStakerExists(ctx, address4), Equals, true)
 
-	// Mint 210M RUNE to TCYStakeName (fund already has MinRuneForTCYStakeDistribution)
+	// Mint 210M RUNE to TCYStakeName (fund already has MinDecaForTCYStakeDistribution)
 	tcyStakeFeeAmount = 210_000_000_00000000 - tcyStakeFeeAmount
 	c.Assert(tcyStakeFeeAmount > 0, Equals, true)
 	FundModule(c, ctx, mgr.Keeper(), TCYStakeName, uint64(tcyStakeFeeAmount))
-	balanceTCY = mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.RuneNative)
+	balanceTCY = mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.DecaNative)
 	c.Assert(balanceTCY.Amount.Equal(math.NewInt(210_000_000_00000000)), Equals, true)
 
 	nmgr.distributeTCYStake(ctx, mgr)
@@ -1394,40 +1394,40 @@ func (s *NetworkManagerTestSuite) TestDistributeTCYStake(c *C) {
 	// Check balances, accounts should have their corresponding part: 75% to acc1,
 	// 25% to acc2, 0% to acc4 and claiming the corresponding part of acc4.
 	// TCYStake should not have funds after the distribution
-	balanceAcc1 = mgr.Keeper().GetBalanceOf(ctx, acc1, common.RuneNative)
+	balanceAcc1 = mgr.Keeper().GetBalanceOf(ctx, acc1, common.DecaNative)
 	c.Assert(balanceAcc1.Amount.Equal(math.NewInt(157_499_999_99950000)), Equals, true)
-	c.Assert(balanceAcc1.Denom, Equals, common.RuneNative.Native())
+	c.Assert(balanceAcc1.Denom, Equals, common.DecaNative.Native())
 
-	balanceAcc2 = mgr.Keeper().GetBalanceOf(ctx, acc2, common.RuneNative)
+	balanceAcc2 = mgr.Keeper().GetBalanceOf(ctx, acc2, common.DecaNative)
 	c.Assert(balanceAcc2.Amount.Equal(math.NewInt(52_499_999_99950001)), Equals, true)
-	c.Assert(balanceAcc2.Denom, Equals, common.RuneNative.Native())
+	c.Assert(balanceAcc2.Denom, Equals, common.DecaNative.Native())
 
-	balanceAcc4 = mgr.Keeper().GetBalanceOf(ctx, acc4, common.RuneNative)
+	balanceAcc4 = mgr.Keeper().GetBalanceOf(ctx, acc4, common.DecaNative)
 	c.Assert(balanceAcc4.IsZero(), Equals, true)
 
-	balanceClaiming := mgr.Keeper().GetBalanceOfModule(ctx, TCYClaimingName, common.RuneNative.Native())
+	balanceClaiming := mgr.Keeper().GetBalanceOfModule(ctx, TCYClaimingName, common.DecaNative.Native())
 	c.Assert(balanceClaiming.Equal(math.NewUint(99999)), Equals, true)
 
-	balanceTCY = mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.RuneNative)
+	balanceTCY = mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.DecaNative)
 	c.Assert(balanceTCY.Amount.IsZero(), Equals, true)
 
 	// Move acc1, acc2 and claiming module RUNE balances to zero
-	coin = common.NewCoin(common.RuneNative, cosmos.NewUint(balanceAcc1.Amount.Uint64()))
+	coin = common.NewCoin(common.DecaNative, cosmos.NewUint(balanceAcc1.Amount.Uint64()))
 	err = mgr.Keeper().SendFromAccountToModule(ctx, acc1, ModuleName, common.NewCoins(coin))
 	c.Assert(err, IsNil)
-	balanceAcc1 = mgr.Keeper().GetBalanceOf(ctx, acc1, common.RuneNative)
+	balanceAcc1 = mgr.Keeper().GetBalanceOf(ctx, acc1, common.DecaNative)
 	c.Assert(balanceAcc1.Amount.IsZero(), Equals, true)
 
-	coin = common.NewCoin(common.RuneNative, cosmos.NewUint(balanceAcc2.Amount.Uint64()))
+	coin = common.NewCoin(common.DecaNative, cosmos.NewUint(balanceAcc2.Amount.Uint64()))
 	err = mgr.Keeper().SendFromAccountToModule(ctx, acc2, ModuleName, common.NewCoins(coin))
 	c.Assert(err, IsNil)
-	balanceAcc2 = mgr.Keeper().GetBalanceOf(ctx, acc2, common.RuneNative)
+	balanceAcc2 = mgr.Keeper().GetBalanceOf(ctx, acc2, common.DecaNative)
 	c.Assert(balanceAcc2.Amount.IsZero(), Equals, true)
 
-	coin = common.NewCoin(common.RuneNative, cosmos.NewUint(balanceClaiming.Uint64()))
+	coin = common.NewCoin(common.DecaNative, cosmos.NewUint(balanceClaiming.Uint64()))
 	err = mgr.Keeper().SendFromModuleToModule(ctx, TCYClaimingName, ModuleName, common.NewCoins(coin))
 	c.Assert(err, IsNil)
-	balanceClaiming = mgr.Keeper().GetBalanceOfModule(ctx, TCYClaimingName, common.RuneNative.Native())
+	balanceClaiming = mgr.Keeper().GetBalanceOfModule(ctx, TCYClaimingName, common.DecaNative.Native())
 	c.Assert(balanceClaiming.IsZero(), Equals, true)
 
 	// Change distribution to acc1 = 50%, acc2 = 25% and acc4 = 25%
@@ -1457,22 +1457,22 @@ func (s *NetworkManagerTestSuite) TestDistributeTCYStake(c *C) {
 	// Check balances, accounts should have their corresponding part: 50% to acc1,
 	// 25% to acc2, 25% to acc3 and acc4 should not receive rune.
 	// TCYStake should not have funds after the distribution
-	balanceAcc1 = mgr.Keeper().GetBalanceOf(ctx, acc1, common.RuneNative)
+	balanceAcc1 = mgr.Keeper().GetBalanceOf(ctx, acc1, common.DecaNative)
 	c.Assert(balanceAcc1.Amount.Equal(math.NewInt(210_000_000_00000000)), Equals, true)
-	c.Assert(balanceAcc1.Denom, Equals, common.RuneNative.Native())
+	c.Assert(balanceAcc1.Denom, Equals, common.DecaNative.Native())
 
-	balanceAcc2 = mgr.Keeper().GetBalanceOf(ctx, acc2, common.RuneNative)
+	balanceAcc2 = mgr.Keeper().GetBalanceOf(ctx, acc2, common.DecaNative)
 	c.Assert(balanceAcc2.Amount.Equal(math.NewInt(105_000_000_00000000)), Equals, true)
-	c.Assert(balanceAcc2.Denom, Equals, common.RuneNative.Native())
+	c.Assert(balanceAcc2.Denom, Equals, common.DecaNative.Native())
 
-	balanceAcc3 = mgr.Keeper().GetBalanceOf(ctx, acc3, common.RuneNative)
+	balanceAcc3 = mgr.Keeper().GetBalanceOf(ctx, acc3, common.DecaNative)
 	c.Assert(balanceAcc3.Amount.Equal(math.NewInt(105_000_000_00000000)), Equals, true)
-	c.Assert(balanceAcc3.Denom, Equals, common.RuneNative.Native())
+	c.Assert(balanceAcc3.Denom, Equals, common.DecaNative.Native())
 
-	balanceAcc4 = mgr.Keeper().GetBalanceOf(ctx, acc4, common.RuneNative)
+	balanceAcc4 = mgr.Keeper().GetBalanceOf(ctx, acc4, common.DecaNative)
 	c.Assert(balanceAcc4.IsZero(), Equals, true)
 
-	balanceTCY = mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.RuneNative)
+	balanceTCY = mgr.Keeper().GetBalanceOf(ctx, tcyStakeAddress, common.DecaNative)
 	c.Assert(balanceTCY.Amount.IsZero(), Equals, true)
 }
 
@@ -1481,29 +1481,29 @@ func (s *NetworkManagerTestSuite) TestGetTCYStakeAmountToDistribute(c *C) {
 	nmgr := newNetworkMgr(mgr.Keeper(), NewTxStoreDummy(), NewDummyEventMgr())
 	ver := GetCurrentVersion()
 	constAccessor := constants.GetConstantValues(ver)
-	minRune := constAccessor.GetInt64Value(constants.MinRuneForTCYStakeDistribution)
+	minRune := constAccessor.GetInt64Value(constants.MinDecaForTCYStakeDistribution)
 
-	// If funds are less than MinRuneForTCYStakeDistribution it should NOT distribute that amount
+	// If funds are less than MinDecaForTCYStakeDistribution it should NOT distribute that amount
 	amount := uint64(minRune - 1)
 	tcyStakeAmount := cosmos.NewUint(amount)
 	result := nmgr.getTCYStakeAmountToDistribute(tcyStakeAmount, minRune)
 	c.Assert(result.IsZero(), Equals, true)
 
-	// If funds are equal to MinRuneForTCYStakeDistribution it should distribute that amount
+	// If funds are equal to MinDecaForTCYStakeDistribution it should distribute that amount
 	amount = uint64(minRune)
 	tcyStakeAmount = cosmos.NewUint(amount)
 	result = nmgr.getTCYStakeAmountToDistribute(tcyStakeAmount, minRune)
 	c.Assert(result.IsZero(), Equals, false)
 	c.Assert(result.Equal(tcyStakeAmount), Equals, true)
 
-	// If funds are equal to 2x MinRuneForTCYStakeDistribution it should distribute that amount
+	// If funds are equal to 2x MinDecaForTCYStakeDistribution it should distribute that amount
 	amount = uint64(minRune * 2)
 	tcyStakeAmount = cosmos.NewUint(amount)
 	result = nmgr.getTCYStakeAmountToDistribute(tcyStakeAmount, minRune)
 	c.Assert(result.IsZero(), Equals, false)
 	c.Assert(result.Equal(tcyStakeAmount), Equals, true)
 
-	// If funds are equal to 2.5x MinRuneForTCYStakeDistribution it should only distribute 2x
+	// If funds are equal to 2.5x MinDecaForTCYStakeDistribution it should only distribute 2x
 	amount = uint64(float64(minRune) * 2.5)
 	amoutMul2 := uint64(minRune * 2)
 	tcyStakeAmount = cosmos.NewUint(amount)
@@ -1520,7 +1520,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvency(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.PendingInboundAsset = cosmos.NewUint(10 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
@@ -1560,7 +1560,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvency(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(200 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(200 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(200 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -1581,7 +1581,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvency(c *C) {
 			Chain: common.BTCChain,
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(5*common.One))},
 		},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 	}
 	c.Assert(mgr.Keeper().SetSwapQueueItem(ctx, swapMsg, 0), IsNil)
 
@@ -1607,7 +1607,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvency(c *C) {
 	synthPool := NewPool()
 	synthPool.Asset = synthBTC
 	synthPool.BalanceAsset = cosmos.NewUint(80 * common.One)
-	synthPool.BalanceRune = cosmos.NewUint(80 * common.One)
+	synthPool.BalanceDeca = cosmos.NewUint(80 * common.One)
 	synthPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, synthPool), IsNil)
 
@@ -1617,7 +1617,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvency(c *C) {
 	derivedPool := NewPool()
 	derivedPool.Asset = derivedBTCAsset
 	derivedPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	derivedPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	derivedPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	derivedPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, derivedPool), IsNil)
 
@@ -1625,7 +1625,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvency(c *C) {
 	rujiPool := NewPool()
 	rujiPool.Asset = common.RUJI
 	rujiPool.BalanceAsset = cosmos.NewUint(50 * common.One)
-	rujiPool.BalanceRune = cosmos.NewUint(50 * common.One)
+	rujiPool.BalanceDeca = cosmos.NewUint(50 * common.One)
 	rujiPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, rujiPool), IsNil)
 
@@ -1654,7 +1654,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvencyWithStreamingSwaps
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One) // Pool has 100 BTC from LPs + processed streaming swaps
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -1675,7 +1675,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvencyWithStreamingSwaps
 			Chain: common.BTCChain,
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(10*common.One))},
 		},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 	}
 	c.Assert(mgr.Keeper().SetSwapQueueItem(ctx, swapMsg, 0), IsNil)
 
@@ -1697,7 +1697,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvencyWithStreamingSwaps
 			Chain: common.BTCChain,
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(50*common.One))}, // Full deposit: 50 BTC
 		},
-		TargetAsset:    common.RuneAsset(),
+		TargetAsset:    common.DecaAsset(),
 		StreamInterval: 10, // Makes it a legacy streaming swap (V1)
 		Version:        types.SwapVersion_v1,
 	}
@@ -1729,7 +1729,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvencyWithStreamingSwaps
 			Chain: common.BTCChain,
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(30*common.One))}, // Full deposit: 30 BTC
 		},
-		TargetAsset: common.RuneAsset(),
+		TargetAsset: common.DecaAsset(),
 		Version:     types.SwapVersion_v2,
 		State: &types.SwapState{
 			Quantity: 10, // Makes it a streaming swap (State.Quantity > 1)
@@ -1764,7 +1764,7 @@ func (s *NetworkManagerTestSuite) TestCalculateNetworkSolvencyWithStreamingSwaps
 			Chain: common.BTCChain,
 			Coins: common.Coins{common.NewCoin(common.BTCAsset, cosmos.NewUint(25*common.One))},
 		},
-		TargetAsset:    common.RuneAsset(),
+		TargetAsset:    common.DecaAsset(),
 		StreamInterval: 10,
 		Version:        types.SwapVersion_v1,
 	}
@@ -1792,14 +1792,14 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapTargetOutput(c *C) {
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(80 * common.One) // Pool already emitted 20 BTC to streaming swap output
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -1874,7 +1874,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapTargetOutputFromNativ
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(80 * common.One) // Pool already emitted 20 BTC
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -1893,7 +1893,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapTargetOutputFromNativ
 		Tx: common.Tx{
 			ID:    streamingTxID,
 			Chain: common.THORChain,
-			Coins: common.Coins{common.NewCoin(common.RuneAsset(), cosmos.NewUint(50*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaAsset(), cosmos.NewUint(50*common.One))},
 		},
 		TargetAsset: common.BTCAsset,
 		SwapType:    types.SwapType_market,
@@ -1930,7 +1930,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapTargetSynthOutput(c *
 	ethPool := NewPool()
 	ethPool.Asset = common.ETHAsset
 	ethPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	ethPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	ethPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	ethPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, ethPool), IsNil)
 
@@ -1938,7 +1938,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapTargetSynthOutput(c *
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One) // Synth output should not reduce this
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -2007,7 +2007,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapNativeSourceTargetOut
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(80 * common.One) // Pool emitted 20 BTC
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -2026,7 +2026,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapNativeSourceTargetOut
 		Tx: common.Tx{
 			ID:    streamingTxID,
 			Chain: common.THORChain,
-			Coins: common.Coins{common.NewCoin(common.RuneNative, cosmos.NewUint(50*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaNative, cosmos.NewUint(50*common.One))},
 		},
 		TargetAsset: common.BTCAsset,
 		Version:     types.SwapVersion_v2,
@@ -2069,7 +2069,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapSynthTargetNotSubtrac
 	btcPool := NewPool()
 	btcPool.Asset = common.BTCAsset
 	btcPool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	btcPool.BalanceRune = cosmos.NewUint(100 * common.One)
+	btcPool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	btcPool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, btcPool), IsNil)
 
@@ -2090,7 +2090,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyStreamingSwapSynthTargetNotSubtrac
 		Tx: common.Tx{
 			ID:    streamingTxID,
 			Chain: common.THORChain,
-			Coins: common.Coins{common.NewCoin(common.RuneNative, cosmos.NewUint(50*common.One))},
+			Coins: common.Coins{common.NewCoin(common.DecaNative, cosmos.NewUint(50*common.One))},
 		},
 		TargetAsset: synthTarget,
 		Version:     types.SwapVersion_v2,
@@ -2130,7 +2130,7 @@ func (s *NetworkManagerTestSuite) TestProcessPostChurnSolvency(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2213,7 +2213,7 @@ func (s *NetworkManagerTestSuite) TestCreateSwapToOverSolvency(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	pool.BalanceRune = cosmos.NewUint(1000 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(1000 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2249,7 +2249,7 @@ func (s *NetworkManagerTestSuite) TestCreateSwapToOverSolvency(c *C) {
 	c.Assert(foundSwap, NotNil)
 	c.Assert(foundSwap.Tx.Coins[0].Asset.Equals(common.BTCAsset), Equals, true)
 	c.Assert(foundSwap.Tx.Coins[0].Amount.Equal(swapAmount), Equals, true)
-	c.Assert(foundSwap.TargetAsset.Equals(common.RuneAsset()), Equals, true)
+	c.Assert(foundSwap.TargetAsset.Equals(common.DecaAsset()), Equals, true)
 
 	// Verify streaming swap parameters
 	c.Assert(foundSwap.StreamInterval, Equals, uint64(1))
@@ -2286,7 +2286,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyWithScheduledOutbounds(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2332,7 +2332,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyWithPendingOutboundsAtPastHeight(c
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2406,7 +2406,7 @@ func (s *NetworkManagerTestSuite) TestSolvencyWithTradeAndSecuredAssets(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2484,7 +2484,7 @@ func (s *NetworkManagerTestSuite) TestProcessPostChurnSolvencyEdgeCases(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(100 * common.One)
-	pool.BalanceRune = cosmos.NewUint(100 * common.One)
+	pool.BalanceDeca = cosmos.NewUint(100 * common.One)
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2530,7 +2530,7 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncome(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	pool.BalanceRune = cosmos.NewUint(2000 * common.One) // 2:1 RUNE:BTC ratio
+	pool.BalanceDeca = cosmos.NewUint(2000 * common.One) // 2:1 RUNE:BTC ratio
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2550,7 +2550,7 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncome(c *C) {
 			if msg.Tx.Coins[0].Asset.Equals(common.BTCAsset) {
 				foundSwap = true
 				c.Assert(msg.Tx.Coins[0].Amount.Equal(coin.Amount), Equals, true)
-				c.Assert(msg.TargetAsset.Equals(common.RuneAsset()), Equals, true)
+				c.Assert(msg.TargetAsset.Equals(common.DecaAsset()), Equals, true)
 			}
 		}
 		c.Assert(foundSwap, Equals, true, Commentf("swap should have been created in queue"))
@@ -2560,17 +2560,17 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncome(c *C) {
 
 	// Test 2: Process RUNE directly to over-solvency address
 	FundModule(c, ctx, mgr.Keeper(), AsgardName, 100*common.One)
-	runeCoin := common.NewCoin(common.RuneAsset(), cosmos.NewUint(50*common.One))
+	runeCoin := common.NewCoin(common.DecaAsset(), cosmos.NewUint(50*common.One))
 	overSolvencyAddrStr := mgr.Keeper().GetConstants().GetStringValue(constants.OverSolvencyAddress)
 	overSolvencyAccAddr, addrErr := cosmos.AccAddressFromBech32(overSolvencyAddrStr)
 	c.Assert(addrErr, IsNil)
-	runeBalanceBefore := mgr.Keeper().GetBalanceOf(ctx, overSolvencyAccAddr, common.RuneAsset())
+	runeBalanceBefore := mgr.Keeper().GetBalanceOf(ctx, overSolvencyAccAddr, common.DecaAsset())
 
 	err = nmgr.SwapToOverSolvencyIncome(ctx, mgr, runeCoin)
 	c.Assert(err, IsNil)
 
 	// Verify RUNE was transferred to over-solvency address
-	runeBalanceAfter := mgr.Keeper().GetBalanceOf(ctx, overSolvencyAccAddr, common.RuneAsset())
+	runeBalanceAfter := mgr.Keeper().GetBalanceOf(ctx, overSolvencyAccAddr, common.DecaAsset())
 	c.Assert(runeBalanceAfter.Amount.Sub(runeBalanceBefore.Amount).Uint64(), Equals, runeCoin.Amount.Uint64())
 
 	// Test 3: Zero amount should return nil without error
@@ -2605,7 +2605,7 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncomeTradeAsset(c *C) {
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	pool.BalanceRune = cosmos.NewUint(3000 * common.One) // 3:1 RUNE:BTC ratio
+	pool.BalanceDeca = cosmos.NewUint(3000 * common.One) // 3:1 RUNE:BTC ratio
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2627,7 +2627,7 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncomeTradeAsset(c *C) {
 			if msg.Tx.Coins[0].Asset.Equals(tradeAsset) {
 				foundSwap = true
 				c.Assert(msg.Tx.Coins[0].Amount.Equal(tradeCoin.Amount), Equals, true)
-				c.Assert(msg.TargetAsset.Equals(common.RuneAsset()), Equals, true)
+				c.Assert(msg.TargetAsset.Equals(common.DecaAsset()), Equals, true)
 			}
 		}
 		c.Assert(foundSwap, Equals, true, Commentf("swap should have been created in queue"))
@@ -2650,7 +2650,7 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncomeSecuredAsset(c *C)
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
 	pool.BalanceAsset = cosmos.NewUint(1000 * common.One)
-	pool.BalanceRune = cosmos.NewUint(4000 * common.One) // 4:1 RUNE:BTC ratio
+	pool.BalanceDeca = cosmos.NewUint(4000 * common.One) // 4:1 RUNE:BTC ratio
 	pool.Status = PoolAvailable
 	c.Assert(mgr.Keeper().SetPool(ctx, pool), IsNil)
 
@@ -2672,7 +2672,7 @@ func (s *NetworkManagerTestSuite) TestSwapToOverSolvencyIncomeSecuredAsset(c *C)
 			if msg.Tx.Coins[0].Asset.Equals(securedAsset) {
 				foundSwap = true
 				c.Assert(msg.Tx.Coins[0].Amount.Equal(securedCoin.Amount), Equals, true)
-				c.Assert(msg.TargetAsset.Equals(common.RuneAsset()), Equals, true)
+				c.Assert(msg.TargetAsset.Equals(common.DecaAsset()), Equals, true)
 			}
 		}
 		c.Assert(foundSwap, Equals, true, Commentf("swap should have been created in queue"))

@@ -40,7 +40,7 @@ var (
 
 // fundModuleBench funds a module for benchmarking (no check.C dependency)
 func fundModuleBench(b testing.TB, ctx cosmos.Context, k keeper.Keeper, name string, amt uint64) {
-	coin := common.NewCoin(common.RuneNative, cosmos.NewUint(amt))
+	coin := common.NewCoin(common.DecaNative, cosmos.NewUint(amt))
 	err := k.MintToModule(ctx, ModuleName, coin)
 	if err != nil {
 		b.Fatal(err)
@@ -97,7 +97,7 @@ func setupBenchmarkManager(b *testing.B) (cosmos.Context, *Mgrs) {
 			types.LendingName:            {},
 			types.AffiliateCollectorName: {},
 			types.TreasuryName:           {},
-			types.RUNEPoolName:           {},
+			types.DECAPoolName:           {},
 			types.TCYStakeName:           {},
 			types.TCYClaimingName:        {},
 		},
@@ -116,7 +116,7 @@ func setupBenchmarkManager(b *testing.B) (cosmos.Context, *Mgrs) {
 	)
 
 	err = bk.MintCoins(ctx, ModuleName, cosmos.Coins{
-		cosmos.NewCoin(common.RuneAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
+		cosmos.NewCoin(common.DecaAsset().Native(), cosmos.NewInt(200_000_000_00000000)),
 	})
 	if err != nil {
 		b.Fatal(err)
@@ -189,7 +189,7 @@ func setupBenchmarkPools(ctx cosmos.Context, mgr *Mgrs) error {
 	for _, p := range pools {
 		pool := NewPool()
 		pool.Asset = p.asset
-		pool.BalanceRune = cosmos.NewUint(p.runeBalance * common.One)
+		pool.BalanceDeca = cosmos.NewUint(p.runeBalance * common.One)
 		pool.BalanceAsset = cosmos.NewUint(p.assetBalance * common.One)
 		pool.Status = PoolAvailable
 		if err := mgr.Keeper().SetPool(ctx, pool); err != nil {
@@ -325,7 +325,7 @@ func BenchmarkQuoteSwapEnabledWithQueue(b *testing.B) {
 					common.NewCoin(common.BTCAsset, cosmos.NewUint(10000000)),
 				},
 			},
-			TargetAsset:             common.RuneAsset(),
+			TargetAsset:             common.DecaAsset(),
 			TradeTarget:             cosmos.ZeroUint(),
 			Signer:                  GetRandomBech32Addr(),
 			AggregatorTargetAddress: "",

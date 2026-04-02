@@ -20,7 +20,7 @@ type DerivedPool struct {
 	Status string `json:"status"`
 	Decimals *int64 `json:"decimals,omitempty"`
 	BalanceAsset string `json:"balance_asset"`
-	BalanceRune string `json:"balance_rune"`
+	BalanceDeca string `json:"balance_deca"`
 	// the depth of the derived virtual pool relative to L1 pool (in basis points)
 	DerivedDepthBps string `json:"derived_depth_bps"`
 }
@@ -29,12 +29,12 @@ type DerivedPool struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDerivedPool(asset string, status string, balanceAsset string, balanceRune string, derivedDepthBps string) *DerivedPool {
+func NewDerivedPool(asset string, status string, balanceAsset string, balanceDeca string, derivedDepthBps string) *DerivedPool {
 	this := DerivedPool{}
 	this.Asset = asset
 	this.Status = status
 	this.BalanceAsset = balanceAsset
-	this.BalanceRune = balanceRune
+	this.BalanceDeca = balanceDeca
 	this.DerivedDepthBps = derivedDepthBps
 	return &this
 }
@@ -151,28 +151,28 @@ func (o *DerivedPool) SetBalanceAsset(v string) {
 	o.BalanceAsset = v
 }
 
-// GetBalanceRune returns the BalanceRune field value
-func (o *DerivedPool) GetBalanceRune() string {
+// GetBalanceDeca returns the BalanceDeca field value
+func (o *DerivedPool) GetBalanceDeca() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.BalanceRune
+	return o.BalanceDeca
 }
 
-// GetBalanceRuneOk returns a tuple with the BalanceRune field value
+// GetBalanceDecaOk returns a tuple with the BalanceDeca field value
 // and a boolean to check if the value has been set.
-func (o *DerivedPool) GetBalanceRuneOk() (*string, bool) {
+func (o *DerivedPool) GetBalanceDecaOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.BalanceRune, true
+	return &o.BalanceDeca, true
 }
 
-// SetBalanceRune sets field value
-func (o *DerivedPool) SetBalanceRune(v string) {
-	o.BalanceRune = v
+// SetBalanceDeca sets field value
+func (o *DerivedPool) SetBalanceDeca(v string) {
+	o.BalanceDeca = v
 }
 
 // GetDerivedDepthBps returns the DerivedDepthBps field value
@@ -214,7 +214,7 @@ func (o DerivedPool) MarshalJSON_deprecated() ([]byte, error) {
 		toSerialize["balance_asset"] = o.BalanceAsset
 	}
 	if true {
-		toSerialize["balance_rune"] = o.BalanceRune
+		toSerialize["balance_deca"] = o.BalanceDeca
 	}
 	if true {
 		toSerialize["derived_depth_bps"] = o.DerivedDepthBps

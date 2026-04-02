@@ -8,12 +8,12 @@ import (
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// RUNEPool
+// DECAPool
 ////////////////////////////////////////////////////////////////////////////////////////
 
-func (k KVStore) GetRUNEPool(ctx cosmos.Context) (RUNEPool, error) {
-	record := NewRUNEPool()
-	key := k.GetKey(prefixRUNEPool, "")
+func (k KVStore) GetDECAPool(ctx cosmos.Context) (DECAPool, error) {
+	record := NewDECAPool()
+	key := k.GetKey(prefixDECAPool, "")
 
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	if !store.Has(key) {
@@ -27,9 +27,9 @@ func (k KVStore) GetRUNEPool(ctx cosmos.Context) (RUNEPool, error) {
 	return record, nil
 }
 
-func (k KVStore) SetRUNEPool(ctx cosmos.Context, pool RUNEPool) {
+func (k KVStore) SetDECAPool(ctx cosmos.Context, pool DECAPool) {
 	store := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	key := k.GetKey(prefixRUNEPool, "")
+	key := k.GetKey(prefixDECAPool, "")
 	buf := k.cdc.MustMarshal(&pool)
 	store.Set(key, buf)
 }
@@ -69,7 +69,7 @@ func (k KVStore) GetRUNEProviderIterator(ctx cosmos.Context) cosmos.Iterator {
 // GetRUNEProvider retrieve RUNE provider from the data store
 func (k KVStore) GetRUNEProvider(ctx cosmos.Context, addr cosmos.AccAddress) (RUNEProvider, error) {
 	record := RUNEProvider{
-		RuneAddress:    addr,
+		DecaAddress:    addr,
 		DepositAmount:  cosmos.ZeroUint(),
 		WithdrawAmount: cosmos.ZeroUint(),
 		Units:          cosmos.ZeroUint(),

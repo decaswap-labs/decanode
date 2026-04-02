@@ -9,25 +9,25 @@ import (
 )
 
 var (
-	_ sdk.Msg              = &MsgRunePoolDeposit{}
-	_ sdk.HasValidateBasic = &MsgRunePoolDeposit{}
-	_ sdk.LegacyMsg        = &MsgRunePoolDeposit{}
+	_ sdk.Msg              = &MsgDecaPoolDeposit{}
+	_ sdk.HasValidateBasic = &MsgDecaPoolDeposit{}
+	_ sdk.LegacyMsg        = &MsgDecaPoolDeposit{}
 
-	_ sdk.Msg              = &MsgRunePoolWithdraw{}
-	_ sdk.HasValidateBasic = &MsgRunePoolWithdraw{}
-	_ sdk.LegacyMsg        = &MsgRunePoolWithdraw{}
+	_ sdk.Msg              = &MsgDecaPoolWithdraw{}
+	_ sdk.HasValidateBasic = &MsgDecaPoolWithdraw{}
+	_ sdk.LegacyMsg        = &MsgDecaPoolWithdraw{}
 )
 
-// NewMsgRunePoolDeposit create new MsgRunePoolDeposit message
-func NewMsgRunePoolDeposit(signer cosmos.AccAddress, tx common.Tx) *MsgRunePoolDeposit {
-	return &MsgRunePoolDeposit{
+// NewMsgDecaPoolDeposit create new MsgDecaPoolDeposit message
+func NewMsgDecaPoolDeposit(signer cosmos.AccAddress, tx common.Tx) *MsgDecaPoolDeposit {
+	return &MsgDecaPoolDeposit{
 		Signer: signer,
 		Tx:     tx,
 	}
 }
 
 // ValidateBasic runs stateless checks on the message
-func (m *MsgRunePoolDeposit) ValidateBasic() error {
+func (m *MsgDecaPoolDeposit) ValidateBasic() error {
 	if !m.Tx.Chain.Equals(common.THORChain) {
 		return cosmos.ErrUnauthorized("chain must be THORChain")
 	}
@@ -37,7 +37,7 @@ func (m *MsgRunePoolDeposit) ValidateBasic() error {
 	if !m.Tx.Coins[0].Asset.Chain.IsTHORChain() {
 		return cosmos.ErrInvalidCoins("coin chain must be THORChain")
 	}
-	if !m.Tx.Coins[0].IsRune() {
+	if !m.Tx.Coins[0].IsDeca() {
 		return cosmos.ErrInvalidCoins("coin must be RUNE")
 	}
 	if m.Signer.Empty() {
@@ -50,13 +50,13 @@ func (m *MsgRunePoolDeposit) ValidateBasic() error {
 }
 
 // GetSigners defines whose signature is required
-func (m *MsgRunePoolDeposit) GetSigners() []cosmos.AccAddress {
+func (m *MsgDecaPoolDeposit) GetSigners() []cosmos.AccAddress {
 	return []cosmos.AccAddress{m.Signer}
 }
 
-// NewMsgRunePoolWithdraw create new MsgRunePoolWithdraw message
-func NewMsgRunePoolWithdraw(signer cosmos.AccAddress, tx common.Tx, basisPoints cosmos.Uint, affAddr common.Address, affBps cosmos.Uint) *MsgRunePoolWithdraw {
-	return &MsgRunePoolWithdraw{
+// NewMsgDecaPoolWithdraw create new MsgDecaPoolWithdraw message
+func NewMsgDecaPoolWithdraw(signer cosmos.AccAddress, tx common.Tx, basisPoints cosmos.Uint, affAddr common.Address, affBps cosmos.Uint) *MsgDecaPoolWithdraw {
+	return &MsgDecaPoolWithdraw{
 		Signer:               signer,
 		Tx:                   tx,
 		BasisPoints:          basisPoints,
@@ -66,7 +66,7 @@ func NewMsgRunePoolWithdraw(signer cosmos.AccAddress, tx common.Tx, basisPoints 
 }
 
 // ValidateBasic runs stateless checks on the message
-func (m *MsgRunePoolWithdraw) ValidateBasic() error {
+func (m *MsgDecaPoolWithdraw) ValidateBasic() error {
 	if !m.Tx.Coins.IsEmpty() {
 		return cosmos.ErrInvalidCoins("coins must be empty (zero amount)")
 	}
@@ -87,6 +87,6 @@ func (m *MsgRunePoolWithdraw) ValidateBasic() error {
 }
 
 // GetSigners defines whose signature is required
-func (m *MsgRunePoolWithdraw) GetSigners() []cosmos.AccAddress {
+func (m *MsgDecaPoolWithdraw) GetSigners() []cosmos.AccAddress {
 	return []cosmos.AccAddress{m.Signer}
 }

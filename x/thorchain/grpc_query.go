@@ -238,15 +238,15 @@ func (s *queryServer) Ragnarok(c context.Context, req *types.QueryRagnarokReques
 	return s.queryRagnarok(ctx, req)
 }
 
-func (s *queryServer) RunePool(c context.Context, req *types.QueryRunePoolRequest) (*types.QueryRunePoolResponse, error) {
+func (s *queryServer) DecaPool(c context.Context, req *types.QueryDecaPoolRequest) (*types.QueryDecaPoolResponse, error) {
 	if err := checkHeightParam(req.Height); err != nil {
 		return nil, err
 	}
 	ctx := s.unwrapSdkContext(c)
-	return s.queryRUNEPool(ctx, req)
+	return s.queryDECAPool(ctx, req)
 }
 
-func (s *queryServer) RuneProvider(c context.Context, req *types.QueryRuneProviderRequest) (*types.QueryRuneProviderResponse, error) {
+func (s *queryServer) DecaProvider(c context.Context, req *types.QueryDecaProviderRequest) (*types.QueryDecaProviderResponse, error) {
 	if err := checkHeightParam(req.Height); err != nil {
 		return nil, err
 	}
@@ -254,7 +254,7 @@ func (s *queryServer) RuneProvider(c context.Context, req *types.QueryRuneProvid
 	return s.queryRUNEProvider(ctx, req)
 }
 
-func (s *queryServer) RuneProviders(c context.Context, req *types.QueryRuneProvidersRequest) (*types.QueryRuneProvidersResponse, error) {
+func (s *queryServer) DecaProviders(c context.Context, req *types.QueryDecaProvidersRequest) (*types.QueryDecaProvidersResponse, error) {
 	if err := checkHeightParam(req.Height); err != nil {
 		return nil, err
 	}

@@ -39,10 +39,10 @@ func ConvertAssetAmount(coin openapi.Coin, asset string) (cosmos.Uint, error) {
 
 	// convert the amount
 	converted := cosmos.NewUintFromString(coin.Amount).
-		Mul(cosmos.NewUintFromString(sourcePool.BalanceRune)).
+		Mul(cosmos.NewUintFromString(sourcePool.BalanceDeca)).
 		Quo(cosmos.NewUintFromString(sourcePool.BalanceAsset)).
 		Mul(cosmos.NewUintFromString(targetPool.BalanceAsset)).
-		Quo(cosmos.NewUintFromString(targetPool.BalanceRune))
+		Quo(cosmos.NewUintFromString(targetPool.BalanceDeca))
 
 	return converted, nil
 }

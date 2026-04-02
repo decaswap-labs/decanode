@@ -16,13 +16,13 @@ var (
 )
 
 // NewMsgAddLiquidity is a constructor function for MsgAddLiquidity
-func NewMsgAddLiquidity(tx common.Tx, asset common.Asset, r, amount cosmos.Uint, runeAddr, assetAddr, affAddr common.Address, affPts cosmos.Uint, signer cosmos.AccAddress) *MsgAddLiquidity {
+func NewMsgAddLiquidity(tx common.Tx, asset common.Asset, r, amount cosmos.Uint, decaAddr, assetAddr, affAddr common.Address, affPts cosmos.Uint, signer cosmos.AccAddress) *MsgAddLiquidity {
 	return &MsgAddLiquidity{
 		Tx:                   tx,
 		Asset:                asset,
 		AssetAmount:          amount,
 		RuneAmount:           r,
-		RuneAddress:          runeAddr,
+		DecaAddress:          decaAddr,
 		AssetAddress:         assetAddr,
 		AffiliateAddress:     affAddr,
 		AffiliateBasisPoints: affPts,
@@ -42,7 +42,7 @@ func (m *MsgAddLiquidity) ValidateBasic() error {
 		return cosmos.ErrUnknownRequest(err.Error())
 	}
 	// There is no dedicate pool for RUNE, because every pool will have RUNE, that's by design
-	if m.Asset.IsRune() {
+	if m.Asset.IsDeca() {
 		return cosmos.ErrUnknownRequest("asset cannot be rune")
 	}
 	// test scenario we get two coins, but none are rune, invalid liquidity provider
@@ -52,7 +52,7 @@ func (m *MsgAddLiquidity) ValidateBasic() error {
 	if len(m.Tx.Coins) > 2 {
 		return cosmos.ErrUnknownRequest("not expecting more than two coins in adding liquidity")
 	}
-	if m.RuneAddress.IsEmpty() && m.AssetAddress.IsEmpty() {
+	if m.DecaAddress.IsEmpty() && m.AssetAddress.IsEmpty() {
 		return cosmos.ErrUnknownRequest("rune address and asset address cannot be empty")
 	}
 	if m.AffiliateAddress.IsEmpty() && !m.AffiliateBasisPoints.IsZero() {
@@ -65,7 +65,7 @@ func (m *MsgAddLiquidity) ValidateBasic() error {
 		if m.AssetAddress.IsEmpty() {
 			return cosmos.ErrUnknownRequest("asset address cannot be empty")
 		}
-		if m.RuneAddress.IsEmpty() {
+		if m.DecaAddress.IsEmpty() {
 			return cosmos.ErrUnknownRequest("rune address cannot be empty")
 		}
 		if !m.AssetAddress.IsChain(common.THORChain) {

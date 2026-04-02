@@ -20,7 +20,7 @@ var (
 	fd_MsgAddLiquidity_asset                  protoreflect.FieldDescriptor
 	fd_MsgAddLiquidity_asset_amount           protoreflect.FieldDescriptor
 	fd_MsgAddLiquidity_rune_amount            protoreflect.FieldDescriptor
-	fd_MsgAddLiquidity_rune_address           protoreflect.FieldDescriptor
+	fd_MsgAddLiquidity_deca_address           protoreflect.FieldDescriptor
 	fd_MsgAddLiquidity_asset_address          protoreflect.FieldDescriptor
 	fd_MsgAddLiquidity_affiliate_address      protoreflect.FieldDescriptor
 	fd_MsgAddLiquidity_affiliate_basis_points protoreflect.FieldDescriptor
@@ -34,7 +34,7 @@ func init() {
 	fd_MsgAddLiquidity_asset = md_MsgAddLiquidity.Fields().ByName("asset")
 	fd_MsgAddLiquidity_asset_amount = md_MsgAddLiquidity.Fields().ByName("asset_amount")
 	fd_MsgAddLiquidity_rune_amount = md_MsgAddLiquidity.Fields().ByName("rune_amount")
-	fd_MsgAddLiquidity_rune_address = md_MsgAddLiquidity.Fields().ByName("rune_address")
+	fd_MsgAddLiquidity_deca_address = md_MsgAddLiquidity.Fields().ByName("deca_address")
 	fd_MsgAddLiquidity_asset_address = md_MsgAddLiquidity.Fields().ByName("asset_address")
 	fd_MsgAddLiquidity_affiliate_address = md_MsgAddLiquidity.Fields().ByName("affiliate_address")
 	fd_MsgAddLiquidity_affiliate_basis_points = md_MsgAddLiquidity.Fields().ByName("affiliate_basis_points")
@@ -130,9 +130,9 @@ func (x *fastReflection_MsgAddLiquidity) Range(f func(protoreflect.FieldDescript
 			return
 		}
 	}
-	if x.RuneAddress != "" {
-		value := protoreflect.ValueOfString(x.RuneAddress)
-		if !f(fd_MsgAddLiquidity_rune_address, value) {
+	if x.DecaAddress != "" {
+		value := protoreflect.ValueOfString(x.DecaAddress)
+		if !f(fd_MsgAddLiquidity_deca_address, value) {
 			return
 		}
 	}
@@ -183,8 +183,8 @@ func (x *fastReflection_MsgAddLiquidity) Has(fd protoreflect.FieldDescriptor) bo
 		return x.AssetAmount != ""
 	case "types.MsgAddLiquidity.rune_amount":
 		return x.RuneAmount != ""
-	case "types.MsgAddLiquidity.rune_address":
-		return x.RuneAddress != ""
+	case "types.MsgAddLiquidity.deca_address":
+		return x.DecaAddress != ""
 	case "types.MsgAddLiquidity.asset_address":
 		return x.AssetAddress != ""
 	case "types.MsgAddLiquidity.affiliate_address":
@@ -217,8 +217,8 @@ func (x *fastReflection_MsgAddLiquidity) Clear(fd protoreflect.FieldDescriptor) 
 		x.AssetAmount = ""
 	case "types.MsgAddLiquidity.rune_amount":
 		x.RuneAmount = ""
-	case "types.MsgAddLiquidity.rune_address":
-		x.RuneAddress = ""
+	case "types.MsgAddLiquidity.deca_address":
+		x.DecaAddress = ""
 	case "types.MsgAddLiquidity.asset_address":
 		x.AssetAddress = ""
 	case "types.MsgAddLiquidity.affiliate_address":
@@ -255,8 +255,8 @@ func (x *fastReflection_MsgAddLiquidity) Get(descriptor protoreflect.FieldDescri
 	case "types.MsgAddLiquidity.rune_amount":
 		value := x.RuneAmount
 		return protoreflect.ValueOfString(value)
-	case "types.MsgAddLiquidity.rune_address":
-		value := x.RuneAddress
+	case "types.MsgAddLiquidity.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfString(value)
 	case "types.MsgAddLiquidity.asset_address":
 		value := x.AssetAddress
@@ -298,8 +298,8 @@ func (x *fastReflection_MsgAddLiquidity) Set(fd protoreflect.FieldDescriptor, va
 		x.AssetAmount = value.Interface().(string)
 	case "types.MsgAddLiquidity.rune_amount":
 		x.RuneAmount = value.Interface().(string)
-	case "types.MsgAddLiquidity.rune_address":
-		x.RuneAddress = value.Interface().(string)
+	case "types.MsgAddLiquidity.deca_address":
+		x.DecaAddress = value.Interface().(string)
 	case "types.MsgAddLiquidity.asset_address":
 		x.AssetAddress = value.Interface().(string)
 	case "types.MsgAddLiquidity.affiliate_address":
@@ -342,8 +342,8 @@ func (x *fastReflection_MsgAddLiquidity) Mutable(fd protoreflect.FieldDescriptor
 		panic(fmt.Errorf("field asset_amount of message types.MsgAddLiquidity is not mutable"))
 	case "types.MsgAddLiquidity.rune_amount":
 		panic(fmt.Errorf("field rune_amount of message types.MsgAddLiquidity is not mutable"))
-	case "types.MsgAddLiquidity.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.MsgAddLiquidity is not mutable"))
+	case "types.MsgAddLiquidity.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.MsgAddLiquidity is not mutable"))
 	case "types.MsgAddLiquidity.asset_address":
 		panic(fmt.Errorf("field asset_address of message types.MsgAddLiquidity is not mutable"))
 	case "types.MsgAddLiquidity.affiliate_address":
@@ -375,7 +375,7 @@ func (x *fastReflection_MsgAddLiquidity) NewField(fd protoreflect.FieldDescripto
 		return protoreflect.ValueOfString("")
 	case "types.MsgAddLiquidity.rune_amount":
 		return protoreflect.ValueOfString("")
-	case "types.MsgAddLiquidity.rune_address":
+	case "types.MsgAddLiquidity.deca_address":
 		return protoreflect.ValueOfString("")
 	case "types.MsgAddLiquidity.asset_address":
 		return protoreflect.ValueOfString("")
@@ -470,7 +470,7 @@ func (x *fastReflection_MsgAddLiquidity) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -547,10 +547,10 @@ func (x *fastReflection_MsgAddLiquidity) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x32
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0x2a
 		}
@@ -783,7 +783,7 @@ func (x *fastReflection_MsgAddLiquidity) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 5:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -811,7 +811,7 @@ func (x *fastReflection_MsgAddLiquidity) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = string(dAtA[iNdEx:postIndex])
+				x.DecaAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 6:
 				if wireType != 2 {
@@ -1000,7 +1000,7 @@ type MsgAddLiquidity struct {
 	Asset                *common.Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	AssetAmount          string        `protobuf:"bytes,3,opt,name=asset_amount,json=assetAmount,proto3" json:"asset_amount,omitempty"`
 	RuneAmount           string        `protobuf:"bytes,4,opt,name=rune_amount,json=runeAmount,proto3" json:"rune_amount,omitempty"`
-	RuneAddress          string        `protobuf:"bytes,5,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress          string        `protobuf:"bytes,5,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	AssetAddress         string        `protobuf:"bytes,6,opt,name=asset_address,json=assetAddress,proto3" json:"asset_address,omitempty"`
 	AffiliateAddress     string        `protobuf:"bytes,7,opt,name=affiliate_address,json=affiliateAddress,proto3" json:"affiliate_address,omitempty"`
 	AffiliateBasisPoints string        `protobuf:"bytes,8,opt,name=affiliate_basis_points,json=affiliateBasisPoints,proto3" json:"affiliate_basis_points,omitempty"`
@@ -1055,9 +1055,9 @@ func (x *MsgAddLiquidity) GetRuneAmount() string {
 	return ""
 }
 
-func (x *MsgAddLiquidity) GetRuneAddress() string {
+func (x *MsgAddLiquidity) GetDecaAddress() string {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return ""
 }

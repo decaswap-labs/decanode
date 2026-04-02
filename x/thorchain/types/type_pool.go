@@ -49,11 +49,11 @@ type Pools []Pool
 // NewPool Returns a new Pool
 func NewPool() Pool {
 	return Pool{
-		BalanceRune:         cosmos.ZeroUint(),
+		BalanceDeca:         cosmos.ZeroUint(),
 		BalanceAsset:        cosmos.ZeroUint(),
 		SynthUnits:          cosmos.ZeroUint(),
 		LPUnits:             cosmos.ZeroUint(),
-		PendingInboundRune:  cosmos.ZeroUint(),
+		PendingInboundDeca:  cosmos.ZeroUint(),
 		PendingInboundAsset: cosmos.ZeroUint(),
 		Status:              PoolStatus_Available,
 	}
@@ -106,12 +106,12 @@ func (m Pool) IsEmpty() bool {
 // String implement fmt.Stringer
 func (m Pool) String() string {
 	sb := strings.Builder{}
-	sb.WriteString(fmt.Sprintln("rune-balance: " + m.BalanceRune.String()))
+	sb.WriteString(fmt.Sprintln("rune-balance: " + m.BalanceDeca.String()))
 	sb.WriteString(fmt.Sprintln("asset-balance: " + m.BalanceAsset.String()))
 	sb.WriteString(fmt.Sprintln("asset: " + m.Asset.String()))
 	sb.WriteString(fmt.Sprintln("synth-units: " + m.SynthUnits.String()))
 	sb.WriteString(fmt.Sprintln("lp-units: " + m.LPUnits.String()))
-	sb.WriteString(fmt.Sprintln("pending-inbound-rune: " + m.PendingInboundRune.String()))
+	sb.WriteString(fmt.Sprintln("pending-inbound-rune: " + m.PendingInboundDeca.String()))
 	sb.WriteString(fmt.Sprintln("pending-inbound-asset: " + m.PendingInboundAsset.String()))
 	sb.WriteString(fmt.Sprintln("status: " + m.Status.String()))
 	sb.WriteString(fmt.Sprintln("decimals:" + strconv.FormatInt(m.Decimals, 10)))
@@ -138,10 +138,10 @@ func (m Pool) EnsureValidPoolStatus(msg cosmos.Msg) error {
 
 // AssetValueInRune convert a specific amount of asset amt into its rune value
 func (m Pool) AssetValueInRune(amt cosmos.Uint) cosmos.Uint {
-	if m.BalanceRune.IsZero() || m.BalanceAsset.IsZero() {
+	if m.BalanceDeca.IsZero() || m.BalanceAsset.IsZero() {
 		return cosmos.ZeroUint()
 	}
-	return common.GetUncappedShare(m.BalanceRune, m.BalanceAsset, amt)
+	return common.GetUncappedShare(m.BalanceDeca, m.BalanceAsset, amt)
 }
 
 // RuneReimbursementForAssetWithdrawal returns the equivalent amount of rune for a
@@ -149,7 +149,7 @@ func (m Pool) AssetValueInRune(amt cosmos.Uint) cosmos.Uint {
 // this amount is added to the pool, the constant product of depths rule is
 // preserved.
 func (m Pool) RuneReimbursementForAssetWithdrawal(amt cosmos.Uint) cosmos.Uint {
-	if m.BalanceRune.IsZero() || m.BalanceAsset.IsZero() {
+	if m.BalanceDeca.IsZero() || m.BalanceAsset.IsZero() {
 		return cosmos.ZeroUint()
 	}
 	denom := common.SafeSub(m.BalanceAsset, amt)
@@ -159,15 +159,15 @@ func (m Pool) RuneReimbursementForAssetWithdrawal(amt cosmos.Uint) cosmos.Uint {
 		// case.
 		return cosmos.ZeroUint()
 	}
-	return common.GetUncappedShare(m.BalanceRune, denom, amt)
+	return common.GetUncappedShare(m.BalanceDeca, denom, amt)
 }
 
 // RuneValueInAsset convert a specific amount of rune amt into its asset value
 func (m Pool) RuneValueInAsset(amt cosmos.Uint) cosmos.Uint {
-	if m.BalanceRune.IsZero() || m.BalanceAsset.IsZero() {
+	if m.BalanceDeca.IsZero() || m.BalanceAsset.IsZero() {
 		return cosmos.ZeroUint()
 	}
-	assetAmt := common.GetUncappedShare(m.BalanceAsset, m.BalanceRune, amt)
+	assetAmt := common.GetUncappedShare(m.BalanceAsset, m.BalanceDeca, amt)
 	return cosmos.RoundToDecimal(assetAmt, m.Decimals)
 }
 
@@ -195,29 +195,29 @@ func (m Pools) Set(pool Pool) Pools {
 // amount is withdrawn from the pool, the constant product of depths rule is
 // preserved.
 func (m Pool) RuneDisbursementForAssetAdd(amt cosmos.Uint) cosmos.Uint {
-	if m.BalanceRune.IsZero() || m.BalanceAsset.IsZero() {
+	if m.BalanceDeca.IsZero() || m.BalanceAsset.IsZero() {
 		return cosmos.ZeroUint()
 	}
 	denom := m.BalanceAsset.Add(amt)
-	return common.GetUncappedShare(m.BalanceRune, denom, amt)
+	return common.GetUncappedShare(m.BalanceDeca, denom, amt)
 }
 
-// AssetDisbursementForRuneAdd returns the equivalent amount of asset for a
+// AssetDisbursementForDecaAdd returns the equivalent amount of asset for a
 // given amount of rune added to the pool, taking slip into account. When this
 // amount is withdrawn from the pool, the constant product of depths rule is
 // preserved.
-func (m Pool) AssetDisbursementForRuneAdd(amt cosmos.Uint) cosmos.Uint {
-	if m.BalanceRune.IsZero() || m.BalanceAsset.IsZero() {
+func (m Pool) AssetDisbursementForDecaAdd(amt cosmos.Uint) cosmos.Uint {
+	if m.BalanceDeca.IsZero() || m.BalanceAsset.IsZero() {
 		return cosmos.ZeroUint()
 	}
-	denom := m.BalanceRune.Add(amt)
+	denom := m.BalanceDeca.Add(amt)
 	outAmt := common.GetUncappedShare(m.BalanceAsset, denom, amt)
 	return cosmos.RoundToDecimal(outAmt, m.Decimals)
 }
 
 func (m Pool) GetLUVI() cosmos.Uint {
 	bigInt := &big.Int{}
-	balRune := m.BalanceRune.MulUint64(1e12).BigInt()
+	balRune := m.BalanceDeca.MulUint64(1e12).BigInt()
 	balAsset := m.BalanceAsset.MulUint64(1e12).BigInt()
 	num := bigInt.Mul(balRune, balAsset)
 	num = bigInt.Sqrt(num)

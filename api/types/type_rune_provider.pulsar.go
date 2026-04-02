@@ -15,7 +15,7 @@ import (
 
 var (
 	md_RUNEProvider                      protoreflect.MessageDescriptor
-	fd_RUNEProvider_rune_address         protoreflect.FieldDescriptor
+	fd_RUNEProvider_deca_address         protoreflect.FieldDescriptor
 	fd_RUNEProvider_deposit_amount       protoreflect.FieldDescriptor
 	fd_RUNEProvider_withdraw_amount      protoreflect.FieldDescriptor
 	fd_RUNEProvider_units                protoreflect.FieldDescriptor
@@ -24,9 +24,9 @@ var (
 )
 
 func init() {
-	file_types_type_rune_provider_proto_init()
-	md_RUNEProvider = File_types_type_rune_provider_proto.Messages().ByName("RUNEProvider")
-	fd_RUNEProvider_rune_address = md_RUNEProvider.Fields().ByName("rune_address")
+	file_types_type_deca_provider_proto_init()
+	md_RUNEProvider = File_types_type_deca_provider_proto.Messages().ByName("RUNEProvider")
+	fd_RUNEProvider_deca_address = md_RUNEProvider.Fields().ByName("deca_address")
 	fd_RUNEProvider_deposit_amount = md_RUNEProvider.Fields().ByName("deposit_amount")
 	fd_RUNEProvider_withdraw_amount = md_RUNEProvider.Fields().ByName("withdraw_amount")
 	fd_RUNEProvider_units = md_RUNEProvider.Fields().ByName("units")
@@ -43,7 +43,7 @@ func (x *RUNEProvider) ProtoReflect() protoreflect.Message {
 }
 
 func (x *RUNEProvider) slowProtoReflect() protoreflect.Message {
-	mi := &file_types_type_rune_provider_proto_msgTypes[0]
+	mi := &file_types_type_deca_provider_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,9 +99,9 @@ func (x *fastReflection_RUNEProvider) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_RUNEProvider) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.RuneAddress) != 0 {
-		value := protoreflect.ValueOfBytes(x.RuneAddress)
-		if !f(fd_RUNEProvider_rune_address, value) {
+	if len(x.DecaAddress) != 0 {
+		value := protoreflect.ValueOfBytes(x.DecaAddress)
+		if !f(fd_RUNEProvider_deca_address, value) {
 			return
 		}
 	}
@@ -150,8 +150,8 @@ func (x *fastReflection_RUNEProvider) Range(f func(protoreflect.FieldDescriptor,
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_RUNEProvider) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "types.RUNEProvider.rune_address":
-		return len(x.RuneAddress) != 0
+	case "types.RUNEProvider.deca_address":
+		return len(x.DecaAddress) != 0
 	case "types.RUNEProvider.deposit_amount":
 		return x.DepositAmount != ""
 	case "types.RUNEProvider.withdraw_amount":
@@ -178,8 +178,8 @@ func (x *fastReflection_RUNEProvider) Has(fd protoreflect.FieldDescriptor) bool 
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_RUNEProvider) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "types.RUNEProvider.rune_address":
-		x.RuneAddress = nil
+	case "types.RUNEProvider.deca_address":
+		x.DecaAddress = nil
 	case "types.RUNEProvider.deposit_amount":
 		x.DepositAmount = ""
 	case "types.RUNEProvider.withdraw_amount":
@@ -206,8 +206,8 @@ func (x *fastReflection_RUNEProvider) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_RUNEProvider) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "types.RUNEProvider.rune_address":
-		value := x.RuneAddress
+	case "types.RUNEProvider.deca_address":
+		value := x.DecaAddress
 		return protoreflect.ValueOfBytes(value)
 	case "types.RUNEProvider.deposit_amount":
 		value := x.DepositAmount
@@ -244,8 +244,8 @@ func (x *fastReflection_RUNEProvider) Get(descriptor protoreflect.FieldDescripto
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_RUNEProvider) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "types.RUNEProvider.rune_address":
-		x.RuneAddress = value.Bytes()
+	case "types.RUNEProvider.deca_address":
+		x.DecaAddress = value.Bytes()
 	case "types.RUNEProvider.deposit_amount":
 		x.DepositAmount = value.Interface().(string)
 	case "types.RUNEProvider.withdraw_amount":
@@ -276,8 +276,8 @@ func (x *fastReflection_RUNEProvider) Set(fd protoreflect.FieldDescriptor, value
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_RUNEProvider) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.RUNEProvider.rune_address":
-		panic(fmt.Errorf("field rune_address of message types.RUNEProvider is not mutable"))
+	case "types.RUNEProvider.deca_address":
+		panic(fmt.Errorf("field deca_address of message types.RUNEProvider is not mutable"))
 	case "types.RUNEProvider.deposit_amount":
 		panic(fmt.Errorf("field deposit_amount of message types.RUNEProvider is not mutable"))
 	case "types.RUNEProvider.withdraw_amount":
@@ -301,7 +301,7 @@ func (x *fastReflection_RUNEProvider) Mutable(fd protoreflect.FieldDescriptor) p
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_RUNEProvider) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "types.RUNEProvider.rune_address":
+	case "types.RUNEProvider.deca_address":
 		return protoreflect.ValueOfBytes(nil)
 	case "types.RUNEProvider.deposit_amount":
 		return protoreflect.ValueOfString("")
@@ -382,7 +382,7 @@ func (x *fastReflection_RUNEProvider) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		l = len(x.RuneAddress)
+		l = len(x.DecaAddress)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -464,10 +464,10 @@ func (x *fastReflection_RUNEProvider) ProtoMethods() *protoiface.Methods {
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.RuneAddress) > 0 {
-			i -= len(x.RuneAddress)
-			copy(dAtA[i:], x.RuneAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.RuneAddress)))
+		if len(x.DecaAddress) > 0 {
+			i -= len(x.DecaAddress)
+			copy(dAtA[i:], x.DecaAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DecaAddress)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -522,7 +522,7 @@ func (x *fastReflection_RUNEProvider) ProtoMethods() *protoiface.Methods {
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field RuneAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecaAddress", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
@@ -549,9 +549,9 @@ func (x *fastReflection_RUNEProvider) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.RuneAddress = append(x.RuneAddress[:0], dAtA[iNdEx:postIndex]...)
-				if x.RuneAddress == nil {
-					x.RuneAddress = []byte{}
+				x.DecaAddress = append(x.DecaAddress[:0], dAtA[iNdEx:postIndex]...)
+				if x.DecaAddress == nil {
+					x.DecaAddress = []byte{}
 				}
 				iNdEx = postIndex
 			case 2:
@@ -727,7 +727,7 @@ func (x *fastReflection_RUNEProvider) ProtoMethods() *protoiface.Methods {
 // versions:
 // 	protoc-gen-go v1.27.0
 // 	protoc        (unknown)
-// source: types/type_rune_provider.proto
+// source: types/type_deca_provider.proto
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.
@@ -741,7 +741,7 @@ type RUNEProvider struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuneAddress        []byte `protobuf:"bytes,1,opt,name=rune_address,json=runeAddress,proto3" json:"rune_address,omitempty"`
+	DecaAddress        []byte `protobuf:"bytes,1,opt,name=deca_address,json=decaAddress,proto3" json:"deca_address,omitempty"`
 	DepositAmount      string `protobuf:"bytes,2,opt,name=deposit_amount,json=depositAmount,proto3" json:"deposit_amount,omitempty"`
 	WithdrawAmount     string `protobuf:"bytes,3,opt,name=withdraw_amount,json=withdrawAmount,proto3" json:"withdraw_amount,omitempty"`
 	Units              string `protobuf:"bytes,4,opt,name=units,proto3" json:"units,omitempty"`
@@ -752,7 +752,7 @@ type RUNEProvider struct {
 func (x *RUNEProvider) Reset() {
 	*x = RUNEProvider{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_types_type_rune_provider_proto_msgTypes[0]
+		mi := &file_types_type_deca_provider_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -766,12 +766,12 @@ func (*RUNEProvider) ProtoMessage() {}
 
 // Deprecated: Use RUNEProvider.ProtoReflect.Descriptor instead.
 func (*RUNEProvider) Descriptor() ([]byte, []int) {
-	return file_types_type_rune_provider_proto_rawDescGZIP(), []int{0}
+	return file_types_type_deca_provider_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *RUNEProvider) GetRuneAddress() []byte {
+func (x *RUNEProvider) GetDecaAddress() []byte {
 	if x != nil {
-		return x.RuneAddress
+		return x.DecaAddress
 	}
 	return nil
 }
@@ -811,9 +811,9 @@ func (x *RUNEProvider) GetLastWithdrawHeight() int64 {
 	return 0
 }
 
-var File_types_type_rune_provider_proto protoreflect.FileDescriptor
+var File_types_type_deca_provider_proto protoreflect.FileDescriptor
 
-var file_types_type_rune_provider_proto_rawDesc = []byte{
+var file_types_type_deca_provider_proto_rawDesc = []byte{
 	0x0a, 0x1e, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x72, 0x75, 0x6e,
 	0x65, 0x5f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x12, 0x05, 0x74, 0x79, 0x70, 0x65, 0x73, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f,
@@ -855,22 +855,22 @@ var file_types_type_rune_provider_proto_rawDesc = []byte{
 }
 
 var (
-	file_types_type_rune_provider_proto_rawDescOnce sync.Once
-	file_types_type_rune_provider_proto_rawDescData = file_types_type_rune_provider_proto_rawDesc
+	file_types_type_deca_provider_proto_rawDescOnce sync.Once
+	file_types_type_deca_provider_proto_rawDescData = file_types_type_deca_provider_proto_rawDesc
 )
 
-func file_types_type_rune_provider_proto_rawDescGZIP() []byte {
-	file_types_type_rune_provider_proto_rawDescOnce.Do(func() {
-		file_types_type_rune_provider_proto_rawDescData = protoimpl.X.CompressGZIP(file_types_type_rune_provider_proto_rawDescData)
+func file_types_type_deca_provider_proto_rawDescGZIP() []byte {
+	file_types_type_deca_provider_proto_rawDescOnce.Do(func() {
+		file_types_type_deca_provider_proto_rawDescData = protoimpl.X.CompressGZIP(file_types_type_deca_provider_proto_rawDescData)
 	})
-	return file_types_type_rune_provider_proto_rawDescData
+	return file_types_type_deca_provider_proto_rawDescData
 }
 
-var file_types_type_rune_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_types_type_rune_provider_proto_goTypes = []interface{}{
+var file_types_type_deca_provider_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_types_type_deca_provider_proto_goTypes = []interface{}{
 	(*RUNEProvider)(nil), // 0: types.RUNEProvider
 }
-var file_types_type_rune_provider_proto_depIdxs = []int32{
+var file_types_type_deca_provider_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -878,13 +878,13 @@ var file_types_type_rune_provider_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_types_type_rune_provider_proto_init() }
-func file_types_type_rune_provider_proto_init() {
-	if File_types_type_rune_provider_proto != nil {
+func init() { file_types_type_deca_provider_proto_init() }
+func file_types_type_deca_provider_proto_init() {
+	if File_types_type_deca_provider_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_types_type_rune_provider_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_types_type_deca_provider_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RUNEProvider); i {
 			case 0:
 				return &v.state
@@ -901,18 +901,18 @@ func file_types_type_rune_provider_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_types_type_rune_provider_proto_rawDesc,
+			RawDescriptor: file_types_type_deca_provider_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_types_type_rune_provider_proto_goTypes,
-		DependencyIndexes: file_types_type_rune_provider_proto_depIdxs,
-		MessageInfos:      file_types_type_rune_provider_proto_msgTypes,
+		GoTypes:           file_types_type_deca_provider_proto_goTypes,
+		DependencyIndexes: file_types_type_deca_provider_proto_depIdxs,
+		MessageInfos:      file_types_type_deca_provider_proto_msgTypes,
 	}.Build()
-	File_types_type_rune_provider_proto = out.File
-	file_types_type_rune_provider_proto_rawDesc = nil
-	file_types_type_rune_provider_proto_goTypes = nil
-	file_types_type_rune_provider_proto_depIdxs = nil
+	File_types_type_deca_provider_proto = out.File
+	file_types_type_deca_provider_proto_rawDesc = nil
+	file_types_type_deca_provider_proto_goTypes = nil
+	file_types_type_deca_provider_proto_depIdxs = nil
 }

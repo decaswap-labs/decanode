@@ -169,7 +169,7 @@ func (h BondHandler) handle(ctx cosmos.Context, msg MsgBond) (err error) {
 	// when node bond for the first time , send 1 RUNE to node address
 	// so as the node address will be created on THORChain otherwise node account won't be able to send tx
 	if acct == nil && nodeAccount.Bond.GTE(cosmos.NewUint(common.One)) {
-		coin := common.NewCoin(common.RuneNative, cosmos.NewUint(common.One))
+		coin := common.NewCoin(common.DecaNative, cosmos.NewUint(common.One))
 		if err = h.mgr.Keeper().SendFromModuleToAccount(ctx, BondName, msg.NodeAddress, common.NewCoins(coin)); err != nil {
 			return ErrInternal(err, "fail to send one RUNE to node address")
 		}

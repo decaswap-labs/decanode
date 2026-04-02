@@ -11,7 +11,7 @@ const (
 	AsgardName             = types.AsgardName
 	AffiliateCollectorName = types.AffiliateCollectorName
 	TreasuryName           = types.TreasuryName
-	RUNEPoolName           = types.RUNEPoolName
+	DECAPoolName           = types.DECAPoolName
 	TCYClaimingName        = types.TCYClaimingName
 	TCYStakeName           = types.TCYStakeName
 	BondName               = types.BondName
@@ -51,7 +51,7 @@ var (
 	NewStreamingSwap           = types.NewStreamingSwap
 	NewNetwork                 = types.NewNetwork
 	NewProtocolOwnedLiquidity  = types.NewProtocolOwnedLiquidity
-	NewRUNEPool                = types.NewRUNEPool
+	NewDECAPool                = types.NewDECAPool
 	NewObservedTx              = common.NewObservedTx
 	NewTssVoter                = types.NewTssVoter
 	NewBanVoter                = types.NewBanVoter
@@ -148,7 +148,7 @@ type (
 	TradeUnit                = types.TradeUnit
 	SecuredAsset             = types.SecuredAsset
 	RUNEProvider             = types.RUNEProvider
-	RUNEPool                 = types.RUNEPool
+	DECAPool                 = types.DECAPool
 	MsgTCYClaim              = types.MsgTCYClaim
 	MsgTCYStake              = types.MsgTCYStake
 	MsgTCYUnstake            = types.MsgTCYUnstake

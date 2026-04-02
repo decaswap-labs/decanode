@@ -17,7 +17,7 @@ message QueryDerivedPoolResponse {
   string status = 2 [ (gogoproto.jsontag) = "status" ];
   int64 decimals = 3;
   string balance_asset = 4 [ (gogoproto.jsontag) = "balance_asset" ];
-  string balance_rune = 5 [ (gogoproto.jsontag) = "balance_rune" ];
+  string balance_deca = 5 [ (gogoproto.jsontag) = "balance_deca" ];
   // the depth of the derived virtual pool relative to L1 pool (in basis points)
   string derived_depth_bps = 6 [ (gogoproto.jsontag) = "derived_depth_bps" ];
 }

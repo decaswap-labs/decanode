@@ -21,12 +21,12 @@ func (s *MsgTssPoolSuite) TestMsgTssPool(c *C) {
 	addr, err := common.PubKey(pks[0]).GetThorAddress()
 	c.Assert(err, IsNil)
 	keygenTime := int64(1024)
-	msg, err := NewMsgTssPool(pks, pk, nil, nil, KeygenType_AsgardKeygen, 1, nil, []string{common.RuneAsset().Chain.String()}, addr, keygenTime)
+	msg, err := NewMsgTssPool(pks, pk, nil, nil, KeygenType_AsgardKeygen, 1, nil, []string{common.DecaAsset().Chain.String()}, addr, keygenTime)
 	c.Assert(err, IsNil)
 	c.Assert(msg.ValidateBasic(), IsNil)
 	EnsureMsgBasicCorrect(msg, c)
 
-	chains := []string{common.RuneAsset().Chain.String()}
+	chains := []string{common.DecaAsset().Chain.String()}
 	m, err := NewMsgTssPool(pks, pk, nil, nil, KeygenType_AsgardKeygen, 1, nil, chains, nil, keygenTime)
 	c.Assert(m, NotNil)
 	c.Assert(err, IsNil)
@@ -49,7 +49,7 @@ func (s *MsgTssPoolSuite) TestMsgTssPool(c *C) {
 	c.Assert(err, IsNil)
 	c.Check(msg.ValidateBasic(), NotNil)
 	// fails on duplicates in chain list
-	msg, err = NewMsgTssPool(pks, pk, nil, nil, KeygenType_AsgardKeygen, 1, nil, []string{common.RuneAsset().Chain.String(), common.RuneAsset().Chain.String()}, addr, keygenTime)
+	msg, err = NewMsgTssPool(pks, pk, nil, nil, KeygenType_AsgardKeygen, 1, nil, []string{common.DecaAsset().Chain.String(), common.DecaAsset().Chain.String()}, addr, keygenTime)
 	c.Assert(err, IsNil)
 	c.Check(msg.ValidateBasic(), NotNil)
 

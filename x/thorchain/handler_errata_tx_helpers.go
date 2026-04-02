@@ -129,7 +129,7 @@ func processErrataTxAttestation(
 	runeCoin := common.NoCoin
 	assetCoin := common.NoCoin
 	for _, coin := range tx.Coins {
-		if coin.IsRune() {
+		if coin.IsDeca() {
 			runeCoin = coin
 		} else {
 			assetCoin = coin
@@ -144,13 +144,13 @@ func processErrataTxAttestation(
 	}
 
 	// subtract amounts from pool balances
-	if runeCoin.Amount.GT(pool.BalanceRune) {
-		runeCoin.Amount = pool.BalanceRune
+	if runeCoin.Amount.GT(pool.BalanceDeca) {
+		runeCoin.Amount = pool.BalanceDeca
 	}
 	if assetCoin.Amount.GT(pool.BalanceAsset) {
 		assetCoin.Amount = pool.BalanceAsset
 	}
-	pool.BalanceRune = common.SafeSub(pool.BalanceRune, runeCoin.Amount)
+	pool.BalanceDeca = common.SafeSub(pool.BalanceDeca, runeCoin.Amount)
 	pool.BalanceAsset = common.SafeSub(pool.BalanceAsset, assetCoin.Amount)
 	if memo.IsType(TxAdd) {
 		lp, err := k.GetLiquidityProvider(ctx, pool.Asset, tx.FromAddress)

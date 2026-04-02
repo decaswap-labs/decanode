@@ -14,35 +14,35 @@ import (
 	"encoding/json"
 )
 
-// RUNEPoolResponse struct for RUNEPoolResponse
-type RUNEPoolResponse struct {
+// DECAPoolResponse struct for DECAPoolResponse
+type DECAPoolResponse struct {
 	Pol POL `json:"pol"`
-	Providers RUNEPoolResponseProviders `json:"providers"`
-	Reserve RUNEPoolResponseReserve `json:"reserve"`
+	Providers DECAPoolResponseProviders `json:"providers"`
+	Reserve DECAPoolResponseReserve `json:"reserve"`
 }
 
-// NewRUNEPoolResponse instantiates a new RUNEPoolResponse object
+// NewDECAPoolResponse instantiates a new DECAPoolResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRUNEPoolResponse(pol POL, providers RUNEPoolResponseProviders, reserve RUNEPoolResponseReserve) *RUNEPoolResponse {
-	this := RUNEPoolResponse{}
+func NewDECAPoolResponse(pol POL, providers DECAPoolResponseProviders, reserve DECAPoolResponseReserve) *DECAPoolResponse {
+	this := DECAPoolResponse{}
 	this.Pol = pol
 	this.Providers = providers
 	this.Reserve = reserve
 	return &this
 }
 
-// NewRUNEPoolResponseWithDefaults instantiates a new RUNEPoolResponse object
+// NewDECAPoolResponseWithDefaults instantiates a new DECAPoolResponse object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRUNEPoolResponseWithDefaults() *RUNEPoolResponse {
-	this := RUNEPoolResponse{}
+func NewDECAPoolResponseWithDefaults() *DECAPoolResponse {
+	this := DECAPoolResponse{}
 	return &this
 }
 
 // GetPol returns the Pol field value
-func (o *RUNEPoolResponse) GetPol() POL {
+func (o *DECAPoolResponse) GetPol() POL {
 	if o == nil {
 		var ret POL
 		return ret
@@ -53,7 +53,7 @@ func (o *RUNEPoolResponse) GetPol() POL {
 
 // GetPolOk returns a tuple with the Pol field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponse) GetPolOk() (*POL, bool) {
+func (o *DECAPoolResponse) GetPolOk() (*POL, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -61,14 +61,14 @@ func (o *RUNEPoolResponse) GetPolOk() (*POL, bool) {
 }
 
 // SetPol sets field value
-func (o *RUNEPoolResponse) SetPol(v POL) {
+func (o *DECAPoolResponse) SetPol(v POL) {
 	o.Pol = v
 }
 
 // GetProviders returns the Providers field value
-func (o *RUNEPoolResponse) GetProviders() RUNEPoolResponseProviders {
+func (o *DECAPoolResponse) GetProviders() DECAPoolResponseProviders {
 	if o == nil {
-		var ret RUNEPoolResponseProviders
+		var ret DECAPoolResponseProviders
 		return ret
 	}
 
@@ -77,7 +77,7 @@ func (o *RUNEPoolResponse) GetProviders() RUNEPoolResponseProviders {
 
 // GetProvidersOk returns a tuple with the Providers field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponse) GetProvidersOk() (*RUNEPoolResponseProviders, bool) {
+func (o *DECAPoolResponse) GetProvidersOk() (*DECAPoolResponseProviders, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -85,14 +85,14 @@ func (o *RUNEPoolResponse) GetProvidersOk() (*RUNEPoolResponseProviders, bool) {
 }
 
 // SetProviders sets field value
-func (o *RUNEPoolResponse) SetProviders(v RUNEPoolResponseProviders) {
+func (o *DECAPoolResponse) SetProviders(v DECAPoolResponseProviders) {
 	o.Providers = v
 }
 
 // GetReserve returns the Reserve field value
-func (o *RUNEPoolResponse) GetReserve() RUNEPoolResponseReserve {
+func (o *DECAPoolResponse) GetReserve() DECAPoolResponseReserve {
 	if o == nil {
-		var ret RUNEPoolResponseReserve
+		var ret DECAPoolResponseReserve
 		return ret
 	}
 
@@ -101,7 +101,7 @@ func (o *RUNEPoolResponse) GetReserve() RUNEPoolResponseReserve {
 
 // GetReserveOk returns a tuple with the Reserve field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPoolResponse) GetReserveOk() (*RUNEPoolResponseReserve, bool) {
+func (o *DECAPoolResponse) GetReserveOk() (*DECAPoolResponseReserve, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -109,11 +109,11 @@ func (o *RUNEPoolResponse) GetReserveOk() (*RUNEPoolResponseReserve, bool) {
 }
 
 // SetReserve sets field value
-func (o *RUNEPoolResponse) SetReserve(v RUNEPoolResponseReserve) {
+func (o *DECAPoolResponse) SetReserve(v DECAPoolResponseReserve) {
 	o.Reserve = v
 }
 
-func (o RUNEPoolResponse) MarshalJSON_deprecated() ([]byte, error) {
+func (o DECAPoolResponse) MarshalJSON_deprecated() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["pol"] = o.Pol
@@ -127,38 +127,38 @@ func (o RUNEPoolResponse) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableRUNEPoolResponse struct {
-	value *RUNEPoolResponse
+type NullableDECAPoolResponse struct {
+	value *DECAPoolResponse
 	isSet bool
 }
 
-func (v NullableRUNEPoolResponse) Get() *RUNEPoolResponse {
+func (v NullableDECAPoolResponse) Get() *DECAPoolResponse {
 	return v.value
 }
 
-func (v *NullableRUNEPoolResponse) Set(val *RUNEPoolResponse) {
+func (v *NullableDECAPoolResponse) Set(val *DECAPoolResponse) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRUNEPoolResponse) IsSet() bool {
+func (v NullableDECAPoolResponse) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRUNEPoolResponse) Unset() {
+func (v *NullableDECAPoolResponse) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRUNEPoolResponse(val *RUNEPoolResponse) *NullableRUNEPoolResponse {
-	return &NullableRUNEPoolResponse{value: val, isSet: true}
+func NewNullableDECAPoolResponse(val *DECAPoolResponse) *NullableDECAPoolResponse {
+	return &NullableDECAPoolResponse{value: val, isSet: true}
 }
 
-func (v NullableRUNEPoolResponse) MarshalJSON_deprecated() ([]byte, error) {
+func (v NullableDECAPoolResponse) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRUNEPoolResponse) UnmarshalJSON(src []byte) error {
+func (v *NullableDECAPoolResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

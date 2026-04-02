@@ -71,7 +71,7 @@ func (h LeaveHandler) handle(ctx cosmos.Context, msg MsgLeave) error {
 			return cosmos.ErrUnauthorized(fmt.Sprintf("%s is not authorized to manage %s when it is not Active", msg.Tx.FromAddress, msg.NodeAddress))
 		}
 		// check if message was sent by a bond provider with bond > minBond
-		minBond := h.mgr.Keeper().GetConfigInt64(ctx, constants.MinimumBondInRune)
+		minBond := h.mgr.Keeper().GetConfigInt64(ctx, constants.MinimumBondInDeca)
 		minBondUint := cosmos.NewUint(uint64(minBond))
 		var bondProviders BondProviders
 		bondProviders, err = h.mgr.Keeper().GetBondProviders(ctx, msg.NodeAddress)

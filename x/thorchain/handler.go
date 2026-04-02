@@ -101,28 +101,28 @@ func getMsgWithdrawFromMemo(memo WithdrawLiquidityMemo, tx ObservedTx, signer co
 func getMsgAddLiquidityFromMemo(ctx cosmos.Context, memo AddLiquidityMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
 	// Extract the Rune amount and the asset amount from the transaction. At least one of them must be
 	// nonzero. If THORNode saw two types of coins, one of them must be the asset coin.
-	runeCoin := tx.Tx.Coins.GetCoin(common.RuneAsset())
+	runeCoin := tx.Tx.Coins.GetCoin(common.DecaAsset())
 	assetCoin := tx.Tx.Coins.GetCoin(memo.GetAsset())
 
-	var runeAddr common.Address
+	var decaAddr common.Address
 	var assetAddr common.Address
 	if tx.Tx.Chain.Equals(common.THORChain) {
-		runeAddr = tx.Tx.FromAddress
+		decaAddr = tx.Tx.FromAddress
 		assetAddr = memo.GetDestination()
 	} else {
-		runeAddr = memo.GetDestination()
+		decaAddr = memo.GetDestination()
 		assetAddr = tx.Tx.FromAddress
 	}
 	// in case we are providing native rune and another native asset
 	if memo.GetAsset().Chain.Equals(common.THORChain) {
-		assetAddr = runeAddr
+		assetAddr = decaAddr
 	}
 
-	return NewMsgAddLiquidity(tx.Tx, memo.GetAsset(), runeCoin.Amount, assetCoin.Amount, runeAddr, assetAddr, memo.AffiliateAddress, memo.AffiliateBasisPoints, signer), nil
+	return NewMsgAddLiquidity(tx.Tx, memo.GetAsset(), runeCoin.Amount, assetCoin.Amount, decaAddr, assetAddr, memo.AffiliateAddress, memo.AffiliateBasisPoints, signer), nil
 }
 
 func getMsgDonateFromMemo(memo DonateMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
-	runeCoin := tx.Tx.Coins.GetCoin(common.RuneAsset())
+	runeCoin := tx.Tx.Coins.GetCoin(common.DecaAsset())
 	assetCoin := tx.Tx.Coins.GetCoin(memo.GetAsset())
 	return NewMsgDonate(tx.Tx, memo.GetAsset(), runeCoin.Amount, assetCoin.Amount, signer), nil
 }
@@ -159,7 +159,7 @@ func getMsgLeaveFromMemo(memo LeaveMemo, tx ObservedTx, signer cosmos.AccAddress
 }
 
 func getMsgBondFromMemo(memo BondMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
-	coin := tx.Tx.Coins.GetCoin(common.RuneAsset())
+	coin := tx.Tx.Coins.GetCoin(common.DecaAsset())
 	return NewMsgBond(tx.Tx, memo.GetAccAddress(), coin.Amount, tx.Tx.FromAddress, memo.BondProviderAddress, signer, memo.NodeOperatorFee), nil
 }
 
@@ -230,7 +230,7 @@ func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, sig
 	case LeaveMemo:
 		newMsg, err = getMsgLeaveFromMemo(m, tx, signer)
 	case ReserveMemo:
-		res := NewReserveContributor(tx.Tx.FromAddress, tx.Tx.Coins.GetCoin(common.RuneAsset()).Amount)
+		res := NewReserveContributor(tx.Tx.FromAddress, tx.Tx.Coins.GetCoin(common.DecaAsset()).Amount)
 		newMsg = NewMsgReserveContributor(tx.Tx, res, signer)
 	case NoOpMemo:
 		newMsg = NewMsgNoOp(tx, signer, m.Action)
@@ -252,10 +252,10 @@ func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, sig
 	case SecuredAssetWithdrawMemo:
 		coin := tx.Tx.Coins[0]
 		newMsg = NewMsgSecuredAssetWithdraw(coin.Asset, coin.Amount, m.GetAddress(), signer, tx.Tx)
-	case RunePoolDepositMemo:
-		newMsg = NewMsgRunePoolDeposit(signer, tx.Tx)
-	case RunePoolWithdrawMemo:
-		newMsg = NewMsgRunePoolWithdraw(signer, tx.Tx, m.GetBasisPts(), m.GetAffiliateAddress(), m.GetAffiliateBasisPoints())
+	case DecaPoolDepositMemo:
+		newMsg = NewMsgDecaPoolDeposit(signer, tx.Tx)
+	case DecaPoolWithdrawMemo:
+		newMsg = NewMsgDecaPoolWithdraw(signer, tx.Tx, m.GetBasisPts(), m.GetAffiliateAddress(), m.GetAffiliateBasisPoints())
 	case SwitchMemo:
 		coin := tx.Tx.Coins[0]
 		newMsg = NewMsgSwitch(coin.Asset, coin.Amount, m.GetAccAddress(), signer, tx.Tx)
@@ -292,8 +292,8 @@ func fuzzyAssetMatch(ctx cosmos.Context, keeper keeper.Keeper, origAsset common.
 	if err != nil {
 		return origAsset
 	}
-	// Only check BalanceRune after checking the error so that no panic if there were an error.
-	if !pool.BalanceRune.IsZero() {
+	// Only check BalanceDeca after checking the error so that no panic if there were an error.
+	if !pool.BalanceDeca.IsZero() {
 		return origAsset
 	}
 
@@ -327,7 +327,7 @@ func fuzzyAssetMatch(ctx cosmos.Context, keeper keeper.Keeper, origAsset common.
 		// check if no symbol given (ie "USDT" or "USDT-")
 		if hasNoSymbol {
 			// Use LTE rather than LT so this function can only return origAsset or a match
-			if winner.BalanceRune.LTE(pool.BalanceRune) {
+			if winner.BalanceDeca.LTE(pool.BalanceDeca) {
 				winner = pool
 			}
 			continue
@@ -335,7 +335,7 @@ func fuzzyAssetMatch(ctx cosmos.Context, keeper keeper.Keeper, origAsset common.
 
 		if strings.HasSuffix(strings.ToLower(pool.Asset.Symbol.String()), symbol) {
 			// Use LTE rather than LT so this function can only return origAsset or a match
-			if winner.BalanceRune.LTE(pool.BalanceRune) {
+			if winner.BalanceDeca.LTE(pool.BalanceDeca) {
 				winner = pool
 			}
 			continue

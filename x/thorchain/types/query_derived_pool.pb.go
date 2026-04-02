@@ -80,7 +80,7 @@ type QueryDerivedPoolResponse struct {
 	Status       string `protobuf:"bytes,2,opt,name=status,proto3" json:"status"`
 	Decimals     int64  `protobuf:"varint,3,opt,name=decimals,proto3" json:"decimals,omitempty"`
 	BalanceAsset string `protobuf:"bytes,4,opt,name=balance_asset,json=balanceAsset,proto3" json:"balance_asset"`
-	BalanceRune  string `protobuf:"bytes,5,opt,name=balance_rune,json=balanceRune,proto3" json:"balance_rune"`
+	BalanceDeca  string `protobuf:"bytes,5,opt,name=balance_deca,json=balanceDeca,proto3" json:"balance_deca"`
 	// the depth of the derived virtual pool relative to L1 pool (in basis points)
 	DerivedDepthBps string `protobuf:"bytes,6,opt,name=derived_depth_bps,json=derivedDepthBps,proto3" json:"derived_depth_bps"`
 }
@@ -146,9 +146,9 @@ func (m *QueryDerivedPoolResponse) GetBalanceAsset() string {
 	return ""
 }
 
-func (m *QueryDerivedPoolResponse) GetBalanceRune() string {
+func (m *QueryDerivedPoolResponse) GetBalanceDeca() string {
 	if m != nil {
-		return m.BalanceRune
+		return m.BalanceDeca
 	}
 	return ""
 }
@@ -349,10 +349,10 @@ func (m *QueryDerivedPoolResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x32
 	}
-	if len(m.BalanceRune) > 0 {
-		i -= len(m.BalanceRune)
-		copy(dAtA[i:], m.BalanceRune)
-		i = encodeVarintQueryDerivedPool(dAtA, i, uint64(len(m.BalanceRune)))
+	if len(m.BalanceDeca) > 0 {
+		i -= len(m.BalanceDeca)
+		copy(dAtA[i:], m.BalanceDeca)
+		i = encodeVarintQueryDerivedPool(dAtA, i, uint64(len(m.BalanceDeca)))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -501,7 +501,7 @@ func (m *QueryDerivedPoolResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQueryDerivedPool(uint64(l))
 	}
-	l = len(m.BalanceRune)
+	l = len(m.BalanceDeca)
 	if l > 0 {
 		n += 1 + l + sovQueryDerivedPool(uint64(l))
 	}
@@ -806,7 +806,7 @@ func (m *QueryDerivedPoolResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BalanceRune", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BalanceDeca", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -834,7 +834,7 @@ func (m *QueryDerivedPoolResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BalanceRune = string(dAtA[iNdEx:postIndex])
+			m.BalanceDeca = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {

@@ -339,7 +339,7 @@ func (s *HandlerOperatorRotateSuite) TestOperatorRotateHandler_NonZeroCoin(c *C)
 	h := NewOperatorRotateHandler(mgr)
 
 	// Non-zero coin should fail ValidateBasic
-	msg := NewMsgOperatorRotate(GetRandomBech32Addr(), GetRandomBech32Addr(), common.NewCoin(common.RuneNative, cosmos.NewUint(100)))
+	msg := NewMsgOperatorRotate(GetRandomBech32Addr(), GetRandomBech32Addr(), common.NewCoin(common.DecaNative, cosmos.NewUint(100)))
 	_, err := h.Run(ctx, msg)
 	c.Assert(err, NotNil)
 }

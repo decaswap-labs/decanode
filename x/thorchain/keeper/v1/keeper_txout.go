@@ -84,7 +84,7 @@ func (k KVStore) GetTOIsValue(ctx cosmos.Context, tois ...TxOutItem) (cosmos.Uin
 	poolCache := map[common.Asset]Pool{} // Cache the pools to avoid duplicated GetPool calls
 	for i := range tois {
 		for _, coin := range append(common.Coins{tois[i].Coin}, tois[i].MaxGas...) {
-			if coin.IsRune() {
+			if coin.IsDeca() {
 				runeValue = runeValue.Add(coin.Amount)
 				continue
 			}

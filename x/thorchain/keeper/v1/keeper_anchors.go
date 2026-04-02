@@ -80,7 +80,7 @@ func (k KVStore) AnchorMedian(ctx cosmos.Context, assets []common.Asset) cosmos.
 		if !pool.IsAvailable() {
 			continue
 		}
-		// value := common.GetUncappedShare(pool.BalanceAsset, pool.BalanceRune, cosmos.NewUint(common.One))
+		// value := common.GetUncappedShare(pool.BalanceAsset, pool.BalanceDeca, cosmos.NewUint(common.One))
 		value := pool.RuneValueInAsset(cosmos.NewUint(constants.DollarMulti * common.One))
 
 		if !value.IsZero() {

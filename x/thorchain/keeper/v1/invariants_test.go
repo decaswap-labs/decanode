@@ -18,34 +18,34 @@ func (s *InvariantsSuite) TestAsgardInvariant(c *C) {
 	ctx, k := setupKeeperForTest(c)
 
 	// empty the starting balance of asgard
-	runeBal := k.GetRuneBalanceOfModule(ctx, AsgardName)
-	coins := common.NewCoins(common.NewCoin(common.RuneAsset(), runeBal))
+	runeBal := k.GetDecaBalanceOfModule(ctx, AsgardName)
+	coins := common.NewCoins(common.NewCoin(common.DecaAsset(), runeBal))
 	c.Assert(k.SendFromModuleToModule(ctx, AsgardName, ReserveName, coins), IsNil)
 
 	pool := NewPool()
 	pool.Asset = common.BTCAsset
-	pool.BalanceRune = cosmos.NewUint(1000)
-	pool.PendingInboundRune = cosmos.NewUint(100)
+	pool.BalanceDeca = cosmos.NewUint(1000)
+	pool.PendingInboundDeca = cosmos.NewUint(100)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	// derived asset pools are not included in expectations
 	pool = NewPool()
 	pool.Asset = common.BTCAsset.GetDerivedAsset()
-	pool.BalanceRune = cosmos.NewUint(666)
-	pool.PendingInboundRune = cosmos.NewUint(777)
+	pool.BalanceDeca = cosmos.NewUint(666)
+	pool.PendingInboundDeca = cosmos.NewUint(777)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	// savers pools are not included in expectations
 	pool = NewPool()
 	pool.Asset = common.BTCAsset.GetSyntheticAsset()
-	pool.BalanceRune = cosmos.NewUint(666)
-	pool.PendingInboundRune = cosmos.NewUint(777)
+	pool.BalanceDeca = cosmos.NewUint(666)
+	pool.PendingInboundDeca = cosmos.NewUint(777)
 	c.Assert(k.SetPool(ctx, pool), IsNil)
 
 	swapMsg := MsgSwap{
 		Tx: GetRandomTx(),
 	}
-	swapMsg.Tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(2000)))
+	swapMsg.Tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(2000)))
 	c.Assert(k.SetSwapQueueItem(ctx, swapMsg, 0), IsNil)
 
 	// synth swaps are ignored
@@ -67,7 +67,7 @@ func (s *InvariantsSuite) TestAsgardInvariant(c *C) {
 	// send the expected amount to asgard
 	expCoins := common.NewCoins(
 		common.NewCoin(common.BTCAsset.GetSyntheticAsset(), cosmos.NewUint(666)),
-		common.NewCoin(common.RuneAsset(), cosmos.NewUint(3100)),
+		common.NewCoin(common.DecaAsset(), cosmos.NewUint(3100)),
 	)
 	for _, coin := range expCoins {
 		c.Assert(k.MintToModule(ctx, ModuleName, coin), IsNil)
@@ -79,7 +79,7 @@ func (s *InvariantsSuite) TestAsgardInvariant(c *C) {
 	c.Assert(msg, IsNil)
 
 	// send a little more to make asgard oversolvent
-	extraCoins := common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1)))
+	extraCoins := common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1)))
 	c.Assert(k.SendFromModuleToModule(ctx, ReserveName, AsgardName, extraCoins), IsNil)
 
 	msg, broken = invariant(ctx)
@@ -110,7 +110,7 @@ func (s *InvariantsSuite) TestBondInvariant(c *C) {
 	c.Assert(len(msg), Equals, 1)
 	c.Assert(msg[0], Equals, "insolvent: 3100rune")
 
-	expRune := common.NewCoin(common.RuneAsset(), cosmos.NewUint(3100))
+	expRune := common.NewCoin(common.DecaAsset(), cosmos.NewUint(3100))
 	c.Assert(k.MintToModule(ctx, ModuleName, expRune), IsNil)
 	c.Assert(k.SendFromModuleToModule(ctx, ModuleName, BondName, common.NewCoins(expRune)), IsNil)
 
@@ -139,7 +139,7 @@ func (s *InvariantsSuite) TestTHORChainInvariant(c *C) {
 	c.Assert(msg, IsNil)
 
 	// send some coins to make it oversolvent
-	coins := common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1)))
+	coins := common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1)))
 	c.Assert(k.SendFromModuleToModule(ctx, AsgardName, ModuleName, coins), IsNil)
 
 	msg, broken = invariant(ctx)
@@ -153,7 +153,7 @@ func (s *InvariantsSuite) TestStreamingSwapsInvariant(c *C) {
 
 	// Happy path: V1 streaming swap exists and matches stream record
 	tx := GetRandomTx()
-	tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000)))
+	tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000)))
 	swap := MsgSwap{
 		Tx:             tx,
 		TargetAsset:    common.BTCAsset,
@@ -204,7 +204,7 @@ func (s *InvariantsSuite) TestStreamingSwapsInvariant(c *C) {
 
 	// V2 Market Streaming Swap (Happy Path)
 	v2Tx := GetRandomTx()
-	v2Tx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000)))
+	v2Tx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000)))
 	v2Swap := MsgSwap{
 		Tx:          v2Tx,
 		TargetAsset: common.BTCAsset,
@@ -225,7 +225,7 @@ func (s *InvariantsSuite) TestStreamingSwapsInvariant(c *C) {
 
 	// Limit Swap test
 	limitTx := GetRandomTx()
-	limitTx.Coins = common.NewCoins(common.NewCoin(common.RuneAsset(), cosmos.NewUint(1000)))
+	limitTx.Coins = common.NewCoins(common.NewCoin(common.DecaAsset(), cosmos.NewUint(1000)))
 	limitSwap := MsgSwap{
 		Tx:          limitTx,
 		TargetAsset: common.BTCAsset,

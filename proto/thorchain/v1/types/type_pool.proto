@@ -22,7 +22,7 @@ enum PoolStatus {
 }
 
 message Pool {
-  string balance_rune = 1 [
+  string balance_deca = 1 [
     (gogoproto.customtype) = "cosmossdk.io/math.Uint",
     (gogoproto.nullable) = false
   ];
@@ -45,7 +45,7 @@ message Pool {
     (gogoproto.customtype) = "cosmossdk.io/math.Uint",
     (gogoproto.nullable) = false
   ];
-  string pending_inbound_rune = 8 [
+  string pending_inbound_deca = 8 [
     (gogoproto.customtype) = "cosmossdk.io/math.Uint",
     (gogoproto.nullable) = false
   ];

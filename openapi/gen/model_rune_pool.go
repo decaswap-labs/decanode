@@ -14,38 +14,38 @@ import (
 	"encoding/json"
 )
 
-// RUNEPool struct for RUNEPool
-type RUNEPool struct {
-	// the units of RUNEPool owned by the reserve
+// DECAPool struct for DECAPool
+type DECAPool struct {
+	// the units of DECAPool owned by the reserve
 	ReserveUnits string `json:"reserve_units"`
-	// the units of RUNEPool owned by providers (including pending)
+	// the units of DECAPool owned by providers (including pending)
 	PoolUnits string `json:"pool_units"`
-	// the units of RUNEPool owned by providers that remain pending
+	// the units of DECAPool owned by providers that remain pending
 	PendingPoolUnits string `json:"pending_pool_units"`
 }
 
-// NewRUNEPool instantiates a new RUNEPool object
+// NewDECAPool instantiates a new DECAPool object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRUNEPool(reserveUnits string, poolUnits string, pendingPoolUnits string) *RUNEPool {
-	this := RUNEPool{}
+func NewDECAPool(reserveUnits string, poolUnits string, pendingPoolUnits string) *DECAPool {
+	this := DECAPool{}
 	this.ReserveUnits = reserveUnits
 	this.PoolUnits = poolUnits
 	this.PendingPoolUnits = pendingPoolUnits
 	return &this
 }
 
-// NewRUNEPoolWithDefaults instantiates a new RUNEPool object
+// NewDECAPoolWithDefaults instantiates a new DECAPool object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRUNEPoolWithDefaults() *RUNEPool {
-	this := RUNEPool{}
+func NewDECAPoolWithDefaults() *DECAPool {
+	this := DECAPool{}
 	return &this
 }
 
 // GetReserveUnits returns the ReserveUnits field value
-func (o *RUNEPool) GetReserveUnits() string {
+func (o *DECAPool) GetReserveUnits() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -56,7 +56,7 @@ func (o *RUNEPool) GetReserveUnits() string {
 
 // GetReserveUnitsOk returns a tuple with the ReserveUnits field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPool) GetReserveUnitsOk() (*string, bool) {
+func (o *DECAPool) GetReserveUnitsOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -64,12 +64,12 @@ func (o *RUNEPool) GetReserveUnitsOk() (*string, bool) {
 }
 
 // SetReserveUnits sets field value
-func (o *RUNEPool) SetReserveUnits(v string) {
+func (o *DECAPool) SetReserveUnits(v string) {
 	o.ReserveUnits = v
 }
 
 // GetPoolUnits returns the PoolUnits field value
-func (o *RUNEPool) GetPoolUnits() string {
+func (o *DECAPool) GetPoolUnits() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -80,7 +80,7 @@ func (o *RUNEPool) GetPoolUnits() string {
 
 // GetPoolUnitsOk returns a tuple with the PoolUnits field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPool) GetPoolUnitsOk() (*string, bool) {
+func (o *DECAPool) GetPoolUnitsOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -88,12 +88,12 @@ func (o *RUNEPool) GetPoolUnitsOk() (*string, bool) {
 }
 
 // SetPoolUnits sets field value
-func (o *RUNEPool) SetPoolUnits(v string) {
+func (o *DECAPool) SetPoolUnits(v string) {
 	o.PoolUnits = v
 }
 
 // GetPendingPoolUnits returns the PendingPoolUnits field value
-func (o *RUNEPool) GetPendingPoolUnits() string {
+func (o *DECAPool) GetPendingPoolUnits() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -104,7 +104,7 @@ func (o *RUNEPool) GetPendingPoolUnits() string {
 
 // GetPendingPoolUnitsOk returns a tuple with the PendingPoolUnits field value
 // and a boolean to check if the value has been set.
-func (o *RUNEPool) GetPendingPoolUnitsOk() (*string, bool) {
+func (o *DECAPool) GetPendingPoolUnitsOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -112,11 +112,11 @@ func (o *RUNEPool) GetPendingPoolUnitsOk() (*string, bool) {
 }
 
 // SetPendingPoolUnits sets field value
-func (o *RUNEPool) SetPendingPoolUnits(v string) {
+func (o *DECAPool) SetPendingPoolUnits(v string) {
 	o.PendingPoolUnits = v
 }
 
-func (o RUNEPool) MarshalJSON_deprecated() ([]byte, error) {
+func (o DECAPool) MarshalJSON_deprecated() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["reserve_units"] = o.ReserveUnits
@@ -130,38 +130,38 @@ func (o RUNEPool) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableRUNEPool struct {
-	value *RUNEPool
+type NullableDECAPool struct {
+	value *DECAPool
 	isSet bool
 }
 
-func (v NullableRUNEPool) Get() *RUNEPool {
+func (v NullableDECAPool) Get() *DECAPool {
 	return v.value
 }
 
-func (v *NullableRUNEPool) Set(val *RUNEPool) {
+func (v *NullableDECAPool) Set(val *DECAPool) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRUNEPool) IsSet() bool {
+func (v NullableDECAPool) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRUNEPool) Unset() {
+func (v *NullableDECAPool) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRUNEPool(val *RUNEPool) *NullableRUNEPool {
-	return &NullableRUNEPool{value: val, isSet: true}
+func NewNullableDECAPool(val *DECAPool) *NullableDECAPool {
+	return &NullableDECAPool{value: val, isSet: true}
 }
 
-func (v NullableRUNEPool) MarshalJSON_deprecated() ([]byte, error) {
+func (v NullableDECAPool) MarshalJSON_deprecated() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRUNEPool) UnmarshalJSON(src []byte) error {
+func (v *NullableDECAPool) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

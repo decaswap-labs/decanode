@@ -21,7 +21,7 @@ func (s CoinSuite) TestCoin(c *C) {
 	c.Check(coin.IsNative(), Equals, false)
 	_, err := coin.Native()
 	c.Assert(err, NotNil)
-	coin = NewCoin(RuneNative, cosmos.NewUint(230))
+	coin = NewCoin(DecaNative, cosmos.NewUint(230))
 	c.Check(coin.IsNative(), Equals, true)
 	sdkCoin, err := coin.Native()
 	c.Assert(err, IsNil)

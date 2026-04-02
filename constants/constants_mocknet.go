@@ -28,14 +28,14 @@ func init() {
 		DesiredValidatorSet:                 12,
 		ChurnInterval:                       60,
 		ChurnRetryInterval:                  30,
-		MinimumBondInRune:                   100_000_000, // 1 rune
+		MinimumBondInDeca:                   100_000_000, // 1 rune
 		MemolessTxnTTL:                      100,
 		MemolessTxnMaxUse:                   5, // higher limit for testing
 		EnableMemolessOutbound:              1, // Enable memoless outbound for mocknet testing
 		ValidatorMaxRewardRatio:             3,
 		FundMigrationInterval:               15,
 		LiquidityLockUpBlocks:               0,
-		MaxRuneSupply:                       500_000_000_00000000,
+		MaxDecaSupply:                       500_000_000_00000000,
 		JailTimeKeygen:                      10,
 		JailTimeKeysign:                     10,
 		AsgardSize:                          6,
@@ -50,15 +50,15 @@ func init() {
 		MaxSynthPerPoolDepth:                3_500,
 		MaxSynthsForSaversYield:             5000,
 		AllowWideBlame:                      1,
-		TargetOutboundFeeSurplusRune:        10_000_00000000,
+		TargetOutboundFeeSurplusDeca:        10_000_00000000,
 		MaxOutboundFeeMultiplierBasisPoints: 30_000,
 		MinOutboundFeeMultiplierBasisPoints: 10_00,
 		OperationalVotesMin:                 1, // For regtest single-signer Mimir changes without Admin
 		PreferredAssetOutboundFeeMultiplier: 100,
 		TradeAccountsEnabled:                1,
 		MaxAffiliateFeeBasisPoints:          10_000,
-		RUNEPoolDepositMaturityBlocks:       0,
-		RUNEPoolMaxReserveBackstop:          0,
+		DECAPoolDepositMaturityBlocks:       0,
+		DECAPoolMaxReserveBackstop:          0,
 		SaversEjectInterval:                 60,
 		SystemIncomeBurnRateBps:             0,
 		DevFundSystemIncomeBps:              0,

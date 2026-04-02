@@ -141,7 +141,7 @@ func (gm *GasMgr) GetAssetOutboundFee(ctx cosmos.Context, asset common.Asset, in
 		outboundFeeSpentRune = cosmos.ZeroUint()
 	}
 
-	targetOutboundFeeSurplus := gm.keeper.GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusRune)
+	targetOutboundFeeSurplus := gm.keeper.GetConfigInt64(ctx, constants.TargetOutboundFeeSurplusDeca)
 	maxMultiplierBasisPoints := gm.keeper.GetConfigInt64(ctx, constants.MaxOutboundFeeMultiplierBasisPoints)
 	minMultiplierBasisPoints := gm.keeper.GetConfigInt64(ctx, constants.MinOutboundFeeMultiplierBasisPoints)
 
@@ -166,8 +166,8 @@ func (gm *GasMgr) GetAssetOutboundFee(ctx cosmos.Context, asset common.Asset, in
 		return fee, nil
 	}
 
-	if gasPool.BalanceAsset.IsZero() || gasPool.BalanceRune.IsZero() {
-		ctx.Logger().Error("fail to calculate fee as gas pool balance is zero, returning 0 fee", "pool", gasPool.Asset.String(), "rune", gasPool.BalanceRune.String(), "asset", gasPool.BalanceAsset.String())
+	if gasPool.BalanceAsset.IsZero() || gasPool.BalanceDeca.IsZero() {
+		ctx.Logger().Error("fail to calculate fee as gas pool balance is zero, returning 0 fee", "pool", gasPool.Asset.String(), "rune", gasPool.BalanceDeca.String(), "asset", gasPool.BalanceAsset.String())
 		return cosmos.ZeroUint(), nil
 	}
 
@@ -182,8 +182,8 @@ func (gm *GasMgr) GetAssetOutboundFee(ctx cosmos.Context, asset common.Asset, in
 	if err != nil {
 		return cosmos.ZeroUint(), err
 	}
-	if assetPool.BalanceAsset.IsZero() || assetPool.BalanceRune.IsZero() {
-		ctx.Logger().Error("fail to calculate fee as asset pool balance is zero, returning 0 fee", "pool", assetPool.Asset.String(), "rune", assetPool.BalanceRune.String(), "asset", assetPool.BalanceAsset.String())
+	if assetPool.BalanceAsset.IsZero() || assetPool.BalanceDeca.IsZero() {
+		ctx.Logger().Error("fail to calculate fee as asset pool balance is zero, returning 0 fee", "pool", assetPool.Asset.String(), "rune", assetPool.BalanceDeca.String(), "asset", assetPool.BalanceAsset.String())
 		return cosmos.ZeroUint(), nil
 	}
 
@@ -290,7 +290,7 @@ func (gm *GasMgr) ProcessGas(ctx cosmos.Context, keeper keeper.Keeper) {
 		return
 	}
 
-	reserveRune := keeper.GetRuneBalanceOfModule(ctx, ReserveName)
+	reserveRune := keeper.GetDecaBalanceOfModule(ctx, ReserveName)
 	poolCache := map[common.Asset]Pool{}
 	for i := range gm.outAssetGas {
 		feeSpentRune := cosmos.ZeroUint()
@@ -358,11 +358,11 @@ func (gm *GasMgr) ProcessGas(ctx cosmos.Context, keeper keeper.Keeper) {
 			continue
 		}
 		if !gm.gasEvent.Pools[i].RuneAmt.IsZero() {
-			coin := common.NewCoin(common.RuneNative, gm.gasEvent.Pools[i].RuneAmt)
+			coin := common.NewCoin(common.DecaNative, gm.gasEvent.Pools[i].RuneAmt)
 			if err := keeper.SendFromModuleToModule(ctx, ReserveName, AsgardName, common.NewCoins(coin)); err != nil {
 				ctx.Logger().Error("fail to transfer funds from reserve to asgard", "pool", gm.gasEvent.Pools[i].Asset, "error", err)
 			} else {
-				pool.BalanceRune = pool.BalanceRune.Add(gm.gasEvent.Pools[i].RuneAmt)
+				pool.BalanceDeca = pool.BalanceDeca.Add(gm.gasEvent.Pools[i].RuneAmt)
 			}
 		}
 		pool.BalanceAsset = common.SafeSub(pool.BalanceAsset, gm.gasEvent.Pools[i].AssetAmt)
