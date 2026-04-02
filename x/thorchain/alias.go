@@ -212,7 +212,7 @@ var (
 	NewMsgRejectUpgrade            = types.NewMsgRejectUpgrade
 	NewMsgSetIPAddress             = types.NewMsgSetIPAddress
 	NewMsgNetworkFee               = types.NewMsgNetworkFee
-	NewNetworkFee = types.NewNetworkFee
+	NewNetworkFee                  = types.NewNetworkFee
 	NewTHORName                    = types.NewTHORName
 	NewReferenceMemo               = types.NewReferenceMemo
 	NewStreamingSwap               = types.NewStreamingSwap
@@ -249,6 +249,7 @@ var (
 	NewMsgTCYClaim                 = types.NewMsgTCYClaim
 	NewMsgTCYStake                 = types.NewMsgTCYStake
 	NewMsgTCYUnstake               = types.NewMsgTCYUnstake
+	NewMsgSwapRequest              = types.NewMsgSwapRequest
 
 	// Memo
 	ParseMemo              = mem.ParseMemo
@@ -309,11 +310,12 @@ type (
 	MsgSolvency               = types.MsgSolvency
 	MsgDecaPoolDeposit        = types.MsgDecaPoolDeposit
 	MsgDecaPoolWithdraw       = types.MsgDecaPoolWithdraw
-	MsgSwitch = types.MsgSwitch
+	MsgSwitch                 = types.MsgSwitch
 	MsgTCYClaim               = types.MsgTCYClaim
 	MsgTCYStake               = types.MsgTCYStake
 	MsgTCYUnstake             = types.MsgTCYUnstake
 	MsgOperatorRotate         = types.MsgOperatorRotate
+	MsgSwapRequest            = types.MsgSwapRequest
 
 	// Keeper structs
 	PoolStatus               = types.PoolStatus

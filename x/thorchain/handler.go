@@ -60,8 +60,6 @@ func getInternalHandlerMapping(mgr Manager) map[string]MsgHandler {
 	m[sdk.MsgTypeURL(&MsgLeave{})] = NewLeaveHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgMaint{})] = NewMaintHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgDonate{})] = NewDonateHandler(mgr)
-	m[sdk.MsgTypeURL(&MsgWithdrawLiquidity{})] = NewWithdrawLiquidityHandler(mgr)
-	m[sdk.MsgTypeURL(&MsgAddLiquidity{})] = NewAddLiquidityHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgRefundTx{})] = NewRefundHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgMigrate{})] = NewMigrateHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgRagnarok{})] = NewRagnarokHandler(mgr)
@@ -69,6 +67,7 @@ func getInternalHandlerMapping(mgr Manager) map[string]MsgHandler {
 	m[sdk.MsgTypeURL(&MsgConsolidate{})] = NewConsolidateHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgModifyLimitSwap{})] = NewModifyLimitSwapHandler(mgr)
 	m[sdk.MsgTypeURL(&MsgOperatorRotate{})] = NewOperatorRotateHandler(mgr)
+	m[sdk.MsgTypeURL(&MsgSwapRequest{})] = NewSwapRequestHandler(mgr)
 	return m
 }
 
@@ -84,41 +83,6 @@ func getMsgSwapFromMemo(ctx cosmos.Context, keeper keeper.Keeper, memo SwapMemo,
 	}
 
 	return NewMsgSwap(tx.Tx, memo.GetAsset(), memo.Destination, memo.SlipLimit, memo.AffiliateAddress, memo.AffiliateBasisPoints, memo.GetDexAggregator(), memo.GetDexTargetAddress(), memo.GetDexTargetLimit(), memo.GetSwapType(), memo.GetStreamQuantity(), memo.GetStreamInterval(), version, signer), nil
-}
-
-func getMsgReferenceMemo(memo ReferenceWriteMemo, signer cosmos.AccAddress) (cosmos.Msg, error) {
-	return NewMsgReferenceMemo(memo.GetAsset(), memo.GetMemo(), signer), nil
-}
-
-func getMsgWithdrawFromMemo(memo WithdrawLiquidityMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
-	withdrawAmount := cosmos.NewUint(MaxWithdrawBasisPoints)
-	if !memo.GetAmount().IsZero() {
-		withdrawAmount = memo.GetAmount()
-	}
-	return NewMsgWithdrawLiquidity(tx.Tx, tx.Tx.FromAddress, withdrawAmount, memo.GetAsset(), memo.GetWithdrawalAsset(), signer), nil
-}
-
-func getMsgAddLiquidityFromMemo(ctx cosmos.Context, memo AddLiquidityMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
-	// Extract the Rune amount and the asset amount from the transaction. At least one of them must be
-	// nonzero. If THORNode saw two types of coins, one of them must be the asset coin.
-	runeCoin := tx.Tx.Coins.GetCoin(common.DecaAsset())
-	assetCoin := tx.Tx.Coins.GetCoin(memo.GetAsset())
-
-	var decaAddr common.Address
-	var assetAddr common.Address
-	if tx.Tx.Chain.Equals(common.THORChain) {
-		decaAddr = tx.Tx.FromAddress
-		assetAddr = memo.GetDestination()
-	} else {
-		decaAddr = memo.GetDestination()
-		assetAddr = tx.Tx.FromAddress
-	}
-	// in case we are providing native rune and another native asset
-	if memo.GetAsset().Chain.Equals(common.THORChain) {
-		assetAddr = decaAddr
-	}
-
-	return NewMsgAddLiquidity(tx.Tx, memo.GetAsset(), runeCoin.Amount, assetCoin.Amount, decaAddr, assetAddr, memo.AffiliateAddress, memo.AffiliateBasisPoints, signer), nil
 }
 
 func getMsgDonateFromMemo(memo DonateMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
@@ -175,13 +139,6 @@ func getMsgMaintFromMemo(memo MaintMemo, signer cosmos.AccAddress) (cosmos.Msg, 
 	return types.NewMsgMaint(memo.GetAccAddress(), signer), nil
 }
 
-func getMsgManageTHORNameFromMemo(memo ManageTHORNameMemo, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
-	if len(tx.Tx.Coins) == 0 {
-		return nil, fmt.Errorf("transaction must have rune in it")
-	}
-	return NewMsgManageTHORName(memo.Name, memo.Chain, memo.Address, tx.Tx.Coins[0], memo.Expire, memo.PreferredAsset, memo.Owner, signer, memo.PreferredAssetOutboundFeeMultiplier), nil
-}
-
 func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, signer cosmos.AccAddress) (cosmos.Msg, error) {
 	if len(tx.Tx.Coins) != 1 {
 		return nil, cosmos.ErrInvalidCoins("only send 1 coins per message")
@@ -198,12 +155,9 @@ func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, sig
 	// interpret the memo and initialize a corresponding msg event
 	switch m := memo.(type) {
 	case AddLiquidityMemo:
-		m.Asset = fuzzyAssetMatch(ctx, keeper, m.Asset)
-		newMsg, err = getMsgAddLiquidityFromMemo(ctx, m, tx, signer)
+		return nil, fmt.Errorf("add liquidity is not supported")
 	case WithdrawLiquidityMemo:
-		m.Asset = fuzzyAssetMatch(ctx, keeper, m.Asset)
-		m.WithdrawalAsset = fuzzyAssetMatch(ctx, keeper, m.WithdrawalAsset)
-		newMsg, err = getMsgWithdrawFromMemo(m, tx, signer)
+		return nil, fmt.Errorf("withdraw liquidity is not supported")
 	case SwapMemo:
 		m.Asset = fuzzyAssetMatch(ctx, keeper, m.Asset)
 		m.DexTargetAddress = externalAssetMatch(m.Asset.GetChain(), m.DexTargetAddress)
@@ -236,35 +190,6 @@ func processOneTxIn(ctx cosmos.Context, keeper keeper.Keeper, tx ObservedTx, sig
 		newMsg = NewMsgNoOp(tx, signer, m.Action)
 	case ConsolidateMemo:
 		newMsg = NewMsgConsolidate(tx, signer)
-	case ReferenceWriteMemo:
-		newMsg, err = getMsgReferenceMemo(m, signer)
-	case ManageTHORNameMemo:
-		newMsg, err = getMsgManageTHORNameFromMemo(m, tx, signer)
-	case TradeAccountDepositMemo:
-		coin := tx.Tx.Coins[0]
-		newMsg = NewMsgTradeAccountDeposit(coin.Asset, coin.Amount, m.GetAccAddress(), signer, tx.Tx)
-	case TradeAccountWithdrawalMemo:
-		coin := tx.Tx.Coins[0]
-		newMsg = NewMsgTradeAccountWithdrawal(coin.Asset, coin.Amount, m.GetAddress(), signer, tx.Tx)
-	case SecuredAssetDepositMemo:
-		coin := tx.Tx.Coins[0]
-		newMsg = NewMsgSecuredAssetDeposit(coin.Asset, coin.Amount, m.GetAccAddress(), signer, tx.Tx)
-	case SecuredAssetWithdrawMemo:
-		coin := tx.Tx.Coins[0]
-		newMsg = NewMsgSecuredAssetWithdraw(coin.Asset, coin.Amount, m.GetAddress(), signer, tx.Tx)
-	case DecaPoolDepositMemo:
-		newMsg = NewMsgDecaPoolDeposit(signer, tx.Tx)
-	case DecaPoolWithdrawMemo:
-		newMsg = NewMsgDecaPoolWithdraw(signer, tx.Tx, m.GetBasisPts(), m.GetAffiliateAddress(), m.GetAffiliateBasisPoints())
-	case SwitchMemo:
-		coin := tx.Tx.Coins[0]
-		newMsg = NewMsgSwitch(coin.Asset, coin.Amount, m.GetAccAddress(), signer, tx.Tx)
-	case TCYClaimMemo:
-		newMsg = NewMsgTCYClaim(m.Address, tx.Tx.FromAddress, signer)
-	case TCYStakeMemo:
-		newMsg = NewMsgTCYStake(tx.Tx, signer)
-	case TCYUnstakeMemo:
-		newMsg = NewMsgTCYUnstake(tx.Tx, m.BasisPoints, signer)
 	case MaintMemo:
 		newMsg, err = getMsgMaintFromMemo(m, signer)
 	case OperatorRotateMemo:
