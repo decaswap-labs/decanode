@@ -8,7 +8,7 @@ package types
 
 import (
 	context "context"
-	common "github.com/decaswap-labs/decanode/v3/api/common"
+	common "github.com/decaswap-labs/decanode/api/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
