@@ -1225,18 +1225,6 @@ func (tos *TxOutStorage) nativeTxOut(ctx cosmos.Context, mgr Manager, toi TxOutI
 	var sdkErr error
 
 	switch {
-	case toi.Coin.Asset.IsTradeAsset():
-		// Even if trade accounts are not enabled, outbounds (as for streaming swap refunds) should complete.
-		_, err = mgr.TradeAccountManager().Deposit(ctx, toi.Coin.Asset, toi.Coin.Amount, addr, common.NoAddress, toi.InHash)
-		if err != nil {
-			return ErrInternal(err, "fail to deposit to trade account")
-		}
-	case toi.Coin.Asset.IsSecuredAsset():
-		// Even if secured assets are halted, outbounds (as for streaming swap refunds) should complete.
-		_, err = mgr.SecuredAssetManager().Deposit(ctx, toi.Coin.Asset.GetLayer1Asset(), toi.Coin.Amount, addr, common.NoAddress, toi.InHash)
-		if err != nil {
-			return ErrInternal(err, "fail to deposit secured asset")
-		}
 	case polAddress.Equals(toi.ToAddress):
 		sdkErr = tos.keeper.SendFromModuleToModule(ctx, toi.ModuleName, ReserveName, common.NewCoins(toi.Coin))
 	case affColAddress.Equals(toi.ToAddress):

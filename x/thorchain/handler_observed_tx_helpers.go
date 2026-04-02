@@ -294,18 +294,6 @@ func handleObservedTxInQuorum(
 
 	mCtx := ctx
 
-	// Check and block switch assets
-	// Check is independent of the mimir to enable the handler in order to support
-	// bifrost & switch whitelisting prior to switching commencing
-	_, isSwitch := m.(*MsgSwitch)
-	if !isSwitch && len(tx.Tx.Coins) > 0 && mgr.SwitchManager().IsSwitch(ctx, tx.Tx.Coins[0].Asset) {
-		if err = refundTx(ctx, tx, mgr, CodeTxFail, "asset is a switch asset", ""); err != nil {
-			ctx.Logger().Error("fail to refund", "error", err)
-		}
-
-		return nil
-	}
-
 	_, err = handler(mCtx, m)
 	if err != nil {
 		if err = refundTx(ctx, tx, mgr, CodeTxFail, err.Error(), ""); err != nil {

@@ -20,7 +20,6 @@ import (
 	mem "github.com/decaswap-labs/decanode/x/thorchain/memo"
 	"github.com/decaswap-labs/decanode/x/thorchain/types"
 
-	"github.com/decaswap-labs/decanode/bifrost/pkg/chainclients/shared/utxo"
 	"github.com/decaswap-labs/decanode/constants"
 )
 

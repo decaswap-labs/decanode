@@ -487,43 +487,6 @@ func (h AddLiquidityHandler) addLiquidity(ctx cosmos.Context,
 	stage bool,
 	constAccessor constants.ConstantValues,
 ) (err error) {
-	if asset.IsSecuredAsset() {
-		if !addAssetAmount.IsZero() {
-			var accAddr cosmos.AccAddress
-			accAddr, err = runeAddr.AccAddress()
-			if err != nil {
-				return err
-			}
-
-			requestedAmount := addAssetAmount
-			var coins common.Coin
-			coins, err = h.mgr.SecuredAssetManager().Withdraw(
-				ctx, asset, addAssetAmount, accAddr, common.NoAddress, requestTxHash)
-			if err != nil {
-				return err
-			}
-
-			if !coins.Asset.Equals(asset.GetLayer1Asset()) {
-				return fmt.Errorf("secured asset manager withdraw return unexpected asset: %s", coins.Asset.String())
-			}
-
-			// Verify withdrawn amount is not zero when requested amount was non-zero
-			if coins.Amount.IsZero() {
-				return fmt.Errorf("secured asset withdrawal returned zero amount for request of %s", requestedAmount)
-			}
-
-			// Log if withdrawn amount differs from requested (due to share-based calculation rounding)
-			if !coins.Amount.Equal(requestedAmount) {
-				ctx.Logger().Info("secured asset withdrawal amount differs from requested",
-					"asset", asset, "requested", requestedAmount, "withdrawn", coins.Amount)
-			}
-
-			addAssetAmount = coins.Amount
-		}
-
-		asset = asset.GetLayer1Asset()
-	}
-
 	ctx.Logger().Info("liquidity provision", "asset", asset, "rune amount", addRuneAmount, "asset amount", addAssetAmount)
 	if err = h.validateAddLiquidityMessage(ctx, h.mgr.Keeper(), asset, requestTxHash, runeAddr, assetAddr); err != nil {
 		return fmt.Errorf("add liquidity message fail validation: %w", err)

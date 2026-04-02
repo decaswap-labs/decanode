@@ -59,28 +59,12 @@ func (h DepositHandler) handle(ctx cosmos.Context, msg MsgDeposit, idx uint16) (
 		return nil, fmt.Errorf("unable to use MsgDeposit while THORChain is halted")
 	}
 
-	asset := msg.Coins[0].Asset
-
-	switch {
-	case asset.IsTradeAsset():
-		balance := h.mgr.TradeAccountManager().BalanceOf(ctx, asset, msg.Signer)
-		if msg.Coins[0].Amount.GT(balance) {
-			return nil, se.ErrInsufficientFunds
-		}
-	case asset.IsSecuredAsset():
-		balance := h.mgr.SecuredAssetManager().BalanceOf(ctx, asset, msg.Signer)
-		if msg.Coins[0].Amount.GT(balance) {
-			return nil, se.ErrInsufficientFunds
-		}
-	default:
+	{
 		coins, err := msg.Coins.Native()
 		if err != nil {
 			return nil, ErrInternal(err, "coins are native to THORChain")
 		}
 
-		// HasCoins always returns false if the address has no balances
-		// (such as if having had just enough for the network fee),
-		// so check first whether there is any non-zero Amount necessary.
 		if !msg.Coins.IsEmpty() && !h.mgr.Keeper().HasCoins(ctx, msg.GetSigners()[0], coins) {
 			return nil, se.ErrInsufficientFunds
 		}

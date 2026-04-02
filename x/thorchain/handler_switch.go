@@ -3,8 +3,6 @@ package thorchain
 import (
 	"fmt"
 
-	"github.com/hashicorp/go-multierror"
-
 	"github.com/decaswap-labs/decanode/common"
 	"github.com/decaswap-labs/decanode/common/cosmos"
 	"github.com/decaswap-labs/decanode/constants"
@@ -48,32 +46,8 @@ func (h SwitchHandler) validate(ctx cosmos.Context, msg MsgSwitch) error {
 	return msg.ValidateBasic()
 }
 
-func (h SwitchHandler) handle(ctx cosmos.Context, msg MsgSwitch) error {
-	// Mint the full amount as native tokens. Switch assets are tokens (not gas assets),
-	// so the outbound burn gas is subsidized by the gas asset pool—no outbound fee
-	// deduction from the switch amount is needed.
-	addr, err := h.mgr.SwitchManager().Switch(ctx, msg.Asset, msg.Amount, msg.Address, msg.Tx.FromAddress, msg.Tx.ID)
-	if err != nil {
-		ctx.Logger().Error("fail to handle switch", "error", err)
-		return err
-	}
-
-	toi := TxOutItem{
-		Chain:     msg.Asset.GetChain(),
-		InHash:    msg.Tx.ID,
-		ToAddress: addr,
-		Coin:      common.NewCoin(msg.Asset, msg.Amount),
-	}
-
-	ok, err := h.mgr.TxOutStore().TryAddTxOutItem(ctx, h.mgr, toi, cosmos.ZeroUint())
-	if err != nil {
-		return multierror.Append(errFailAddOutboundTx, err)
-	}
-	if !ok {
-		return errFailAddOutboundTx
-	}
-
-	return nil
+func (h SwitchHandler) handle(_ cosmos.Context, _ MsgSwitch) error {
+	return fmt.Errorf("switch feature has been removed")
 }
 
 func (h SwitchHandler) checkEnabled(ctx cosmos.Context, asset common.Asset) error {

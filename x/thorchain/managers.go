@@ -42,28 +42,9 @@ type Manager interface {
 	SwapQ() SwapQueue
 	AdvSwapQueueMgr() AdvSwapQueue
 	Slasher() Slasher
-	TradeAccountManager() TradeAccountManager
-	SecuredAssetManager() SecuredAssetManager
-	SwitchManager() SwitchManager
 	ScheduledMigrationManager() ScheduledMigrationManager
 }
 
-type TradeAccountManager interface {
-	EndBlock(ctx cosmos.Context, keeper keeper.Keeper) error
-	Deposit(_ cosmos.Context, _ common.Asset, amount cosmos.Uint, owner cosmos.AccAddress, assetAddr common.Address, _ common.TxID) (cosmos.Uint, error)
-	Withdrawal(_ cosmos.Context, _ common.Asset, amount cosmos.Uint, owner cosmos.AccAddress, assetAddr common.Address, _ common.TxID) (cosmos.Uint, error)
-	BalanceOf(_ cosmos.Context, _ common.Asset, owner cosmos.AccAddress) cosmos.Uint
-}
-
-type SecuredAssetManager interface {
-	EndBlock(ctx cosmos.Context, keeper keeper.Keeper) error
-	Deposit(_ cosmos.Context, _ common.Asset, amount cosmos.Uint, owner cosmos.AccAddress, assetAddr common.Address, _ common.TxID) (cosmos.Coin, error)
-	Withdraw(_ cosmos.Context, _ common.Asset, amount cosmos.Uint, owner cosmos.AccAddress, assetAddr common.Address, _ common.TxID) (common.Coin, error)
-	BalanceOf(_ cosmos.Context, _ common.Asset, owner cosmos.AccAddress) cosmos.Uint
-	GetSecuredAssetStatus(_ cosmos.Context, _ common.Asset) (keeper.SecuredAsset, cosmos.Uint, error)
-	GetShareSupply(_ cosmos.Context, _ common.Asset) cosmos.Uint
-	CheckHalt(_ cosmos.Context) error
-}
 
 // GasManager define all the methods required to manage gas
 type GasManager interface {
@@ -175,11 +156,6 @@ type Swapper interface {
 	GetSwapCalc(X, x, Y, slipBps, minSlipBps cosmos.Uint) (emitAssets, liquidityFee, slip cosmos.Uint)
 }
 
-type SwitchManager interface {
-	Switch(_ cosmos.Context, _ common.Asset, amount cosmos.Uint, owner cosmos.AccAddress, assetAddr common.Address, _ common.TxID) (common.Address, error)
-	IsSwitch(_ cosmos.Context, _ common.Asset) bool
-}
-
 type ScheduledMigrationManager interface {
 	EndBlock(ctx cosmos.Context, mgr Manager) error
 }
@@ -206,9 +182,6 @@ type Mgrs struct {
 	swapQ                     SwapQueue
 	advSwapQueue              AdvSwapQueue
 	slasher                   Slasher
-	tradeManager              TradeAccountManager
-	securedManager            SecuredAssetManager
-	switchManager             SwitchManager
 	scheduledMigrationManager ScheduledMigrationManager
 	oracleManager             OracleManager
 	volumeManager             VolumeManager
@@ -337,21 +310,6 @@ func (mgr *Mgrs) recreateManagers(ctx cosmos.Context, v semver.Version) error {
 		return fmt.Errorf("fail to create swap queue: %w", err)
 	}
 
-	mgr.tradeManager, err = GetTradeAccountManager(v, mgr.K, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create trade manager: %w", err)
-	}
-
-	mgr.securedManager, err = GetSecuredAssetManager(v, mgr.K, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create secured manager: %w", err)
-	}
-
-	mgr.switchManager, err = GetSwitchManager(v, mgr.K, mgr.eventMgr)
-	if err != nil {
-		return fmt.Errorf("fail to create switch manager: %w", err)
-	}
-
 	mgr.oracleManager, err = GetOracleManager(v, mgr.K, mgr.eventMgr)
 	if err != nil {
 		return fmt.Errorf("fail to create oracle manager: %w", err)
@@ -402,12 +360,6 @@ func (mgr *Mgrs) AdvSwapQueueMgr() AdvSwapQueue { return mgr.advSwapQueue }
 
 // Slasher return an implementation of Slasher
 func (mgr *Mgrs) Slasher() Slasher { return mgr.slasher }
-
-func (mgr *Mgrs) TradeAccountManager() TradeAccountManager { return mgr.tradeManager }
-
-func (mgr *Mgrs) SecuredAssetManager() SecuredAssetManager { return mgr.securedManager }
-
-func (mgr *Mgrs) SwitchManager() SwitchManager { return mgr.switchManager }
 
 func (mgr *Mgrs) ScheduledMigrationManager() ScheduledMigrationManager {
 	return mgr.scheduledMigrationManager
@@ -487,18 +439,6 @@ func GetSlasher(version semver.Version, keeper keeper.Keeper, eventMgr EventMana
 // GetSwapper return an implementation of Swapper
 func GetSwapper(version semver.Version) (Swapper, error) {
 	return newSwapper(), nil
-}
-
-func GetTradeAccountManager(version semver.Version, keeper keeper.Keeper, eventMgr EventManager) (TradeAccountManager, error) {
-	return newTradeMgr(keeper, eventMgr), nil
-}
-
-func GetSecuredAssetManager(version semver.Version, keeper keeper.Keeper, eventMgr EventManager) (SecuredAssetManager, error) {
-	return newSecuredAssetMgr(keeper, eventMgr), nil
-}
-
-func GetSwitchManager(version semver.Version, keeper keeper.Keeper, eventMgr EventManager) (SwitchManager, error) {
-	return newSwitchMgr(keeper, eventMgr), nil
 }
 
 func GetScheduledMigrationManager(_ semver.Version, mgr Manager) (ScheduledMigrationManager, error) {

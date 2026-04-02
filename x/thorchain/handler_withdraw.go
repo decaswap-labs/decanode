@@ -96,33 +96,6 @@ func (h WithdrawLiquidityHandler) handle(ctx cosmos.Context, msg MsgWithdrawLiqu
 		return nil, ErrInternal(err, "fail to process withdraw request")
 	}
 
-	// withdraw to secure asset
-	if withdrawToSecuredAsset {
-		if !msg.WithdrawalAsset.IsEmpty() {
-			return nil, fmt.Errorf("single sided withdrawal not supported for secured assets")
-		}
-
-		if !assetAmt.IsZero() {
-			// Withdraw to secure asset
-			accAddr, err := lp.AssetAddress.AccAddress()
-			if err != nil {
-				return nil, err
-			}
-
-			_, err = h.mgr.SecuredAssetManager().Deposit(
-				ctx,
-				msg.Asset,
-				assetAmt,
-				accAddr,
-				lp.AssetAddress,
-				msg.Tx.ID,
-			)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-
 	memo := ""
 	if msg.Tx.ID.Equals(common.BlankTxID) {
 		// tx id is blank, must be triggered by the ragnarok protocol

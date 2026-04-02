@@ -220,9 +220,6 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 	synthVirtualDepthMult int64,
 	stableOverride bool,
 ) (amt cosmos.Uint, evt *EventSwap, swapErr error) {
-	tradeAccountsEnabled := mgr.Keeper().GetConfigInt64(ctx, constants.TradeAccountsEnabled)
-	tradeAccountsDepositEnabled := mgr.Keeper().GetConfigInt64(ctx, constants.TradeAccountsDepositEnabled)
-
 	source := tx.Coins[0].Asset
 	amount := tx.Coins[0].Amount
 
@@ -236,36 +233,6 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 		minSlipAsset = source
 	}
 	poolAsset := minSlipAsset.GetLayer1Asset()
-
-	if source.IsTradeAsset() {
-		if tradeAccountsEnabled <= 0 {
-			return cosmos.ZeroUint(), evt, fmt.Errorf("trade accounts are disabled")
-		}
-		fromAcc, err := cosmos.AccAddressFromBech32(tx.FromAddress.String())
-		if err != nil {
-			return cosmos.ZeroUint(), evt, ErrInternal(err, "fail to parse from address")
-		}
-		amount, err = mgr.TradeAccountManager().Withdrawal(ctx, source, amount, fromAcc, common.NoAddress, tx.ID)
-		if err != nil {
-			return cosmos.ZeroUint(), evt, ErrInternal(err, "fail to withdraw from trade")
-		}
-	}
-
-	if source.IsSecuredAsset() {
-		fromAcc, err := cosmos.AccAddressFromBech32(tx.FromAddress.String())
-		if err != nil {
-			return cosmos.ZeroUint(), evt, ErrInternal(err, "fail to parse from address")
-		}
-		withdrawAmount, err := mgr.SecuredAssetManager().Withdraw(ctx, source, amount, fromAcc, common.NoAddress, tx.ID)
-		if err != nil {
-			return cosmos.ZeroUint(), evt, ErrInternal(err, "fail to withdraw from secured asset")
-		}
-		amount = withdrawAmount.Amount
-	}
-
-	if target.IsTradeAsset() && tradeAccountsDepositEnabled <= 0 {
-		return cosmos.ZeroUint(), evt, fmt.Errorf("trade accounts deposits are disabled")
-	}
 
 	swapEvt := NewEventSwap(
 		poolAsset,
@@ -467,19 +434,6 @@ func (s *SwapperImpl) swapOne(ctx cosmos.Context,
 	}
 
 	// if target is trade account, check whether swaps to trade assets are enabled
-	if target.IsTradeAsset() {
-		if tradeAccountsEnabled <= 0 {
-			return cosmos.ZeroUint(), evt, fmt.Errorf("trade accounts are disabled")
-		}
-	}
-
-	// if target is secured asset, check whether swaps to secured assets are enabled
-	if target.IsSecuredAsset() {
-		if err := mgr.SecuredAssetManager().CheckHalt(ctx); err != nil {
-			return cosmos.ZeroUint(), evt, err
-		}
-	}
-
 	// apply swapper clout
 	availableClout := swapEvt.LiquidityFeeInRune
 	for i, addr := range []common.Address{tx.FromAddress, destination} {

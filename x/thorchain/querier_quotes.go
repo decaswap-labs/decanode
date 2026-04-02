@@ -817,19 +817,6 @@ func (qs queryServer) queryQuoteSwap(ctx cosmos.Context, req *types.QueryQuoteSw
 		return nil, fmt.Errorf("bad from address: %w", err)
 	}
 
-	// if from asset is a trade asset, create fake balance
-	if fromAsset.IsTradeAsset() {
-		var thorAddr cosmos.AccAddress
-		thorAddr, err = fromPubkey.GetThorAddress()
-		if err != nil {
-			return nil, fmt.Errorf("failed to get thor address: %w", err)
-		}
-		_, err = qs.mgr.TradeAccountManager().Deposit(ctx, fromAsset, amount, thorAddr, common.NoAddress, common.BlankTxID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to deposit trade asset: %w", err)
-		}
-	}
-
 	// parse destination address or generate a random one
 	sendMemo := true
 	var destination common.Address
@@ -928,32 +915,6 @@ func (qs queryServer) queryQuoteSwap(ctx cosmos.Context, req *types.QueryQuoteSw
 		RefundAddress:         refundAddress,
 	}
 	memoString := memo.ShortString()
-
-	// if from asset is a trade asset, create fake balance
-	if fromAsset.IsTradeAsset() {
-		var thorAddr cosmos.AccAddress
-		thorAddr, err = fromPubkey.GetThorAddress()
-		if err != nil {
-			return nil, fmt.Errorf("failed to get thor address: %w", err)
-		}
-		_, err = qs.mgr.TradeAccountManager().Deposit(ctx, fromAsset, amount, thorAddr, common.NoAddress, common.BlankTxID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to deposit trade asset: %w", err)
-		}
-	}
-
-	// if from asset is a secured asset, create fake balance
-	if fromAsset.IsSecuredAsset() {
-		var thorAddr cosmos.AccAddress
-		thorAddr, err = fromPubkey.GetThorAddress()
-		if err != nil {
-			return nil, fmt.Errorf("failed to get thor address: %w", err)
-		}
-		_, err = qs.mgr.SecuredAssetManager().Deposit(ctx, fromAsset.GetLayer1Asset(), amount, thorAddr, common.NoAddress, common.BlankTxID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to deposit secured asset: %w", err)
-		}
-	}
 
 	// create the swap message
 	msg := &types.MsgSwap{
